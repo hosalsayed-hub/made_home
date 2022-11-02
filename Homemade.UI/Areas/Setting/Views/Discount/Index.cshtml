@@ -1,0 +1,70 @@
+﻿@inject Homemade.BLL.Setting.BlDiscount blDiscount
+@model Homemade.BLL.ViewModel.Setting.DiscountViewModel
+@inject Homemade.BLL.BLPermission blPermission
+@Html.AntiForgeryToken()
+<div class="content">
+    <!-- Dynamic Table Full -->
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>
+                        <span class="header-title">@Homemade.UI.Resources.Homemade.Discount</span>
+                    </h3>
+                </div>
+                <div class="col-md-6">
+                    <div class="dt_buttons_wrap text-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="block-content">
+            <div class="row" id="divMsgParent" style="display:none">
+                <div class="form-group row">
+                    <div class="col-xs-12">
+                        <div id="divMsgClass" class="alert alert-danger" role="alert">
+                            <strong id="lblMsg"></strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table id="tbl" class="table table-custom js-dataTable-buttons">
+                <thead>
+                    <tr>
+                        <th class="text-center">@Homemade.UI.Resources.Homemade.SNumber</th>
+                        <th class="text-center">@Homemade.UI.Resources.Homemade.DiscountValue</th>
+                        <th class="text-center">@Homemade.UI.Resources.Homemade.DiscountType</th>
+                        <th class="text-center">@Homemade.UI.Resources.Homemade.Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<partial name="_Modal" model="Model" />
+@section Styles {
+    <!-- Data_Table Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" />
+    <!-- Select 2 Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2-bootstrap.min.css" />
+}
+
+    @section Scripts {
+    <!-- Data_table Plugins -->
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+    <!-- Select 2 Scripts -->
+    <script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+    <partial name="_Scripts" />
+    <partial name="_DataTable" />
+}

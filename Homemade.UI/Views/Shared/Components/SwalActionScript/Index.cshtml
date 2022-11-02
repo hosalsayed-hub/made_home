@@ -1,0 +1,129 @@
+﻿@model Swal
+@{
+    string actionName = "", type = "success", confirmButtonClass = "btn-success";
+
+    switch (Model.SwalActions)
+    {
+        case SwalActions.Activate:
+            actionName = Homemade.UI.Resources.Homemade.Activation;
+            type = "info";
+            confirmButtonClass = "btn-" + type;
+            break;
+        case SwalActions.Add:
+            actionName = Homemade.UI.Resources.Homemade.AreYouSureToSave;
+            type = "success";
+            confirmButtonClass = "btn-" + type;
+            break;
+        case SwalActions.Delete:
+            actionName = Homemade.UI.Resources.Homemade.AreYouSureToDelete;
+            type = "error";
+            confirmButtonClass = "btn-danger";
+            break;
+        case SwalActions.Disable:
+            actionName = Homemade.UI.Resources.Homemade.Disable;
+            type = "info";
+            confirmButtonClass = "btn-" + type;
+            break;
+        case SwalActions.Edit:
+            actionName = Homemade.UI.Resources.Homemade.AreYouSureToSave;
+            type = "success";
+            confirmButtonClass = "btn-" + type;
+            break;
+        case SwalActions.Success:
+            type = "success";
+            confirmButtonClass = "btn-" + type;
+            break;
+        case SwalActions.Error:
+            type = "error";
+            confirmButtonClass = "btn-danger";
+            break;
+        case SwalActions.ChangeStaute:
+            actionName = Homemade.UI.Resources.Homemade.AreYouSureToChangeStatue;
+            type = "info";
+            confirmButtonClass = "btn-" + type;
+            break;
+        case SwalActions.ExportExcel:
+            actionName = Homemade.UI.Resources.Homemade.AreYouSureToExportExcel;
+            type = "info";
+            confirmButtonClass = "btn-" + type;
+            break;
+        case SwalActions.SendReq:
+            actionName = Homemade.UI.Resources.Homemade.AreYouSureToSendRequest;
+            type = "success";
+            confirmButtonClass = "btn-" + type;
+            break;
+
+        case SwalActions.SaveReq:
+            actionName = Homemade.UI.Resources.Homemade.AreYouSureToSaveRequest;
+            type = "success";
+            confirmButtonClass = "btn-" + type;
+            break;
+
+        case SwalActions.SaveScheduleReq:
+            actionName = Homemade.UI.Resources.Homemade.SavescheduledOrder;
+            type = "success";
+            confirmButtonClass = "btn-" + type;
+            break;
+
+        case SwalActions.CancelReq:
+            actionName = Homemade.UI.Resources.Homemade.AreYouSureToCancelTrip;
+            type = "success";
+            confirmButtonClass = "btn-" + type;
+            break;
+
+        case SwalActions.EndCall:
+            actionName = Homemade.UI.Resources.Homemade.AreYouSureToEndCall;
+            type = "success";
+            confirmButtonClass = "btn-" + type;
+            break;
+
+        case SwalActions.JoinCall:
+            actionName = Homemade.UI.Resources.Homemade.AreYouSureToJoinCall;
+            type = "success";
+            confirmButtonClass = "btn-" + type;
+            break;
+
+        case SwalActions.AssignOrder:
+            actionName = Homemade.UI.Resources.Homemade.AreYouSureToAssignOrder;
+            type = "success";
+            confirmButtonClass = "btn-" + type;
+            break;
+
+    }
+
+    if (Model.Title != "")
+    {
+        actionName = Model.Title;
+
+    }
+    else
+    {
+        actionName = "\"" + actionName + "\"";
+    }
+}
+
+    swal({
+    title: @Html.Raw(actionName) ,
+    text: "@Model.Text",
+    type: "@type",
+    showCancelButton: @Model.ShowCancelButton.ToString().ToLower(),
+    showConfirmButton: @Model.ShowOkButton.ToString().ToLower(),
+    confirmButtonClass: "@(Model.ConfirmButtonClass != "" ? Model.ConfirmButtonClass : confirmButtonClass)",
+    confirmButtonText: "@Homemade.UI.Resources.Homemade.Yes",
+    cancelButtonText: "@Homemade.UI.Resources.Homemade.No",
+    closeOnConfirm: @Model.CloseOnConfirm.ToString().ToLower(),
+    closeOnCancel: @Model.CloseOnCancel.ToString().ToLower(),
+    @if (!Model.IsConfirm)
+    {
+        @: timer : @Model.Timer ,
+    }
+    buttons: {
+    cancel: @Model.ShowCancelButton.ToString().ToLower(),
+    confirm: @Model.ShowOkButton.ToString().ToLower(),
+
+    } }
+    @if (Model.IsConfirm)
+    {
+        @:,function(isConfirm) {if (isConfirm){@Model.CallBack}else{swal.close();}}
+    }
+    );

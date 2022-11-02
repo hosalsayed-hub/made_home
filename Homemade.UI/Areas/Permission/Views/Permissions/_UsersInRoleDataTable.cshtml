@@ -1,0 +1,90 @@
+﻿@inject Homemade.BLL.BLPermission blPermission
+@{
+    var IsPermissionDelete = @blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Permission, (int)Homemade.BLL.ActionEnum.Delete) ? 1 : 0;
+}
+<script>
+    var table = $('#tbl').DataTable({
+        pageLength: 10,
+        pagijngType: "full_numbers",
+        serverSide: true,
+        processing: true,
+        lengthMenu: [[5, 10, 20, 25, -1], [5, 10, 20, 50, 100]],
+        sAjaxSource: '@Url.Action("LoadTable")',
+        sServerMethod: "POST",
+        bPaginate: true,
+        paging: true,
+        columns: [
+            {
+                "data": null,
+                "sortable": false,
+                render: function(data, type, row, meta) {
+                    return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                }
+            },
+            {
+                data: null,
+                bSortable: true,
+                render: function(data, type, row) {
+                    return '<label class="arName">' + data.roleName + '</label>'
+                }
+
+            },
+
+            {
+
+                data: null,
+                bSortable: true,
+                render: function(data, type, row) {
+                    if (@IsPermissionDelete == 1) {
+                        return '<a class="btn btn-xs btn-danger" style="margin:4px"' +
+                            ' onclick="Delete(this)" data-id="' + data.userID + '" data-name="' +
+                            data.roleName + '" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Delete"><i class="fa fa-trash"></i></a>';
+                    }
+                    else {
+                        return '';
+                    }
+                }
+            }
+        ],
+        buttons: [
+            {
+                extend: "copy",
+                className: "btn btn-info btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Copy'
+            },
+            {
+                text: '@Homemade.UI.Resources.Homemade.Excel',
+                className: "btn btn-success btn-xs",
+                action: function(e, dt, node, config) {
+                    DownloadExcel();
+                }
+            },
+            {
+                text: '@Homemade.UI.Resources.Homemade.Print',
+                className: "btn btn-warning btn-xs",
+                action: function(e, dt, node, config) {
+                    Print();
+                }
+            },
+            {
+                text: '@Homemade.UI.Resources.Homemade.PDF',
+                className: "btn btn-info btn-xs",
+                action: function(e, dt, node, config) {
+                    PDF();
+                }
+            }],
+        drawCallback: function(s) {
+            $('[data-toggle="tooltip"]').tooltip();
+        },
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+    });
+    table.buttons().container().appendTo('.dt_buttons_wrap');
+
+    function readtable(userId) {
+        table.ajax.url('/Permission/Permissions/LoadTable?UserId=' + userId);
+        table.ajax.reload();
+    }
+
+</script>

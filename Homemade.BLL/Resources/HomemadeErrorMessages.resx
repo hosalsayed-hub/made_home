@@ -1,0 +1,516 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddressRequierd" xml:space="preserve">
+    <value>Address Requierd</value>
+  </data>
+  <data name="AmountRequierd" xml:space="preserve">
+    <value>Amount Requierd</value>
+  </data>
+  <data name="AmountValid" xml:space="preserve">
+    <value>Amount InValid</value>
+  </data>
+  <data name="ArabicOnly" xml:space="preserve">
+    <value>Arabic letters and numbers only</value>
+  </data>
+  <data name="ArNameRequierd" xml:space="preserve">
+    <value>Arabic Name  Requierd</value>
+  </data>
+  <data name="CityRequierd" xml:space="preserve">
+    <value>City Requierd</value>
+  </data>
+  <data name="CountryRequierd" xml:space="preserve">
+    <value>Country Requierd</value>
+  </data>
+  <data name="DateOperationRequierd" xml:space="preserve">
+    <value>Date Operation Requierd</value>
+  </data>
+  <data name="DeliveryPriceRequierd" xml:space="preserve">
+    <value>Delivery Price  Requierd</value>
+  </data>
+  <data name="DriverRequierd" xml:space="preserve">
+    <value>Driver Requierd</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email Invalid</value>
+  </data>
+  <data name="EmailRequierd" xml:space="preserve">
+    <value>Email Requierd</value>
+  </data>
+  <data name="EnglishOnly" xml:space="preserve">
+    <value>English letters and numbers only</value>
+  </data>
+  <data name="EnNameRequierd" xml:space="preserve">
+    <value>English Name Requierd</value>
+  </data>
+  <data name="FieldRequierd" xml:space="preserve">
+    <value>Field Requierd</value>
+  </data>
+  <data name="FileNoRequierd" xml:space="preserve">
+    <value>File No Requierd</value>
+  </data>
+  <data name="FileNoValid" xml:space="preserve">
+    <value>File No InValid</value>
+  </data>
+  <data name="GenderRequierd" xml:space="preserve">
+    <value>Gender Requierd</value>
+  </data>
+  <data name="IDNoRequierd" xml:space="preserve">
+    <value>ID No Requierd</value>
+  </data>
+  <data name="IDNoValid" xml:space="preserve">
+    <value>ID No InValid</value>
+  </data>
+  <data name="MainAddressRequierd" xml:space="preserve">
+    <value>Main Address Requierd</value>
+  </data>
+  <data name="MainAddressValid" xml:space="preserve">
+    <value>Main Address Invlalid</value>
+  </data>
+  <data name="InvalidMobile" xml:space="preserve">
+    <value>Invalid Mobile</value>
+  </data>
+  <data name="MobileRequierd" xml:space="preserve">
+    <value>Mobile Requierd</value>
+  </data>
+  <data name="MobileValid" xml:space="preserve">
+    <value>Mobile No InValid</value>
+  </data>
+  <data name="NameMax0" xml:space="preserve">
+    <value>It must be greater than 0 </value>
+  </data>
+  <data name="NameMax10" xml:space="preserve">
+    <value>It must be lower than or equal to 10 characters</value>
+  </data>
+  <data name="NameMax4" xml:space="preserve">
+    <value>It must be lower than or equal to 4 characters</value>
+  </data>
+  <data name="NameMax75" xml:space="preserve">
+    <value>It must be lower than or equal to 75 characters</value>
+  </data>
+  <data name="NationalityRequierd" xml:space="preserve">
+    <value>Nationality Requierd</value>
+  </data>
+  <data name="NumberOnly" xml:space="preserve">
+    <value>Numbers Only</value>
+  </data>
+  <data name="PositionRequierd" xml:space="preserve">
+    <value>Position Requierd</value>
+  </data>
+  <data name="Required" xml:space="preserve">
+    <value>Required</value>
+  </data>
+  <data name="TransactionTypeRequierd" xml:space="preserve">
+    <value>Transaction Requierd</value>
+  </data>
+  <data name="YearInvalid" xml:space="preserve">
+    <value>Year Invalid</value>
+  </data>
+  <data name="ZoneRequierd" xml:space="preserve">
+    <value>Zone Requierd</value>
+  </data>
+  <data name="NameMax100" xml:space="preserve">
+    <value>It must be lower than or equal to 100 characters</value>
+  </data>
+  <data name="NameMax15" xml:space="preserve">
+    <value>It must be lower than or equal to 15 characters</value>
+  </data>
+  <data name="NameMax20" xml:space="preserve">
+    <value>It must be lower than or equal to 20 characters</value>
+  </data>
+  <data name="ContentArRequierd" xml:space="preserve">
+    <value>Content Ar Requierd</value>
+  </data>
+  <data name="ContentEnRequierd" xml:space="preserve">
+    <value>Content En Requierd</value>
+  </data>
+  <data name="MessageRequierd" xml:space="preserve">
+    <value>Message Requierd</value>
+  </data>
+  <data name="NotIdentical" xml:space="preserve">
+    <value>Value NotI dentical</value>
+  </data>
+  <data name="BaseFareRequired" xml:space="preserve">
+    <value>Base Fare Required</value>
+  </data>
+  <data name="CancelationFareRequired" xml:space="preserve">
+    <value>Cancelation Fare Required</value>
+  </data>
+  <data name="CategoryCarTypeRequired" xml:space="preserve">
+    <value>Category Car Type Required</value>
+  </data>
+  <data name="DeliveryTypeRequired" xml:space="preserve">
+    <value>Delivery Type Required</value>
+  </data>
+  <data name="FareMinuteRequired" xml:space="preserve">
+    <value>Fare Minute Required</value>
+  </data>
+  <data name="MinFareRequired" xml:space="preserve">
+    <value>Min Fare Required</value>
+  </data>
+  <data name="MinKMRequired" xml:space="preserve">
+    <value>Min KM Required</value>
+  </data>
+  <data name="WaitingChargeRequired" xml:space="preserve">
+    <value>Waiting Charge Required</value>
+  </data>
+  <data name="ClientRequierd" xml:space="preserve">
+    <value>Client Requierd</value>
+  </data>
+  <data name="PromoRequierd" xml:space="preserve">
+    <value>Promo Requierd</value>
+  </data>
+  <data name="VoucherRequierd" xml:space="preserve">
+    <value>Voucher Requierd</value>
+  </data>
+  <data name="CategoryRequierd" xml:space="preserve">
+    <value>CategoryRequierd</value>
+  </data>
+  <data name="SubCategoryRequierd" xml:space="preserve">
+    <value>Sub Category Requierd</value>
+  </data>
+  <data name="ClientTypeRequierd" xml:space="preserve">
+    <value>Client Type Requierd</value>
+  </data>
+  <data name="Invalid_Phone_number" xml:space="preserve">
+    <value>Invalid Phone number</value>
+  </data>
+  <data name="Oops_this_ID_Number_is_found_Before_to_a_Captain_account" xml:space="preserve">
+    <value>Oops this ID Number is found Before to a Captain account</value>
+  </data>
+  <data name="Phone_Number_Is_Exists" xml:space="preserve">
+    <value>Mobile No already exists</value>
+  </data>
+  <data name="RequiredTxt" xml:space="preserve">
+    <value>Required</value>
+  </data>
+  <data name="Requierd" xml:space="preserve">
+    <value>Requierd</value>
+  </data>
+  <data name="DefaultPriceRequired" xml:space="preserve">
+    <value>Default Price Required</value>
+  </data>
+  <data name="WeightUnitRequired" xml:space="preserve">
+    <value>Weight Unit Required</value>
+  </data>
+  <data name="RegionRequierd" xml:space="preserve">
+    <value>Region Requierd</value>
+  </data>
+  <data name="JobTypeRequierd" xml:space="preserve">
+    <value>Job Type Requierd</value>
+  </data>
+  <data name="PhoneRequierd" xml:space="preserve">
+    <value>Phone Requierd</value>
+  </data>
+  <data name="MobileIsExists" xml:space="preserve">
+    <value>Mobile Is Exists</value>
+  </data>
+  <data name="ArAddressRequierd" xml:space="preserve">
+    <value>Arabic Address Requierd</value>
+  </data>
+  <data name="EnAddressRequierd" xml:space="preserve">
+    <value>English Address Requierd</value>
+  </data>
+  <data name="FaxRequierd" xml:space="preserve">
+    <value>Fax Requierd</value>
+  </data>
+  <data name="GeneralSettingRequierd" xml:space="preserve">
+    <value>General Setting Requierd</value>
+  </data>
+  <data name="EntityRequierd" xml:space="preserve">
+    <value>Entity Requierd</value>
+  </data>
+  <data name="EntityTypeRequierd" xml:space="preserve">
+    <value>Entity Type Requierd</value>
+  </data>
+  <data name="DepartmentRequierd" xml:space="preserve">
+    <value>Department Requierd</value>
+  </data>
+  <data name="JobRequierd" xml:space="preserve">
+    <value>Job Requierd</value>
+  </data>
+  <data name="DoctorRequierd" xml:space="preserve">
+    <value>Doctor Requierd</value>
+  </data>
+  <data name="EntitiesGroupRequierd" xml:space="preserve">
+    <value>Entities Group Requierd</value>
+  </data>
+  <data name="PatientRequierd" xml:space="preserve">
+    <value>Patient Requierd</value>
+  </data>
+  <data name="PlaceRequierd" xml:space="preserve">
+    <value>Place Requierd</value>
+  </data>
+  <data name="Please_Check_Any_Permission_First" xml:space="preserve">
+    <value>Please Check Any Permission First</value>
+  </data>
+  <data name="User_Is_Exist" xml:space="preserve">
+    <value>User Is Exist</value>
+  </data>
+  <data name="MainCategoryRequired" xml:space="preserve">
+    <value>Main Category Required</value>
+  </data>
+  <data name="CodeRequired" xml:space="preserve">
+    <value>Code Required</value>
+  </data>
+  <data name="FirstNameRequierd" xml:space="preserve">
+    <value>First Name Requierd</value>
+  </data>
+  <data name="SliderTypeRequierd" xml:space="preserve">
+    <value>SliderType Requierd</value>
+  </data>
+  <data name="AccountNumberRequierd" xml:space="preserve">
+    <value>Account Number Requierd</value>
+  </data>
+  <data name="BankRequierd" xml:space="preserve">
+    <value>Bank Requierd</value>
+  </data>
+  <data name="IBANnumberRequierd" xml:space="preserve">
+    <value>IBA Nnumber Requierd</value>
+  </data>
+  <data name="PercentRequierd" xml:space="preserve">
+    <value>Percent Requierd</value>
+  </data>
+  <data name="SecondNameRequired" xml:space="preserve">
+    <value>Second Name Required</value>
+  </data>
+  <data name="MainPageRequired" xml:space="preserve">
+    <value>Main Page Required</value>
+  </data>
+  <data name="TitleArRequired" xml:space="preserve">
+    <value>Title Ar required</value>
+  </data>
+  <data name="TitleEnRequired" xml:space="preserve">
+    <value>Title En required</value>
+  </data>
+  <data name="PriceRequierd" xml:space="preserve">
+    <value>Price Requierd</value>
+  </data>
+  <data name="PriceRequired" xml:space="preserve">
+    <value>Price Required</value>
+  </data>
+  <data name="VendorRequierd" xml:space="preserve">
+    <value>Vendor Requierd</value>
+  </data>
+  <data name="DeliveryPriceBiggerThanZero" xml:space="preserve">
+    <value>Delivery Price Should Be Greater Than Zero</value>
+  </data>
+  <data name="DeliveryPriceRequired" xml:space="preserve">
+    <value>Delivery Price</value>
+  </data>
+  <data name="MaxDeliveryPriceBiggerThanZero" xml:space="preserve">
+    <value>Max Delivery Price Should Be Greater Than Zero</value>
+  </data>
+  <data name="MaxDeliveryPriceRequired" xml:space="preserve">
+    <value>MaxDelivery Price</value>
+  </data>
+  <data name="MinDeliveryPriceBiggerThanZero" xml:space="preserve">
+    <value>Min Delivery Price Should Be Greater Than Zero</value>
+  </data>
+  <data name="MinDeliveryPriceRequired" xml:space="preserve">
+    <value>Min Delivery Price</value>
+  </data>
+  <data name="NameRequierd" xml:space="preserve">
+    <value>Name Requierd</value>
+  </data>
+  <data name="FirstNameARRequierd" xml:space="preserve">
+    <value>First Name Arabic Requierd</value>
+  </data>
+  <data name="FirstNameENRequierd" xml:space="preserve">
+    <value>First Name English Requierd</value>
+  </data>
+  <data name="DeliveryTypeRequierd" xml:space="preserve">
+    <value>Delivery Type Requierd</value>
+  </data>
+  <data name="DeliveryPriceMinMaxValidation" xml:space="preserve">
+    <value>Delivery Price Shoud be from</value>
+  </data>
+  <data name="DeliveryPriceMinMaxValidationCurrency" xml:space="preserve">
+    <value>Rial</value>
+  </data>
+  <data name="DeliveryPriceMinMaxValidationTo" xml:space="preserve">
+    <value>to</value>
+  </data>
+  <data name="DeliveryPriceValidation" xml:space="preserve">
+    <value>Delivery Price Required</value>
+  </data>
+  <data name="UserNameRequierd" xml:space="preserve">
+    <value>User Name Requierd</value>
+  </data>
+  <data name="ConfirmPasswordRequierd" xml:space="preserve">
+    <value>Confirm Password Requierd</value>
+  </data>
+  <data name="IsAgreeTermsRequierd" xml:space="preserve">
+    <value>You must agree to the terms and conditions</value>
+  </data>
+  <data name="PasswordRequierd" xml:space="preserve">
+    <value>Password Requierd</value>
+  </data>
+  <data name="PasswordValidNumber" xml:space="preserve">
+    <value>Must be between 5 and 255 characters</value>
+  </data>
+  <data name="Password_must_match" xml:space="preserve">
+    <value>Password must match</value>
+  </data>
+  <data name="Password_not_match" xml:space="preserve">
+    <value>Password not match</value>
+  </data>
+  <data name="QuestionRequierd" xml:space="preserve">
+    <value>Question Requierd</value>
+  </data>
+  <data name="AddressTypesRequierd" xml:space="preserve">
+    <value>Address Types Requierd</value>
+  </data>
+  <data name="BlockRequierd" xml:space="preserve">
+    <value>Block Requierd</value>
+  </data>
+  <data name="StoreNameAr" xml:space="preserve">
+    <value>Store Name Ar Requierd</value>
+  </data>
+  <data name="StoreNameEn" xml:space="preserve">
+    <value>Store Name En Requierd</value>
+  </data>
+  <data name="ProductTypeRequierd" xml:space="preserve">
+    <value>Product Type Requierd</value>
+  </data>
+  <data name="number_must_be_10" xml:space="preserve">
+    <value>number must be 10</value>
+  </data>
+  <data name="NameMax300" xml:space="preserve">
+    <value>It must be lower than or equal to 300 characters</value>
+  </data>
+  <data name="DriverCommisionRequierd" xml:space="preserve">
+    <value>Driver Commision Requierd</value>
+  </data>
+  <data name="MinKMRequierd" xml:space="preserve">
+    <value>Min KM Requierd</value>
+  </data>
+  <data name="OverKmFareRequierd" xml:space="preserve">
+    <value>Over Km Fare Requierd</value>
+  </data>
+  <data name="NameMax50" xml:space="preserve">
+    <value>It must be lower than or equal to 50 characters</value>
+  </data>
+  <data name="WeightRequired" xml:space="preserve">
+    <value>Weight Required</value>
+  </data>
+  <data name="Discount_Date_Required" xml:space="preserve">
+    <value>Discount Date Required</value>
+  </data>
+</root>

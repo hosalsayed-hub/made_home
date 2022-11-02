@@ -1,0 +1,172 @@
+﻿
+
+
+<script charset="utf-8" type="text/javascript">
+
+    var divMsgClass = $("#divMsgClass");
+    var lblMsg = $("#lblMsg");
+    var divMsgParent = $("#divMsgParent");
+
+    $("#btnSave").click(function() {
+
+        let frmCreate = $("#frmCreate");
+        if (frmCreate.valid()) {
+
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Add , "frmCreate.submit();"))
+            }
+    });
+
+
+
+    function completed(xhr) {
+
+        var obj = JSON.parse(xhr.responseText);
+        var result = obj.result;
+
+
+        var msg = result.message;
+        if (result.resultType == 'success') {
+
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false)
+                { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\"" })
+
+                    if (obj.operationType == 'update') {
+                $("#modal").modal('hide');
+            }
+            else {
+                $("#frmCreate").trigger('reset');
+                $('#CityID').val('');
+                $('#CityID').trigger('change');
+            }
+            $('#tbl').DataTable().ajax.reload();
+        }
+        else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+            }
+    };
+
+
+    function Delete(e) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Delete , "ConfirmDelete(e)"))
+        }
+
+    function ConfirmDelete(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete")',
+            data: {
+                'id': id
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                var msg = result.message;
+
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                        Title = "\"" + Homemade.UI.Resources.Homemade.SuccessDeleteMessage + "\""})
+                        $('#tbl').DataTable().ajax.reload();
+
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+                    }
+            }
+        });
+    }
+
+    function ShowModal(e) {
+        if (e == undefined) {
+            $('#title').html('@Homemade.UI.Resources.Homemade.Add')
+        }
+        else
+            $('#title').html('@Homemade.UI.Resources.Homemade.Update');
+
+        let fields = $('#frmCreate span');
+        fields.each(function() {
+            if ($(this).attr('data-valmsg-for') != null) {
+                $($(this).children()[0]).text('');
+            }
+        });
+        var button = $(e);
+        var tr = $(button.closest('tr'));
+
+        var id = button.attr("data-id");
+        $("#BlockID").val(id);
+
+        $("#CityID").val(button.attr("data-cityID"));
+        $('#CityID').trigger('change');
+        $("#BlockNameAR").val(button.attr("data-nameAr"));
+        $("#BlockNameEN").val(button.attr("data-nameEn"));
+        $("#Code").val(button.attr("data-code"));
+        $('#modal').modal('show');
+    }
+    function Edit() {
+        var BlockID = $("#BlockID").val();
+    }
+
+    function ChangeStatue(e) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.ChangeStaute , "ConfirmStatue(e)"))
+        }
+    function ConfirmStatue(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeStatue")',
+            data: {
+                'id': id
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                        Title = "result.message"})
+                        $('#tbl').DataTable().ajax.reload();
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "result.message" })
+                    }
+
+
+            }
+        });
+    }
+
+    function GetCities(mainCategoriesID) {
+        $.ajax({
+            type: "POST",
+            url: '/Setting/Block/GetAllCities',
+            data: {},
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $("#CityID").html('');
+                $("#CityID").append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+
+                    if (mainCategoriesID != undefined && mainCategoriesID > 0 && mainCategoriesID == item.blockID) {
+                        $("#CityID").append('<option selected value="' + item.cityID + '">' + item.cityName + '</option>');
+                        $("#CityID").val(mainCategoriesID).trigger('change');
+                    }
+                    else
+                        $("#CityID").append('<option value="' + item.cityID + '">' + item.cityName + '</option>');
+                }
+                $($("#CityID")).select2();
+            },
+            error: function() {
+
+            }
+        });
+    }
+</script>
+

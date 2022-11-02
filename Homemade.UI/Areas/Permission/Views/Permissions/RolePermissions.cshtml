@@ -1,0 +1,158 @@
+﻿@inject Homemade.BLL.BLPermission bLPermission
+@model Homemade.BLL.ViewModel.PermissionViewModel
+<div class="content">
+    <!-- Dynamic Table Full -->
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <h3 class="block-title" data-toggle="collapse" data-target="#collapseProd" aria-expanded="false" aria-controls="collapseProd">
+                <i class="ion-code-working push-5-r"></i>
+                <span class="header-title" style="display:none">@Homemade.UI.Resources.HomemadeMenu.Role_Permissions</span>
+                <span>@Homemade.UI.Resources.Homemade.Search_Filter</span>
+            </h3>
+        </div>
+        <div class="collapse" id="collapseProd">
+            <div class="block-content block-content-full">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.User <span style="color:red">*</span></label>
+                            <select class="form-control js-select2" onchange="GetValue()" asp-for="UserId" name="UserId" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1" asp-items="@bLPermission.GetAllUserOperatorAndClient().ToList().Select(p => new SelectListItem { Text = Homemade.UI.InfraStructure.Utility.CurrentLanguageCode=="ar"? p.UserNameAR:p.UserNameEN, Value = p.UserID + "" })">
+                                <option value=""></option>
+                            </select>
+
+
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Role <span style="color:red">*</span></label>
+                            <select class="form-control js-select2" onchange="GetValue()" asp-for="RoleID" name="RoleName" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1" asp-items="@bLPermission.GetRoles(Homemade.UI.InfraStructure.Utility.CurrentLanguageCode).ToList().Select(p => new SelectListItem { Text = Homemade.UI.InfraStructure.Utility.CurrentLanguageCode=="ar"? p.RoleName:p.RoleName, Value = p.RoleId + "" })">
+                                <option value=""></option>
+                            </select>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="block-title" data-toggle="collapse" data-target="#collapseOrder" aria-expanded="false" aria-controls="collapseOrder">
+                        <i class="ion-code-working push-5-r"></i>
+                        @Homemade.UI.Resources.Homemade.List
+                    </h3>
+                </div>
+                <div class="col-md-6 text-right">
+                    <div class="dt_buttons_wrap text-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="collapse in" id="collapseOrder">
+            <div class="block-content h_scroll">
+                <div class="row" id="divMsgParent" style="display:none">
+                    <div class="form-group row">
+                        <div class="col-xs-12">
+                            <div id="divMsgClass" class="alert alert-danger" role="alert">
+                                <strong id="lblMsg"></strong>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @Html.HiddenFor(m => m.CheckedItems)
+                <div class="col-md-4" style="margin-top: 0.8%;">
+                    <button id="btnSave" type="button" onclick="Update()" style="margin:12px 5px" class="btn btn-custom bg-orange">
+                        <i class="fa fa-edit push-5-r" aria-hidden="true"></i>
+                        @Homemade.UI.Resources.Homemade.save
+                    </button>
+                </div>
+                <table id="tbl" class="table table-custom js-dataTable-buttons">
+                    <thead>
+                        <tr>
+                            <th>
+                                <label class="css-input css-checkbox css-checkbox-warning">
+                                    <input type='checkbox' id='chkSelectAll' onclick='checkAll(this)' /><span></span> @Homemade.UI.Resources.Homemade.All
+                                </label>
+                            </th>
+                            <th>@Homemade.UI.Resources.Homemade.SNumber</th>
+                            <th>@Homemade.UI.Resources.Homemade.Permission</th>
+                            <th>@Homemade.UI.Resources.Homemade.View</th>
+                            <th>@Homemade.UI.Resources.Homemade.Insert</th>
+                            <th>@Homemade.UI.Resources.Homemade.Update</th>
+                            <th>@Homemade.UI.Resources.Homemade.Delete</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <!-- Data_Table Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" />
+
+    <!-- Select 2 Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2-bootstrap.min.css" />
+}
+
+    @section Scripts {
+    <!-- Data_table Plugins -->
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+
+    <!-- Select 2 Scripts -->
+    <script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+
+    <partial name="_RolePermissionsDataTable" />
+    <script>
+        function GetValue() {
+            readtable($("#UserId").val(), $("#RoleID").val());
+        }
+        function Update() {
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Edit , "ConfirmUpdate();"))
+                }
+
+        function ConfirmUpdate() {
+            $.ajax({
+                type: "POST",
+                url: '/Permission/Permissions/RolePermissions',
+                data: {
+                    'UserId': $("#UserId").val(),
+                    'RoleID': $("#RoleID").val(),
+                    'CheckedItems': $("#CheckedItems").val()
+                },
+                dataType: "json",
+                async: false,
+
+                contentType: "application/x-www-form-urlencoded",
+                success: function(result) {
+                    var msg = result.message;
+
+                    if (result.resultType == 'success') {
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false)
+                        { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\"" })
+                        }
+                    else {
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) {
+                        Title = "msg"
+                        })
+                        }
+                }
+            });
+        }
+    </script>
+}

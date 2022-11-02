@@ -1,0 +1,58 @@
+﻿@inject Homemade.BLL.BLPermission blPermission
+
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Permission, (int)Homemade.BLL.ActionEnum.Insert)
+|| blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Permission, (int)Homemade.BLL.ActionEnum.View))
+{
+    <li>
+        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+            <i class="si si-lock"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.HomemadeMenu.Permissions
+            </span>
+        </a>
+        <ul>
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Permission, (int)Homemade.BLL.ActionEnum.Insert))
+            {
+                <li>
+                    <a href="/ClientUser/Permissions/UsersInRole">
+                        <i class="ion-chevron-right"></i>
+                        <span class="sidebar-mini-hide">
+                            @Homemade.UI.Resources.HomemadeMenu.Users_In_Role
+                        </span>
+                    </a>
+                </li>
+            }@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Permission, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/ClientUser/Permissions/RolePermissions">
+                        <i class="ion-chevron-right"></i>
+                        <span class="sidebar-mini-hide">
+                            @Homemade.UI.Resources.HomemadeMenu.Role_Permissions
+                        </span>
+                    </a>
+                </li>
+            }@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Role, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/ClientUser/Role/Index">
+                        <i class="ion-chevron-right"></i>
+                        <span class="sidebar-mini-hide">
+                            @Homemade.UI.Resources.Homemade.Role
+                        </span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </li>
+}
+<li>
+    <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+        <i class="si si-settings"></i>
+        <span class="sidebar-mini-hide">
+            @Homemade.UI.Resources.HomemadeMenu.Setting
+        </span>
+    </a>
+    <ul>
+
+    </ul>
+</li>

@@ -1,0 +1,975 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="About_us" xml:space="preserve">
+    <value>About us</value>
+  </data>
+  <data name="Active_Requests" xml:space="preserve">
+    <value>Active Requests</value>
+  </data>
+  <data name="Active_Trip" xml:space="preserve">
+    <value>Active Request</value>
+  </data>
+  <data name="Add_New_Branchs" xml:space="preserve">
+    <value>Add New Branchs</value>
+  </data>
+  <data name="Add_New_Staff" xml:space="preserve">
+    <value>Add New Staff</value>
+  </data>
+  <data name="Agents" xml:space="preserve">
+    <value>Agents</value>
+  </data>
+  <data name="Agent_Add" xml:space="preserve">
+    <value>New Agent</value>
+  </data>
+  <data name="Agent_Report" xml:space="preserve">
+    <value>Agent Report</value>
+  </data>
+  <data name="Agent_Reports" xml:space="preserve">
+    <value>Agent Reports</value>
+  </data>
+  <data name="Agent_Table" xml:space="preserve">
+    <value>List Agent</value>
+  </data>
+  <data name="Assign_Driver_Add" xml:space="preserve">
+    <value>Assign Captain Add</value>
+  </data>
+  <data name="Assign_Driver_Table" xml:space="preserve">
+    <value>Assign Captain Table</value>
+  </data>
+  <data name="Auto_Verify" xml:space="preserve">
+    <value>Auto Verify</value>
+  </data>
+  <data name="Balances" xml:space="preserve">
+    <value>Balances</value>
+  </data>
+  <data name="Become_a_Captain" xml:space="preserve">
+    <value>Become a Captain</value>
+  </data>
+  <data name="Become_a_Partner" xml:space="preserve">
+    <value>Become a Partner</value>
+  </data>
+  <data name="Branchs" xml:space="preserve">
+    <value>Branchs</value>
+  </data>
+  <data name="Branchs_History" xml:space="preserve">
+    <value>Branchs History</value>
+  </data>
+  <data name="Brand" xml:space="preserve">
+    <value>Brand</value>
+  </data>
+  <data name="Cancel_Reason" xml:space="preserve">
+    <value>Cancel Reason</value>
+  </data>
+  <data name="Cancel_Requests" xml:space="preserve">
+    <value>Cancel Requests</value>
+  </data>
+  <data name="Captains" xml:space="preserve">
+    <value>Captains</value>
+  </data>
+  <data name="Captain_Reg" xml:space="preserve">
+    <value>Captain Register Request</value>
+  </data>
+  <data name="Captain_Taxis" xml:space="preserve">
+    <value>Captain &amp; Taxis</value>
+  </data>
+  <data name="Category_Fare" xml:space="preserve">
+    <value>Branches Finances</value>
+  </data>
+  <data name="Category_Fare_Add" xml:space="preserve">
+    <value>New Branch Finances</value>
+  </data>
+  <data name="Category_Fare_Table" xml:space="preserve">
+    <value>Branches Finances Table</value>
+  </data>
+  <data name="Cities" xml:space="preserve">
+    <value>Cities</value>
+  </data>
+  <data name="Clients" xml:space="preserve">
+    <value>Clients</value>
+  </data>
+  <data name="Clients_Reg" xml:space="preserve">
+    <value>Client Register Request</value>
+  </data>
+  <data name="Clients_Table" xml:space="preserve">
+    <value>Clients Table</value>
+  </data>
+  <data name="Client_Balance" xml:space="preserve">
+    <value>Client Balance</value>
+  </data>
+  <data name="Client_Balance_Add" xml:space="preserve">
+    <value>Client Balance Add</value>
+  </data>
+  <data name="Client_Support" xml:space="preserve">
+    <value>Client Support</value>
+  </data>
+  <data name="Collect_Invoice" xml:space="preserve">
+    <value>Collect Invoice</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="Companies" xml:space="preserve">
+    <value>Companies</value>
+  </data>
+  <data name="Companies_List" xml:space="preserve">
+    <value>List Companies </value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="Company_Finances" xml:space="preserve">
+    <value>Company Finances</value>
+  </data>
+  <data name="Company_Reg" xml:space="preserve">
+    <value>Company Register Requests</value>
+  </data>
+  <data name="Company_Support" xml:space="preserve">
+    <value>Company Support</value>
+  </data>
+  <data name="ContactUs" xml:space="preserve">
+    <value>Contact Us</value>
+  </data>
+  <data name="Contact_us" xml:space="preserve">
+    <value>Contact us</value>
+  </data>
+  <data name="Countries" xml:space="preserve">
+    <value>Countries</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>Customers</value>
+  </data>
+  <data name="DashBoard" xml:space="preserve">
+    <value>DashBoard</value>
+  </data>
+  <data name="Delivered_History" xml:space="preserve">
+    <value>Delivered Requests</value>
+  </data>
+  <data name="Delivered_History_2" xml:space="preserve">
+    <value>Delivered</value>
+  </data>
+  <data name="Delivery_Invoice" xml:space="preserve">
+    <value>Delivery Invoice</value>
+  </data>
+  <data name="Delivery_Setting" xml:space="preserve">
+    <value>Delivery Setting</value>
+  </data>
+  <data name="Delivery_Type" xml:space="preserve">
+    <value>Delivery Type</value>
+  </data>
+  <data name="DriverInterval" xml:space="preserve">
+    <value>Captain Interval</value>
+  </data>
+  <data name="Drivers" xml:space="preserve">
+    <value>Captains</value>
+  </data>
+  <data name="Drivers_Help" xml:space="preserve">
+    <value>Captains Help</value>
+  </data>
+  <data name="Driver_Balance" xml:space="preserve">
+    <value>Captain Balance</value>
+  </data>
+  <data name="Driver_Report" xml:space="preserve">
+    <value>Captain Report</value>
+  </data>
+  <data name="Driver_Trip_Status" xml:space="preserve">
+    <value>Captain Request Status</value>
+  </data>
+  <data name="Finances" xml:space="preserve">
+    <value>Finances</value>
+  </data>
+  <data name="Finances_History" xml:space="preserve">
+    <value>Finances History</value>
+  </data>
+  <data name="Generate_Invoice" xml:space="preserve">
+    <value>Generate Invoice</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="HelpQuestions" xml:space="preserve">
+    <value>Help Questions</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Industy" xml:space="preserve">
+    <value>Industy</value>
+  </data>
+  <data name="Invoice" xml:space="preserve">
+    <value>Invoice</value>
+  </data>
+  <data name="Invoice_Report" xml:space="preserve">
+    <value>Invoice Report</value>
+  </data>
+  <data name="Items" xml:space="preserve">
+    <value>Items</value>
+  </data>
+  <data name="List_Captain_Taxis" xml:space="preserve">
+    <value>List Captain</value>
+  </data>
+  <data name="List_Category_Fare" xml:space="preserve">
+    <value>List Category Fare</value>
+  </data>
+  <data name="List_Client_Balance" xml:space="preserve">
+    <value>List Client Balance</value>
+  </data>
+  <data name="List_Collected" xml:space="preserve">
+    <value>List Collected</value>
+  </data>
+  <data name="List_Driver_Balance" xml:space="preserve">
+    <value>List Captain Balance</value>
+  </data>
+  <data name="List_Operator" xml:space="preserve">
+    <value>List Operator</value>
+  </data>
+  <data name="List_Promo_Code" xml:space="preserve">
+    <value>List Promo Code</value>
+  </data>
+  <data name="List_Reward" xml:space="preserve">
+    <value>List Reward</value>
+  </data>
+  <data name="List_Transfer" xml:space="preserve">
+    <value>List Transfer</value>
+  </data>
+  <data name="List_Voucher_Code" xml:space="preserve">
+    <value>List Voucher Code</value>
+  </data>
+  <data name="Log_in" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="Main_Category" xml:space="preserve">
+    <value>Main Category</value>
+  </data>
+  <data name="Model" xml:space="preserve">
+    <value>Model</value>
+  </data>
+  <data name="My_Ticket" xml:space="preserve">
+    <value>My Tickets</value>
+  </data>
+  <data name="Nationality" xml:space="preserve">
+    <value>Nationality</value>
+  </data>
+  <data name="New_Captain_Taxis" xml:space="preserve">
+    <value>New Captain</value>
+  </data>
+  <data name="New_Category_Fare" xml:space="preserve">
+    <value>New Branches Finances</value>
+  </data>
+  <data name="New_Client" xml:space="preserve">
+    <value>New Client</value>
+  </data>
+  <data name="New_Client_Balance" xml:space="preserve">
+    <value>New Client Balance</value>
+  </data>
+  <data name="New_Driver_Balance" xml:space="preserve">
+    <value>New Captain Balance</value>
+  </data>
+  <data name="New_Operator" xml:space="preserve">
+    <value>New Operator</value>
+  </data>
+  <data name="New_Promo_Code" xml:space="preserve">
+    <value>New Promo Code</value>
+  </data>
+  <data name="New_Request" xml:space="preserve">
+    <value>New Request</value>
+  </data>
+  <data name="New_Requests" xml:space="preserve">
+    <value>New Requests</value>
+  </data>
+  <data name="New_Reward" xml:space="preserve">
+    <value>New Reward</value>
+  </data>
+  <data name="New_Ticket" xml:space="preserve">
+    <value>New Ticket</value>
+  </data>
+  <data name="New_Voucher_Code" xml:space="preserve">
+    <value>New Voucher Code</value>
+  </data>
+  <data name="Not_Found" xml:space="preserve">
+    <value>Not Accept Orders</value>
+  </data>
+  <data name="Operations" xml:space="preserve">
+    <value>Operations</value>
+  </data>
+  <data name="OperationsNotFound" xml:space="preserve">
+    <value>Not Found</value>
+  </data>
+  <data name="Operators" xml:space="preserve">
+    <value>Operators</value>
+  </data>
+  <data name="Operators_Add" xml:space="preserve">
+    <value>Operators Add</value>
+  </data>
+  <data name="Operators_Table" xml:space="preserve">
+    <value>Operators Table</value>
+  </data>
+  <data name="Pending_Action" xml:space="preserve">
+    <value>Pending Action</value>
+  </data>
+  <data name="Pending_Invoice" xml:space="preserve">
+    <value>Pending Invoice</value>
+  </data>
+  <data name="Pending_Invoices" xml:space="preserve">
+    <value>Pending Requests</value>
+  </data>
+  <data name="Pending_Requests" xml:space="preserve">
+    <value>Pending Requests</value>
+  </data>
+  <data name="Permissions" xml:space="preserve">
+    <value>Permissions</value>
+  </data>
+  <data name="PortalPaid_History" xml:space="preserve">
+    <value>Paid from Logi Portal</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="Promo_Code" xml:space="preserve">
+    <value>Promo Code</value>
+  </data>
+  <data name="Promo_Code_Add" xml:space="preserve">
+    <value>Promo Code Add</value>
+  </data>
+  <data name="Promo_Code_Table" xml:space="preserve">
+    <value>Promo Code Table</value>
+  </data>
+  <data name="Receivers" xml:space="preserve">
+    <value>Receivers</value>
+  </data>
+  <data name="Rejected_Requests" xml:space="preserve">
+    <value>Rejected Requests</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>Reports</value>
+  </data>
+  <data name="Requests" xml:space="preserve">
+    <value>Requests</value>
+  </data>
+  <data name="Requests_History" xml:space="preserve">
+    <value>Requests History</value>
+  </data>
+  <data name="Reward" xml:space="preserve">
+    <value>Reward</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="Role_Permissions" xml:space="preserve">
+    <value>Role Permissions</value>
+  </data>
+  <data name="Schedule_Requests" xml:space="preserve">
+    <value>Schedule Requests</value>
+  </data>
+  <data name="Sent_Ticket" xml:space="preserve">
+    <value>Sent Ticket</value>
+  </data>
+  <data name="Services" xml:space="preserve">
+    <value>Services</value>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>Setting</value>
+  </data>
+  <data name="Staff" xml:space="preserve">
+    <value>Staff</value>
+  </data>
+  <data name="staffs_History" xml:space="preserve">
+    <value>staffs History</value>
+  </data>
+  <data name="Staff_Permissions" xml:space="preserve">
+    <value>Staff Permissions</value>
+  </data>
+  <data name="Staff_Roles" xml:space="preserve">
+    <value>Branches Roles</value>
+  </data>
+  <data name="Sub_Category" xml:space="preserve">
+    <value>Sub Category</value>
+  </data>
+  <data name="Support" xml:space="preserve">
+    <value>Support</value>
+  </data>
+  <data name="Taxis" xml:space="preserve">
+    <value>Taxis</value>
+  </data>
+  <data name="Taxi_Report" xml:space="preserve">
+    <value>Taxi Report</value>
+  </data>
+  <data name="Tickets" xml:space="preserve">
+    <value>Tickets</value>
+  </data>
+  <data name="Track" xml:space="preserve">
+    <value>Track</value>
+  </data>
+  <data name="Transaction_Type" xml:space="preserve">
+    <value>Transaction Type</value>
+  </data>
+  <data name="Trips" xml:space="preserve">
+    <value>Requests</value>
+  </data>
+  <data name="Trip_Finanical" xml:space="preserve">
+    <value>Request Finanical</value>
+  </data>
+  <data name="Trip_History" xml:space="preserve">
+    <value>Request History</value>
+  </data>
+  <data name="Trip_Promo" xml:space="preserve">
+    <value>Request Promo</value>
+  </data>
+  <data name="Trip_Status" xml:space="preserve">
+    <value>Request Status</value>
+  </data>
+  <data name="UnderScrutiny" xml:space="preserve">
+    <value>Under Scrutiny</value>
+  </data>
+  <data name="Users_In_Role" xml:space="preserve">
+    <value>User in Role</value>
+  </data>
+  <data name="Voucher_Add" xml:space="preserve">
+    <value>Voucher Add</value>
+  </data>
+  <data name="Voucher_Code" xml:space="preserve">
+    <value>Voucher Code</value>
+  </data>
+  <data name="Voucher_Driver" xml:space="preserve">
+    <value>Voucher Captain</value>
+  </data>
+  <data name="Voucher_Table" xml:space="preserve">
+    <value>Voucher Table</value>
+  </data>
+  <data name="Waiting_Activation" xml:space="preserve">
+    <value>Waiting Activation</value>
+  </data>
+  <data name="Work_Type" xml:space="preserve">
+    <value>Work Type</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>Year</value>
+  </data>
+  <data name="Devices_Setting" xml:space="preserve">
+    <value>Devices Setting</value>
+  </data>
+  <data name="General_Setting" xml:space="preserve">
+    <value>General Setting</value>
+  </data>
+  <data name="Jobs" xml:space="preserve">
+    <value>Jobs</value>
+  </data>
+  <data name="Entities" xml:space="preserve">
+    <value>Hospitals</value>
+  </data>
+  <data name="List_Entities" xml:space="preserve">
+    <value>List Hospitals</value>
+  </data>
+  <data name="New_Entity" xml:space="preserve">
+    <value>New Hospital</value>
+  </data>
+  <data name="Departments" xml:space="preserve">
+    <value>Departments</value>
+  </data>
+  <data name="EntitiesGroup" xml:space="preserve">
+    <value>Hospitals Group</value>
+  </data>
+  <data name="Patient" xml:space="preserve">
+    <value>Patient</value>
+  </data>
+  <data name="List_Patient" xml:space="preserve">
+    <value>List Patient</value>
+  </data>
+  <data name="New_Patient" xml:space="preserve">
+    <value>New Patient</value>
+  </data>
+  <data name="Patients" xml:space="preserve">
+    <value>Patients</value>
+  </data>
+  <data name="Add_Doctor" xml:space="preserve">
+    <value>Add Doctor</value>
+  </data>
+  <data name="Add_Employee" xml:space="preserve">
+    <value>Add Employee</value>
+  </data>
+  <data name="Doctors" xml:space="preserve">
+    <value>Doctors</value>
+  </data>
+  <data name="Medical_Administration" xml:space="preserve">
+    <value>Medical Administration</value>
+  </data>
+  <data name="System_Administrators" xml:space="preserve">
+    <value>System Administrators</value>
+  </data>
+  <data name="List_Doctors" xml:space="preserve">
+    <value>List Doctors</value>
+  </data>
+  <data name="List_Employees" xml:space="preserve">
+    <value>List Employees</value>
+  </data>
+  <data name="Appointments" xml:space="preserve">
+    <value>Appointments</value>
+  </data>
+  <data name="Add_Appointment" xml:space="preserve">
+    <value>Add Appointment</value>
+  </data>
+  <data name="View_Appointment" xml:space="preserve">
+    <value>View Appointment</value>
+  </data>
+  <data name="Edit_Appointment" xml:space="preserve">
+    <value>Edit Appointment</value>
+  </data>
+  <data name="Case_List" xml:space="preserve">
+    <value>Case List</value>
+  </data>
+  <data name="Under_Observation" xml:space="preserve">
+    <value>Under Observation</value>
+  </data>
+  <data name="All_Diagnosis" xml:space="preserve">
+    <value>All Diagnosis</value>
+  </data>
+  <data name="Diagnosis_List" xml:space="preserve">
+    <value>Diagnosis List</value>
+  </data>
+  <data name="Diseases" xml:space="preserve">
+    <value>Diseases</value>
+  </data>
+  <data name="Medicines" xml:space="preserve">
+    <value>Medicines</value>
+  </data>
+  <data name="Diseases_List" xml:space="preserve">
+    <value>Diseases List</value>
+  </data>
+  <data name="Medicines_List" xml:space="preserve">
+    <value>Medicines List</value>
+  </data>
+  <data name="FilesTypes" xml:space="preserve">
+    <value>Files Types</value>
+  </data>
+  <data name="Laboratory" xml:space="preserve">
+    <value>Laboratory</value>
+  </data>
+  <data name="Pharmacy" xml:space="preserve">
+    <value>Pharmacy</value>
+  </data>
+  <data name="Role_Configration" xml:space="preserve">
+    <value>Role Configration</value>
+  </data>
+  <data name="EntityType" xml:space="preserve">
+    <value>Hospital Type</value>
+  </data>
+  <data name="Visits" xml:space="preserve">
+    <value>Visits</value>
+  </data>
+  <data name="Captain" xml:space="preserve">
+    <value>Captain</value>
+  </data>
+  <data name="Orders_Delivered" xml:space="preserve">
+    <value>Orders Delivered</value>
+  </data>
+  <data name="Pending_Delivery_Orders" xml:space="preserve">
+    <value>Pending Delivery Orders</value>
+  </data>
+  <data name="Processing_Requests" xml:space="preserve">
+    <value>Processing Requests</value>
+  </data>
+  <data name="View_Appointments" xml:space="preserve">
+    <value>View Appointments</value>
+  </data>
+  <data name="Doctor_Managment" xml:space="preserve">
+    <value>Doctor Managment</value>
+  </data>
+  <data name="Genetic_Profile" xml:space="preserve">
+    <value>Genetic Profile</value>
+  </data>
+  <data name="Groups" xml:space="preserve">
+    <value>Groups</value>
+  </data>
+  <data name="High_Risk" xml:space="preserve">
+    <value>High Risk</value>
+  </data>
+  <data name="Hospital_Managment" xml:space="preserve">
+    <value>Hospital Managment</value>
+  </data>
+  <data name="Medical_Managment" xml:space="preserve">
+    <value>Medical Managment</value>
+  </data>
+  <data name="Metal_Map" xml:space="preserve">
+    <value>Metal Map</value>
+  </data>
+  <data name="Patient_Managment" xml:space="preserve">
+    <value>Patient Managment</value>
+  </data>
+  <data name="System_Admin" xml:space="preserve">
+    <value>System Admin</value>
+  </data>
+  <data name="System_Managment" xml:space="preserve">
+    <value>System Managment</value>
+  </data>
+  <data name="Banks" xml:space="preserve">
+    <value>Banks</value>
+  </data>
+  <data name="Activities" xml:space="preserve">
+    <value>Activities</value>
+  </data>
+  <data name="PaymentWays" xml:space="preserve">
+    <value>Payment Ways</value>
+  </data>
+  <data name="Blocks" xml:space="preserve">
+    <value>Blocks</value>
+  </data>
+  <data name="ConfigrationCompany" xml:space="preserve">
+    <value>Company Configration</value>
+  </data>
+  <data name="Vendors" xml:space="preserve">
+    <value>Vendors</value>
+  </data>
+  <data name="PaymentConfiguration" xml:space="preserve">
+    <value>Payment Configuration</value>
+  </data>
+  <data name="Banar" xml:space="preserve">
+    <value>Sliders</value>
+  </data>
+  <data name="Sliders" xml:space="preserve">
+    <value>Sliders</value>
+  </data>
+  <data name="Packages" xml:space="preserve">
+    <value>Packages</value>
+  </data>
+  <data name="PaymentsStatus" xml:space="preserve">
+    <value>Payments Status</value>
+  </data>
+  <data name="CustomersDetails" xml:space="preserve">
+    <value>Customers Details</value>
+  </data>
+  <data name="Inquiries" xml:space="preserve">
+    <value>Inquiries</value>
+  </data>
+  <data name="Add_New_Vendor" xml:space="preserve">
+    <value>Add New Vendor</value>
+  </data>
+  <data name="List_Vendors" xml:space="preserve">
+    <value>List Vendors</value>
+  </data>
+  <data name="Service_Providers" xml:space="preserve">
+    <value>Service Providers</value>
+  </data>
+  <data name="Add_New_Product" xml:space="preserve">
+    <value>Add New Product</value>
+  </data>
+  <data name="Product" xml:space="preserve">
+    <value>Product</value>
+  </data>
+  <data name="MainPages" xml:space="preserve">
+    <value>Site Pages</value>
+  </data>
+  <data name="MainPageDetails" xml:space="preserve">
+    <value>Main Page Details</value>
+  </data>
+  <data name="List_Products" xml:space="preserve">
+    <value>List Products</value>
+  </data>
+  <data name="New_Product" xml:space="preserve">
+    <value>New Product</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>Products</value>
+  </data>
+  <data name="AddressTypes" xml:space="preserve">
+    <value>Address Types</value>
+  </data>
+  <data name="KeyWords" xml:space="preserve">
+    <value>KeyWords</value>
+  </data>
+  <data name="FavouriteProducts" xml:space="preserve">
+    <value>Favourite Products</value>
+  </data>
+  <data name="Locations" xml:space="preserve">
+    <value>Locations</value>
+  </data>
+  <data name="ShippingCompany" xml:space="preserve">
+    <value>Shipping Company</value>
+  </data>
+  <data name="Employees" xml:space="preserve">
+    <value>Employees</value>
+  </data>
+  <data name="AddShippingCompany" xml:space="preserve">
+    <value>Add Shipping Company</value>
+  </data>
+  <data name="ShippingCompanies" xml:space="preserve">
+    <value>Shipping Companies</value>
+  </data>
+  <data name="Add_New_Employee" xml:space="preserve">
+    <value>Add New Employee</value>
+  </data>
+  <data name="Orders" xml:space="preserve">
+    <value>Orders</value>
+  </data>
+  <data name="AddBranches" xml:space="preserve">
+    <value>Add Branches</value>
+  </data>
+  <data name="Add_Admin" xml:space="preserve">
+    <value>Add Admin</value>
+  </data>
+  <data name="List_Admins" xml:space="preserve">
+    <value>List Admins</value>
+  </data>
+  <data name="System_Employees" xml:space="preserve">
+    <value>System Employees</value>
+  </data>
+  <data name="AcceptedOrders" xml:space="preserve">
+    <value>Accepted Orders</value>
+  </data>
+  <data name="Being_DeliveredOrders" xml:space="preserve">
+    <value>Being Delivered Orders</value>
+  </data>
+  <data name="Being_ProcessedOrders" xml:space="preserve">
+    <value>Being Processed Orders</value>
+  </data>
+  <data name="CanceledOrders" xml:space="preserve">
+    <value>Canceled Orders</value>
+  </data>
+  <data name="CreatedOrders" xml:space="preserve">
+    <value>New Orders</value>
+  </data>
+  <data name="DeliveredOrders" xml:space="preserve">
+    <value>Delivered Orders</value>
+  </data>
+  <data name="ShippingOrders" xml:space="preserve">
+    <value>Shipping Orders</value>
+  </data>
+  <data name="EnbaleHistory" xml:space="preserve">
+    <value>Enbale History</value>
+  </data>
+  <data name="VacHistory" xml:space="preserve">
+    <value>Vaccations History</value>
+  </data>
+  <data name="List_a_Vendors" xml:space="preserve">
+    <value>List Vendor - Productive families</value>
+  </data>
+  <data name="Mangment" xml:space="preserve">
+    <value>Management</value>
+  </data>
+  <data name="Add_New_Vend" xml:space="preserve">
+    <value>Add New Vendor</value>
+  </data>
+  <data name="List_Captain_Active" xml:space="preserve">
+    <value>List Captain Active</value>
+  </data>
+  <data name="Send_Message" xml:space="preserve">
+    <value>Send Message</value>
+  </data>
+  <data name="Certified_Captain" xml:space="preserve">
+    <value>Certified Captain</value>
+  </data>
+  <data name="CitiesCovered" xml:space="preserve">
+    <value>Cities Covered</value>
+  </data>
+  <data name="AssignOrder" xml:space="preserve">
+    <value>Assign Order</value>
+  </data>
+  <data name="CaptainZone" xml:space="preserve">
+    <value>Captain Zone</value>
+  </data>
+  <data name="TrackingOrders" xml:space="preserve">
+    <value>Tracking Orders</value>
+  </data>
+  <data name="Edit_Data" xml:space="preserve">
+    <value>Edit Data</value>
+  </data>
+  <data name="New_Captain" xml:space="preserve">
+    <value>New Captain</value>
+  </data>
+  <data name="Converted" xml:space="preserve">
+    <value>Converted</value>
+  </data>
+  <data name="Invoices" xml:space="preserve">
+    <value>Invoices</value>
+  </data>
+  <data name="Pending_Transfer" xml:space="preserve">
+    <value>Pending Transfer</value>
+  </data>
+  <data name="Reports_Inquiries" xml:space="preserve">
+    <value>Reports and Inquiries</value>
+  </data>
+  <data name="Questions" xml:space="preserve">
+    <value>Questions</value>
+  </data>
+  <data name="Add_Blocks" xml:space="preserve">
+    <value>Add Blocks</value>
+  </data>
+  <data name="Assign_Captains" xml:space="preserve">
+    <value>Assign Captains</value>
+  </data>
+  <data name="CaptainBlocks" xml:space="preserve">
+    <value>Captain Blocks</value>
+  </data>
+  <data name="List_Customers" xml:space="preserve">
+    <value>List Customers</value>
+  </data>
+  <data name="Pending_Approve" xml:space="preserve">
+    <value>Pending Approve</value>
+  </data>
+  <data name="Processes" xml:space="preserve">
+    <value>Processes</value>
+  </data>
+  <data name="Subscriptions" xml:space="preserve">
+    <value>Subscriptions</value>
+  </data>
+  <data name="Update_Assigns" xml:space="preserve">
+    <value>Update Assigns</value>
+  </data>
+  <data name="Update_Blocks" xml:space="preserve">
+    <value>Update Blocks</value>
+  </data>
+  <data name="Orders_History" xml:space="preserve">
+    <value>Orders History</value>
+  </data>
+  <data name="Rate" xml:space="preserve">
+    <value>Rate</value>
+  </data>
+  <data name="Schedule_Orders" xml:space="preserve">
+    <value>Schedule Orders</value>
+  </data>
+  <data name="Questions_Ratings" xml:space="preserve">
+    <value>Questions And Ratings</value>
+  </data>
+  <data name="Ratings" xml:space="preserve">
+    <value>Ratings</value>
+  </data>
+  <data name="Increase_Orders" xml:space="preserve">
+    <value>Increase Orders</value>
+  </data>
+  <data name="DriverSupport" xml:space="preserve">
+    <value>Driver Support</value>
+  </data>
+  <data name="Subscriptions_Email" xml:space="preserve">
+    <value>Subscriptions Email</value>
+  </data>
+  <data name="PaymentReports" xml:space="preserve">
+    <value>Payment Reports</value>
+  </data>
+  <data name="Company_Working_Hours" xml:space="preserve">
+    <value>Company Working Hours</value>
+  </data>
+  <data name="Customers_Balance" xml:space="preserve">
+    <value>Customers Balance</value>
+  </data>
+  <data name="Favourite_Products" xml:space="preserve">
+    <value>Favourite Products</value>
+  </data>
+</root>

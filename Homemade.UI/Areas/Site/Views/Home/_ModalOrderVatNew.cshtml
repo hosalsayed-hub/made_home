@@ -1,0 +1,133 @@
+﻿@model Homemade.BLL.ViewModel.Site.SiteOrdersVatViewModel
+@inject Homemade.BLL.Setting.BlConfiguration _blConfiguration
+<!-- ***** order-details modal  ***** -->
+@*<div class="modal-body-title">
+
+    </div>*@
+<div class="modal-body-content">
+    <div class="row">
+        <div class="col-lg-12 form-group text-center">
+            <img class="img-fluid" src="~/assets/homeMadeSite/img/logo.svg">
+        </div>
+        <div class="col-lg-12 form-group text-center">
+            <span class="box"><strong> فاتورة ضريبية مبسطة</strong></span>
+        </div>
+        <div class="col-lg-12 form-group text-center">
+            <span class="box"><strong>رقم الفاتورة : #@Model.OrderVendorID</strong></span>
+        </div>
+        <div class="col-lg-12 form-group text-center">
+            <span class="box"><strong>@_blConfiguration.GetFirstConfiguration().CompanNameAr</strong></span>
+        </div>
+        <div class="col-lg-12 form-group text-center">
+            <span class="box">@Model.Address</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 form-group">
+            <span class="box">
+                التاريخ:  @Model.OrderDate
+            </span>
+        </div>
+        <div class="col-lg-12 form-group">
+            <span class="box">
+                <strong>  رقم تسجيل ضريبة القيمة المضافة:  @Model.TaxIdentificationNumber</strong>
+            </span>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="form-group box">
+                <div class="table-responsive order-table">
+                    <table class="table table-borderless">
+                        <thead style="border-bottom: 1px solid gray">
+                            <tr>
+                                <th>المنتجات </th>
+                                <th>الكمية</th>
+                                <th>السعر</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.SiteOrderItems)
+                            {
+                                <tr>
+                                    <td class="order-name">
+                                        <p class="order-details-td">
+                                            @item.ProdName
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p class="order-details-td">
+                                            @item.Quantity
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p class="order-details-td">
+                                            @(Math.Round(item.Price * item.Quantity, 2)) @Homemade.UI.Resources.Homemade.SR
+                                        </p>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <hr />
+                <div class="order-summary">
+                    <div class="summary-details">
+                        <p class="details-text">
+                            اجمالي الطلبات شامل الضريبة : @Model.Price
+                        </p>
+                    </div>
+                    <div class="summary-details">
+                        <p class="details-text">
+                            اجمالي مبلغ التوصيل شامل الضريبة : @Model.DeliveryPrice
+                        </p>
+                    </div>
+                    <div class="summary-details summary-total ">
+                        <p class="details-text">
+                            اجمالي الفاتورة قبل الخصم : @(Math.Round(@Model.Price + @Model.DeliveryPrice, 2))
+                        </p>
+                    </div>
+                    @if (Model.Discount > 0)
+                    {
+                        <div class="summary-details">
+                            <p class="details-text"> الخصم: @Model.Discount </p>
+                        </div>
+                    }
+
+                    <div class="summary-details summary-total ">
+                        <p class="details-text">
+                            اجمالي الفاتورة بعد الخصم شامل الضريبة (ريال): @Model.Total
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group box">
+                <div class="summary-details summary-total ">
+                    <p class="details-text"><strong> ضريبة القيمة المضافه (@_blConfiguration.GetDeliveryPriceVatPercent().ToString("0")%): @Model.VatValue.ToString("0.##") </strong></p>
+                </div>
+            </div>
+        </div>
+        @*<div class="col-lg-12 form-group">
+        <hr style="border: 1px dotted gray;" />
+        </div>*@
+        <div class="col-lg-12">
+            <center>
+                <div class="form-group box" style="width:160px">
+                    <img width="150" height="150" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.BarCode))" />
+                </div>
+            </center>
+        </div>
+    </div>
+</div>
+
+<style>
+    .box {
+        border: 1px solid gray;
+        padding: 3px;
+    }
+</style>
+
+
+
+<!-- ***** order-details modal  ***** -->

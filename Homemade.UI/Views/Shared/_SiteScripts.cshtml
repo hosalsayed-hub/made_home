@@ -1,0 +1,367 @@
+﻿<script>
+    function Submitlogin() {
+        $("#divMsgParentLogin").hide();
+        if ($("#txtmobileNo").val() == "" || $("#txtpassword").val() == "") {
+            $("#divMsgParentLogin").slideUp();
+            $("#divMsgParentLogin").show();
+            $("#divMsgClassLogin").attr("class", "alert alert-site");
+            $("#lblMsgLogin").html("@Homemade.UI.Resources.Homemade.Please_Insert_Data");
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: "/site/Home/LogIn",
+                data: {
+                    Mobile: $("#txtmobileNo").val(),
+                    Password: $("#txtpassword").val(),
+                }
+            }).done(function (data) {
+                $("#divMsgParentLogin").slideUp();
+                $("#divMsgParentLogin").show();
+                console.log(data);
+                if (data.status) {
+                    $("#divMsgClassLogin").attr("class", "alert alert-success");
+                    $("#lblMsgLogin").html(data.message);
+                    $("#form_Login").hide();
+                    $("#form_LoginCode").show();
+                }
+                else {
+                    $("#divMsgClassLogin").attr("class", "alert alert-site");
+                    $("#lblMsgLogin").html(data.message);
+                }
+            });
+        }
+    }
+    function GetNationalityRegister(nationalityID) {
+        $.ajax({
+            type: "POST",
+            url: '/Site/Home/LoadNationality',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                $('#NationalityID').html('');
+                $('#NationalityID').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (nationalityID != undefined && nationalityID > 0 && nationalityID == item.nationalityID) {
+                        $('#NationalityID').append('<option selected value="' + item.nationalityID + '">' + item.nationalityName + '</option>');
+                        $('#NationalityID').val(nationalityID).trigger('change');
+                    }
+                    else {
+                        $('#NationalityID').append('<option value="' + item.nationalityID + '">' + item.nationalityName + '</option>');
+                    }
+
+                }
+            },
+            error: function () {
+
+            }
+        });
+    }
+    function GetGenderRegister(genderID) {
+        $.ajax({
+            type: "POST",
+            url: '/Vendor/Vendors/GetAllGender',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                $('#GenderID').html('');
+                $('#GenderID').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (genderID != undefined && genderID == item.genderID) {
+                        $('#GenderID').append('<option selected value="' + item.genderID + '">' + item.genderName + '</option>');
+                        $('#GenderID').val(genderID).trigger('change');
+                    }
+                    else {
+                        $('#GenderID').append('<option value="' + item.genderID + '">' + item.genderName + '</option>');
+                    }
+
+                }
+            },
+            error: function () {
+
+            }
+        });
+    }
+    function GetCitiesRegister(cityID) {
+        $.ajax({
+            type: "POST",
+            url: '/Site/Home/LoadCities',
+            data: {},
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                $("#CityID").html('');
+                $("#CityID").append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (cityID != undefined && cityID > 0 && cityID == item.cityID) {
+                        $("#CityID").append('<option selected value="' + item.cityID + '">' + item.cityName + '</option>');
+                        $("#CityID").val(cityID).trigger('change');
+                    }
+                    else
+                        $("#CityID").append('<option value="' + item.cityID + '">' + item.cityName + '</option>');
+
+                }
+            },
+            error: function () {
+
+            }
+        });
+    }
+    function completedRegister(xhr) {
+        var obj = JSON.parse(xhr.responseText);
+        var result = obj;
+        $("#divMsgParentRegister").slideUp();
+        $("#divMsgParentRegister").show();
+
+        var msg = result.message;
+        if (result.status) {
+            if (result.objResult == "verfied") {
+                $("#newUsermodal").modal('hide');
+                $("#newUsermodalStep2").modal('show');
+                $("#RegisterTypeId").val(2);
+                setTimeout(function () {
+                    $("#Div_Loading").hide();
+                    $("#Div_sendcode").show();
+                }, 2000);
+            }
+            else {
+                $("#Div_Verfied").hide();
+                $("#Div_Verfied_Success").show();
+                window.setTimeout(() => {
+                    location.reload();
+                }, 3000);
+            }
+          
+        }
+        else {
+
+            $("#divMsgClassRegister").attr("class", "alert alert-site");
+            $("#lblMsgRegister").html(msg);
+        }
+
+    }
+
+
+
+    function SubmitVerfiedRegisterCode() {
+        $.ajax({
+            type: "POST",
+            url: "/site/Home/CheckVerfiedCode",
+            data: {
+                code: $("#RegisterCode").val(),
+            }
+            , success: function (result) {
+
+                if (result.status) {
+                    $("#RegisterCustomerForm").submit();
+                }
+                else {
+                    $("#divMsgParentRegisterCode").slideUp();
+                    $("#divMsgParentRegisterCode").show();
+                    $("#divMsgClassRegisterCode").attr("class", "alert alert-site");
+                    $("#lblMsgRegisterCode").html(result.message);
+                }
+            }
+        });
+
+    }
+    function SubmitVerfiedLoginCode() {
+        $.ajax({
+            type: "POST",
+            url: "/site/Home/CheckVerfiedCodeLogin",
+            data: {
+                code: $("#LoginCode").val(),
+            }
+            , success: function (result) {
+                $("#divMsgParentLogin").hide();
+
+                if (result.status) {
+                    $("#divMsgParentLogin").slideUp();
+                    $("#divMsgParentLogin").show();
+                    $("#divMsgClassLogin").attr("class", "alert alert-success");
+                    $("#lblMsgLogin").html(result.message);
+                    location.reload();
+                }
+                else {
+                    $("#divMsgParentLogin").slideUp();
+                    $("#divMsgParentLogin").show();
+                    $("#divMsgClassLogin").attr("class", "alert alert-site");
+                    $("#lblMsgLogin").html(result.message);
+                }
+            }
+        });
+
+    }
+    function SendCode() {
+        let formSendCode = $("#formSendCode");
+        if (formSendCode.valid()) {
+            $.ajax({
+                type: "POST",
+                url: "/site/Home/SendOtpCode",
+                data: {
+                    mobileNo: $("#ForgetMobileNo").val(),
+                }
+                , success: function (result) {
+
+                    if (result.status) {
+                        $("#forgotPasswordmodalStep1").modal('hide');
+                        $("#forgotPasswordmodalStep2").modal('show');
+                    }
+                    else {
+                        $("#divMsgParentResetPhoneCode").slideUp();
+                        $("#divMsgParentResetPhoneCode").show();
+                        $("#divMsgClassResetPhoneCode").attr("class", "alert alert-site");
+                        $("#lblMsgResetPhoneCode").html(result.message);
+                    }
+                }
+            });
+        }
+
+    }
+    function CheckCode() {
+        let formCheckCode = $("#formCheckCode");
+        if (formCheckCode.valid()) {
+            $.ajax({
+                type: "POST",
+                url: "/site/Home/CheckOtpCode",
+                data: {
+                    code: $("#ForgetCode").val(),
+                }
+                , success: function (result) {
+
+                    if (result.status) {
+                        $("#forgotPasswordmodalStep2").modal('hide');
+                        $("#forgotPasswordmodalStep3").modal('show');
+                    }
+                    else {
+                        $("#divMsgParentCheckPhoneCode").slideUp();
+                        $("#divMsgParentCheckPhoneCode").show();
+                        $("#divMsgClassCheckPhoneCode").attr("class", "alert alert-site");
+                        $("#lblMsgCheckPhoneCode").html(result.message);
+                    }
+                }
+            });
+        }
+    }
+    function ResetPassword() {
+        let formForgetPassword = $("#formForgetPassword");
+        if (formForgetPassword.valid()) {
+            $.ajax({
+                type: "POST",
+                url: "/site/Home/ResetForgetPassword",
+                data: {
+                    newPassword: $("#ForgetNewPassword").val(),
+                    confirmNewPassword: $("#ForgetConfirmNewPassword").val(),
+                }
+                , success: function (result) {
+
+                    if (result.status) {
+
+                        $("#formForgetPassword").hide();
+                        $("#divMsgParentPasswordCode").slideUp();
+                        $("#divMsgClassPasswordCode").hide();
+                        $("#divMsgParentPasswordCode").show();
+                        $("#lblMsgPasswordCodeSuccess").show();
+                        $("#lblMsgPasswordCodeSuccess").html(result.message);
+                        window.setTimeout(() => {
+                            location.reload();
+                        }, 5000);
+                    }
+                    else {
+                        $("#divMsgParentPasswordCode").slideUp();
+                        $("#divMsgParentPasswordCode").show();
+                        $("#divMsgClassPasswordCode").attr("class", "alert alert-site");
+                        $("#lblMsgPasswordCode").html(result.message);
+                    }
+                }
+            });
+        }
+    }
+    function LoginReset() {
+        location.reload();
+    }
+    function completedSubscribe(xhr) {
+        var result = JSON.parse(xhr.responseText);
+        $("#divMsgParentSubscribe").hide();
+        var msg = result.message;
+        if (result.status) {
+            $("#divMsgParentSubscribe").slideUp();
+            $("#divMsgParentSubscribe").show();
+            $("#divMsgClassSubscribe").attr("class", "alert alert-success");
+            $("#lblMsgSubscribe").html(msg);
+            $("#Dev_Subscribe").hide();
+        }
+        else {
+            $("#divMsgParentSubscribe").slideUp();
+            $("#divMsgParentSubscribe").show();
+            $("#divMsgClassSubscribe").attr("class", "alert alert-site");
+            $("#lblMsgSubscribe").html(msg);
+        }
+    }
+    function OpenNotificationandSeen(notId, guid, status) {
+             $.ajax({
+                        type: "POST",
+                 url: '/Site/Home/SeenNotifictions',
+                 data: { 'notId': notId },
+                        dataType: "json",
+                        contentType: "application/x-www-form-urlencoded",
+                 success: function (result) {
+                     if (result.resultType == 'success') {
+                         $("#notificationId_" + notId).removeClass("notification-not-reading");
+                         $("#SeenActivePointNoti").html($("#SeenActivePointNoti").html() - 1);
+                         var dd = $("#SeenActivePointNoti").html() - 1;
+                         if (dd > 0) {
+                             $("#SeenActivePointNoti").removeClass('d-none');
+                         }
+                         else {
+                             $("#SeenActivePointNoti").removeClass('d-none');
+                             $("#SeenActivePointNoti").addClass('d-none');
+                         }
+                         if (guid != "") {
+                                 if (status === '10') {
+                                     window.location.href = "/Site/Home/completePendingOrder?id=" + guid;
+                                 }
+                             }
+                     }
+                 },
+                        error: function () {
+
+                        }
+                    });
+        }
+        function SeenAllNotifications() {
+            $.ajax({
+                type: "POST",
+                url: '/Site/Home/SeenAllNotifictions',
+                data: {},
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function (result) {
+                    if (result.resultType == 'success') {
+                        $(".notification-not-reading").removeClass("notification-not-reading");
+                        $("#SeenActivePointNoti").removeClass("active-point");
+                    }
+                },
+                error: function () {
+                }
+            });
+    }
+    function CheckActivePointNoti() {
+        var seenActiveCount = $("#SeenActivePointNoti").html();
+        console.log(seenActiveCount);
+        if (seenActiveCount > 0) {
+            $("#SeenActivePointNoti").removeClass('d-none');
+        }
+        else {
+            $("#SeenActivePointNoti").removeClass('d-none');
+            $("#SeenActivePointNoti").addClass('d-none');
+        }
+    }
+</script>

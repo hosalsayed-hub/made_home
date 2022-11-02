@@ -1,0 +1,414 @@
+﻿<script>
+    var divMsgClass = $("#divMsgClass");
+    var lblMsg = $("#lblMsg");
+    var divMsgParent = $("#divMsgParent");
+        function GetCountries(countryID) {
+
+     $("#CountryID").html('');
+        $("#CountryID").append('<option></option>')
+
+        var obj = {};
+        $.ajax({
+            type: "POST",
+            url: 'Setting/City/GetAllCountries',
+            data: '{obj: ' + JSON.stringify(obj) + '}',
+            dataType: "json",
+            async: false,
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (countryID != undefined && countryID > 0 && countryID == item.countryID) {
+                        $("#CountryID").append('<option selected value="' + item.countryID + '">' + item.countryName + '</option>');
+                        $("#CountryID").val(countryID).trigger('change');
+
+
+                    }
+                    else
+                    $("#CountryID").append('<option value="' + item.countryID + '">' + item.countryName + '</option>');
+
+                }
+
+
+
+            },
+            error: function () {
+
+            }
+        });
+    }
+    function GetNationalities(nationalityID) {
+
+
+        var obj = {};
+        $.ajax({
+            type: "POST",
+            url: '/Setting/Nationality/GetAllNationality',
+            data: '{obj: ' + JSON.stringify(obj) + '}',
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+
+                    if (nationalityID != undefined && nationalityID > 0 && nationalityID == item.nationalityID) {
+                        $("#NationalityID").append('<option selected value="' + item.nationalityID + '">' + item.nationalityName + '</option>');
+                        $("#NationalityID").val(nationalityID).trigger('change');
+                    }
+                    else
+                        $("#NationalityID").append('<option value="' + item.nationalityID + '">' + item.nationalityName + '</option>');
+                }
+            },
+            error: function () {
+
+            }
+        });
+    }
+    function initDefault() {
+        $(".Hijiri").hijriDatePicker({
+            hijri: true,
+            showSwitcher: false
+        });
+    }
+    function ChangeDateType(e) {
+
+        var elem = $(e);
+        var value = elem.attr('value');
+
+        var mainParent = elem.closest('.parentDate');
+        mainParent.find('input[type=hidden]').val(value);
+        var dateDateType = mainParent.find('.datetype');
+        var hijiri = $(dateDateType.find('.Hijiri')[0]);
+        var normal = $(dateDateType.find('.NormalDate')[0]);
+        hijiri.hide();
+        normal.hide();
+
+        if (value == 0) {
+            hijiri.toggle();
+        }
+        else {
+            normal.toggle();
+        }
+    }
+    function ConvertToBase64(e, imgid) {
+        //alert(imgid)
+        var fileUpload = $(e);
+        var pID = '#' + fileUpload.attr('id').replace('fup', '');
+        console.log(pID);
+
+
+        var FR = new FileReader();
+
+        FR.addEventListener("load", function (e) {
+            $(pID).html(e.target.result.replace(/^data:.+;base64,/, ''));
+        }, false);
+
+        FR.readAsDataURL($(fileUpload)[0].files[0]);
+        processdata(imgid)
+    }
+    function ChangeMale_Female(type) {
+        $('#Gender').val(type);
+    }
+    function ConfirmInsert() {
+        var mainObject = {}; // main object
+        var formData = new FormData();
+
+
+
+        var elements = $('.AddData');
+        var ArrayOfParameter = [];
+        elements.each(function (i) {
+            var control = $(this)[0];
+            var data = $(control).val();
+
+            var id = $(control).attr('id');
+
+            var TagName = $(this)[0].tagName.toLowerCase();
+
+            if (TagName == 'input') {
+
+                var type = $(this).attr('type');
+                if (type == 'radio') {
+
+                    if ($(this).prop('checked'))
+                        data = $(this).prop('value');
+
+                }
+                else if (type == 'checkbox') {
+                    data = $(this).prop('checked');
+
+                }
+
+            }
+
+            if (TagName == 'label') {
+                data = $(control).text();
+            }
+            if (TagName == 'p') {
+                data = $(control).html();
+            }
+
+            var obj = new Object();
+            obj.Value = data;
+
+            if (data != null && (data != undefined && data.toString().trim() != '')) {
+                if (id != undefined) {
+                    id = id.replace('rdb', '');
+                    if (data != null && (data != undefined && data.toString().trim() != '')) {
+                        id = id.replace('rdb', '');
+
+                        if (id == "CarPictrue" ||
+                            id == "PersonalPicture" ||
+                            id == "LicensePicture" ||
+                            id == "CarLicensePicture" ||
+                            id == "IDPicture" ||
+                            id == "BankAccountPicture"
+                        ) {
+
+                            mainObject[id] = "";
+                            formData.append(id, "");
+
+
+                        } else {
+                            mainObject[id] = data;
+                            formData.append(id, data);
+
+                        }
+
+
+                        /*property name or key of choice*/
+                    }
+
+
+                }
+            }
+
+
+        });
+        var obj = {};
+        formData.append("fupCarPictrue", fupCarPictruefiles);
+        formData.append("fupPersonalPicture", fupPersonalPicturefiles);
+        formData.append("fupLicensePicture", fupLicensePicturefiles);
+        formData.append("fupIDPicture", fupIDPicturefiles);
+        formData.append("fupBankAccountPicture", fupBankAccountPicturefiles);
+        formData.append("fupCarLicensePicture", fupCarLicensePicturefiles);
+
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Insert")',
+            data: formData,
+            contentType: false,
+            enctype: "multipart/form-data",
+            processData: false,
+            success: function (result) {
+
+                swal.close();
+
+                lblMsg.html(result.message);
+                divMsgParent.show();
+
+                ScrollTop();
+
+                if (result.resultType == 'success') {
+
+                    var msg = result.message;
+                    divMsgClass.attr("class", "alert alert-success");
+
+                }
+                else {
+                    divMsgClass.attr("class", "alert alert-danger");
+                    swal.close();
+                }
+            },
+            error: function () {
+
+            }
+        });
+        console.log(mainObject);
+    }
+        function ConfirmUpdate() {
+        var mainObject = {}; // main object
+
+        debugger;
+        var formData = new FormData();
+
+
+
+        var elements = $('.AddData');
+        var ArrayOfParameter = [];
+        elements.each(function (i) {
+
+            var control = $(this)[0];
+            var data = $(control).val();
+
+            var id = $(control).attr('id');
+
+            var TagName = $(this)[0].tagName.toLowerCase();
+
+            if (TagName == 'input') {
+
+                var type = $(this).attr('type');
+                if (type == 'radio') {
+
+                    data = $(this).attr('value');
+                }
+                else if (type == 'checkbox') {
+                    data = $(this).prop('checked');
+                }
+            }
+
+            if (TagName == 'label') {
+                data = $(control).text();
+            }
+            if (TagName == 'p') {
+                data = $(control).html();
+            }
+
+            var obj = new Object();
+            obj.Value = data;
+
+            if (data != null && (data != undefined && data.toString().trim() != '')) {
+                id = id.replace('rdb', '');
+
+                if (id == "CarPictrue" ||
+                    id == "PersonalPicture" ||
+                    id == "LicensePicture" ||
+                    id == "CarLicensePicture" ||
+                    id == "IDPicture" ||
+                    id == "BankAccountPicture"
+                    ) {
+
+                    mainObject[id] = "";
+                    formData.append(id, "");
+
+
+                } else {
+                    mainObject[id] = data;
+                    formData.append(id, data);
+
+                }
+
+
+                /*property name or key of choice*/
+            }
+        });
+        debugger;
+
+
+        var obj = {};
+
+            formData.append("fupCarPictrue", fupCarPictruefiles);
+            formData.append("fupPersonalPicture", fupPersonalPicturefiles);
+            formData.append("fupLicensePicture", fupLicensePicturefiles);
+            formData.append("fupIDPicture", fupIDPicturefiles);
+            formData.append("fupBankAccountPicture", fupBankAccountPicturefiles);
+            formData.append("fupCarLicensePicture", fupCarLicensePicturefiles);
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Edit")',
+            data: formData,
+            contentType: false,
+            enctype: "multipart/form-data",
+            processData: false,
+            success: function (result) {
+
+
+                lblMsg.html(result.message);
+                divMsgParent.show();
+                ScrollTop();
+                if (result.resultType == 'success') {
+                    var msg = result.message;
+                    divMsgClass.attr("class", "alert alert-success");
+                      @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false)
+  { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\"" })
+            lblMsg.html(msg);
+                }
+                else {
+                    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "result.message" })
+                    divMsgClass.attr("class", "alert alert-danger");
+
+                    swal(result.message, '', 'error');
+                    lblMsg.html(result.message);
+                }
+
+
+
+            },
+            error: function () {
+
+            }
+        });
+    }
+    function ScrollTop() {
+        $('html,body').animate({
+            scrollTop: $('body').position().top
+        }, 1000);
+    }
+          function Insert() {
+        if (!($("form").valid())) { return }
+              $('.validation-summary-errors').hide();
+
+         @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Add, "ConfirmInsert();"));
+    }
+    function GetRegionCity(regionCityID) {
+        $.ajax({
+            type: "POST",
+            url: '/Setting/Region/GetAllRegionCity',
+            data: {},
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                $("#RegionCityID").html('');
+                $("#RegionCityID").append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (regionCityID != undefined && regionCityID > 0 && regionCityID == item.regionCityID) {
+                        $("#RegionCityID").append('<option selected value="' + item.regionCityID + '">' + item.regionCityName + '</option>');
+                        $("#RegionCityID").val(regionCityID).trigger('change');
+                    }
+                    else
+                        $("#RegionCityID").append('<option value="' + item.regionCityID + '">' + item.regionCityName + '</option>');
+                }
+                $($("#RegionCityID")).select2();
+            },
+            error: function () {
+
+            }
+        });
+    }
+    function GetCitys(cityID) {
+       // var regionID = $(e).val();
+       // $($("#CityID")).prop("disabled", false);
+        //if (regionID != '' || regionID != undefined) {
+            $.ajax({
+                type: "POST",
+                //url: '/Setting/City/GetAllCityByRegion',
+                //data: { 'regionID': regionID },
+                url: '/Setting/City/GetAllCities',
+                data: { },
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function (result) {
+                    $("#CityID").html('');
+                    $("#CityID").append('<option></option>');
+                    for (var i = 0; i < result.length; i++) {
+                        var item = result[i];
+                        if (cityID != undefined && cityID > 0 && cityID == item.cityID) {
+                            $("#CityID").append('<option selected value="' + item.cityID + '">' + item.cityName + '</option>');
+                            $("#CityID").val(cityID).trigger('change');
+                        }
+                        else
+                            $("#CityID").append('<option value="' + item.cityID + '">' + item.cityName + '</option>');
+
+                    }
+                    $($("#CityID")).select2();
+                },
+                error: function () {
+
+                }
+            });
+       // }
+    }
+</script>

@@ -1,0 +1,333 @@
+﻿@model Homemade.BLL.ViewModel.Vendor.VendorViewModel
+@inject Homemade.BLL.General.BLGeneral bLGeneral
+@inject Homemade.BLL.Vendor.BlVendor blVendor
+<div class="content">
+    <div class="block">
+        <div class="block-content h_scroll">
+            <h3 class="form-group">
+                <span class="header-title">     @Html.DisplayFor(x => x.FirstName)    @Html.DisplayFor(x => x.SeconedName)</span>
+            </h3>
+            <ul class="nav nav-tabs" id="VendorTabs">
+                <li class="active">
+                    <a href="#Main_Data" data-toggle="tab"><i class="fa fa-user push-5-r"></i> @Homemade.UI.Resources.Homemade.Personal_Data</a>
+                </li>
+
+                <li>
+                    <a href="#Store_Data" data-toggle="tab"><i class="fa fa-file push-5-r"></i> @Homemade.UI.Resources.Homemade.Store_Data</a>
+                </li>
+                <li>
+                    <a href="#Account_Data" data-toggle="tab"><i class="fa fa-file push-5-r"></i> @Homemade.UI.Resources.Homemade.Account_Data</a>
+                </li>
+                <li>
+                    <a href="#Location" data-toggle="tab"><i class="fa fa-file push-5-r"></i> @Homemade.UI.Resources.Homemade.Location</a>
+                </li>
+            </ul>
+            <div class="block-content tab-content push-15">
+                <div class="tab-pane active" id="Main_Data">
+                    <div class="row">
+                        <input type="hidden" asp-for="VendorsID" />
+                        @Html.AntiForgeryToken()
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.FirstNameAr)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Name</label>
+                            </div>
+                        </div>
+                        @*<div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    @Html.DisplayFor(x => x.SeconedNameAr)
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Last_Name_AR</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    @Html.DisplayFor(x => x.FirstNameEn)
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.First_Name_EN</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    @Html.DisplayFor(x => x.SeconedNameEn)
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Last_Name_EN</label>
+                                </div>
+                            </div>*@
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.MobileNo)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Mobile </label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.RegionName)
+                                <label for="material-select2">@Homemade.UI.Resources.Homemade.Region </label>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.CityName)
+                                <label for="material-select2">@Homemade.UI.Resources.Homemade.City</label>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.BlockName)
+                                <label for="material-select2">@Homemade.UI.Resources.Homemade.Block</label>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.Email)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Email </label>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.NationalityName)
+                                <label for="material-select2">@Homemade.UI.Resources.Homemade.Nationality</label>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="material-select2">@Homemade.UI.Resources.Homemade.WorkingTimes</label>
+                                <br />
+                                @{
+                                    var working = blVendor.GetVendorWorkingTimeByID(Model.VendorsID, Homemade.UI.InfraStructure.Utility.CurrentLanguageCode);
+                                }
+                                <label>
+                                    @working.SiteDaysWork  &nbsp; &nbsp; &nbsp;
+                                    @if (!string.IsNullOrEmpty(working.SiteTimeWork))
+                                    {
+                                        @working.SiteTimeWork
+                                    }
+                                </label>
+                                @if (!string.IsNullOrEmpty(working.SiteDaysVac))
+                                {
+                                    <br />
+                                    <label>
+                                        @working.SiteDaysVac  &nbsp; &nbsp; &nbsp;
+                                        @if (!string.IsNullOrEmpty(working.SiteTimeVac))
+                                        {
+                                            @working.SiteTimeVac
+                                        }
+                                    </label>
+                                }
+
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.GenderString)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Gender </label>
+                            </div>
+                        </div>
+                        @*<div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.IsShowContactString)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.IsShowContact </label>
+                            </div>
+                        </div>*@
+                        <div class="col-md-6 form-group">
+                            @if (!string.IsNullOrEmpty(Model.ProfilePic))
+                            {
+                                <img src="@Model.ProfilePic" class="img" width="100" height="100" style="display:block;margin-bottom:7px;" />
+                            }
+                        </div>
+                    </div>
+                    @*<div class="form-group">
+                            <button class="btn btn-custom bg-info" onclick="GoToTab('Store_Data')"><i class=""></i> @Homemade.UI.Resources.Homemade.Next</button>
+                        </div>*@
+                </div>
+                <div class="tab-pane" id="Store_Data">
+
+                    <div class="prof_wral">
+                        <div class="banner_wrap">
+                            @*<img src="~/assets/img/mcdonalds.jpeg" />*@
+                            @if (!string.IsNullOrEmpty(Model.Banner))
+                            {
+                                <img src="@Model.Banner" alt="@Homemade.UI.Resources.Homemade.Banner" style="height: 345px;" />
+                            }
+                        </div>
+                        <div class="prof_img_wrap">
+                            @*<img src="~/assets/img/m_logo_en.png" />*@
+                            @if (!string.IsNullOrEmpty(Model.Logo))
+                            {
+                                <img src="@Model.Logo" alt="@Homemade.UI.Resources.Homemade.Logo" />
+                            }
+                        </div>
+                        <div class="row">
+                            @*<div class="col-md-6">
+                                <div class="text-right">
+                                    <h3 class="">@Model.StoreNameEn</h3>
+                                    <p class="">@Model.AboutStoreEn</p>
+                                </div>
+                            </div>*@
+                            <div class="col-md-12">
+                                <div class="text-center">
+                                    <h3 class="">@Model.StoreNameAr</h3>
+                                    <p class="">@Model.AboutStoreAr</p>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="text-center">
+                                    <h5>@Homemade.UI.Resources.Homemade.CRnumber</h5>
+                                    @if (!string.IsNullOrWhiteSpace(Model.CRnumber))
+                                    {
+                                        <p class="text-primary">@Html.DisplayFor(x => x.CRnumber)</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-primary">-----</p>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="text-center">
+                                    <h5>@Homemade.UI.Resources.Homemade.CRPic</h5>
+                                    @if (!string.IsNullOrEmpty(Model.CRPic))
+                                    {
+                                        <img src="@Model.CRPic" class="img" style="display: block; margin: 0 auto 7px; max-width: 10%" />
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    @Html.DisplayFor(x => x.DeliveryTypeName)
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.DeliveryType </label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    @*<div class="form-group">
+                            <button class="btn btn-custom bg-gray" onclick="GoToTab('Main_Data')"><i class=""></i> @Homemade.UI.Resources.Homemade.Previous</button>
+                            <button class="btn btn-custom bg-info" onclick="GoToTab('Account_Data')"><i class=""></i> @Homemade.UI.Resources.Homemade.Next</button>
+
+                        </div>*@
+
+                </div>
+                <div class="tab-pane" id="Account_Data">
+
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.TaxNumber)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.TaxNumber</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.BanksName)
+                                <label for="material-select2">@Homemade.UI.Resources.Homemade.Bank_Name </label>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.AccountNumber)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.AccountNumber</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.IBANNumber)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.IBANNumber</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.SwiftCode)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.SwiftCode</label>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    @*<div class="form-group">
+                            <button class="btn btn-custom bg-gray" onclick="GoToTab('Store_Data')"><i class=""></i> @Homemade.UI.Resources.Homemade.Previous</button>
+                            <button class="btn btn-custom bg-info" onclick="GoToTab('Location')"><i class=""></i> @Homemade.UI.Resources.Homemade.Next</button>
+
+
+                        </div>*@
+                </div>
+                <div class="tab-pane" id="Location">
+
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Address</label>
+                                @Html.DisplayFor(x => x.Address)
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.PackageName)
+                                <label for="material-select2">@Homemade.UI.Resources.Homemade.Package</label>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.BlockName)
+                                <label for="material-select2">@Homemade.UI.Resources.Homemade.Block</label>
+
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Location </label>
+                            <label class="text-center" style="margin-bottom: 10px;">
+                                <span style="color: red" class="field-validation-valid" data-valmsg-for="lat" data-valmsg-replace="true"> </span>
+                            </label>
+                            <input id="pac-input"
+                                   class="controls"
+                                   type="text"
+                                   placeholder="Enter a location" />
+                            <div id="map" style="width: 100%; height: 307px; overflow: initial" data-lat="@Model.Lat" data-long="@Model.Lng"></div>
+                            <div id="infowindow-content">
+                                <span id="place-name" style="display: none" class="title"></span><br />
+                                <strong style="display: none;">Place ID:</strong> <span id="place-id"></span><br />
+                                <span id="place-address"></span>
+                            </div>
+                            <div class="latlngxop" style="opacity: 0">
+                                <input type="text" id="txtLatHidden" value="@Model.Lat" name="lat" asp-for="Lat" data-val="true" data-val-required="@Homemade.UI.Resources.Homemade.ChooseCityOnMap" />
+                                <input type="text" id="txtLngHidden" value="@Model.Lng" name="lng" asp-for="Lng" />
+                            </div>
+
+
+                        </div>
+                    </div>
+                    @*<div class="form-group">
+                            <button class="btn btn-custom bg-gray" onclick="GoToTab('Account_Data')"><i class=""></i> @Homemade.UI.Resources.Homemade.Previous</button>
+                        </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/Scripts/App/Google/Map.js" id="txtScript"></script>
+}
+
+@section Styles {
+    <style>
+        .bg-info {
+            background-color: #682300;
+            color: #fff;
+            border: 2px solid #682300;
+        }
+    </style>
+}

@@ -1,0 +1,494 @@
+﻿@model Homemade.BLL.ViewModel.Order.OrdersVendorViewModel
+@inject Homemade.BLL.Order.BlOrders blOrders
+@inject Homemade.BLL.Order.BlOrderRate blOrderRate
+@inject Homemade.BLL.Setting.BlConfiguration _blConfiguration
+@{
+    var AllOrdersVendor = blOrders.GetAllOrdersVendorViewModelByOrderID(Model.OrdersID, Homemade.UI.InfraStructure.Utility.CurrentLanguageCode);
+    var orderRating = blOrderRate.GetOrderRateViewModelRepley(Model.OrderVendorID, Homemade.UI.InfraStructure.Utility.CurrentLanguageCode, null, null);
+    var HistoryOrders = blOrders.GetOrderHistory(Model.OrderVendorID, Homemade.UI.InfraStructure.Utility.CurrentLanguageCode);
+    var shipCompanyHistory = blOrders.GetAllShipCompanyHistoryByOrder(Model.OrderVendorID, Homemade.UI.InfraStructure.Utility.CurrentLanguageCode);
+}
+<input asp-for="OrderVendorID" hidden />
+<div class="content">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="block">
+                <div class="block-content block-content-full dep_b_wrap">
+                    <h4>@Homemade.UI.Resources.Homemade.Seller_Data </h4>
+                    <div class="dep_b">
+                        <div class="log_wrap">
+                            <img src="@Model.VendorLogo" style="height: 70px !important;" />
+                        </div>
+                        <div class="det_wrap">
+                            <a href="#" class="name"> @Model.VendorsName </a>
+                            <a href="#"><i class="ion-android-call push-5-r"></i>@Model.VendorMobilNo </a>
+                            <a href="#"><i class="ion-android-mail push-5-r"></i>  @Model.VendorEmail </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="block">
+                <div class="block-content block-content-full dep_b_wrap">
+                    <h4>@Homemade.UI.Resources.Homemade.Customer_Data </h4>
+                    <div class="dep_b">
+                        <div class="log_wrap">
+                            <span>
+                                @{
+                                    var CustomerLogoString = "";
+                                    int WordsCounter = 0;
+                                }
+                                @foreach (var part in Model.CustomersName.Split(' '))
+                                {
+                                    if (WordsCounter == 2) break;
+                                    CustomerLogoString += !string.IsNullOrWhiteSpace(part) ? part.Substring(0, 1) : "";
+                                    WordsCounter++;
+
+                                }
+                                @CustomerLogoString
+                            </span>
+                        </div>
+                        <div class="det_wrap">
+                            <a href="#" class="name"> @Model.CustomersName </a>
+                            <a href="#"><i class="ion-android-call push-5-r"></i> @Model.CustomersMobileNo  </a>
+                            <a href="#"><i class="ion-android-mail push-5-r"></i> @Model.CustomersEmail </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="block">
+                <div class="block-content block-content-full dep_b_wrap">
+                    <h4>@Homemade.UI.Resources.Homemade.Order_Status <span class="pull-right bg-warning"> @Model.OrderStatusName  </span></h4>
+                    @if (Model.OrderStatusID != (int)Homemade.BLL.OrderStatusEnum.Cancel && Model.OrderStatusID != (int)Homemade.BLL.OrderStatusEnum.Delivered)
+                    {
+                        <select class="form-control push-5" id="OrdersStatusId">
+                            <option value="value"></option>
+                        </select>
+                        <button type="submit" class="btn btn-block btn-custom bg-orange" onclick="ChangeStatus(@Model.OrderVendorID)">@Homemade.UI.Resources.Homemade.Change</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="block">
+                <div class="block-content block-content-full dep_b_wrap">
+                    <h4><strong class="text-secondary">@Homemade.UI.Resources.Homemade.Order_Number: @Model.OrderVendorID - @Homemade.UI.Resources.Homemade.Integration_Number: @Model.IntegrationOrderId - @Homemade.UI.Resources.Homemade.Block: @Model.VendorBlockName</strong></h4>
+                    @if (Model.OrderTypeId == (int)OrderTypeEnum.Schedule)
+                    {
+                        <h5><strong class="text-secondary">@Model.OrderTypeName - @Model.ScheduleDateString @Model.ScheduleTimeString</strong></h5>
+                    }
+                    else
+                    {
+                        <h5><strong class="text-secondary">@Model.OrderTypeName</strong></h5>
+                    }
+                    <table class="table prod_pay">
+                        <tr>
+                            <th>#</th>
+                            <th>@Homemade.UI.Resources.Homemade.Product</th>
+                            <th>@Homemade.UI.Resources.Homemade.Quantity</th>
+                            <th class="text-right">@Homemade.UI.Resources.Homemade.Price</th>
+                            <th class="text-right">@Homemade.UI.Resources.Homemade.Total</th>
+                        </tr>
+                        @{ var ProdCount = 1;}
+                        @foreach (var product in Model.Products)
+                        {
+                            <tr>
+                                <td>@ProdCount @{ ProdCount++; }</td>
+                                <td class="product_inf">
+                                    <img src="@product.Logo" alt="Alternate Text" class="prod_img" />
+                                    <span class="push-5-r">@product.Name</span>
+                                </td>
+                                <td>@product.Quantity</td>
+                                <td class="text-right"> @product.Price </td>
+                                <td class="text-right">@product.GrossPrice</td>
+                            </tr>
+                        }
+                        <tfoot>
+                            <tr>
+                                <td class="text-right" colspan="4">@Homemade.UI.Resources.Homemade.Price_With_Vat</td>
+                                <td class="text-right text-secondary">@Model.Price </td>
+                            </tr>
+                            @if (Model.Discount > 0)
+                            {
+                                <tr>
+                                    <td class="text-right" colspan="4">@Homemade.UI.Resources.Homemade.Discount</td>
+                                    <td class="text-right">@Model.Discount</td>
+                                </tr>
+                            }
+                            <tr>
+                                <td class="text-right" colspan="4">@Homemade.UI.Resources.Homemade.DeliveryPrice</td>
+                                <td class="text-right">@Model.DeliveryPrice</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right" colspan="4"><strong>@Homemade.UI.Resources.Homemade.Total_With_Vat </strong></td>
+                                <td class="text-right text-primary"><strong>@Model.Total</strong></td>
+                            </tr>
+                            <tr>
+                                <td class="text-right" colspan="4"> @Homemade.UI.Resources.Homemade.Vat (@_blConfiguration.GetDeliveryPriceVatPercent().ToString("0")%)</td>
+                                <td class="text-right">@Model.VatValue.ToString("0.##")</td>
+                            </tr>
+
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="block">
+                <div class="block-content block-content-full dep_b_wrap">
+                    <h4>
+                        @Homemade.UI.Resources.Homemade.Notes_Admin
+
+                        <a class="btn btn-md addBtn text-right pull-right" onclick="ShowModalOrderNotesAdmin()" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.New">
+                            <i class="ion-plus-round push-5-r"></i>
+                            @Homemade.UI.Resources.Homemade.New
+                        </a>
+                    </h4>
+                    <table id="tbl_OrderNotesAdmin" class="table table-custom js-dataTable-buttons" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th class="text-center">@Homemade.UI.Resources.Homemade.SNumber</th>
+                                <th class="text-center">@Homemade.UI.Resources.Homemade.Date</th>
+                                <th class="text-center">@Homemade.UI.Resources.Homemade.Notes</th>
+                                <th class="text-center">@Homemade.UI.Resources.Homemade.History_User </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="block">
+                <div class="block-content block-content-full dep_b_wrap">
+                    <h4> @Homemade.UI.Resources.Homemade.Order_History </h4>
+                    <table class="table prod_history">
+                        <tr>
+                            <th>@Homemade.UI.Resources.Homemade.History_Date</th>
+                            <th>@Homemade.UI.Resources.Homemade.Status</th>
+                            <th>@Homemade.UI.Resources.Homemade.History_User </th>
+                            <th>@Homemade.UI.Resources.Homemade.History_User_Type </th>
+                        </tr>
+                        @foreach (var item in HistoryOrders)
+                        {
+                            <tr>
+                                <td>@item.CreateDate</td>
+                                <td>@item.StatusName</td>
+                                <td>@item.UserName</td>
+                                <td>@item.UserType</td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+            </div>
+            <div class="block">
+                <div class="block-content block-content-full dep_b_wrap">
+                    <h4> @Homemade.UI.Resources.Homemade.Shipping_Company_History </h4>
+                    <table class="table prod_history">
+                        <tr>
+                            <th>@Homemade.UI.Resources.Homemade.companyName</th>
+                            <th>@Homemade.UI.Resources.Homemade.Status</th>
+                            <th>@Homemade.UI.Resources.Homemade.ResponseStatus </th>
+                            <th>@Homemade.UI.Resources.Homemade.CancelReason </th>
+                        </tr>
+                        @foreach (var item in shipCompanyHistory)
+                        {
+                            <tr>
+                                <td>@item.ShippingCompanyName</td>
+                                <td>@item.StatusName</td>
+                                <td>@item.ResponseStatusName</td>
+                                <td>@item.CancelReason</td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="block">
+                <div class="block-content block-content-full dep_b_wrap">
+                    <h4>@Homemade.UI.Resources.Homemade.Order_Notes </h4>
+                    <textarea class="form-control" rows="5" disabled> @Model.Notes </textarea>
+                </div>
+            </div>
+            <div class="block">
+                <div class="block-content block-content-full dep_b_wrap">
+                    <h4>@Homemade.UI.Resources.Homemade.Order_Rate </h4>
+                    <div class="row">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            @if (orderRating?.RateOrder <= i)
+                            {
+                                <span style="font-size:200%;color:yellow;">&star;</span>
+                            }
+                            else
+                            {
+                                <span style="font-size:200%;color:yellow;">&starf;</span>
+                            }
+                        }
+                    </div>
+                <div class="text-left">@orderRating?.CommentOrder</div>
+                <div class="text-left"> &#8617; تم الرد من قبل  @Model.VendorsName</div>
+                <div class="text-left">@orderRating?.AnswerRate</div>
+            </div>
+            </div>
+            <div class="block">
+                <div class="block-content block-content-full dep_b_wrap">
+                    <h4>@Homemade.UI.Resources.Homemade.Captin_Rate </h4>
+                    <div class="row">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            @if (orderRating?.RateDelivery <= i)
+                            {
+                                <span style="font-size:200%;color:yellow;">&star;</span>
+                            }
+                            else
+                            {
+                                <span style="font-size:200%;color:yellow;">&starf;</span>
+                            }
+                        }
+                    </div>
+                    <div class="text-left">@orderRating?.CommentDelivery</div>
+                </div>
+            </div>
+            <div class="block">
+                <div class="block-content block-content-full dep_b_wrap">
+                    <h4>@Homemade.UI.Resources.Homemade.Shipping_Data </h4>
+                    <table class="table">
+                        @*<tr>
+                        <td class="text-black">@Homemade.UI.Resources.Homemade.Order_Number</td>
+                        <td class="text-right">@Model.OrderVendorID - @Model.CustomerBlockName</td>
+                    </tr>*@
+                        <tr>
+                            <td class="text-black">@Homemade.UI.Resources.Homemade.By:</td>
+                            <td class="text-right">@Model.CaptainTypeName</td>
+                        </tr>
+                        <tr>
+                            <td class="text-black">@Homemade.UI.Resources.Homemade.Captain:</td>
+                            <td class="text-right">@Model.CaptainName</td>
+                        </tr>
+                        @if (Model.CaptainTypeId == (int)CaptainTypeEnum.Home_Made)
+                        {
+                            <tr>
+                                <td class="text-black">@Homemade.UI.Resources.Homemade.Phone:</td>
+                                <td class="text-right">@Model.CaptainPhone</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td class="text-black">@Homemade.UI.Resources.Homemade.Integration_Number:</td>
+                            <td class="text-right">@Model.IntegrationOrderId</td>
+                        </tr>
+
+                        @*
+                    <tr>
+                        <td class="text-black">@Homemade.UI.Resources.Homemade.Online</td>
+                        <td class="text-right">@Model.IsOnlineString</td>
+                    </tr>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles{
+    <!-- Data_Table Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" />
+    <style>
+        thead {
+            display: none;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+    </style>
+}
+
+@section Scripts{
+
+    <!-- Data_table Plugins -->
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+
+    <partial name="_DataTableOrderNotesAdmin" />
+    <partial name="_ModalOrderNotesAdmin" />
+    <script>
+    var idselected = 0;
+        function ChangeStatus(id) {
+            $.getJSON('/Order/Orders/IsExistOrderHistoryByOrderStatus?orderId=' + id + '&statusId=' + $("#OrdersStatusId").val(), '', function (data) {
+                if (data != true) {
+                    idselected = id;
+         @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.ChangeStaute , "delFileFromDB();"))
+                }
+                else {
+                     var msg = "@Homemade.UI.Resources.Homemade.Error_In_Status_Order";
+              @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Error, "", false, false, false) { Title = "msg" });
+                }
+            });
+
+    }
+        function delFileFromDB() {
+            $.ajax({
+                url: "/Order/Orders/ChangeOrderStatus",
+                data: {
+                    orderId: idselected,
+                    statusId: $('#OrdersStatusId').val()
+                },
+                type: 'POST',
+                success: function (data) {
+                    if (data.status === true) {
+                        idselected = 0;
+                        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false)
+        { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessChangeMessage + "\"" })
+                        setTimeout(function () {
+                            location.reload();}, 2000);
+                    }
+                }
+            });
+        }
+    </script>
+    <script>
+
+        $(document).ready(function () {
+            GetOrdersStatusList(@Model.OrderStatusID);
+                    $.getJSON('/Order/Orders/GetAllListOrdersVendor?ordersID='+@Model.OrdersID, '', function (data) {
+                        for (var i = 0; i < data.length; i++) {
+                            $('#tbl_OrderItems_' + data[i]).DataTable({
+                pageLength: 1000,
+                pagijngType: "full_numbers",
+                serverSide: true,
+                processing: true,
+                lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+                sAjaxSource: '@Url.Action("LoadTableOrderItems")?orderVendorID=' + data[i],
+                                sServerMethod: "POST",
+                                bPaginate: false,
+                                paging: false,
+                columns: [
+                    {
+                        "data": null,
+                        "sortable": false,
+                        render: function (data, type, row, meta) {
+                            return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                        }
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) {
+                            return '<label><img src=' + data.prodImage + ' class="img" width="100" height="100" /></label>';
+                        }
+
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) {
+                            return '<input type="hidden" value="' + data.orderItemsID + '"/><label class="arName">' + data.prodName + '</label>';
+                        }
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) {
+                            return '<label>' +"X"+ data.price + '</label>';
+                        }
+                    },
+                    //{
+                    //    data: null,
+                    //    bSortable: true,
+                    //    render: function (data, type, row) {
+                    //        return '<label>' + data.discount + '</label>';
+                    //    }
+                    //},
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) {
+                            return '<label>' + data.quantity + '</label>';
+                        }
+                    }
+
+                ],
+                drawCallback: function (s) {
+                    $('[data-toggle="tooltip"]').tooltip();
+                },
+           buttons: [
+                @*{
+                    extend: "copy",
+                    className: "btn btn-info btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.Copy'
+                },*@ {
+                    extend: "excelHtml5",
+                    autoFilter: true,
+                    sheetName: 'Exported data',
+                    className: "btn btn-success btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.Excel'
+                }, @*{
+                    extend: "print",
+                    className: "btn btn-warning btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.Print'
+                },*@ {
+                    extend: "pdfHtml5",
+                    download: 'open',
+                    className: "btn btn-info btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.PDF'
+                }],
+            //"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "language": {
+                "search": "_INPUT_",
+                "searchPlaceholder": "Search",
+                "lengthMenu": "_MENU_",
+                }, dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+
+                }).buttons().container().appendTo('.dt_buttons_wrap');
+            }
+                    });
+
+
+        });
+        function ShowModalOrderNotesAdmin() {
+        $("#NotesAdmin").val("");
+            $('#modalOrderNotesAdmin').modal('show');
+        }
+        function AddNotes() {
+             $.ajax({
+            type: "POST",
+            url: '@Url.Action("AddOrderNotesAdmin")',
+            data: {
+                'orderVendorID': $("#OrderVendorID").val(),
+                'notes': $("#NotesAdmin").val(),
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                var msg = result.message;
+
+                if (result.resultType == 'success') {
+                   @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+              {
+                  Title = "msg"
+              });
+                    $("#modalOrderNotesAdmin").modal('hide');
+                    $('#tbl_OrderNotesAdmin').DataTable().ajax.reload();
+
+                }
+                else {
+                    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Error, "", false, false, false) { Title = "msg" });
+                }
+            }
+        });
+        }
+    </script>
+}

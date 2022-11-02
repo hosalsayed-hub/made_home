@@ -1,0 +1,48 @@
+﻿<div class="custom-bootstrap-modal modal fade add-new-address-modal modify-address-modal" id="modifyMaintModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bgimg" style="background-image: url('/images/wordpress-maintenance-mode-featured-image.jpg'); height: 447px;">
+                <div class="topleft">
+                    <img src="https://made-home.com/assets/homeMadeSite/img/logo.svg" />
+                </div>
+                <div class="middle">
+                    <h1 style="font-size: 124%;font-weight: bold;">الموقع تحت الصيانة</h1>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .bgimg {
+        height: 100%;
+        background-position: center;
+        background-size: cover;
+        position: relative;
+        color: #794416;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 25px;
+    }
+
+    .topleft {
+        position: absolute;
+        top: 0;
+        /*left: 16px;*/
+    }
+    /* Position text in the middle */
+    .middle {
+        position: absolute;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+    /* Style the <hr> element */
+    hr {
+        margin: auto;
+        width: 40%;
+    }
+</style>

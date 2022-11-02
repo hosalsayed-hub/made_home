@@ -1,0 +1,141 @@
+﻿<script>
+    function GetOrdersStatusTrackingList(orderStatusId) {
+        $.ajax({
+            type: "POST",
+            url: '/Order/Orders/GetOrdersStatusTrackingList',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $('#ListOrdersStatusId').html('');
+                $('#ListOrdersStatusId').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (orderStatusId != undefined && orderStatusId > 0 && orderStatusId == item.orderStatusID) {
+                        $('#ListOrdersStatusId').append('<option selected value="' + item.orderStatusID + '">' + item.orderStatusName + '</option>');
+                        $('#ListOrdersStatusId').val(orderStatusId).trigger('change');
+                    }
+                    else {
+                        $('#ListOrdersStatusId').append('<option value="' + item.orderStatusID + '">' + item.orderStatusName + '</option>');
+                    }
+                }
+                isPaused = false;
+            },
+            error: function() {
+                isPaused = false;
+            }
+        });
+    }
+    function GetDriversList(driversID) {
+        $.ajax({
+            type: "POST",
+            url: '/Order/Orders/GetDriversList',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $('#ListDriversID').html('');
+                $('#ListDriversID').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (driversID != undefined && driversID > 0 && driversID == item.driversID) {
+                        $('#ListDriversID').append('<option selected value="' + item.driversID + '">' + item.driversName + '</option>');
+                        $('#ListDriversID').val(driversID).trigger('change');
+                    }
+                    else {
+                        $('#ListDriversID').append('<option value="' + item.driversID + '">' + item.driversName + '</option>');
+                    }
+                }
+                isPaused = false;
+            },
+            error: function() {
+                isPaused = false;
+            }
+        });
+    }
+    function GetVendorsTrackingList(vendorsID) {
+        $.ajax({
+            type: "POST",
+            url: '/Order/Orders/GetVendorsListForTrackingOrder',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $('#ListVendorsID').html('');
+                $('#ListVendorsID').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (vendorsID != undefined && vendorsID > 0 && vendorsID == item.vendorsID) {
+                        $('#ListVendorsID').append('<option selected value="' + item.vendorsID + '">' + item.vendorsName + '</option>');
+                        $('#ListVendorsID').val(vendorsID).trigger('change');
+                    }
+                    else {
+                        $('#ListVendorsID').append('<option value="' + item.vendorsID + '">' + item.vendorsName + '</option>');
+                    }
+                }
+                isPaused = false;
+            },
+            error: function() {
+                isPaused = false;
+            }
+        });
+    }
+    function ReplyDriver(id, driversID) {
+        $("#OrderVendorID").val(id);
+        GetAssginDrivers(driversID);
+        $('#Replymodal').modal('show');
+    }
+    function ConfirmReplyDriver() {
+        if ($("#AssginDriversID").val() === "") {
+            swal('@Homemade.UI.Resources.Homemade.Please_Choose_Captian', "", "error");
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: '/Order/Orders/ReAssginOrder',
+                data: {
+                    'OrderVendorID': $("#OrderVendorID").val(), 'DriversID': $("#AssginDriversID").val()
+                },
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function(result) {
+                    console.log(result);
+                    if (result.status == true) {
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+                            { Title = "result.message" });
+                        readtable();
+                        $('#AssginDriversID').val('').trigger('change');
+                    }
+                    else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false)
+                            { Title = "result.message" })
+                        }
+                }
+            });
+            $("#Replymodal").modal('hide');
+        }
+    }
+    function GetAssginDrivers(driverID) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetDriversList")',
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function(result) {
+                $('#AssginDriversID').html('');
+                $('#AssginDriversID').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (driverID != item.driversID) {
+                        $("#AssginDriversID").append('<option value="' + item.driversID + '">' + item.driversName + '</option>');
+                    }
+                }
+            },
+            error: function() {
+            }
+        });
+    }
+</script>

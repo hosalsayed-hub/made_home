@@ -1,0 +1,735 @@
+﻿<script>
+    $('#tbl_Vendor').each(function (index, value) {
+        $("#DT_search_Vendor").keyup(function () {
+            $('#' + value.id + '').DataTable().search($(this).val()).draw();
+        })
+    });
+    $('#tbl_Order').each(function (index, value) {
+        $("#DT_search_Order").keyup(function () {
+            $('#' + value.id + '').DataTable().search($(this).val()).draw();
+        })
+    });
+        $(document).ready(function () {
+            GetDashSummaryChart();
+        });
+                    function GetDashSummaryChart() {
+                        $.ajax({
+                            type: "GET",
+                            url: '/home/GetDashSummaryChart',
+                            dataType: "json",
+                            async: true,
+
+                            success: function (result) {
+
+                                var listOrdersCount = result.listOrdersCount;
+                                var listCaptainsCount = result.listCaptainsCount;
+                                var ordersCount = result.ordersCount;
+                                var vendorsCount = result.vendorsCount;
+                                GetChart(listCaptainsCount, listOrdersCount, ordersCount, vendorsCount);
+
+                            },
+                            error: function () {
+
+                            }
+                        });
+                    }
+    function GetChart(listCaptainsCount, listOrdersCount, ordersCount, vendorsCount) {
+                        var chart = document.getElementById('Orderschart');
+                        var myChart = echarts.init(chart);
+                        var option = {
+                            tooltip: {
+                                trigger: 'axis'
+                            },
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    mark: { show: true },
+                                    dataView: { show: true },
+                                    magicType: { show: true, type: ['line', 'bar'] },
+                                    restore: { show: true },
+                                    saveAsImage: { show: true }
+                                }
+                            },
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    position: 'bottom',
+                                    boundaryGap: true,
+                                    axisLabel: {
+                                        show: true,
+                                        interval: 'auto',    // {number}
+                                        rotate: 45,
+                                        margin: 8,
+                                        formatter: '{value}',
+                                        textStyle: {
+                                            color: '#2c343f',
+                                            fontFamily: 'sans-serif',
+                                            fontSize: 13
+                                        }
+                                    },
+                                    data: ['@Homemade.UI.Resources.Homemade.Pending_Accept', '@Homemade.UI.Resources.Homemade.Accepted', '@Homemade.UI.Resources.Homemade.Being_Processed', '@Homemade.UI.Resources.Homemade.Pending_Delivered'
+                                        , '@Homemade.UI.Resources.Homemade.Assigned', '@Homemade.UI.Resources.Homemade.OnWayStore', '@Homemade.UI.Resources.Homemade.With_Captain', '@Homemade.UI.Resources.Homemade.Delivered', '@Homemade.UI.Resources.Homemade.Cancel_Orders']
+                                },
+                                {
+                                    type: 'category',
+                                    data: [
+                                        //'1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'
+                                    ]
+                                }
+                            ],
+                            yAxis: [
+                                {
+                                    type: 'value',
+                                    position: 'left',
+                                    boundaryGap: [0, 0.1],
+                                    axisLine: {
+                                        show: true,
+                                        lineStyle: {
+                                            color: 'green',
+                                            type: 'dashed',
+                                            width: 2
+                                        }
+                                    },
+                                    axisTick: {
+                                        show: true,
+                                        length: 10,
+                                        lineStyle: {
+                                            color: 'green',
+                                            type: 'solid',
+                                            width: 2
+                                        }
+                                    },
+                                    axisLabel: {
+                                        show: true,
+                                        interval: 'auto',
+                                        rotate: -45,
+                                        margin: 18,
+                                        formatter: '{value}',
+                                        textStyle: {
+                                            color: 'green',
+                                            fontFamily: 'verdana',
+                                            fontSize: 10,
+                                            fontStyle: 'normal',
+                                            fontWeight: 'bold'
+                                        }
+                                    },
+                                    splitLine: {
+                                        show: true,
+                                        lineStyle: {
+                                            color: '#f9f9f9',
+                                            type: 'dotted',
+                                            width: 1
+                                        }
+                                    },
+                                    splitArea: {
+                                        show: true,
+                                        areaStyle: {
+                                            color: ['#f9f9f9', '#f5f5f5']
+                                        }
+                                    }
+                                }
+                            ],
+                            series: [
+                                {
+                                    name: '@Homemade.UI.Resources.Homemade.Orders',
+                                    type: 'bar',
+                                    itemStyle: { normal: { color: 'lightskyblue' } },
+                                    data: listOrdersCount
+                                },
+                            ]
+                        };
+        myChart.setOption(option);
+
+                        var chartCaptains = document.getElementById('Captainschart');
+                        var myChartCaptains = echarts.init(chartCaptains);
+                        var optionCaptains = {
+                            tooltip: {
+                                trigger: 'axis'
+                            },
+
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    mark: { show: true },
+                                    dataView: { show: true },
+                                    magicType: { show: true, type: ['line', 'bar'] },
+                                    restore: { show: true },
+                                    saveAsImage: { show: true }
+                                }
+                            },
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    position: 'bottom',
+                                    boundaryGap: true,
+                                    axisLabel: {
+                                        show: true,
+                                        interval: 'auto',    // {number}
+                                        rotate: 45,
+                                        margin: 8,
+                                        formatter: '{value}',
+                                        textStyle: {
+                                            color: '#2c343f',
+                                            fontFamily: 'sans-serif',
+                                            fontSize: 13
+                                        }
+                                    },
+                                     data: ['@Homemade.UI.Resources.Homemade.Certified', '@Homemade.UI.Resources.Homemade.New_Requests', '@Homemade.UI.Resources.Homemade.Under_Scrutiny', '@Homemade.UI.Resources.Homemade.Waiting_Activation'
+                                        , '@Homemade.UI.Resources.Homemade.Rejected', '@Homemade.UI.Resources.Homemade.Online']
+
+                                }
+                            ],
+                            yAxis: [
+                            {
+                                    type: 'value',
+                                    position: 'left',
+                                    boundaryGap: [0, 0.1],
+                                    axisLine: {
+                                        show: true,
+                                        lineStyle: {
+                                            color: '#2c343f',
+                                            type: 'dashed',
+                                            width: 2
+                                        }
+                                    },
+                                    axisTick: {
+                                        show: true,
+                                        length: 10,
+                                        lineStyle: {
+                                            color: 'green',
+                                            type: 'solid',
+                                            width: 2
+                                        }
+                                    },
+                                    axisLabel: {
+                                        show: true,
+                                        interval: 'auto',
+                                        rotate: -45,
+                                        margin: 18,
+                                        formatter: '{value}',
+                                        textStyle: {
+                                            color: '#1e90ff',
+                                            fontFamily: 'verdana',
+                                            fontSize: 10,
+                                            fontStyle: 'normal',
+                                            fontWeight: 'bold'
+                                        }
+                                    },
+                                    splitLine: {
+                                        show: true,
+                                        lineStyle: {
+                                            color: '#ccc',
+                                            type: 'dotted',
+                                            width: 1
+                                        }
+                                    },
+                                    splitArea: {
+                                        show: true,
+                                        areaStyle: {
+                                            color: ['#f9f9f9', '#f5f5f5']
+                                        }
+                                    }
+                                }
+                            ],
+                            series: [
+                                {
+                                    name: '@Homemade.UI.Resources.Homemade.Captains',
+                                    type: 'bar',
+                                    itemStyle: { normal: { color: 'lightgreen' } },
+                                    data: listCaptainsCount
+                                },
+
+                            ]
+                        };
+            myChartCaptains.setOption(optionCaptains);
+
+
+
+        var $chart2Pie;
+        var $chart2PieCon = jQuery('.js-chartjs2-pie');
+        var $chart2PolarPieDonutData = {
+            labels: [
+                '@Homemade.UI.Resources.Homemade.Delivered',
+                '@Homemade.UI.Resources.Homemade.Cancel_Orders',
+                '@Homemade.UI.Resources.Homemade.New_Orders'
+            ],
+            datasets: [{
+                data: ordersCount,
+                backgroundColor: [
+                    'rgba(171, 227, 125, 1)',
+                    'rgba(117, 176, 235, 1)',
+                    'rgba(250, 219, 125, 1)'
+                ],
+                hoverBackgroundColor: [
+                    'rgba(171, 227, 125, .75)',
+                    'rgba(117, 176, 235, .75)',
+                    'rgba(250, 219, 125, .75)'
+                ],
+                borderWidth: [
+                    0,
+                    0
+                ]
+            }]
+        };
+        $chart2Pie = new Chart($chart2PieCon, { type: 'pie', data: $chart2PolarPieDonutData });
+
+        var $chart2Pievendors;
+        var $chart2PieConvendors = jQuery('.js-chartjs2-pie-vendors');
+        var $chart2PolarPieDonutDatavendors = {
+            labels: [
+                '@Homemade.UI.Resources.Homemade.Active',
+                '@Homemade.UI.Resources.Homemade.NotActive'
+            ],
+            datasets: [{
+                data: vendorsCount,
+                backgroundColor: [
+                    'rgba(60, 118, 61, 1)',
+                    'rgba(197, 71, 54, 1)'
+                ],
+                hoverBackgroundColor: [
+                    'rgba(60, 118, 61, .75)',
+                    'rgba(197, 71, 54, .75)'
+                ],
+                borderWidth: [
+                    0,
+                    0
+                ]
+            }]
+        };
+        $chart2Pievendors = new Chart($chart2PieConvendors, { type: 'pie', data: $chart2PolarPieDonutDatavendors });
+
+
+                    }
+</script>
+
+<!--
+     var chartPendingDiagnosis = document.getElementById('PendingDiagnosischart');
+            var myChartPendingDiagnosis = echarts.init(chartPendingDiagnosis);
+            var optionPendingDiagnosis = {
+                            tooltip: {
+                                trigger: 'axis'
+                            },
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    mark: { show: true },
+                                    dataView: { show: true },
+                                    magicType: { show: true, type: ['line', 'bar'] },
+                                    restore: { show: true },
+                                    saveAsImage: { show: true }
+                                }
+                            },
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    position: 'bottom',
+                                    boundaryGap: true,
+                                    axisLabel: {
+                                        show: true,
+                                        interval: 'auto',    // {number}
+                                        rotate: 45,
+                                        margin: 8,
+                                        formatter: '{value}',
+                                        textStyle: {
+                                            color: '#2c343f',
+                                            fontFamily: 'sans-serif',
+                                            fontSize: 13
+                                        }
+                                    },
+                                    data: listOrdersName
+                                },
+                                {
+                                    type: 'category',
+                                    data: [
+                                        //'1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'
+                                    ]
+                                }
+                            ],
+                            yAxis: [
+                            {
+                                    type: 'value',
+                                    position: 'left',
+                                    boundaryGap: [0, 0.1],
+                                    axisLine: {
+                                        show: true,
+                                        lineStyle: {
+                                            color: '#2c343f',
+                                            type: 'dashed',
+                                            width: 2
+                                        }
+                                    },
+                                    axisTick: {
+                                        show: true,
+                                        length: 10,
+                                        lineStyle: {
+                                            color: 'green',
+                                            type: 'solid',
+                                            width: 2
+                                        }
+                                    },
+                                    axisLabel: {
+                                        show: true,
+                                        interval: 'auto',
+                                        rotate: -45,
+                                        margin: 18,
+                                        formatter: '{value}',
+                                        textStyle: {
+                                            color: '#1e90ff',
+                                            fontFamily: 'verdana',
+                                            fontSize: 10,
+                                            fontStyle: 'normal',
+                                            fontWeight: 'bold'
+                                        }
+                                    },
+                                    splitLine: {
+                                        show: true,
+                                        lineStyle: {
+                                            color: '#ccc',
+                                            type: 'dotted',
+                                            width: 1
+                                        }
+                                    },
+                                    splitArea: {
+                                        show: true,
+                                        areaStyle: {
+                                            color: ['#f9f9f9', '#f5f5f5']
+                                        }
+                                    }
+                                }
+                            ],
+                            series: [
+                                {
+                                    name: '@Homemade.UI.Resources.Homemade.Pending_Diagnosis',
+                                    type: 'bar',
+                                    itemStyle: { normal: { color: 'lightcoral' } },
+                                    data: listPendingDiagnosisCount
+                                },
+                                                                @*{
+                                    name: '@Homemade.UI.Resources.Homemade.Complete_Diagnosis',
+                                                                    type: 'bar',
+                                                                    data: listCompleteDiagnosisCount
+                                },*@
+
+                            ]
+                        };
+            myChartPendingDiagnosis.setOption(optionPendingDiagnosis);
+
+               var chartCompleteDiagnosis = document.getElementById('CompleteDiagnosischart');
+            var myChartCompleteDiagnosis = echarts.init(chartCompleteDiagnosis);
+            var optionCompleteDiagnosis = {
+                            tooltip: {
+                                trigger: 'axis'
+                            },
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    mark: { show: true },
+                                    dataView: { show: true },
+                                    magicType: { show: true, type: ['line', 'bar'] },
+                                    restore: { show: true },
+                                    saveAsImage: { show: true }
+                                }
+                            },
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    position: 'bottom',
+                                    boundaryGap: true,
+                                    axisLabel: {
+                                        show: true,
+                                        interval: 'auto',    // {number}
+                                        rotate: 45,
+                                        margin: 8,
+                                        formatter: '{value}',
+                                        textStyle: {
+                                            color: '#2c343f',
+                                            fontFamily: 'sans-serif',
+                                            fontSize: 13
+                                        }
+                                    },
+                                    data: listOrdersName
+                                },
+                                {
+                                    type: 'category',
+                                    data: [
+                                        //'1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'
+                                    ]
+                                }
+                            ],
+                            yAxis: [
+                            {
+                                    type: 'value',
+                                    position: 'left',
+                                    boundaryGap: [0, 0.1],
+                                    axisLine: {
+                                        show: true,
+                                        lineStyle: {
+                                            color: '#2c343f',
+                                            type: 'dashed',
+                                            width: 2
+                                        }
+                                    },
+                                    axisTick: {
+                                        show: true,
+                                        length: 10,
+                                        lineStyle: {
+                                            color: 'green',
+                                            type: 'solid',
+                                            width: 2
+                                        }
+                                    },
+                                    axisLabel: {
+                                        show: true,
+                                        interval: 'auto',
+                                        rotate: -45,
+                                        margin: 18,
+                                        formatter: '{value}',
+                                        textStyle: {
+                                            color: '#1e90ff',
+                                            fontFamily: 'verdana',
+                                            fontSize: 10,
+                                            fontStyle: 'normal',
+                                            fontWeight: 'bold'
+                                        }
+                                    },
+                                    splitLine: {
+                                        show: true,
+                                        lineStyle: {
+                                            color: '#ccc',
+                                            type: 'dotted',
+                                            width: 1
+                                        }
+                                    },
+                                    splitArea: {
+                                        show: true,
+                                        areaStyle: {
+                                            color: ['#f9f9f9', '#f5f5f5']
+                                        }
+                                    }
+                                }
+                            ],
+                            series: [
+                                {
+                                    name: '@Homemade.UI.Resources.Homemade.Complete_Diagnosis',
+                                    type: 'bar',
+                                    itemStyle: { normal: { color: 'lightpink' } },
+                                    data: listCompleteDiagnosisCount
+                                },
+
+                            ]
+                        };
+        myChartCompleteDiagnosis.setOption(optionCompleteDiagnosis);
+
+        var chartUnderObservation = document.getElementById('UnderObservationchart');
+        var myChartUnderObservation = echarts.init(chartUnderObservation);
+        var optionUnderObservation = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: { show: true },
+                    dataView: { show: true },
+                    magicType: { show: true, type: ['line', 'bar'] },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
+                }
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    position: 'bottom',
+                    boundaryGap: true,
+                    axisLabel: {
+                        show: true,
+                        interval: 'auto',    // {number}
+                        rotate: 45,
+                        margin: 8,
+                        formatter: '{value}',
+                        textStyle: {
+                            color: '#2c343f',
+                            fontFamily: 'sans-serif',
+                            fontSize: 13
+                        }
+                    },
+                    data: listOrdersName
+                },
+                {
+                    type: 'category',
+                    data: [
+                        //'1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'
+                    ]
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    position: 'left',
+                    boundaryGap: [0, 0.1],
+                    axisLine: {
+                        show: true,
+                        lineStyle: {
+                            color: '#2c343f',
+                            type: 'dashed',
+                            width: 2
+                        }
+                    },
+                    axisTick: {
+                        show: true,
+                        length: 10,
+                        lineStyle: {
+                            color: 'green',
+                            type: 'solid',
+                            width: 2
+                        }
+                    },
+                    axisLabel: {
+                        show: true,
+                        interval: 'auto',
+                        rotate: -45,
+                        margin: 18,
+                        formatter: '{value}',
+                        textStyle: {
+                            color: '#1e90ff',
+                            fontFamily: 'verdana',
+                            fontSize: 10,
+                            fontStyle: 'normal',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            color: '#ccc',
+                            type: 'dotted',
+                            width: 1
+                        }
+                    },
+                    splitArea: {
+                        show: true,
+                        areaStyle: {
+                            color: ['#f9f9f9', '#f5f5f5']
+                        }
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: '@Homemade.UI.Resources.Homemade.Under_Observation',
+                    type: 'bar',
+                    itemStyle: { normal: { color: 'lightsalmon' } },
+                    data: listUnderObservationCount
+                },
+
+
+            ]
+        };
+        myChartUnderObservation.setOption(optionUnderObservation);
+
+        var chartExist = document.getElementById('Existchart');
+        var myChartExist = echarts.init(chartExist);
+        var optionExist = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: { show: true },
+                    dataView: { show: true },
+                    magicType: { show: true, type: ['line', 'bar'] },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
+                }
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    position: 'bottom',
+                    boundaryGap: true,
+                    axisLabel: {
+                        show: true,
+                        interval: 'auto',    // {number}
+                        rotate: 45,
+                        margin: 8,
+                        formatter: '{value}',
+                        textStyle: {
+                            color: '#2c343f',
+                            fontFamily: 'sans-serif',
+                            fontSize: 13
+                        }
+                    },
+                    data: listOrdersName
+                },
+                {
+                    type: 'category',
+                    data: [
+                        //'1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'
+                    ]
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    position: 'left',
+                    boundaryGap: [0, 0.1],
+                    axisLine: {
+                        show: true,
+                        lineStyle: {
+                            color: '#2c343f',
+                            type: 'dashed',
+                            width: 2
+                        }
+                    },
+                    axisTick: {
+                        show: true,
+                        length: 10,
+                        lineStyle: {
+                            color: 'green',
+                            type: 'solid',
+                            width: 2
+                        }
+                    },
+                    axisLabel: {
+                        show: true,
+                        interval: 'auto',
+                        rotate: -45,
+                        margin: 18,
+                        formatter: '{value}',
+                        textStyle: {
+                            color: '#1e90ff',
+                            fontFamily: 'verdana',
+                            fontSize: 10,
+                            fontStyle: 'normal',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            color: '#ccc',
+                            type: 'dotted',
+                            width: 1
+                        }
+                    },
+                    splitArea: {
+                        show: true,
+                        areaStyle: {
+                            color: ['#f9f9f9', '#f5f5f5']
+                        }
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: '@Homemade.UI.Resources.Homemade.Exist',
+                    type: 'bar',
+                    itemStyle: { normal: { color: 'darkgrey' } },
+                    data: listExitCount
+                },
+
+            ]
+        };
+        myChartExist.setOption(optionExist);
+    -->

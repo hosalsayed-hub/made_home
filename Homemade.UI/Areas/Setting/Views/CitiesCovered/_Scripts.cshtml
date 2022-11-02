@@ -1,0 +1,38 @@
+﻿<script>
+
+    function SaveCovered() {
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Edit, "ConfirmSaveCovered()"));
+    }
+
+
+    function ConfirmSaveCovered() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveCovered")',
+            data: {
+                'CheckedItems': $("#CheckedItems").val(),
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                var msg = result.message;
+
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+                        {
+                        Title = "msg"
+                        });
+                    $('#tbl').DataTable().ajax.reload();
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+                    }
+            }
+        });
+    }
+
+
+</script>
+

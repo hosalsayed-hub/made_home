@@ -1,0 +1,200 @@
+﻿<script>
+
+    var divMsgClass = $("#divMsgClass");
+    var lblMsg = $("#lblMsg");
+    var divMsgParent = $("#divMsgParent"),
+        txtLatHidden = $("#txtLatHidden"),
+        txtLngHidden = $("#txtLngHidden");
+
+    $(function() {
+        try {
+            initMap();
+        } catch (e) {
+
+        }
+    });
+
+    $("#btnSave").click(function() {
+        let frmCreate = $("#frmCreate");
+        if (frmCreate.valid()) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Add , "frmCreate.submit();"))
+            }
+    });
+
+
+
+    function completed(xhr) {
+
+        var obj = JSON.parse(xhr.responseText);
+        var result = obj.result;
+
+        var msg = result.message;
+        if (result.resultType == 'success') {
+
+
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\"" })
+                if (obj.operationType == 'update') {
+                $("#modal").modal('hide');
+
+            }
+            else {
+                $("#frmCreate").trigger('reset');
+
+            }
+            $('#tbl').DataTable().ajax.reload();
+
+
+
+        }
+        else {
+
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+                lblMsg.html(msg);
+        }
+    };
+
+
+    function Delete(e) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Delete , "ConfirmDelete(e)"))
+        }
+
+
+    function ConfirmDelete(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete")',
+            data: {
+                'id': id
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                var msg = result.message;
+
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                        Title = "\"" + Homemade.UI.Resources.Homemade.SuccessDeleteMessage + "\""})
+                        $('#tbl').DataTable().ajax.reload();
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+                    }
+            }
+        });
+    }
+
+    function ShowModal(e) {
+        if (e == undefined) {
+            $('#title').html('@Homemade.UI.Resources.Homemade.Add')
+
+            txtLatHidden.val("");
+            txtLngHidden.val('');
+
+        }
+        else {
+            $('#title').html('@Homemade.UI.Resources.Homemade.Update');
+            let tr = $($($(e).parent()).parent());
+            let latHidden = $($(tr.children()).find('.latHidden')[0]);
+            let lngHidden = $($(tr.children()).find('.lngHidden')[0]);
+
+            if (isNaN(parseFloat(latHidden.val()))) {
+                initMap();
+
+            } else {
+                if (mainmarker && mainmarker.setMap) {
+                    mainmarker.setMap(null);
+                }
+                var latlng = new google.maps.LatLng(parseFloat(latHidden.val()), parseFloat(lngHidden.val()));
+                mainmarker.setMap(mainMap);
+                mainmarker.setPosition(latlng);
+                mainMap.setCenter(latlng);
+                mainMap.setZoom(15);
+                var input = document.getElementById("pac-input");
+                var autocomplete = new google.maps.places.Autocomplete(input);
+                autocomplete.bindTo("bounds", map);
+            }
+
+            txtLatHidden.val(latHidden.val());
+            txtLngHidden.val(lngHidden.val());
+        }
+
+        let fields = $('#frmCreate span');
+        fields.each(function() {
+            if ($(this).attr('data-valmsg-for') != null) {
+                $($(this).children()[0]).text('');
+            }
+        });
+        var button = $(e);
+        var tr = $(button.closest('tr'));
+
+        var id = button.attr("data-id");
+        $("#CityID").val(id);
+        $("#CityNameAR").val(button.attr("data-nameAr"));
+        $("#CityNameEN").val(button.attr("data-nameEn"));
+        GetRegions($("#CountryID").val());
+        $('#modal').modal('show');
+    }
+
+    function GetRegions(country) {
+
+        var countryID = country;
+        $($("#RegionID")).prop("disabled", false);
+        if (countryID != '' || countryID != undefined) {
+            $.ajax({
+                type: "POST",
+                url: '/Setting/Region/GetAllRegionByCountry',
+                data: { 'countryID': countryID },
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function(result) {
+                    $("#RegionID").html('');
+                    for (var i = 0; i < result.length; i++) {
+                        var item = result[i];
+                        $("#RegionID").append('<option ' + (i == 0 ? 'selected' : "") + ' value="' + item.regionID + '">' + item.regionName + '</option>');
+                    }
+                    $($("#RegionID")).select2();
+                },
+                error: function() {
+
+                }
+            });
+        }
+    }
+    function ChangeStatue(e) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.ChangeStaute , "ConfirmStatue(e)"))
+        }
+    function ConfirmStatue(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeStatue")',
+            data: {
+                'id': id
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                        Title = "result.message"})
+                        $('#tbl').DataTable().ajax.reload();
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "result.message" })
+                    }
+
+
+            }
+        });
+    }
+
+</script>
+

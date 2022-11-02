@@ -1,0 +1,54 @@
+﻿@inject Homemade.BLL.Setting.BlKeyWords blKeyWords
+@model Homemade.BLL.ViewModel.Setting.KeyWordsViewModel
+
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal-block-large" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-popout modal-dialog-scrollable" role="document">
+
+        <div class="modal-content">
+            <div class="block block-themed block-transparent remove-margin-b">
+                <div class="block-header">
+                    <h3 class="block-title" id="title">
+                    </h3>
+                    <div class="block-options">
+                        <button type="button" class="close btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="ion-android-close"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content modal-body">
+                    <form method="post" id="frmCreate" onsubmit="return false"
+                          data-ajax="true"
+                          data-ajax-complete="completed"
+                          data-ajax-method="post">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Department <span style="color: red">*</span></label>
+                            <select required="" class="form-control js-select2" asp-for="DepartmentID" name="DepartmentID" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1">
+                                <option value=""></option>
+                            </select>
+                            <span style="color: red" asp-validation-for="DepartmentID"> </span>
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="KeyWordsID" type="hidden" />
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Name_Ar <span style="color:red">*</span></label>
+                            <input asp-for="KeyWordsNameAR" type="text" class="form-control" placeholder="" />
+                            <span style="color:red" asp-validation-for="KeyWordsNameAR"> </span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Name_En <span style="color:red">*</span></label>
+                            <input asp-for="KeyWordsNameEN" type="text" class="form-control" placeholder="" />
+
+                            <span style="color:red" asp-validation-for="KeyWordsNameEN"> </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer border-white-op-t">
+                <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"> @Homemade.UI.Resources.Homemade.Close </button>
+                <button class="btn btn-sm bg-orange" id="btnSave" type="button"> @Homemade.UI.Resources.Homemade.save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

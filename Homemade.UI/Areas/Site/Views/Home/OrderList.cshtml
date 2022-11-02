@@ -1,0 +1,112 @@
+﻿<!-- ***** user-dashboard-section Start ***** -->
+
+<section class="section-style user-dashboard-section">
+
+    <div class="container">
+
+        <div class="user-dashboard-area">
+
+            <div class="row">
+
+                <partial name="_PersonalMenuPartial" />
+
+                <div class="col-xl-9 col-lg-8">
+
+                    <div class="user-dashboard-wrapper">
+
+                        <div class="user-dashboard-content order-list-area">
+
+                            <div class="order-list-tabs">
+
+                                <button type="button" class="order-list-tab process-requests tab-btn theme-btn theme-btn-7 theme-btn-lg active" data-target="process-requests-tab">
+
+                                    @Homemade.UI.Resources.Homemade.Pending_Delivered_Orders
+
+
+                                </button>
+
+                                <button type="button" class="order-list-tab previous-requests tab-btn theme-btn theme-btn-7 theme-btn-lg" data-target="previous-requests-tab">
+
+                                    @Homemade.UI.Resources.Homemade.Previous_Orders
+
+
+                                </button>
+
+                            </div>
+
+                            <div class="order-list-items tab-content process-requests-tab active" id="OrderListPending">
+                            </div>
+
+                            <div class="order-list-items tab-content previous-requests-tab" id="OrderListPrevious">
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</section>
+
+<div class="custom-bootstrap-modal modal fade order-details-modal " id="orderDetailsmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-lg-orderdetails">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+
+            <div class="modal-body" id="DevOrderDetailsPartial">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="custom-bootstrap-modal modal fade order-details-modal " id="orderVatmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-lg-orderdetails" style="width:50%">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+
+            <div class="modal-body" id="DevOrderVatPartial">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- *****  End ***** -->
+@section Scripts {
+
+    <script>
+        function ShowDetails(id) {
+            $("#DevOrderDetailsPartial").load("/Site/Home/GetOrderDetailsPartial?ordersID=" + id);
+            $('#orderDetailsmodal').modal('show');
+        }
+        function ShowVat(id) {
+            $("#DevOrderVatPartial").load("/Site/Home/GetOrderVatPartial?ordersID=" + id);
+            $('#orderVatmodal').modal('show');
+        }
+        $(document).ready(function() {
+            $("#OrderListPending").load("/Site/Home/GetSiteOrdersPartial?type=1&allOrder=0");
+            $("#OrderListPrevious").load("/Site/Home/GetSiteOrdersPartial?type=2&allOrder=0");
+        });
+        function DisplayMoreOrders(type) {
+            if (type == 1) {
+                $("#OrderListPending").load("/Site/Home/GetSiteOrdersPartial?type=1&allOrder=1");
+            }
+            else {
+                $("#OrderListPrevious").load("/Site/Home/GetSiteOrdersPartial?type=2&allOrder=1");
+            }
+        }
+    </script>
+
+}

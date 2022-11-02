@@ -1,0 +1,106 @@
+﻿/*------  Responsive --------------------------------------*/
+/* Laptop */
+@media only screen and (max-width: 1036px) {
+}
+
+/* Tablet */
+@media only screen and (max-width: 756px) {
+}
+
+/* Mobile */
+@media only screen and (max-width: 540px) {
+    header .header_inner,
+    .services .img_wrap,
+    .log_pattern {
+        display: none;
+    }
+    .about_item {
+        margin-bottom: 15px;
+    }
+    .text_pad {
+        padding: 2rem;
+    }
+    .joinus .context {
+        width: 80%;
+    }
+    .video {
+        height: 190px;
+    }
+    .vid_wrap {
+        padding: 2rem 1rem;
+    }
+    .navbar-nav {
+        margin: 20px 0;
+    }
+    .sign_up_p {
+        margin: 10px 0;
+    }
+    .nav-link, .sticky .nav-link {
+        margin: 2px 0;
+    }
+    .contact_form {
+        margin-bottom: 35px;
+    }
+    .i_wrap_cont {
+        padding: 0 2rem;
+    }
+    .login_wrap, .desc_wrap {
+        height: inherit;
+        position: initial;
+        overflow: hidden;
+    }
+    .desc {
+        top: 23vh;
+        width: 100%;
+    }
+    .login_form {
+        padding: 0;
+        width: 100%;
+        position: absolute;
+        top: 45vh;
+    }
+    .login_wrap::after {
+        position: fixed;
+    }
+    .main_nav {
+        background-color: #202020 !important;
+    }
+    .page_nav {
+        background-color: #f5f5f5 !important;
+        border-bottom: 1px solid #dee2e6; 
+    }
+    .main_nav .dropdown-menu {
+        border-radius: 15px;
+    }
+    header {
+        margin-top: 58px;
+    }
+    .cap_reg_desc {
+        margin-top: -50px;
+        padding: 0 !important;
+    }
+    .steps li {
+        flex-basis: auto;
+        display: block;
+        width: 100%;
+    }
+    .img_wrap_1 {
+        margin-bottom: 15px;
+    }
+    footer .navbar-nav {
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+    }
+
+        footer .navbar-nav .nav-item {
+            display: inline-block;
+        }
+    .f_upload {
+        width: 120px;
+    }
+}
+
+/* Small Mobile */
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+}

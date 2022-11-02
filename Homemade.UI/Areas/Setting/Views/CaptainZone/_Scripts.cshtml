@@ -1,0 +1,242 @@
+﻿<script charset="utf-8" type="text/javascript">
+    function GetCities(cityID) {
+        $.ajax({
+            type: "POST",
+            url: '/Setting/Block/GetAllCities',
+            data: {},
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $("#ListCityID").html('');
+                $("#ListCityID").append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+
+                    if (cityID != undefined && cityID > 0 && cityID == item.cityID) {
+                        $("#ListCityID").append('<option selected value="' + item.cityID + '">' + item.cityName + '</option>');
+                        $("#ListCityID").val(cityID).trigger('change');
+                    }
+                    else
+                        $("#ListCityID").append('<option value="' + item.cityID + '">' + item.cityName + '</option>');
+                }
+                $($("#ListCityID")).select2();
+            },
+            error: function() {
+
+            }
+        });
+    }
+    function GetRegionCity(regionCityID) {
+        $.ajax({
+            type: "POST",
+            url: '/Setting/Region/GetAllRegionCity',
+            data: {},
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $("#ListRegionCityID").html('');
+                $("#ListRegionCityID").append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+
+                    if (regionCityID != undefined && regionCityID > 0 && regionCityID == item.regionCityID) {
+                        $("#ListRegionCityID").append('<option selected value="' + item.regionCityID + '">' + item.regionCityName + '</option>');
+                        $("#ListRegionCityID").val(regionCityID).trigger('change');
+                    }
+                    else
+                        $("#ListRegionCityID").append('<option value="' + item.regionCityID + '">' + item.regionCityName + '</option>');
+                }
+                $($("#ListRegionCityID")).select2();
+            },
+            error: function() {
+
+            }
+        });
+    }
+    function AddBlockToSelect(id, text) {
+        var d = Array.from(document.querySelectorAll("input[name=ListBlockID]")).find(x => x.value == id);
+        if (d == undefined) {
+            $("#TableResultBlock").append('<tr id="Row_Block_' + id + '">' +
+                '<td><input type="text" id="ListBlockID" name="ListBlockID" value="' + id + '" hidden />' + text + '</td>' +
+                '<td><button type="button" class="btn btn-danger" onclick="RemoveBlockRow(this)" data-id="Row_Block_' + id + '"><i class="fa fa-trash"></i></button></td>' +
+                '</tr>');
+        }
+        CheckData();
+    }
+    function RemoveBlockRow(e) {
+        var button = $(e);
+        var rowdelete = button.attr("data-id");
+        $("#" + rowdelete).remove();
+        CheckData();
+    }
+    function AddCaptainToSelect(id, text) {
+        var d = Array.from(document.querySelectorAll("input[name=ListCaptainID]")).find(x => x.value == id);
+        if (d == undefined) {
+            $("#TableResultCaptain").append('<tr id="Row_Captain_' + id + '">' +
+                '<td><input type="text" id="ListCaptainID" name="ListCaptainID" value="' + id + '" hidden />' + text + '</td>' +
+                '<td><button type="button" class="btn btn-danger" onclick="RemoveCaptainRow(this)" data-id="Row_Captain_' + id + '"><i class="fa fa-trash"></i></button></td>' +
+                '</tr>');
+        }
+        CheckData();
+    }
+    function RemoveCaptainRow(e) {
+        var button = $(e);
+        var rowdelete = button.attr("data-id");
+        $("#" + rowdelete).remove();
+        CheckData();
+    }
+    function ReloadTables() {
+        readBlockTable();
+        readCaptainTable();
+    }
+    $("#btnSave").click(function(e) {
+        e.preventDefault();
+        let frmCreate = $("#frmCreate");
+        if ($("#ListCaptainID").val() != "" && $("#ListBlockID").val() != "") {
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Add, "frmCreate.submit();"));
+        }
+        else {
+            var msg = "@Homemade.UI.Resources.Homemade.InsertValidDataMessage";
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Error, "", false, false, false) { Title = "msg" });
+        }
+    });
+    function formSuccess(data) {
+        if (data.status == true) {
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+                { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\"" });
+            setTimeout(function() {
+                window.location.reload();
+            }, 2000);
+        }
+        else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false)
+                { Title = "data.message" })
+            }
+    }
+    $('#tbl_Blocks').each(function(index, value) {
+        $("#DT_search_Block").keyup(function() {
+            $('#' + value.id + '').DataTable().search($(this).val()).draw();
+        })
+    });
+    $('#tbl_Captain').each(function(index, value) {
+        $("#DT_search_Captain").keyup(function() {
+            $('#' + value.id + '').DataTable().search($(this).val()).draw();
+        })
+    });
+    $('#tbl_BlocksChecked').each(function(index, value) {
+        $("#DT_search_Selected_Block").keyup(function() {
+            $('#' + value.id + '').DataTable().search($(this).val()).draw();
+        })
+    });
+    $('#tbl_BlocksNotChecked').each(function(index, value) {
+        $("#DT_search_Not_Selected_Block").keyup(function() {
+            $('#' + value.id + '').DataTable().search($(this).val()).draw();
+        })
+    });
+    function CheckData() {
+        if ($('#TableResultBlock tr').length > 0 && $('#TableResultCaptain tr').length > 0) {
+            $('#btnSave').show();
+        }
+        else {
+            $('#btnSave').hide();
+        }
+
+    }
+    function GetDrivers(driversID) {
+        $.ajax({
+            type: "POST",
+            url: '/Setting/CaptainZone/GetDrivers',
+            data: {},
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $("#DriversID").html('');
+                $("#DriversID").append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+
+                    if (driversID != undefined && driversID > 0 && driversID == item.driversID) {
+                        $("#DriversID").append('<option selected value="' + item.driversID + '">' + item.driversName + '</option>');
+                        $("#DriversID").val(driversID).trigger('change');
+                    }
+                    else
+                        $("#DriversID").append('<option value="' + item.driversID + '">' + item.driversName + '</option>');
+                }
+                $($("#DriversID")).select2();
+            },
+            error: function() {
+
+            }
+        });
+    }
+    function ReloadBlocksTables() {
+        readBlockCheckTable();
+        readBlockNotCheckTable();
+    }
+    function Delete(e) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Delete , "ConfirmDelete(e)"))
+        }
+
+    function ConfirmDelete(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete")',
+            data: {
+                'id': id
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                var msg = result.message;
+
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                        Title = "\"" + Homemade.UI.Resources.Homemade.SuccessDeleteMessage + "\""})
+                        ReloadBlocksTables()
+
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+                    }
+            }
+        });
+    }
+    @*function AddBlock(e) {
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Add , "ConfirmAddBlock(e)"))
+        }*@
+
+        function AddBlock(e) {
+            var button = $(e);
+            var id = button.attr("data-id");
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddBlock")',
+                data: {
+                    blockID: id,
+                    driversID: $("#DriversID").val()
+                },
+                dataType: "json",
+                async: false,
+
+                contentType: "application/x-www-form-urlencoded",
+                success: function(result) {
+                    var msg = result.message;
+
+                    if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                            Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\""})
+                            ReloadBlocksTables()
+
+                    }
+                    else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+                    }
+                }
+            });
+        }
+</script>
+

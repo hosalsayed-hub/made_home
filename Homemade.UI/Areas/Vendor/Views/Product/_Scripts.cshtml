@@ -1,0 +1,477 @@
+﻿<script>
+    var divMsgClass = $("#divMsgClass");
+    var lblMsg = $("#lblMsg");
+    var divMsgParent = $("#divMsgParent");
+    function Delete(e) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Delete , "ConfirmDelete(e)"))
+        }
+
+
+    function ConfirmDelete(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete")',
+            data: {
+                'id': id
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                var msg = result.message;
+
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                        Title = "\"" + Homemade.UI.Resources.Homemade.SuccessDeleteMessage + "\""})
+                        $('#tbl_Product').DataTable().ajax.reload();
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+                    }
+            }
+        });
+    }
+    function DeleteAllProduct() {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Delete , "ConfirmDeleteAllProduct()"))
+        }
+
+
+    function ConfirmDeleteAllProduct() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DeleteAllProduct")',
+            data: {
+                'id': $("#VendorsID").val()
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                var msg = result.message;
+
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                        Title = "\"" + Homemade.UI.Resources.Homemade.SuccessDeleteMessage + "\""})
+                        $('#tbl_Product').DataTable().ajax.reload();
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+                    }
+            }
+        });
+    }
+    function ChangeStatue(e, type) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.ChangeStaute , "ConfirmStatue(e,type)"))
+        }
+    function ConfirmStatue(e, type) {
+        var button = $(e);
+        var id = button.attr("data-id");
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeStatue")',
+            data: {
+                'id': id,
+                'type': type
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                        Title = "result.message"})
+                        $('#tbl_Product').DataTable().ajax.reload();
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "result.message" })
+                    }
+
+
+            }
+        });
+    }
+    $("#btnSave").click(function(e) {
+        e.preventDefault();
+        let frmCreate = $("#frmCreate");
+        if (frmCreate.valid()) {
+            $('#IsAvailable').val($("input[type='radio'][name='IsAvailable']:checked").val());
+            $('#IsFixed').val($("input[type='radio'][name='IsFixed']:checked").val());
+            $('#IsHidden').val($("input[type='radio'][name='IsHidden']:checked").val());
+            $('#IsLimited').val($("input[type='radio'][name='IsLimited']:checked").val());
+            $('#MeasurementId').val($("input[type='radio'][name='MeasurementId']:checked").val());
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Add , "frmCreate.submit();"))
+            }
+    });
+    function formSuccess(data) {
+        divMsgParent.slideUp();
+        divMsgParent.show();
+        if (data.status == true) {
+            divMsgClass.attr("class", "alert alert-success");
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success, "" , false , false , false)
+                { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\"" })
+                lblMsg.html(data.message);
+
+            $('#ProductID').val(data.id);
+            $('#VendorTabs li').removeClass('disabled');
+            $('#VendorTabs li').find('a').attr("data-toggle", "tab");
+            GoToTab('Store_Data');
+            readtableFiles($("#ProductID").val());
+        }
+        else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false)
+                { Title = "data.message" })
+                divMsgClass.attr("class", "alert alert-danger");
+            lblMsg.html(data.message);
+        }
+    }
+    function formSuccessUpdate(data) {
+        divMsgParent.slideUp();
+        divMsgParent.show();
+        if (data.status == true) {
+            divMsgClass.attr("class", "alert alert-success");
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+                {Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\""})
+                lblMsg.html(data.message);
+        } else {
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Error, "", false, false, false)
+                {Title = "data.message"})
+                divMsgClass.attr("class", "alert alert-danger");
+            lblMsg.html(data.message);
+        }
+    }
+    function GetDepartments(departmentsID) {
+        $.ajax({
+            type: "POST",
+            url: '/Setting/Departments/GetAllDepartments',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $('#DepartmentsID').html('');
+                $('#DepartmentsID').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (departmentsID != undefined && departmentsID > 0 && departmentsID == item.departmentsID) {
+                        $('#DepartmentsID').append('<option selected value="' + item.departmentsID + '">' + item.departmentsName + '</option>');
+                        $('#DepartmentsID').val(departmentsID).trigger('change');
+                    }
+                    else {
+                        $('#DepartmentsID').append('<option value="' + item.departmentsID + '">' + item.departmentsName + '</option>');
+                    }
+
+                }
+                $($("#DepartmentsID")).select2();
+            },
+            error: function() {
+
+            }
+        });
+    }
+    function GetVendors(vendorsID) {
+        $.ajax({
+            type: "POST",
+            url: '/Vendor/Vendors/GetAllVendors',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $('#VendorsID').html('');
+                $('#VendorsID').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (vendorsID != undefined && vendorsID > 0 && vendorsID == item.vendorsID) {
+                        $('#VendorsID').append('<option selected value="' + item.vendorsID + '">' + item.vendorsName + '</option>');
+                        $('#VendorsID').val(vendorsID).trigger('change');
+                    }
+                    else {
+                        $('#VendorsID').append('<option value="' + item.vendorsID + '">' + item.vendorsName + '</option>');
+                    }
+
+                }
+                $($("#VendorsID")).select2();
+            },
+            error: function() {
+
+            }
+        });
+    }
+    function GetKeyWords(keyWordsID) {
+        $.ajax({
+            type: "POST",
+            url: '/Vendor/Product/GetAllKeyWords',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $('#KeyWords').html('');
+                $('#KeyWords').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (keyWordsID != undefined && keyWordsID > 0 && keyWordsID == item.keyWordsID) {
+                        $('#KeyWords').append('<option selected value="' + item.keyWordsID + '">' + item.keyWordsName + '</option>');
+                        $('#KeyWords').val(keyWordsID).trigger('change');
+                    }
+                    else {
+                        $('#KeyWords').append('<option value="' + item.keyWordsID + '">' + item.keyWordsName + '</option>');
+                    }
+
+                }
+                $($("#KeyWords")).select2();
+            },
+            error: function() {
+
+            }
+        });
+    }
+    function GetProductType(ProductTypeId) {
+        $.ajax({
+            type: "POST",
+            url: '/Vendor/Product/GetAllProductType',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $('#ProductTypeId').html('');
+                $('#ProductTypeId').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (ProductTypeId != undefined && ProductTypeId > 0 && ProductTypeId == item.value) {
+                        $('#ProductTypeId').append('<option selected value="' + item.value + '">' + item.text + '</option>');
+                        $('#ProductTypeId').val(ProductTypeId).trigger('change');
+                    }
+                    else {
+                        $('#ProductTypeId').append('<option value="' + item.value + '">' + item.text + '</option>');
+                    }
+
+                }
+                $($("#ProductTypeId")).select2();
+            },
+            error: function() {
+
+            }
+        });
+    }
+    function GoToTab(hash) {
+        $('.nav-tabs a[href="#' + hash + '"]').tab('show');
+    }
+    function UploadProductImages() {
+        var fdata = new FormData();
+
+        fdata.append("ProductID", $("#ProductID").val());
+        var ins = document.getElementById('ProductImgFile').files.length;
+        for (var x = 0; x < ins; x++) {
+            fdata.append("ProductImgFile", $('#ProductImgFile')[0].files[x]);
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UploadProductImages")',
+            data: fdata,
+            dataType: "json",
+            async: false,
+            processData: false,
+            contentType: false,
+            success: function(result) {
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+                        {
+                        Title = "result.message"
+                        });
+                    $('#ProductImgFile').val('');
+                    $("#ProductImgPartial").load('/Vendor/Product/ProductImgPartial?ProductID=' + $("#ProductID").val())
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "result.message" })
+                    }
+
+
+            }
+        });
+    }
+    function UploadProductMainImage() {
+        var fdata = new FormData();
+
+        fdata.append("ProductID", $("#ProductID").val());
+        fdata.append("ProductImgFile", $('#fupLogo')[0].files[0]);
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UploadProductMainImage")',
+            data: fdata,
+            dataType: "json",
+            async: false,
+            processData: false,
+            contentType: false,
+            success: function(result) {
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+                        {
+                        Title = "result.message"
+                        });
+                    $('#fupLogo').val('');
+                    if (result.objResult != "") {
+                        $("#img_prod_logo").attr("src", result.objResult);
+                        $("#img_prod_logo").show();
+                    }
+                    else {
+                        $("#img_prod_logo").hide();
+                    }
+
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "result.message" })
+                    }
+
+
+            }
+        });
+    }
+    function GetProductQuantity(productID) {
+        const result = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100];
+
+        $('#ProductQuantity').html('');
+        $('#ProductQuantity').append('<option></option>');
+        for (var i = 0; i < result.length; i++) {
+            var item = result[i];
+            if (productID != undefined && productID > 0 && productID == item) {
+                $('#ProductQuantity').append('<option selected value="' + item + '">' + item + '</option>');
+                $('#ProductQuantity').val(productID).trigger('change');
+            }
+            else {
+                $('#ProductQuantity').append('<option value="' + item + '">' + item + '</option>');
+            }
+        }
+    }
+    function GetProductOrder(productID) {
+        const result = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
+
+        $('#ProductOrder').html('');
+        $('#ProductOrder').append('<option></option>');
+        for (var i = 0; i < result.length; i++) {
+            var item = result[i];
+            if (productID != undefined && productID > 0 && productID == item) {
+                $('#ProductOrder').append('<option selected value="' + item + '">' + item + '</option>');
+                $('#ProductOrder').val(productID).trigger('change');
+            }
+            else {
+                $('#ProductOrder').append('<option value="' + item + '">' + item + '</option>');
+            }
+
+        }
+    }
+    function GetDepartmentsList(departmentsID) {
+        $.ajax({
+            type: "POST",
+            url: '/Setting/Departments/GetAllDepartments',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $('#ListDepartmentID').html('');
+                $('#ListDepartmentID').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (departmentsID != undefined && departmentsID > 0 && departmentsID == item.departmentsID) {
+                        $('#ListDepartmentID').append('<option selected value="' + item.departmentsID + '">' + item.departmentsName + '</option>');
+                        $('#ListDepartmentID').val(departmentsID).trigger('change');
+                    }
+                    else {
+                        $('#ListDepartmentID').append('<option value="' + item.departmentsID + '">' + item.departmentsName + '</option>');
+                    }
+
+                }
+                isPaused = false;
+            },
+            error: function() {
+                isPaused = false;
+            }
+        });
+    }
+    function GetKeyWordsList(keyWordsID) {
+        $.ajax({
+            type: "POST",
+            url: '/Vendor/Product/GetAllKeyWords',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $('#ListKeyWordsID').html('');
+                $('#ListKeyWordsID').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (keyWordsID != undefined && keyWordsID > 0 && keyWordsID == item.keyWordsID) {
+                        $('#ListKeyWordsID').append('<option selected value="' + item.keyWordsID + '">' + item.keyWordsName + '</option>');
+                        $('#ListKeyWordsID').val(keyWordsID).trigger('change');
+                    }
+                    else {
+                        $('#ListKeyWordsID').append('<option value="' + item.keyWordsID + '">' + item.keyWordsName + '</option>');
+                    }
+
+                }
+                isPaused = false;
+            },
+            error: function() {
+                isPaused = false;
+            }
+        });
+    }
+    function GetVendorList(vendorsID) {
+        $.ajax({
+            type: "POST",
+            url: '/Vendor/Vendors/GetAllVendors',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $('#ListVendorID').html('');
+                $('#ListVendorID').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (vendorsID != undefined && vendorsID > 0 && vendorsID == item.vendorsID) {
+                        $('#ListVendorID').append('<option selected value="' + item.vendorsID + '">' + item.vendorsName + '</option>');
+                        $('#ListVendorID').val(vendorsID).trigger('change');
+                    }
+                    else {
+                        $('#ListVendorID').append('<option value="' + item.vendorsID + '">' + item.vendorsName + '</option>');
+                    }
+
+                }
+                isPaused = false;
+            },
+            error: function() {
+                isPaused = false;
+            }
+        });
+    }
+    function ConvertToBase64(e) {
+        var fileUpload = $(e);
+        var pID = '#' + fileUpload.attr('id').replace('fup', '');
+        var FR = new FileReader();
+        FR.addEventListener("load", function(e) {
+            $("#Logo").val(e.target.result.replace(/^data:.+;base64,/, ''));
+        }, false);
+        FR.readAsDataURL($(fileUpload)[0].files[0]);
+    }
+    function ChangeLimit() {
+        if ($("input[type='radio'][name='IsLimited']:checked").val() == "true") {
+            $("#Quantity").prop('readonly', false);
+        }
+        else {
+            $("#Quantity").prop('readonly', true);
+        }
+    }
+
+</script>

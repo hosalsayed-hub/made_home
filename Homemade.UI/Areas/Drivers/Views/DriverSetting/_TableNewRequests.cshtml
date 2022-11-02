@@ -1,0 +1,216 @@
+﻿@inject Homemade.BLL.BLPermission blPermission
+@{
+    var IsPermissionView = @blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Driver_New_Requests, (int)Homemade.BLL.ActionEnum.View) ? 1 : 0;
+    var IsPermissionUpdate = @blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Driver_New_Requests, (int)Homemade.BLL.ActionEnum.Update) ? 1 : 0;
+    var IsPermissionDelete = @blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Driver_New_Requests, (int)Homemade.BLL.ActionEnum.Delete) ? 1 : 0;
+}
+
+
+
+<script>
+    var table;
+    $(document).ready(function () {
+        table = $('#tbl').DataTable({
+            pageLength: 10,
+            pagijngType: "full_numbers",
+            serverSide: true,
+            processing: true,
+            lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+            sAjaxSource: '@Url.Action("LoadTableNewRequest")',
+            sServerMethod: "POST",
+            bPaginate: true,
+            paging: true,
+            columns: [
+                {
+                    data: null,
+                    bSortable: false,
+                    render: function (data, type, row) {
+                        return `<label class="css-input css-checkbox css-checkbox-warning"><input type="checkbox" class="checkbox" onclick="check(this)" id="hfID" value="${data.driversID}" /> <span></span></label>`;
+                    }
+
+                },
+                {
+                    "data": null,
+                    "sortable": false,
+                    render: function (data, type, row, meta) {
+                        return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) { return '<input type="hidden" value="' + data.driversID + '"/><label>' + data.driverName + '</label>' }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) { return '<img src="' + data.personalPicture +'" style="width: 100px;max-height: 65px;max-width: 83px;" alt="Avatar"/>' }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) { return '<label>' + data.nationalityName + '</label>' }
+
+                },
+
+
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) { return '<label>' + data.regionName + '</label>' }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) { return '<label>' + data.cityName + '</label>' }
+                },
+
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) { return '<label>' + data.idNo + '</label>' }
+
+                },
+
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) { return '<label>' + data.phoneNumber + '</label>' }
+
+                },
+                {
+
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) {
+                        var databutton = '';
+                        if (@IsPermissionView == 1) {
+                        }
+                        if (@IsPermissionUpdate == 1) {
+                            databutton += '<a class="btn btn-xs btn-success" style="margin-right:2px" href="/Drivers/DriverSetting/Edit/'
+                                + data.driverGuid + '" type="button" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Update"><i class="fa fa-edit"></i></a>';
+                            if (data.requestStatusId == 0) {
+                            databutton += '<button class="btn btn-xs btn-warning" style="margin-right:2px" type="button" data-toggle="tooltip" onclick="Received(this);" data-id="' +
+                                data.driverGuid + '" title="@Homemade.UI.Resources.Homemade.Under_Scrutiny"><i class="fa fa-paperclip"></i></button>';
+                        }
+                        return databutton;
+                    }
+                }
+            ],
+            drawCallback: function (s) {
+                $('[data-toggle="tooltip"]').tooltip();
+            },
+
+            buttons: [
+                {
+                    extend: "excelHtml5",
+                    autoFilter: true,
+                    sheetName: 'Exported data',
+                    className: "btn btn-success btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.Excel'
+                }, {
+                    extend: "print",
+                    className: "btn btn-warning btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.Print'
+                }, {
+                    extend: "pdfHtml5",
+                    download: 'open',
+                    className: "btn btn-info btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.PDF'
+                }],
+            "language": {
+                "search": "_INPUT_",
+                "searchPlaceholder": "Search",
+                "lengthMenu": "_MENU_",
+            }, dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+
+        });
+        table.buttons().container().appendTo('.dt_buttons_wrap');
+    });
+    function readtable() {
+        debugger;
+        table.ajax.url('/Drivers/DriverSetting/LoadTableNewRequest?fromDate=' + $("#FromDate").val() + '&driverID=' + $("#DriverID").val()
+            +'&listCountryID=' + $("#ListCountryID").val() + '&listAgentID=' + $("#ListAgentID").val() + '&listCityID=' + $("#ListCityID").val() +
+            + '&toDate=' + $("#ToDate").val());
+        table.ajax.reload();
+        setTimeout(function () { $('.sorting_asc').toggleClass('sorting_asc'); }, 5000);
+
+    }
+
+
+    function Received(e) {
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.ChangeStaute , " ConfirmReceived(e);"))
+    }
+    function ConfirmReceived(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ConfirmReceived")',
+            data: {
+                'id': id,'status':1,'notes':''
+            },
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                if (result.resultType == 'success') {
+                    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                   Title = "\"" + Homemade.UI.Resources.Homemade.SuccessChangeMessage + "\""})
+                    $('#tbl').DataTable().ajax.reload();
+                    swal.close();
+                }
+                else {
+                   @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) {
+                   Title = "\"" + Homemade.UI.Resources.Homemade.FailChangeStatueMessage + "\""})
+                    swal.close();
+                }
+
+
+            },
+            error: function () {
+
+            }
+        });
+    }
+
+
+     function ReceivedAll() {
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.ChangeStaute , " ConfirmReceivedAll();"))
+    }
+        function ConfirmReceivedAll() {
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ConfirmReceivedAll")',
+            data: {
+                'id': $("#TripMasterCheck").val(), 'status': 1, 'notes': ''
+            },
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                if (result.resultType == 'success') {
+                    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                   Title = "\"" + Homemade.UI.Resources.Homemade.SuccessChangeMessage + "\""})
+                    $('#tbl').DataTable().ajax.reload();
+                    swal.close();
+                }
+                else {
+                   @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) {
+                   Title = "\"" + Homemade.UI.Resources.Homemade.FailChangeStatueMessage + "\""})
+                    swal.close();
+                }
+
+
+            },
+            error: function () {
+
+            }
+        });
+    }
+
+</script>

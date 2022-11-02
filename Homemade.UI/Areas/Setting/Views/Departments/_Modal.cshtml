@@ -1,0 +1,89 @@
+﻿@inject Homemade.BLL.Setting.BlDepartments blDepartments
+@model Homemade.BLL.ViewModel.Setting.DepartmentsViewModel
+
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal-block-large" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-popout modal-dialog-scrollable" role="document">
+
+        <div class="modal-content">
+            <div class="block block-themed block-transparent remove-margin-b">
+                <div class="block-header">
+                    <h3 class="block-title" id="title">
+                    </h3>
+                    <div class="block-options">
+                        <button type="button" class="close btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="ion-android-close"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content modal-body">
+                    <form method="post" id="frmCreate" onsubmit="return false"
+                          data-ajax="true"
+                          data-ajax-complete="completed"
+                          data-ajax-method="post">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.MainCategory <span style="color: red">*</span></label>
+                            <select required="" class="form-control js-select2" asp-for="MainCategoryID" name="MainCategoryID" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1">
+                                <option value=""></option>
+                            </select>
+                            <span style="color: red" asp-validation-for="MainCategoryID"> </span>
+                        </div>
+
+                        <div class="form-group">
+                            <input asp-for="DepartmentsID" type="hidden" />
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Name_Ar <span style="color:red">*</span></label>
+                            <input asp-for="DepartmentsNameAR" type="text" class="form-control" placeholder="" />
+                            <span style="color:red" asp-validation-for="DepartmentsNameAR"> </span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Name_En <span style="color:red">*</span></label>
+                            <input asp-for="DepartmentsNameEN" type="text" class="form-control" placeholder="" />
+
+                            <span style="color:red" asp-validation-for="DepartmentsNameEN"> </span>
+                        </div>
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Description_Ar </label>
+                            <input asp-for="DescriptionAr" type="text" class="form-control" />
+
+                            <span style="color:red" asp-validation-for="DescriptionAr"> </span>
+                        </div>
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Description_En</label>
+                            <input asp-for="DescriptionEn" type="text" class="form-control" />
+                            <span style="color:red" asp-validation-for="DescriptionEn"> </span>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label for="exampleformcontrolfile1">@Homemade.UI.Resources.Homemade.App_Photo</label> (636 * 190)
+                            <input type="file" class="form-control-file " accept="image/*" id="fupImage" onchange="ConvertToBase64(this)">
+                            @Html.HiddenFor(m => m.Image)
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.IsUnique</label>
+                            <br />
+                            <input type="checkbox" asp-for="Isunique" />
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-6 form-group">
+                            <label for="exampleformcontrolfile1">@Homemade.UI.Resources.Homemade.SiteImage</label> (1296 * 190)
+                            <input type="file" class="" accept="image/*" id="fupImage" onchange="ConvertSiteImageToBase64(this)">
+                            @Html.HiddenFor(m => m.SiteImage)
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Arrange</label>
+                                <input asp-for="Arrange" type="number" step=".01" class="form-control" placeholder="" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer border-white-op-t">
+                <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"> @Homemade.UI.Resources.Homemade.Close </button>
+                <button class="btn btn-sm bg-orange" id="btnSave" type="button"> @Homemade.UI.Resources.Homemade.save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

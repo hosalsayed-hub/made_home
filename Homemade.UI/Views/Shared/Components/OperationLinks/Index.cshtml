@@ -1,0 +1,1124 @@
+﻿@inject Homemade.BLL.BLPermission blPermission
+@inject Homemade.BLL.General.BLUser bLUser
+@inject Homemade.BLL.Setting.BlMainPage bLMainPage
+@inject Homemade.BLL.Order.BlOrders blOrder
+@{
+
+    var userdata = bLUser.GetUserInfo(User.GetUserIdInt());
+    var MainPages = bLMainPage.GetAllMainPage();
+    //int OperatorID = 0;
+    //if (operators != null)
+    //{
+    //    OperatorID = operators.OperatorID;
+    //}
+    //var dashSummary = blTripMaster.DashboardSummary(OperatorID);
+}
+@if (userdata.UserType == (int)UserTypeEnum.Admin || userdata.UserType == (int)UserTypeEnum.Employee)
+{
+    <li>
+        <a href="/Home/Index">
+            <i class="si si-speedometer"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.Homemade.DashBoard
+            </span>
+        </a>
+    </li>
+}
+else if (userdata.UserType == (int)UserTypeEnum.Vendor)
+{
+    <li>
+        <a href="/Home/IndexVendor">
+            <i class="si si-speedometer"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.Homemade.DashBoard
+            </span>
+        </a>
+    </li>
+}
+@*@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Permission, (int)Homemade.BLL.ActionEnum.Insert)
+    || blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Role, (int)Homemade.BLL.ActionEnum.View)
+    || blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.RoleConfigration, (int)Homemade.BLL.ActionEnum.Update)
+    )
+    {
+
+        <li>
+            <a class="" href="/Permission/Permissions/RoleConfigration">
+                <i class="si si-lock"></i>
+                <span class="sidebar-mini-hide">
+                    @Homemade.UI.Resources.HomemadeMenu.Permissions
+                </span>
+            </a>
+            <ul>
+
+                @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Permission, (int)Homemade.BLL.ActionEnum.Insert))
+                {
+                    <li>
+                        <a href="/Permission/Permissions/UsersInRole">
+                            <i class="ion-chevron-right"></i>
+                            <span class="sidebar-mini-hide">
+                                @Homemade.UI.Resources.HomemadeMenu.Users_In_Role
+                            </span>
+                        </a>
+                    </li>
+                }
+                @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Role, (int)Homemade.BLL.ActionEnum.View))
+                {
+                    <li>
+                        <a href="/Permission/Role/Index">
+                            <span class="sidebar-mini-hide">
+                                @Homemade.UI.Resources.Homemade.Role
+                            </span>
+                        </a>
+                    </li>
+                }
+                @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Permission, (int)Homemade.BLL.ActionEnum.View))
+                {
+                    <li>
+                        <a href="/Permission/Permissions/RolePermissions">
+                            <span class="sidebar-mini-hide">
+                                @Homemade.UI.Resources.HomemadeMenu.Role_Permissions
+                            </span>
+                        </a>
+                    </li>
+                }
+                @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.RoleConfigration, (int)Homemade.BLL.ActionEnum.Update))
+                {
+                    <li>
+                        <a href="/Permission/Permissions/RoleConfigration">
+                            <span class="sidebar-mini-hide">
+                                @Homemade.UI.Resources.HomemadeMenu.Role_Configration
+                            </span>
+                        </a>
+                    </li>
+                }
+
+            </ul>
+        </li>
+    }*@
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Vendors, (int)Homemade.BLL.ActionEnum.View) || blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Vendors, (int)Homemade.BLL.ActionEnum.Insert))
+{
+    <li>
+        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+            <i class="si si-speedometer"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.HomemadeMenu.List_Vendors
+            </span>
+        </a>
+        <ul>
+
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Vendors, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Vendor/Vendors/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.List_a_Vendors</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Vendors, (int)Homemade.BLL.ActionEnum.Insert))
+            {
+                <li>
+                    <a href="/Vendor/Vendors/Create">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Add_New_Vendor</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </li>
+}
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Employees, (int)Homemade.BLL.ActionEnum.View) || blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Employees, (int)Homemade.BLL.ActionEnum.Insert)
+|| blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Jobs, (int)Homemade.BLL.ActionEnum.View))
+{
+    <li>
+        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+            <i class="si si-speedometer"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.HomemadeMenu.Mangment
+            </span>
+        </a>
+        <ul>
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Employees, (int)Homemade.BLL.ActionEnum.Insert))
+            {
+                <li>
+                    <a href="/Employees/Employees/Create?jobtype=1">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Add_Employee</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Employees, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Employees/Employees/Index?jobtype=1">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.List_Employees</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Jobs, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Setting/Jobs/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Jobs</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </li>
+}
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Product, (int)Homemade.BLL.ActionEnum.Insert)
+|| blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.ProductOperation, (int)Homemade.BLL.ActionEnum.Insert) ||
+blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Product, (int)Homemade.BLL.ActionEnum.View)
+|| blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.ProductOperation, (int)Homemade.BLL.ActionEnum.View))
+{
+    <li>
+        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+            <i class="si si-speedometer"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.HomemadeMenu.Products
+            </span>
+        </a>
+        <ul>
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Product, (int)Homemade.BLL.ActionEnum.Insert)
+|| blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.ProductOperation, (int)Homemade.BLL.ActionEnum.Insert))
+            {
+                <li>
+                    <a href="/Vendor/Product/Create">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.New_Product</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.ProductOperation, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Vendor/Product/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.List_Products</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Product, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Vendor/Product/IndexVendor">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.List_Products</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.ProductOperation, (int)Homemade.BLL.ActionEnum.Update))
+            {
+                <li>
+                    <a href="/Vendor/Product/FavouriteProducts">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Favourite_Products</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </li>
+}
+
+
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Customer, (int)Homemade.BLL.ActionEnum.View))
+{
+    <li>
+        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+            <i class="si si-speedometer"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.HomemadeMenu.Customers
+            </span>
+        </a>
+        <ul>
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Customer, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Customer/Customer/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.List_Customers</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.CustomerBalance, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Customer/Customer/CustomerBalance">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Customers_Balance</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </li>
+}
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.VendorCustomer, (int)Homemade.BLL.ActionEnum.View))
+{
+    <li>
+        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+            <i class="si si-speedometer"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.HomemadeMenu.Customers
+            </span>
+        </a>
+        <ul>
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.VendorCustomer, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Customer/Customer/IndexVendor">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.List_Customers</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </li>
+}
+
+
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.OperationOrders, (int)Homemade.BLL.ActionEnum.View)
+|| blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.OperationOrders, (int)Homemade.BLL.ActionEnum.Insert)
+|| blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.OperationScheduleOrders, (int)Homemade.BLL.ActionEnum.View))
+{
+    <li>
+        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+            <i class="si si-wallet"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.HomemadeMenu.Processes
+            </span>
+        </a>
+        <ul>
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.OperationOrders, (int)Homemade.BLL.ActionEnum.Insert))
+            {
+                <li>
+                    <a href="/Order/Orders/AssignOrder">
+                        <span class="sidebar-mini-hide">
+                            @Homemade.UI.Resources.HomemadeMenu.AssignOrder
+                        </span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.OperationOrders, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Order/Orders/TrackingOrder">
+                        <span class="sidebar-mini-hide">
+                            @Homemade.UI.Resources.HomemadeMenu.TrackingOrders
+                        </span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.OperationOrders, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Order/Orders/Index">
+                        <span class="sidebar-mini-hide">
+                            @Homemade.UI.Resources.HomemadeMenu.Orders_History
+                        </span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.OperationScheduleOrders, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Order/Orders/ScheduleOrders">
+                        <span class="sidebar-mini-hide">
+                            @Homemade.UI.Resources.HomemadeMenu.Schedule_Orders
+                        </span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </li>
+}
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Invoice, (int)Homemade.BLL.ActionEnum.Insert)
+|| blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Invoice, (int)Homemade.BLL.ActionEnum.View))
+{
+    <li>
+        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+            <i class="si si-wallet"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.HomemadeMenu.Invoices
+            </span>
+        </a>
+        <ul>
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Invoice, (int)Homemade.BLL.ActionEnum.Insert))
+            {
+                <li>
+                    <a href="/Vendor/Invoice/GenerateInvoiceBulk">
+                        <span class="sidebar-mini-hide">
+                            @Homemade.UI.Resources.HomemadeMenu.Generate_Invoice
+                        </span>
+                    </a>
+                </li>
+            }
+
+
+            <li>
+                <a href="/Vendor/Invoice/PendingAction">
+                    <span class="sidebar-mini-hide">
+                        @Homemade.UI.Resources.HomemadeMenu.Pending_Approve
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="/Vendor/Invoice/CollectInvoice">
+                    <span class="sidebar-mini-hide">
+                        @Homemade.UI.Resources.HomemadeMenu.Collect_Invoice
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="/Vendor/Invoice/InvoiceReport">
+                    <span class="sidebar-mini-hide">
+                        @Homemade.UI.Resources.HomemadeMenu.Reports_Inquiries
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="/Vendor/Invoice/ListCollected">
+                    <span class="sidebar-mini-hide">
+                        @Homemade.UI.Resources.HomemadeMenu.List_Collected
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="/Vendor/Invoice/PaymentReports">
+                    <span class="sidebar-mini-hide">
+                        @Homemade.UI.Resources.HomemadeMenu.PaymentReports
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </li>
+}
+@*@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.DriverBlance, (int)Homemade.BLL.ActionEnum.Insert)
+    || blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.DriverBlance, (int)Homemade.BLL.ActionEnum.View))
+    {
+        <li>
+            <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+                <i class="si si-wallet"></i>
+                <span class="sidebar-mini-hide">
+                    @Homemade.UI.Resources.HomemadeMenu.Driver_Balance
+                </span>
+            </a>
+            <ul>
+                <li>
+                        <a href="/Drivers/DriverBlance/Create">
+                            <span class="sidebar-mini-hide">
+                                @Homemade.UI.Resources.Homemade.Add_Balance
+                            </span>
+                        </a>
+                    </li>
+
+
+            </ul>
+        </li>
+    }*@
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.VacHistory, (int)Homemade.BLL.ActionEnum.View)
+|| blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.EnableHistory, (int)Homemade.BLL.ActionEnum.View))
+{
+    <li>
+        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+            <i class="si si-speedometer"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.HomemadeMenu.Subscriptions
+            </span>
+        </a>
+        <ul>
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.EnableHistory, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Vendor/EnableHistory/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.EnbaleHistory</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.VacHistory, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Vendor/VacHistory/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.VacHistory</span>
+                    </a>
+                </li>
+            }
+
+        </ul>
+    </li>
+}
+
+
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Region, (int)Homemade.BLL.ActionEnum.View) || blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.City, (int)Homemade.BLL.ActionEnum.View) || blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Departments, (int)Homemade.BLL.ActionEnum.View)
+|| blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Nationality, (int)Homemade.BLL.ActionEnum.View))
+{
+    <li>
+        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+            <i class="si si-settings"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.HomemadeMenu.Setting
+            </span>
+        </a>
+        <ul>
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Region, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Setting/Region/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Region</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.City, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Setting/City/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Cities</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.CitiesCovered, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Setting/CitiesCovered/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.CitiesCovered</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Block, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Setting/Block/index">
+                        <span class="sidebar-mini-hide">
+
+                            @Homemade.UI.Resources.HomemadeMenu.Blocks
+                        </span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Departments, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Setting/Departments/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Departments</span>
+                    </a>
+                </li>
+            }
+
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Nationality, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Setting/Nationality/Index">
+                        <span class="sidebar-mini-hide">
+                            @Homemade.UI.Resources.HomemadeMenu.Nationality
+                        </span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Banks, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Setting/Banks/Index">
+                        <span class="sidebar-mini-hide">
+                            @Homemade.UI.Resources.HomemadeMenu.Banks
+                        </span>
+                    </a>
+                </li>
+            }
+
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.PaymentWay, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Setting/PaymentWay/Index">
+                        <span class="sidebar-mini-hide">
+                            @Homemade.UI.Resources.HomemadeMenu.PaymentWays
+                        </span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Activity, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Setting/Activity/index">
+                        <span class="sidebar-mini-hide">
+                            @Homemade.UI.Resources.HomemadeMenu.Activities
+                        </span>
+                    </a>
+                </li>
+            }
+
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Package, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Setting/Package/index">
+                        <span class="sidebar-mini-hide">
+                            @Homemade.UI.Resources.HomemadeMenu.Packages
+                        </span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Configuration, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Setting/Configuration/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.ConfigrationCompany</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Configuration, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Setting/PaymentConfiguration/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.PaymentConfiguration</span>
+                    </a>
+                </li>
+            }
+
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.AddressTypes, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Setting/AddressTypes/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.AddressTypes</span>
+                    </a>
+                </li>
+            }
+
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.KeyWords, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Setting/KeyWords/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.KeyWords</span>
+                    </a>
+                </li>
+            }
+
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.ShippingCompany, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Setting/ShippingCompany/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.ShippingCompany</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Sliders, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Setting/Slider/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Sliders</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Discount, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Setting/Discount/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.Homemade.Discount</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.SendMessage, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Setting/SendMessage/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Send_Message</span>
+                    </a>
+                </li>
+            }
+            <li>
+                <a href="/Setting/DeliverySetting/Index">
+                    <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Delivery_Setting</span>
+                </a>
+            </li>
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Configuration, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Setting/CompanyWorkingHours/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Company_Working_Hours</span>
+                    </a>
+                </li>
+            }
+            </ul>
+    </li>
+}
+@*@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.CaptainZone, (int)Homemade.BLL.ActionEnum.Insert)
+    || blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.CaptainZone, (int)Homemade.BLL.ActionEnum.Update))
+    {
+        <li>
+            <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+                <i class="si si-speedometer"></i>
+                <span class="sidebar-mini-hide">
+                    @Homemade.UI.Resources.HomemadeMenu.CaptainZone
+                </span>
+            </a>
+            <ul>
+                       </ul>
+        </li>
+    }*@
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.PromoCode, (int)Homemade.BLL.ActionEnum.View))
+{
+    <li>
+        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+            <i class="si si-speedometer"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.HomemadeMenu.Promo_Code
+            </span>
+        </a>
+        <ul>
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Customer, (int)Homemade.BLL.ActionEnum.Insert))
+            {
+                <li>
+                    <a href="/Order/Orders/CreatePromo">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Promo_Code_Add</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Customer, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Order/Orders/IndexPromo">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Promo_Code_Table</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </li>
+}
+
+
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.MainPages, (int)Homemade.BLL.ActionEnum.View))
+{
+    <li>
+        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+            <i class="si si-speedometer"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.HomemadeMenu.MainPages
+            </span>
+        </a>
+        <ul>
+            @foreach (var mainPage in MainPages)
+            {
+
+                @if (mainPage.MainPageTypeId != (int)Homemade.BLL.MainPageTypeEnum.HowWeAre)
+                {
+                    <li>
+                        <a href="/Setting/MainPageDetails/Index/@(mainPage.MainPageGuid)">
+                            <span class="sidebar-mini-hide"> @(InfraStructure.Utility.CurrentLanguageCode == "ar" ? mainPage.NameAr : mainPage.NameEn)</span>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="/Setting/MainPageDetails/WhoWeAre/@(mainPage.MainPageGuid)">
+                            <span class="sidebar-mini-hide"> @(InfraStructure.Utility.CurrentLanguageCode == "ar" ? mainPage.NameAr : mainPage.NameEn)</span>
+                        </a>
+                    </li>
+                }
+            }
+        </ul>
+    </li>
+}
+
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Inqueries, (int)Homemade.BLL.ActionEnum.View))
+{
+    <li>
+        <a href="/Setting/Inqueries/Index">
+            <i class="si si-speedometer"></i>
+            <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Inquiries</span>
+        </a>
+
+
+    </li>
+}
+
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.VendorOrders, (int)Homemade.BLL.ActionEnum.View)
+|| blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.VendorScheduleOrders, (int)Homemade.BLL.ActionEnum.View))
+{
+    <li>
+        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+            <i class="si si-basket-loaded"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.HomemadeMenu.Orders
+            </span>
+        </a>
+        <ul>
+
+            <li>
+                <a href="/Order/Orders/IndexVendor">
+                    <span class="sidebar-mini-hide">
+                        @Homemade.UI.Resources.HomemadeMenu.Orders_History
+                    </span>
+                </a>
+            </li>
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.VendorScheduleOrders, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Order/Orders/ScheduleOrdersVendor">
+                        <span class="sidebar-mini-hide">
+                            @Homemade.UI.Resources.HomemadeMenu.Schedule_Orders
+                        </span>
+                    </a>
+                </li>
+            }
+            <li>
+                <a href="/Order/OrdersStatus/Index?orderStatus=@blOrder.OrderStatusByGuid((int)OrderStatusEnum.Create)">
+                    <span class="sidebar-mini-hide">
+                        @Homemade.UI.Resources.HomemadeMenu.CreatedOrders
+                    </span>
+                </a>
+            </li>
+
+            <li>
+                <a href="/Order/OrdersStatus/Index?orderStatus=@blOrder.OrderStatusByGuid((int)OrderStatusEnum.Accept)">
+                    <span class="sidebar-mini-hide">
+                        @Homemade.UI.Resources.HomemadeMenu.AcceptedOrders
+                    </span>
+                </a>
+            </li>
+
+            <li>
+                <a href="/Order/OrdersStatus/Index?orderStatus=@blOrder.OrderStatusByGuid((int)OrderStatusEnum.Being_Processed)">
+                    <span class="sidebar-mini-hide">
+                        @Homemade.UI.Resources.HomemadeMenu.Being_ProcessedOrders
+                    </span>
+                </a>
+            </li>
+
+            <li>
+                <a href="/Order/OrdersStatus/Index?orderStatus=@blOrder.OrderStatusByGuid((int)OrderStatusEnum.Shipping)">
+                    <span class="sidebar-mini-hide">
+                        @Homemade.UI.Resources.HomemadeMenu.ShippingOrders
+                    </span>
+                </a>
+            </li>
+
+            <li>
+                <a href="/Order/OrdersStatus/Index?orderStatus=@blOrder.OrderStatusByGuid((int)OrderStatusEnum.Being_Delivery)">
+                    <span class="sidebar-mini-hide">
+                        @Homemade.UI.Resources.HomemadeMenu.Being_DeliveredOrders
+                    </span>
+                </a>
+            </li>
+
+            <li>
+                <a href="/Order/OrdersStatus/Index?orderStatus=@blOrder.OrderStatusByGuid((int)OrderStatusEnum.Delivered)">
+                    <span class="sidebar-mini-hide">
+                        @Homemade.UI.Resources.HomemadeMenu.DeliveredOrders
+                    </span>
+                </a>
+            </li>
+
+            <li>
+                <a href="/Order/OrdersStatus/Index?orderStatus=@blOrder.OrderStatusByGuid((int)OrderStatusEnum.Cancel)">
+                    <span class="sidebar-mini-hide">
+                        @Homemade.UI.Resources.HomemadeMenu.CanceledOrders
+                    </span>
+                </a>
+            </li>
+
+        </ul>
+    </li>
+}
+
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.VendorOrders, (int)Homemade.BLL.ActionEnum.View))
+{<li>
+        <a href="/Order/Orders/PendingOrdersVendor">
+            <i class="si si-speedometer"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.HomemadeMenu.Increase_Orders
+            </span>
+        </a>
+    </li>
+}
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Client_Invoice, (int)Homemade.BLL.ActionEnum.Insert)
+|| blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Client_Invoice, (int)Homemade.BLL.ActionEnum.View))
+{
+    <li>
+        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+            <i class="si si-wallet"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.HomemadeMenu.Invoices
+            </span>
+        </a>
+        <ul>
+            <li>
+                <a href="/Vendor/Invoice/StorePending">
+                    <span class="sidebar-mini-hide">
+                        @Homemade.UI.Resources.HomemadeMenu.Pending_Transfer
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="/Vendor/Invoice/StoreInvoices">
+                    <span class="sidebar-mini-hide">
+                        @Homemade.UI.Resources.HomemadeMenu.Reports_Inquiries
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="/Vendor/Invoice/StoreCollected">
+                    <span class="sidebar-mini-hide">
+                        @Homemade.UI.Resources.HomemadeMenu.Converted
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="/Vendor/Invoice/ReportPayment">
+                    <span class="sidebar-mini-hide">
+                        @Homemade.UI.Resources.HomemadeMenu.PaymentReports
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </li>
+}
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.VendorVacHistory, (int)Homemade.BLL.ActionEnum.View)
+|| blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.VendorEnableHistory, (int)Homemade.BLL.ActionEnum.View))
+{
+    <li>
+        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+            <i class="si si-speedometer"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.HomemadeMenu.Subscriptions
+            </span>
+        </a>
+        <ul>
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.VendorEnableHistory, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Vendor/EnableHistory/IndexVendor">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.EnbaleHistory</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.VendorVacHistory, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Vendor/VacHistory/IndexVendor">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.VacHistory</span>
+                    </a>
+                </li>
+            }
+
+        </ul>
+    </li>
+}
+
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.OrderRate, (int)Homemade.BLL.ActionEnum.View)
+|| blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.ProductQuestion, (int)Homemade.BLL.ActionEnum.View))
+{
+    <li>
+        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+            <i class="si si-speedometer"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.HomemadeMenu.Questions_Ratings
+            </span>
+        </a>
+        <ul>
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.ProductQuestion, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Order/ProductQuestion/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Questions</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.OrderRate, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Order/OrderRate/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Ratings</span>
+                    </a>
+                </li>
+            }
+
+        </ul>
+    </li>
+}
+
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Subscribe, (int)Homemade.BLL.ActionEnum.View))
+{
+    <li>
+        <a href="/Setting/Subscribe/Index">
+            <i class="fa fa-send-o"></i>
+            <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Subscriptions_Email</span>
+        </a>
+
+
+    </li>
+}
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Driver_New_Requests, (int)Homemade.BLL.ActionEnum.View) ||
+blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Driver_Under_Requests, (int)Homemade.BLL.ActionEnum.View) ||
+blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Driver_Waiting_Activation, (int)Homemade.BLL.ActionEnum.View)
+|| blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.DriverBlance, (int)Homemade.BLL.ActionEnum.View)
+|| blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.CaptainZone, (int)Homemade.BLL.ActionEnum.Insert)
+|| blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.CaptainZone, (int)Homemade.BLL.ActionEnum.Update))
+{
+    <li>
+        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+            <i class="si si-speedometer"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.HomemadeMenu.Drivers
+            </span>
+        </a>
+        <ul>
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Driver_New_Requests, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Drivers/DriverSetting/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Certified_Captain</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Driver_New_Requests, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Drivers/DriverSetting/NewRequests">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.New_Requests</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Driver_Under_Requests, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Drivers/DriverSetting/UnderScrutiny">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.UnderScrutiny</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Driver_Rejected_Requests, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Drivers/DriverSetting/RejectedRequests">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Rejected_Requests</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Driver_Waiting_Activation, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Drivers/DriverSetting/WaitingActivation">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Waiting_Activation</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.AssignDriver, (int)Homemade.BLL.ActionEnum.Insert))
+            {
+                <li>
+                    <a href="/Drivers/DriverSetting/Create">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.New_Captain</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.DriverSupport, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Drivers/DriverSupport/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.DriverSupport</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.DriverBlance, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Drivers/DriverBlance/PayToDrivers">
+                        <span class="sidebar-mini-hide">
+                            @Homemade.UI.Resources.Homemade.STC_Pay
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Drivers/DriverBlance/InquirySTC">
+                        <span class="sidebar-mini-hide">
+                            @Homemade.UI.Resources.Homemade.InquiriesSTC
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Drivers/DriverBlance/PaymentHistory">
+                        <span class="sidebar-mini-hide">
+                            @Homemade.UI.Resources.Homemade.Payment_History
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Drivers/DriverBlance/Index">
+                        <span class="sidebar-mini-hide">
+                            @Homemade.UI.Resources.HomemadeMenu.Driver_Balance
+                        </span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.CaptainZone, (int)Homemade.BLL.ActionEnum.Insert))
+            {
+                <li>
+                    <a href="/Setting/CaptainZone/Index">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Assign_Captains</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.CaptainZone, (int)Homemade.BLL.ActionEnum.Update))
+            {
+                <li>
+                    <a href="/Setting/CaptainZone/Update">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Update_Assigns</span>
+                    </a>
+                </li>
+            }
+
+        </ul>
+    </li>
+}
+
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.VendorOrderRate, (int)Homemade.BLL.ActionEnum.View)
+|| blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.VendorProductQuestion, (int)Homemade.BLL.ActionEnum.View))
+{
+    <li>
+        <a class="nav-submenu" data-toggle="nav-submenu" href="#">
+            <i class="si si-speedometer"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.HomemadeMenu.Questions_Ratings
+            </span>
+        </a>
+        <ul>
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.VendorProductQuestion, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Order/ProductQuestion/IndexVendor">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Questions</span>
+                    </a>
+                </li>
+            }
+            @if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.VendorOrderRate, (int)Homemade.BLL.ActionEnum.View))
+            {
+                <li>
+                    <a href="/Order/OrderRate/IndexVendor">
+                        <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Ratings</span>
+                    </a>
+                </li>
+            }
+
+        </ul>
+    </li>
+}
+
+@*@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.VendorEnableHistory, (int)Homemade.BLL.ActionEnum.View))
+    {
+        <li>
+            <a href="/Order/ProductQuestion/Index">
+                <i class="si si-speedometer"></i>
+                <span class="sidebar-mini-hide">@Homemade.UI.Resources.HomemadeMenu.Questions</span>
+            </a>
+        </li>
+    }*@
+
+@if (blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.VendorOrders, (int)Homemade.BLL.ActionEnum.View))
+{
+    <li>
+        <a href="/Vendor/Vendors/EditVendor">
+            <i class="si si-basket-loaded"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.HomemadeMenu.Edit_Data
+            </span>
+        </a>
+    </li>
+}
+@*<li>
+        <a href="/Identity/Account/LogOut">
+            <i class="si si-logout"></i>
+            <span class="sidebar-mini-hide">
+                @Homemade.UI.Resources.Homemade.LogOut
+            </span>
+        </a>
+    </li>*@
+
+
+

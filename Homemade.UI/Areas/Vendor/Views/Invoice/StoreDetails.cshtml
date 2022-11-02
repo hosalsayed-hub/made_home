@@ -1,0 +1,194 @@
+﻿@model Homemade.BLL.ViewModel.Vendor.InvoiceMasterViewModel
+
+<div class="content">
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <h3 class="block-title" data-toggle="collapse" data-target="#collapseProd" aria-expanded="false" aria-controls="collapseProd">
+                <i class="ion-code-working push-5-r"></i>
+                <span class="header-title">@Homemade.UI.Resources.Homemade.Invoice_Details</span>
+                <span class="sub-page-name">
+                    @Model.InvoiceNo
+                </span>
+            </h3>
+        </div>
+        <div class="collapse in" id="collapseProd">
+            <div class="block-content">
+                <div class="row">
+                    <div class="col-md-2 form-group">
+                        <div class="top-item text-center">
+                            <label for="material-text2"><i class="fa fa-male push-10-r"></i> @Homemade.UI.Resources.Homemade.Invoice_No </label>
+                            <p class="text-center">@Model.InvoiceNo</p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 form-group">
+                        <div class="top-item text-center">
+                            <label for="material-text2"><i class="ion-iphone push-10-r"></i> @Homemade.UI.Resources.Homemade.DebitAmount </label>
+                            <p class="text-center">@Model.DebitAmount</p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 form-group">
+                        <div class="top-item text-center">
+                            <label for="material-text2"><i class="ion-email push-10-r"></i> @Homemade.UI.Resources.Homemade.Discount </label>
+                            <p class="text-center">@Model.Discount</p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 form-group">
+                        <div class="top-item text-center">
+                            <label for="material-text2"><i class="ion-earth push-10-r"></i>@Homemade.UI.Resources.Homemade.Vat </label>
+                            <p class="text-center">@Model.Vat</p>
+                        </div>
+                    </div>
+                    <div class="col-md-2 form-group">
+                        <div class="top-item text-center">
+                            <label for="material-text2"><i class="ion-soup-can push-10-r"></i>@Homemade.UI.Resources.Homemade.Total </label>
+                            <p class="text-center">@Model.Total</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="block-title" data-toggle="collapse" data-target="#collapseOrder" aria-expanded="false" aria-controls="collapseOrder">
+                        <i class="ion-code-working push-5-r"></i>
+                        @Homemade.UI.Resources.Homemade.Result
+                    </h3>
+                </div>
+                <div class="col-md-6 text-right">
+                    <div class="dt_buttons_wrap text-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="collapse in" id="collapseOrder">
+            <div class="block-content h_scroll">
+                <table id="tbl" class="table table-custom js-dataTable-buttons">
+                    <thead>
+                        <tr>
+                            <th>@Homemade.UI.Resources.Homemade.SNumber</th>
+                            <th>@Homemade.UI.Resources.Homemade.TripNo</th>
+                            <th>@Homemade.UI.Resources.Homemade.Receiver</th>
+                            <th>@Homemade.UI.Resources.Homemade.Date</th>
+                            <th>@Homemade.UI.Resources.Homemade.DebitAmount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section Styles {
+    <!-- Data_table Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" />
+}
+
+    @section Scripts {
+    <!-- Data_table Plugins -->
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+
+    <script>
+        $(function() {
+            var table = $('#tbl').DataTable({
+                pageLength: 10,
+                pagijngType: "full_numbers",
+                serverSide: true,
+                processing: true,
+                lengthMenu: [[5, 10, 20, 25, -1], [5, 10, 20, 50, 100]],
+                sAjaxSource: '@Url.Action("LoadTableInvoiceDetails")?InvoiceMasterID=@Model.InvoiceMasterID',
+                sServerMethod: "POST",
+                bPaginate: true,
+                paging: true,
+                columns: [
+                    {
+                        "data": null,
+                        "sortable": false,
+                        render: function(data, type, row, meta) {
+                            return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                        }
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function(data, type, row) { return '<label>' + data.orderVendorID + '</label>'; }
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function(data, type, row) { return '<label>' + data.customerName + '</label>'; }
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function(data, type, row) { return '<label>' + data.createDate + '</label>'; }
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function(data, type, row) {
+                            return '<label class="enName">' + data.debitAmount + '</label>';
+                        }
+                    }
+                ],
+                buttons: [
+                    {
+                        text: '@Homemade.UI.Resources.Homemade.Excel',
+                        className: "btn btn-success btn-xs",
+                        action: function(e, dt, node, config) {
+                            DownloadExcel();
+                        }
+                    },
+                    {
+                        text: '@Homemade.UI.Resources.Homemade.Print',
+                        className: "btn btn-warning btn-xs",
+                        action: function(e, dt, node, config) {
+                            Print();
+                        }
+                    },
+                    {
+                        extend: "pdfHtml5",
+                        download: 'open',
+                        className: "btn btn-info btn-xs",
+                        text: '@Homemade.UI.Resources.Homemade.PDF'
+                    }
+                ],
+                drawCallback: function(s) {
+                    $('[data-toggle="tooltip"]').tooltip();
+                }
+                , dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+
+            });
+            table.buttons().container().appendTo('.dt_buttons_wrap');
+        });
+        function Print() {
+            if ($("#tbl tbody tr").length > 0 && ($("#tbl tbody tr td").hasClass("dataTables_empty") == false)) {
+                window.open('/Vendor/Invoice/SearchInvoiceDetailsReport?InvoiceMasterID=' + @Model.InvoiceMasterID + '&type=1', "_blank");
+            }
+        }
+        function DownloadExcel() {
+            if ($("#tbl tbody tr").length > 0 && ($("#tbl tbody tr td").hasClass("dataTables_empty") == false)) {
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.ExportExcel , "ConfirmExcel();"))
+                    }
+            else {
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false)
+                { Title = "\"" + Homemade.UI.Resources.Homemade.NoDataFound + "\"" })
+                    }
+        }
+
+        function ConfirmExcel() {
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+            Title = "\"" + Homemade.UI.Resources.Homemade.Excel + "\""})
+                window.open('/Vendor/Invoice/SearchInvoiceDetailsReport?InvoiceMasterID=' + @Model.InvoiceMasterID + '&type=2', "_blank");
+        }
+    </script>
+}

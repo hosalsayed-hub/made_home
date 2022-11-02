@@ -1,0 +1,172 @@
+﻿@inject Homemade.BLL.General.BLUser blUser
+@inject Homemade.BLL.Customer.BlCustomer _blCustomer
+@{
+    var customer = _blCustomer.GetSiteCustomersViewModel(User.GetUserIdInt(), Homemade.UI.InfraStructure.Utility.CurrentLanguageCode, _configuration["CustomerImageView"]);
+    var customerBalance = _blCustomer.GetLastBlance(customer.CustomersID);
+}
+
+<!-- ***** user-dashboard-section Start ***** -->
+
+<section class="section-style user-dashboard-section">
+
+    <div class="container">
+
+        <div class="user-dashboard-area">
+
+            <div class="row">
+
+                <partial name="_PersonalMenuPartial" />
+
+                <div class="col-xl-9 col-lg-8">
+
+                    <div class="user-dashboard-wrapper">
+
+                        <div class="user-dashboard-content wallet-area">
+
+                            <div class="wallet-items">
+
+                                <div class="wallet-title title-4">@Homemade.UI.Resources.Homemade.Wallet</div>
+
+                                <div class="wallet-details">
+
+                                    <div class="wallet-details-item wallet-balance-wrap">
+
+                                        <div class="balance-wrap">
+
+                                            <span class="balance-text"> @Homemade.UI.Resources.Homemade.Balance : </span>
+                                            <p class="wallet-balance title-2">@customerBalance @Homemade.UI.Resources.Homemade.SR</p>
+
+
+                                        </div>
+                                    </div>
+                                    @*<br />
+                                    <button class="wallet-details-item recovery-btn" onclick="ViewCharge()"></button>*@
+                                    <button onclick="ViewCharge()" class="wallet-details-item recovery-btn">@Homemade.UI.Resources.Homemade.Wallet_Charge</button>
+
+                                </div>
+
+                                <div class="wallet-about">
+
+                                    <div class="wallet-about-title">@Homemade.UI.Resources.Homemade.About_Wallet </div>
+
+                                    <div class="wallet-about-text">
+                                        @Homemade.UI.Resources.Homemade.Wallet_Content
+                                    </div>
+
+
+                                </div><br /><br /><br />
+                                <div id="divMsgClass_Er" class="alert alert-danger" role="alert" style="display:none;">
+                                    <strong id="lblMsg_Er"></strong>
+                                </div>
+                                <div class="wallet-about" style="display:none;" id="Charge_Div">
+
+                                    <div class="wallet-about-title">@Homemade.UI.Resources.Homemade.Enter_Amount </div>
+                                    <div class="wallet-about-text" style="width:25%;    ">
+                                        <input type="number" min="0" value="0" placeholder="@Homemade.UI.Resources.Homemade.Amount" class="form-control input-focus" id="TXT_Amount" name="TXT_Amount">
+                                    </div><br />
+                                    <div class="wallet-about-text">
+                                        <button id="Btn_Confirm" class="Btn_Charge" onclick="Charge()">@Homemade.UI.Resources.Homemade.Confirm_Pay_W</button>
+                                        <div id="Div_wallet" style="display:none;">
+                                            <label class="form-label">جاري تحويلك لبوابة الشحن</label>
+                                            <img src="~/assets/homeMadeSite/css/ajax-loader.gif" />
+                                            <br />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</section>
+<style>
+    .wallet-area .wallet-items .wallet-about .wallet-about-text {
+        color: #8E8E8E;
+        font-size: 23px;
+        text-align: justify;
+    }
+
+    .wallet-area .wallet-items .wallet-about .wallet-about-title {
+        font-size: 22px;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .Btn_Charge {
+        background-color: #968e3b;
+        border: 1px solid #968e3b;
+        outline: none;
+        color: #fff;
+        font-size: 15px;
+        font-weight: bold;
+        transition: all .3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-width: 300px;
+        padding: 0.75rem;
+        border-radius: 30px;
+    }
+
+    .wallet-area .wallet-items .wallet-details .wallet-details-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-width: 300px;
+        width: auto !important;
+        height: auto !important;
+        padding: 0.75rem;
+        border-radius: 30px;
+    }
+</style>
+<script>
+    function ViewCharge() {
+        $("#Charge_Div").show();
+    }
+    function Charge() {
+        $("#Btn_Confirm").hide();
+        $("#divMsgClass_Er").hide();
+        $("#Div_wallet").show();
+        var Amount = $("#TXT_Amount").val();
+        if (Amount > 0) {
+            $.ajax({
+                type: "POST",
+                url: "/site/home/confirmcharge",
+                data: {
+                    amount: Amount,
+                },
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function(result) {
+                    if (result.status) {
+                        setTimeout(function() {
+                            location.href = result.message;
+                        }, 1500);
+                    } else {
+                        $("#Btn_Confirm").show();
+                        $("#divMsgClass_Er").show();
+                        $("#lblMsg_Er").html(data.message);
+                        $("#Div_wallet").hide();
+                    }
+                },
+                error: function() {
+
+                }
+            });
+        } else {
+            $("#Btn_Confirm").show();
+            $("#divMsgClass_Er").show();
+            $("#lblMsg_Er").html("يجب ادخال المبلغ المطلوب شحنه");
+            $("#Div_wallet").hide();
+        }
+    }
+</script>
+<!-- *****  End ***** -->

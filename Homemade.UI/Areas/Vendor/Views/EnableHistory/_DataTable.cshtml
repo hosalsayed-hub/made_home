@@ -1,0 +1,100 @@
+﻿@inject Homemade.BLL.BLPermission blPermission
+@{
+    var IsPermissionView = @blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.EnableHistory, (int)Homemade.BLL.ActionEnum.View) ? 1 : 0;
+    var IsPermissionUpdate = @blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.EnableHistory, (int)Homemade.BLL.ActionEnum.Update) ? 1 : 0;
+    var IsPermissionDelete = @blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.EnableHistory, (int)Homemade.BLL.ActionEnum.Delete) ? 1 : 0;
+}
+<script>
+    var table;
+    $(document).ready(function() {
+        table = $('#tbl_Vendor').DataTable({
+            pageLength: 10,
+            pagijngType: "full_numbers",
+            serverSide: true,
+            processing: true,
+            lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+            sAjaxSource: '@Url.Action("LoadTable")',
+            sServerMethod: "POST",
+            bPaginate: true,
+            paging: true,
+            bFilter: true,
+            bLengthChange: false,
+            columns: [
+                {
+                    "data": null,
+                    "sortable": false,
+                    render: function(data, type, row, meta) {
+                        return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<input type="hidden" value="' + data.enableHistoryID + '"/><label class="arName">' + data.vendorName + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label >' + getFormatDate(data.createDate) + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label >' + data.userName + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label >' + data.statusString + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label >' + data.userTypeString + '</label>';
+                    }
+                }
+            ],
+            drawCallback: function(s) {
+                $('[data-toggle="tooltip"]').tooltip();
+            },
+            buttons: [
+                {
+                    extend: "excelHtml5",
+                    autoFilter: true,
+                    sheetName: 'Exported data',
+                    className: "btn btn-success btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.Excel'
+                }, {
+                    extend: "pdfHtml5",
+                    download: 'open',
+                    className: "btn btn-info btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.PDF'
+                }],
+            "language": {
+                "search": "_INPUT_",
+                "searchPlaceholder": "Search",
+                "lengthMenu": "_MENU_",
+            }, dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+        });
+        table.buttons().container().appendTo('.dt_buttons_wrap');
+    });
+    function zeroPadded(val) {
+        if (val >= 10)
+            return val;
+        else
+            return '0' + val;
+    }
+    function getFormatDate(d) {
+        var d = new Date(d);
+        return d.getFullYear() + "-" + zeroPadded(d.getMonth() + 1) + "-" + zeroPadded(d.getDate())/* + "  " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()*/;
+    }
+</script>

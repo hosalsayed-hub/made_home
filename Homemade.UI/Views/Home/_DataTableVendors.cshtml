@@ -1,0 +1,120 @@
+﻿<script>
+    var tableVendors;
+    $(document).ready(function () {
+        tableVendors = $('#tbl_Vendor').DataTable({
+            pageLength: 5,
+            pagijngType: "full_numbers",
+            serverSide: true,
+            processing: true,
+            lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+            sAjaxSource: '/home/LoadTableVendors',
+            sServerMethod: "POST",
+            bPaginate: true,
+            paging: true,
+            bFilter: true,
+            bLengthChange: false,
+            columns: [
+                {
+                    "data": null,
+                    "sortable": false,
+                    render: function (data, type, row, meta) {
+                        return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) {
+                        var datalogo = data.logo;
+                        return '<label><img src="' + datalogo +'" class="img" width="100" height="100" /></label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) {
+                        return '<input type="hidden" value="' + data.vendorsID + '"/><label class="arName">' + data.storeName + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) {
+                        return '<label >' + data.regionName + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) {
+                        return '<label >' + data.mobileNo + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) {
+                        return '<label >' + data.regType + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) { return '<label>' + getFormatDate(data.createDate) + " " + data.createDateString + '</label>' }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) {
+                        return '<label >' + data.isVacString + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) {
+                        var IsEnable = data.isEnable == 1 ? "<span style='background: #ddf7e8;color: #3c763d;padding:8px;'>@Homemade.UI.Resources.Homemade.Enabled</span>"
+                            : "<span style='background: #f9eae8;color:#c54736;padding:8px;'>@Homemade.UI.Resources.Homemade.Disabled</span>";
+
+                        return '<label>' + IsEnable + '</label>';
+                    }
+                },
+            ],
+            drawCallback: function (s) {
+                $('[data-toggle="tooltip"]').tooltip();
+            },
+            buttons: [
+                {
+                    extend: "excelHtml5",
+                    autoFilter: true,
+                    sheetName: 'Exported data',
+                    className: "btn btn-success btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.Excel'
+                },
+                {
+                    extend: "pdfHtml5",
+                    download: 'open',
+                    className: "btn btn-info btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.PDF'
+                }],
+            "language": {
+                "search": "_INPUT_",
+                "searchPlaceholder": "Search",
+                "lengthMenu": "_MENU_",
+            }, dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+        });
+        tableVendors.buttons().container().appendTo('.dt_buttons_wrap');
+    });
+    function zeroPadded(val) {
+        if (val >= 10)
+            return val;
+        else
+            return '0' + val;
+    }
+    function getFormatDate(d) {
+        var d = new Date(d);
+        return d.getFullYear() + "-" + zeroPadded(d.getMonth() + 1) + "-" + zeroPadded(d.getDate())/* + "  " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()*/;
+    }
+</script>

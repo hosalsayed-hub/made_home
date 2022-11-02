@@ -1,0 +1,129 @@
+﻿@model Homemade.BLL.ViewModel.Site.PersonalDataViewModel
+<!-- ***** user-dashboard-section Start ***** -->
+
+<section class="section-style user-dashboard-section">
+
+    <div class="container">
+
+        <div class="user-dashboard-area">
+
+            <div class="row">
+
+                <partial name="_PersonalMenuPartial" />
+
+                <div class="col-xl-9 col-lg-8">
+
+                    <div class="user-dashboard-wrapper">
+
+                        <div class="user-dashboard-content personal-data-area">
+
+                            <div class="personal-data-perview">
+                                <form class="personal-data-form" id="PersonalDataForm" method="post"
+                                      data-ajax="true"
+                                      data-ajax-method="post"
+                                      data-ajax-success="formSuccess"
+                                      data-ajax-failure="failed">
+                                    <div class="row" id="divMsgParent" style="display:none">
+                                        <div class="form-group row">
+                                            <div class="col-xs-12">
+                                                <div id="divMsgClass" class="alert alert-danger" role="alert">
+                                                    <strong id="lblMsg"></strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input asp-for="CustomersID" hidden />
+                                                <label class="form-label">@Homemade.UI.Resources.Homemade.Name <span style="color:red">*</span></label>
+                                                <input asp-for="Name" type="text" class="form-control input-focus" placeholder="@Homemade.UI.Resources.Homemade.First_Name" />
+                                                <span style="color:red" asp-validation-for="Name"> </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+
+                                            <div class="form-group tel-field">
+
+                                                <label class="form-label">@Homemade.UI.Resources.Homemade.MobileNumber <span style="color:red">*</span></label>
+                                                <div class="input_group">
+
+                                                    <input asp-for="MobileNo" type="number" class="form-control input-focus" inputmode="tel" placeholder="@Homemade.UI.Resources.Homemade.PhoneNumber">
+                                                    <div class="country-code">
+
+                                                        <span>+966</span>
+                                                        <img src="~/assets/homeMadeSite/img/sr.svg" />
+
+
+                                                    </div>
+
+
+                                                </div>
+                                                <span style="color:red" asp-validation-for="MobileNo"> </span>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-6">
+
+                                            <div class="form-group">
+
+                                                <label class="form-label">@Homemade.UI.Resources.Homemade.Email <span style="color:red">*</span></label>
+                                                <input asp-for="Email" type="text" class="form-control input-focus" placeholder="@Homemade.UI.Resources.Homemade.Email" />
+                                                <span style="color:red" asp-validation-for="Email"> </span>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-12">
+
+                                            <button type="submit" class="save-btn theme-btn theme-btn-7 theme-btn-lg loading-btn">@Homemade.UI.Resources.Homemade.Save_Changes </button>
+
+                                        </div>
+                                    </div>
+
+                                </form>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</section>
+
+<!-- *****  End ***** -->
+@section Scripts{
+
+    <partial name="_PersonalDataScripts" />
+
+    <script>
+        $(document).ready(function() {
+            GetCity(@Model.CityID);
+            GetNationality(@Model.NationalityID);
+            GetGender(@Model.GenderID);
+        });
+        function formSuccess(data) {
+            $("#divMsgParent").slideUp();
+            $("#divMsgParent").show();
+            if (data.status == true) {
+                $("#divMsgClass").attr("class", "alert alert-success");
+                $("#lblMsg").html(data.message);
+            }
+            else {
+                $("#divMsgClass").attr("class", "alert alert-site");
+                $("#lblMsg").html(data.message);
+            }
+        }
+    </script>
+}

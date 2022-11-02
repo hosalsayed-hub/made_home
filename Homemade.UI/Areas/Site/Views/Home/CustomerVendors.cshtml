@@ -1,0 +1,52 @@
+﻿@inject Homemade.BLL.Customer.BlCustomer _blCustomer
+@{
+    var customer = _blCustomer.GetSiteCustomersViewModel(User.GetUserIdInt(), Homemade.UI.InfraStructure.Utility.CurrentLanguageCode, _configuration["CustomerImageView"]);
+    var VendorData = blVendor.GetAllSiteVendorsViewModelByCustomer(customer.CustomersID, Homemade.UI.InfraStructure.Utility.CurrentLanguageCode, _configuration["VendorImageView"]);
+}
+<section class="section-style user-dashboard-section">
+
+    <div class="container">
+
+        <div class="user-dashboard-area">
+
+            <div class="row">
+
+                <partial name="_PersonalMenuPartial" />
+
+                <div class="col-xl-9 col-lg-8">
+                    <div class="row">
+
+                        @foreach (var item in VendorData)
+                        {
+                            <div class="col-md-4 form-group text-center" style="margin-bottom:40px;">
+                                <a class="vendor-details" href="/Site/home/vendor?id=@item.VendorsGuid">
+                                    <img class="vendor-circle" src="@item.VendorsLogo">
+                                    @if (!blVendor.IsVendorWorking(item.VendorsDaysWork, item.VendorsWorkFrom, item.VendorsWorkTo, item.VendorsDaysVac, item.VendorsVacWorkFrom, item.VendorsVacWorkTo))
+                                    {
+                                        <img class="vendor-circle" src="https://cdn.made-home.com/Home/Product/closed.png" style="margin-top: -360px; margin-right:12px; opacity: 0.8; height: 57px; width:57px; border-radius: 0px;">}
+                                    }
+
+                                </a>
+                                <h3 class="vendor-name" onclick="location.href='/Site/home/vendor?id=@item.VendorsGuid'" style="padding-top:5px;">@item.VendorsName</h3>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</section>
+
+@section Styles {
+    <style>
+        .vendor-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 100%;
+            object-fit: cover;
+        }
+    </style>
+ }

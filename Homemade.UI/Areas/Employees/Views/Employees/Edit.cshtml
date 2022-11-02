@@ -1,0 +1,356 @@
+﻿@model Homemade.BLL.ViewModel.Employees.EmployeesViewModel
+@inject Homemade.BLL.General.BLGeneral bLGeneral
+@inject Homemade.BLL.Emp.BlEmployee blEmployees
+@inject Homemade.BLL.Setting.BlNationality blNationality
+@inject Homemade.BLL.General.BLUser blUser
+@{
+    @Html.Hidden("UserID", Model.UserId)
+    var UserType = blUser.GetUserInfo(User.GetUserIdInt()).UserType;
+}
+@if (Model.JobTypeId == (int)JobTypeEnum.Employees)
+{
+    <span style="display:none" class="header-title">@Homemade.UI.Resources.HomemadeMenu.Employees</span>
+}
+else
+{
+    <span style="display:none" class="header-title">@Homemade.UI.Resources.HomemadeMenu.System_Administrators</span>
+}
+<div class="content">
+    <form method="post" id="frmCreate" onsubmit="return false" data-action="Create"
+          data-ajax="true"
+          data-ajax-method="post"
+          data-ajax-success="formSuccessUpdate">
+        @Html.AntiForgeryToken()
+        <div class="block">
+            <div class="block-content h_scroll">
+                <h3 class="form-group">
+                    <span class="header-title">@(ViewContext.HttpContext.Request.Cookies.IsArabic() ? Model.FirstNameAR + " " + Model.LastNameAR : Model.FirstNameEN + " " + Model.LastNameEN)</span>
+                </h3>
+                <ul class="nav nav-tabs" data-toggle="tabs">
+                    <li class="active">
+                        <a href="#Basic_Data"><i class="fa fa-user push-5-r"></i> @Homemade.UI.Resources.Homemade.Basic_Data</a>
+                    </li>
+                    <li>
+                        <a href="#Permission"><i class="fa fa-file push-5-r"></i> @Homemade.UI.Resources.Homemade.Permission</a>
+                    </li>
+                </ul>
+                <div class="block-content tab-content">
+                    <div class="tab-pane active" id="Basic_Data">
+                        <div class="row" id="divMsgParent" style="display:none">
+                            <div class="form-group row">
+                                <div class="col-xs-12">
+                                    <div id="divMsgClass" class="alert alert-danger" role="alert">
+                                        <strong id="lblMsg"></strong>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <input type="hidden" name="EntityEmpID" id="EntityEmpID" value="@Model.EntityEmpID" />
+                            <input type="hidden" name="JobTypeId" id="JobTypeId" value="@Model.JobTypeId" />
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Name_Ar <span style="color:red">*</span></label>
+                                    @Html.TextBoxFor(x => x.FirstNameAR, new { @class = "form-control" })
+
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.FirstNameAR)</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Name_En <span style="color:red">*</span></label>
+                                    @Html.TextBoxFor(x => x.FirstNameEN, new { @class = "form-control" })
+
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.FirstNameEN)</span>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group col-md-4">
+                                <div class="row">
+                                    <input asp-for="Gender" class="AddData" type="hidden" />
+                                    <label class="col-xs-12">@Homemade.UI.Resources.Homemade.Gender <span style="color: red">*</span></label>
+                                    <div class="col-xs-12">
+                                        <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbMale">
+                                            <input type="radio" id="rdbMale" name="Gender" value="0">
+                                            <span></span>
+                                            @Homemade.UI.Resources.Homemade.Male
+                                        </label>
+                                        <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbFemale">
+                                            <input type="radio" id="rdbFemale" name="Gender" value="1">
+                                            <span></span>
+                                            @Homemade.UI.Resources.Homemade.Female
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.IdNo <span style="color:red">*</span></label>
+                                    @Html.TextBoxFor(x => x.IDNo, new { @class = "form-control", @placeholder = @Homemade.UI.Resources.Homemade.IdNo, onkeypress = "return isNumberKey(event)" })
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.IDNo)</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="material-select2">@Homemade.UI.Resources.Homemade.Nationality <span style="color:red">*</span></label>
+                                    <select class="form-control js-select2" asp-for="NationalityID" name="NationalityID" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1" asp-items="@blNationality.GetAllNationality().Select(p => new SelectListItem { Text = Homemade.UI.InfraStructure.Utility.CurrentLanguageCode=="ar"? p.NameAR:p.NameEN, Value = p.NationalityID + "" })">
+                                        <option value=""></option>
+                                    </select>
+
+                                    <span style="color:red" asp-validation-for="NationalityID"> </span>
+
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="material-select2">@Homemade.UI.Resources.Homemade.Job <span style="color: red">*</span></label>
+                                    <select required="" class="form-control js-select2" asp-for="JobsID" name="JobsID" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1">
+                                        <option value=""></option>
+                                    </select>
+
+                                    <span style="color: red" asp-validation-for="JobsID"> </span>
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="material-select2">@Homemade.UI.Resources.Homemade.Region <span style="color:red">*</span></label>
+                                    <select required="" class="form-control js-select2" onchange="GetCitys(this,@Model.CityID)" asp-for="RegionID" name="RegionID" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1">
+                                        <option value=""></option>
+                                    </select>
+
+                                    <span style="color:red" asp-validation-for="RegionID"> </span>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="material-select2">@Homemade.UI.Resources.Homemade.City <span style="color:red">*</span></label>
+                                    <select required="" class="form-control js-select2" disabled="" asp-for="CityID" name="CityID" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1">
+                                        <option value=""></option>
+                                    </select>
+
+                                    <span style="color:red" asp-validation-for="CityID"> </span>
+
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Email <span style="color:red">*</span></label>
+                                    @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.Email)</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+
+                                <div class="form-group">
+                                    <label for="example-datepicker1">@Homemade.UI.Resources.Homemade.BirthDateMilady</label>
+                                    <input asp-for="BirthDateMilady" class="js-datepicker form-control AddData " type="text" value="@Model.BirthDateMilady?.ToString("yyyy-MM-dd")" name="BirthDateMilady" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd">
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.BirthDateMilady)</span>
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+
+                                <div class="form-group">
+                                    <label for="example-datepicker1">@Homemade.UI.Resources.Homemade.BirthDateHijri</label>
+                                    <input asp-for="BirthDateHijri" class="form-control Hijiri AddData" type="text" value="@Model.BirthDateHijri">
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.BirthDateHijri)</span>
+
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.FileNumber</label>
+                                    @Html.TextBoxFor(x => x.FileNo, new { @class = "form-control", @placeholder = @Homemade.UI.Resources.Homemade.FileNumber, @maxlength = "10", onkeypress = "return isNumberKey(event)" })
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.FileNo)</span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Mobile <span style="color:red"> @Homemade.UI.Resources.Homemade.Mobile_Validation </span> </label>
+                                    @Html.TextBoxFor(x => x.MobileNo, new { @class = "form-control", placeholder = Homemade.UI.Resources.Homemade.MobileValidation })
+
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.MobileNo)</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.PhoneNumber </label>
+                                    @Html.TextBoxFor(x => x.PhoneNumber, new { @class = "form-control" })
+
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.PhoneNumber)</span>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Notes </label>
+                                    @Html.TextBoxFor(x => x.Notes, new { @class = "form-control" })
+
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.Notes)</span>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Address_Ar </label>
+                                    @Html.TextBoxFor(x => x.AddressAR, new { @class = "form-control" })
+
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.AddressAR)</span>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Address_En </label>
+                                    @Html.TextBoxFor(x => x.AddressEN, new { @class = "form-control" })
+
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.AddressEN)</span>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-12 form-group">
+                                <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.Photo</label>
+                                @if (!string.IsNullOrEmpty(Model.Photo))
+                                {
+                                    <img src="@Model.Photo" class="img" width="100" height="100" style="display:block;margin-bottom:7px;" />
+                                }
+                                <input type="file" class="form-control-file " accept="image/*" id="fupPhoto" onchange="ConvertToBase64(this)">
+                                @Html.HiddenFor(m => m.Photo)
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-custom bg-orange" id="btnSave" type="submit"><i class="ion-checkmark push-5-r"></i> @Homemade.UI.Resources.Homemade.save</button>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="Permission">
+                        <div class="row">
+                            @if (Model.JobTypeId == (int)JobTypeEnum.Employees)
+                            {
+                                <input type="hidden" name="Roles" id="Roles" value="4" />
+                            }
+                            else
+                            {
+                                <input type="hidden" name="Roles" id="Roles" value="1" />
+                            }
+                           
+
+
+                            <div class="col-md-12">
+                                @Html.HiddenFor(m => m.CheckedItems)
+                                <table id="tbl" class="table table-custom js-dataTable-buttons" style="width:100% !important;">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <label class="css-input css-checkbox css-checkbox-warning">
+                                                    <input type='checkbox' id='chkSelectAll' onclick='checkAll(this)' /><span></span> @Homemade.UI.Resources.Homemade.All
+                                                </label>
+                                            </th>
+                                            <th>@Homemade.UI.Resources.Homemade.SNumber</th>
+                                            <th>@Homemade.UI.Resources.Homemade.Permission</th>
+                                            <th>@Homemade.UI.Resources.Homemade.View</th>
+                                            <th>@Homemade.UI.Resources.Homemade.Insert</th>
+                                            <th>@Homemade.UI.Resources.Homemade.Update</th>
+                                            <th>@Homemade.UI.Resources.Homemade.Delete</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Styles{
+    <!-- Data_Table Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" />
+
+    <!-- Select 2 Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2-bootstrap.min.css" />
+
+    <!-- Date_Picker Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/Hijiri-Plugin/css/bootstrap-datetimepicker.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+
+}
+
+@section Scripts{
+    <!-- Data_table Plugins -->
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+
+    <!-- Select 2 Scripts -->
+    <script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+
+    <!-- Date_picker Plugins -->
+    <script src="~/assets/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/Hijiri-Plugin/js/bootstrap-hijri-datetimepicker.js"></script>
+    <script>
+        $(".js-datepicker").keypress(function (e) {
+            e.preventDefault();
+        });
+        $('.js-datepicker').datepicker({
+            dateFormat: 'mm/dd/yyyy'
+        }).on('changeDate', function (ev) {
+            $(this).datepicker('hide');
+            ChangeMiladyTohijri();
+        });
+        $("#BirthDateHijri").hijriDatePicker({
+            hijri: true,
+            showSwitcher: false
+        });
+        $("#BirthDateHijri").on('dp.change', function (arg) {
+            let date = arg.date;
+            $("#BirthDateMilady").val(date.format("YYYY-MM-DD"));
+        });
+    </script>
+    <partial name="_Scripts" />
+    <partial name="_RoleTable" />
+<script>
+        $(document).ready(function () {
+            GetRegions(@Model.RegionID);
+
+            GetJobs(@Model.JobTypeId,@Model.JobsID);
+
+            var gender = $($('input[name=Gender][type=radio][value="' + @Model.Gender+ '"]')[0]);
+            gender.prop('checked', true);
+            readtable();
+        });
+        function ChangeMiladyTohijri() {
+            var _date = moment($("#BirthDateMilady").val(), 'YYYY-MM-DD').format('iYYYY/iM/iD');
+            $("#BirthDateHijri").val(_date);
+        }
+
+</script>
+}

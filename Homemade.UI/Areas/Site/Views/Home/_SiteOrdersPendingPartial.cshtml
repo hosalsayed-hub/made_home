@@ -1,0 +1,117 @@
+﻿@model IEnumerable<Homemade.BLL.ViewModel.Site.SiteOrdersViewModel>
+@if (Model != null)
+{
+    int count = 0;
+    @foreach (var item in Model)
+    {
+        <div class="order-list-item">
+
+            <div class="order-list-wrap">
+
+                <a class="order-list-item-img" href="/Site/Home/vendor?id=@item.VendorsGuid">
+
+                    @if (!string.IsNullOrEmpty(item.VendorsLogo))
+                    {
+                        <img class="img-fluid" src="@item.VendorsLogo">
+                    }
+                    else
+                    {
+                        <img class="img-fluid" src="~/assets/homeMadeSite/img/Group%208.svg">
+                    }
+
+                </a>
+                <div class="order-list-info">
+
+                    <div class="info-item-wrap">
+
+                        <div class="order-date">@item.CreateDate.ToString("dd yyyy MMMM hh:mm tt")</div>
+                        <a href="/Site/Home/vendor?id=@item.VendorsGuid" class="order-vendor">@item.VendorsName</a>
+                        @if (!string.IsNullOrEmpty(item.VendorsContact))
+                        {
+                            <div class="order-vendor"><i class="fa fa-phone"></i> @item.VendorsContact</div>
+                        }
+
+                    </div>
+                    <div class="order-name">
+                        @item.OrderVendorID
+
+                    </div>
+                    <div class="order-delivery">
+
+                        <div class="order-delivery-title">@Homemade.UI.Resources.Homemade.Delivery_Address</div>
+                        <div class="order-delivery-address">
+                            @item.CustomerLocationAddress
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="order-list-details">
+
+                <div class="row row-cols-md-4 row-cols-sm-2 row-cols-2">
+
+                    <div class="details-item">
+
+                        <div class="details-title">@Homemade.UI.Resources.Homemade.Price</div>
+                        <div class="details-val">
+
+                            <span id="orderPrice">@item.Price</span>
+                            @Homemade.UI.Resources.Homemade.SR
+                        </div>
+                    </div>
+                    <div class="details-item">
+
+                        <div class="details-title">@Homemade.UI.Resources.Homemade.Order_Number </div>
+                        <div class="details-val">
+                            @item.OrderVendorID
+                        </div>
+                    </div>
+                    @*<div class="details-item">
+
+            <div class="details-title">@Homemade.UI.Resources.Homemade.Payment_Status</div>
+            <div class="details-val">
+
+            </div>
+            </div>*@
+                    <div class="details-item order-status">
+
+                        <div class="details-title">@Homemade.UI.Resources.Homemade.Order_Status</div>
+                        @if (item.OrderStatusID == (int)OrderStatusEnum.Delivered)
+                        {
+                            <div class="details-val success">
+                                @item.OrderStatusName
+                            </div>
+                        }
+                        else if (item.OrderStatusID == (int)OrderStatusEnum.Cancel)
+                        {
+                            <div class="details-val fail">
+                                @item.OrderStatusName
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="details-val processing">
+                                @item.OrderStatusName
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <a class="theme-btn theme-btn-7 order-detalis-btn" href="/Site/Home/completePendingOrder?id=@item.OrdersGuid">@Homemade.UI.Resources.Homemade.Order_Details </a>
+
+        </div>
+        count = count + 1;
+    }
+    if (Model.Count() != count)
+    {
+        <button type="button" class="theme-btn theme-btn-7 show-more-btn mt-4" onclick="DisplayMoreOrders(@Model.FirstOrDefault().Type)">@Homemade.UI.Resources.Homemade.Display_More</button>
+    }
+}

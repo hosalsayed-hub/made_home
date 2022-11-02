@@ -1,0 +1,20 @@
+﻿<script>
+    var divMsgClass = $("#divMsgClass");
+    var lblMsg = $("#lblMsg");
+    var divMsgParent = $("#divMsgParent");
+    function formSuccessUpdate(data) {
+        divMsgParent.slideUp();
+        divMsgParent.show();
+        if (data.status == true) {
+            divMsgClass.attr("class", "alert alert-success");
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+                {Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\""})
+                lblMsg.html(data.message);
+        } else {
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Error, "", false, false, false)
+                {Title = "data.message"})
+                divMsgClass.attr("class", "alert alert-danger");
+            lblMsg.html(data.message);
+        }
+    }
+</script>

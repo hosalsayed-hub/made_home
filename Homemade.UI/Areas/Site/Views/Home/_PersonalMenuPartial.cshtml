@@ -1,0 +1,244 @@
+﻿@inject Homemade.BLL.General.BLUser blUser
+@inject Homemade.BLL.Customer.BlCustomer _blCustomer
+@{
+    var customer = _blCustomer.GetSiteCustomersViewModel(User.GetUserIdInt(), Homemade.UI.InfraStructure.Utility.CurrentLanguageCode, _configuration["CustomerImageView"]);
+    var customerBalance = _blCustomer.GetLastBlance(customer.CustomersID);
+
+}
+<div class="col-xl-3 col-lg-4">
+
+    <aside class="user-dashboard-sidebar">
+
+        <div class="sidebar-content">
+
+            <div class="user-info-wrap">
+                @if (customer != null)
+                {
+                    <div class="user-img-wrap">
+
+                        <div class="user-img">
+                            @if (!string.IsNullOrEmpty(customer.ProfilePic))
+                            {
+                                <img class="img-fluid" src="@customer.ProfilePic">
+                            }
+                            else
+                            {
+                                <img class="img-fluid" src="~/assets/homeMadeSite/img/Ellipse%20279.svg">
+                            }
+
+                        </div>
+
+                    </div>
+                    <div class="user-name-wrap">
+                        @Homemade.UI.Resources.Homemade.Hello ,
+
+                        <span class="user-name" id="userName">@customer.CustomerName</span>
+
+                        <img class="hand-icon" src="~/assets/homeMadeSite/img/hand.svg">
+
+                    </div>
+                }
+                <a href="/Site/Home/Wallet" class="wallet-info-wrap">
+
+                    <div class="wallet-icon">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="21" viewBox="0 0 24 21">
+                            <path id="Icon_awesome-wallet" data-name="Icon awesome-wallet" d="M21.619,6.75H3.75a.75.75,0,0,1,0-1.5h18a.75.75,0,0,0,.75-.75,2.25,2.25,0,0,0-2.25-2.25H3a3,3,0,0,0-3,3v15a3,3,0,0,0,3,3H21.619A2.321,2.321,0,0,0,24,21V9A2.321,2.321,0,0,0,21.619,6.75ZM19.5,16.5A1.5,1.5,0,1,1,21,15,1.5,1.5,0,0,1,19.5,16.5Z" transform="translate(0 -2.25)" fill="#968e3b" />
+                        </svg>
+
+
+                    </div>
+                    <div class="wallet-info">
+
+                        <p> @Homemade.UI.Resources.Homemade.Wallet_Balance </p>
+                        <p class="wallet-balance">
+
+                            <span id="walletBalance">@customerBalance</span>
+                            @Homemade.UI.Resources.Homemade.SR
+
+                        </p>
+
+                    </div>
+                </a>
+
+            </div>
+
+            <div class="sidebar-links">
+
+                <ul class="slidebar-links-list">
+                    <li class="list-item">
+
+                        <a class="list-link" href="/Site/Home/Wallet" data-target="">
+
+                            <span class="link-icon">
+
+                                <svg width="32px" height="32px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g data-name="21. Credit Card" id="_21._Credit_Card"><path d="M29,7H28V6a3,3,0,0,0-3-3H3A3,3,0,0,0,0,6V22a3,3,0,0,0,3,3H4v1a3,3,0,0,0,3,3H29a3,3,0,0,0,3-3V10A3,3,0,0,0,29,7Zm1,3v1H6V10A1,1,0,0,1,7,9H29A1,1,0,0,1,30,10Zm0,7H6V13H30ZM3,23a1,1,0,0,1-1-1V6A1,1,0,0,1,3,5H25a1,1,0,0,1,1,1V7H7a3,3,0,0,0-3,3V23Zm26,4H7a1,1,0,0,1-1-1V19H30v7A1,1,0,0,1,29,27Z" /><path d="M15,23H13a1,1,0,0,0,0,2h2a1,1,0,0,0,0-2Z" /><path d="M21,23H19a1,1,0,0,0,0,2h2a1,1,0,0,0,0-2Z" /><path d="M27,23H25a1,1,0,0,0,0,2h2a1,1,0,0,0,0-2Z" /></g></svg>
+
+
+                            </span>
+                            @Homemade.UI.Resources.Homemade.Wallet_Charge
+
+
+                        </a>
+
+                    </li>
+                    <li class="list-item">
+
+                        <a class="list-link" href="/Site/Home/PersonalData" data-target="">
+
+                            <span class="link-icon">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="21.351" height="21.351" viewBox="0 0 21.351 21.351">
+                                    <path id="Icon_awesome-info-circle" data-name="Icon awesome-info-circle" d="M11.238.563A10.675,10.675,0,1,0,21.913,11.238,10.677,10.677,0,0,0,11.238.563Zm0,4.735A1.808,1.808,0,1,1,9.43,7.105,1.808,1.808,0,0,1,11.238,5.3Zm2.411,10.934a.517.517,0,0,1-.517.517H9.344a.517.517,0,0,1-.517-.517V15.2a.517.517,0,0,1,.517-.517H9.86V11.927H9.344a.517.517,0,0,1-.517-.517V10.377a.517.517,0,0,1,.517-.517H12.1a.517.517,0,0,1,.517.517v4.3h.517a.517.517,0,0,1,.517.517Z" transform="translate(-0.563 -0.563)" />
+                                </svg>
+
+
+                            </span>
+                            @Homemade.UI.Resources.Homemade.Personal_Data
+
+
+                        </a>
+
+                    </li>
+                    <li class="list-item">
+
+                        <a class="list-link" href="/Site/Home/DeliveryAddresses" data-target="">
+
+                            <span class="link-icon">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="27.143" viewBox="0 0 19 27.143">
+                                    <path id="Icon_material-location-on" data-name="Icon material-location-on" d="M17,3a9.493,9.493,0,0,0-9.5,9.5c0,7.125,9.5,17.643,9.5,17.643S26.5,19.625,26.5,12.5A9.493,9.493,0,0,0,17,3Zm0,12.893A3.393,3.393,0,1,1,20.393,12.5,3.394,3.394,0,0,1,17,15.893Z" transform="translate(-7.5 -3)" />
+                                </svg>
+
+                            </span>
+                            @Homemade.UI.Resources.Homemade.Delivery_Addresses
+
+
+                        </a>
+
+                    </li>
+                    <li class="list-item">
+
+                        <a class="list-link" href="/Site/Home/OrderList" data-target="">
+
+                            <span class="link-icon">
+
+                                <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="446.853px" height="446.853px" viewBox="0 0 446.853 446.853" style="enable-background:new 0 0 446.853 446.853;" xml:space="preserve">
+                                <g>
+                                <path d="M444.274,93.36c-2.558-3.666-6.674-5.932-11.145-6.123L155.942,75.289c-7.953-0.348-14.599,5.792-14.939,13.708
+                                                                c-0.338,7.913,5.792,14.599,13.707,14.939l258.421,11.14L362.32,273.61H136.205L95.354,51.179
+                                                                c-0.898-4.875-4.245-8.942-8.861-10.753L19.586,14.141c-7.374-2.887-15.695,0.735-18.591,8.1c-2.891,7.369,0.73,15.695,8.1,18.591
+                                                                l59.491,23.371l41.572,226.335c1.253,6.804,7.183,11.746,14.104,11.746h6.896l-15.747,43.74c-1.318,3.664-0.775,7.733,1.468,10.916
+                                                                c2.24,3.184,5.883,5.078,9.772,5.078h11.045c-6.844,7.617-11.045,17.646-11.045,28.675c0,23.718,19.299,43.012,43.012,43.012
+                                                                s43.012-19.294,43.012-43.012c0-11.028-4.201-21.058-11.044-28.675h93.777c-6.847,7.617-11.047,17.646-11.047,28.675
+                                                                c0,23.718,19.294,43.012,43.012,43.012c23.719,0,43.012-19.294,43.012-43.012c0-11.028-4.2-21.058-11.042-28.675h13.432
+                                                                c6.6,0,11.948-5.349,11.948-11.947c0-6.6-5.349-11.948-11.948-11.948H143.651l12.902-35.843h216.221
+                                                                c6.235,0,11.752-4.028,13.651-9.96l59.739-186.387C447.536,101.679,446.832,97.028,444.274,93.36z M169.664,409.814
+                                                                c-10.543,0-19.117-8.573-19.117-19.116s8.574-19.117,19.117-19.117s19.116,8.574,19.116,19.117S180.207,409.814,169.664,409.814z
+                                                                 M327.373,409.814c-10.543,0-19.116-8.573-19.116-19.116s8.573-19.117,19.116-19.117s19.116,8.574,19.116,19.117
+                                                                S337.916,409.814,327.373,409.814z"></path>
+                                                            </g>
+                                                        </svg>
+
+                            </span>
+                            @Homemade.UI.Resources.Homemade.Your_Order_List
+
+
+                        </a>
+
+                    </li>
+                    <li class="list-item">
+
+                        <a class="list-link" href="/Site/Home/PendingOrderList" data-target="">
+
+                            <span class="link-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect x="0" y="0" width="24" height="24" />
+                                        <circle cx="12" cy="12" r="10" />
+                                        <path d="M12.4208204,17.1583592 L15.4572949,11.0854102 C15.6425368,10.7149263 15.4923686,10.2644215 15.1218847,10.0791796 C15.0177431,10.0271088 14.9029083,10 14.7864745,10 L12,10 L12,7.17705098 C12,6.76283742 11.6642136,6.42705098 11.25,6.42705098 C10.965921,6.42705098 10.7062236,6.58755277 10.5791796,6.84164079 L7.5427051,12.9145898 C7.35746316,13.2850737 7.50763142,13.7355785 7.87811529,13.9208204 C7.98225687,13.9728912 8.09709167,14 8.21352549,14 L11,14 L11,16.822949 C11,17.2371626 11.3357864,17.572949 11.75,17.572949 C12.034079,17.572949 12.2937764,17.4124472 12.4208204,17.1583592 Z" fill="#968e3b" />
+                                    </g>
+                                </svg><!--end::Svg Icon-->
+                            </span>
+                            @Homemade.UI.Resources.Homemade.Your_Order_Pending
+
+
+                        </a>
+
+                    </li>
+                    <li class="list-item">
+
+                        <a class="list-link" href="/Site/Home/FavoriteProducts" data-target="">
+
+                            <span class="link-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect x="0" y="0" width="24" height="24" />
+                                        <path d="M7,6 C6.44771525,6 6,6.44771525 6,7 L6,17 C6,17.5522847 6.44771525,18 7,18 L17,18 C17.5522847,18 18,17.5522847 18,17 L18,7 C18,6.44771525 17.5522847,6 17,6 L7,6 Z M7,4 L17,4 C18.6568542,4 20,5.34314575 20,7 L20,17 C20,18.6568542 18.6568542,20 17,20 L7,20 C5.34314575,20 4,18.6568542 4,17 L4,7 C4,5.34314575 5.34314575,4 7,4 Z" fill="#968e3b" />
+                                    </g>
+                                </svg><!--end::Svg Icon-->
+                            </span>
+                            @Homemade.UI.Resources.Homemade.My_Favorite_Products
+
+                        </a>
+
+                    </li>
+                    <li class="list-item">
+
+                        <a class="list-link" href="/Site/Home/Reviews" data-target="">
+
+                            <span class="link-icon">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
+                                    <path id="Icon_awesome-question-circle" data-name="Icon awesome-question-circle" d="M21.563,11.063a10.5,10.5,0,1,1-10.5-10.5A10.5,10.5,0,0,1,21.563,11.063ZM11.344,4.034a5.484,5.484,0,0,0-4.935,2.7.509.509,0,0,0,.115.688L7.994,8.536a.508.508,0,0,0,.706-.09c.756-.959,1.275-1.516,2.426-1.516.865,0,1.935.557,1.935,1.4,0,.634-.523.96-1.377,1.439-1,.558-2.314,1.253-2.314,2.992v.169a.508.508,0,0,0,.508.508h2.371a.508.508,0,0,0,.508-.508v-.056c0-1.205,3.522-1.255,3.522-4.516C16.278,5.9,13.731,4.034,11.344,4.034Zm-.282,10.5a1.948,1.948,0,1,0,1.948,1.948A1.95,1.95,0,0,0,11.063,14.534Z" transform="translate(-0.563 -0.563)" />
+                                </svg>
+
+                            </span>
+                            @Homemade.UI.Resources.Homemade.Questions_and_Ratings
+
+                        </a>
+
+                    </li>
+                    <li class="list-item">
+
+                        <a class="list-link" href="/Site/Home/CustomerVendors" data-target="">
+
+                            <span class="link-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect x="0" y="0" width="24" height="24" />
+                                        <path d="M21.9999843,15.009808 L22.0249378,15 L22.0249378,19.5857864 C22.0249378,20.1380712 21.5772226,20.5857864 21.0249378,20.5857864 C20.7597213,20.5857864 20.5053674,20.4804296 20.317831,20.2928932 L18.0249378,18 L5,18 C3.34314575,18 2,16.6568542 2,15 L2,6 C2,4.34314575 3.34314575,3 5,3 L19,3 C20.6568542,3 22,4.34314575 22,6 L22,15 C22,15.0032706 21.9999948,15.0065399 21.9999843,15.009808 Z M6.16794971,10.5547002 C7.67758127,12.8191475 9.64566871,14 12,14 C14.3543313,14 16.3224187,12.8191475 17.8320503,10.5547002 C18.1384028,10.0951715 18.0142289,9.47430216 17.5547002,9.16794971 C17.0951715,8.86159725 16.4743022,8.98577112 16.1679497,9.4452998 C15.0109146,11.1808525 13.6456687,12 12,12 C10.3543313,12 8.9890854,11.1808525 7.83205029,9.4452998 C7.52569784,8.98577112 6.90482849,8.86159725 6.4452998,9.16794971 C5.98577112,9.47430216 5.86159725,10.0951715 6.16794971,10.5547002 Z" fill="#968e3b" />
+                                    </g>
+                                </svg>
+                            </span>
+                            @Homemade.UI.Resources.Homemade.Vendors_previously_dealt_with
+
+                        </a>
+
+                    </li>
+                    <li class="list-item">
+
+                        <a class="list-link" href="/Site/Home/ChangePassword" data-target="">
+
+                            <span class="link-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <path d="M7,10 L7,8 C7,5.23857625 9.23857625,3 12,3 C14.7614237,3 17,5.23857625 17,8 L17,10 L18,10 C19.1045695,10 20,10.8954305 20,12 L20,18 C20,19.1045695 19.1045695,20 18,20 L6,20 C4.8954305,20 4,19.1045695 4,18 L4,12 C4,10.8954305 4.8954305,10 6,10 L7,10 Z M12,5 C10.3431458,5 9,6.34314575 9,8 L9,10 L15,10 L15,8 C15,6.34314575 13.6568542,5 12,5 Z" fill="#968e3b" />
+                                    </g>
+                                </svg>
+
+                            </span>
+                            @Homemade.UI.Resources.Homemade.Change_Password
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </div>
+        </div>
+
+    </aside>
+
+</div>

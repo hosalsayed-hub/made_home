@@ -1,0 +1,710 @@
+﻿@inject Homemade.BLL.Setting.BlMainPageDetails blMainPageDetails
+@{
+    ViewData["Title"] = "Wizzard";
+    Layout = "~/Views/Shared/_SiteLayout.cshtml";
+}
+
+@section Styles{
+    <link href="~/assets/css/provider-page-css.css" rel="stylesheet" />
+
+    <style>
+        .controls {
+            width: 250px !important;
+        }
+
+        .error {
+            color: red
+        }
+    </style>
+}
+
+    @Html.AntiForgeryToken()
+
+    <section class="section-style provider-apply-section">
+
+        <div class="container">
+
+            <div class="row">
+
+
+                <div class="col-12">
+
+                    <div class="provider-apply-area">
+
+                        <div class="provider-apply-area-head">
+
+                            <h1 class="provider-apply-title title-2">@Homemade.UI.Resources.Homemade.Become_a_Vendor  </h1>
+                            <p class="provider-apply-head-text">@Homemade.UI.Resources.Homemade.Become_a_VendorDesc     </p>
+                        </div>
+                        <div class="provider-apply-steps-area">
+
+
+                            <div class="wizard-btns">
+
+                                <div class="step-btn active" data-target="terms_data" tap-id="0" id="terms_data">
+
+                                    <div class="step-icon"><i class="fas fa-circle"></i></div>
+                                    <div class="step-name"> @Homemade.UI.Resources.Homemade.Terms_and_Conditions   </div>
+                                </div>
+                                <div class="step-btn " data-target="personal_data" tap-id="1" id="personal_data">
+
+                                    <div class="step-icon"><i class="fas fa-circle"></i></div>
+                                    <div class="step-name"> @Homemade.UI.Resources.Homemade.Personal_Data   </div>
+                                </div>
+                                <div class="step-btn " data-target="store_data" tap-id="2" id="store_data">
+
+                                    <div class="step-icon"><i class="fas fa-circle"></i></div>
+                                    <div class="step-name">@Homemade.UI.Resources.Homemade.Store_Data   </div>
+                                </div>
+                                <div class="step-btn " data-target="payment_data" tap-id="3" id="payment_data">
+
+                                    <div class="step-icon"><i class="fas fa-circle"></i></div>
+                                    <div class="step-name"> @Homemade.UI.Resources.Homemade.PaymentType   </div>
+                                </div>
+
+                            </div>
+                            <div class="steps-items tabs-content">
+                                <div id="messageBlock">
+                                </div>
+                                <div class="step-item tab-content terms_data active " id="terms_data">
+                                    <div class="step-content">
+                                        <div class="row" id="formterms_data">
+                                            <div class="col-12">
+                                                @{
+
+                                                var terms = blMainPageDetails.GetMainPageDetailsViewModelForTermsVendor(Utility.CurrentLanguageCode);
+                                            }
+
+                                            @if (terms != null)
+                                            {
+                                                <p class="accordion-content">
+                                                    @Html.Raw(terms.Desc.Replace("\n", "</br>"))
+                                                </p>
+                                            }
+
+                                        </div>
+                                        <div class="form-check terms-checkbox">
+
+                                            <input class="form-check-input" type="checkbox" id="IsAgreeTerms" name="IsAgreeTerms" value="1">
+                                            <label class="form-check-label" for="IsAgreeTerms">
+                                                @Homemade.UI.Resources.Homemade.I_agree_to
+                                                <span class="terms-link">@Homemade.UI.Resources.Homemade.Terms_and_Conditions</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="wizard-arrow">
+                                    <button type="button" class="arrow-btn next-btn " current-tab="0" onclick="nextTab('#formterms_data','personal_data')">
+                                        <span class="tab_name_next">@Homemade.UI.Resources.Homemade.Personal_Data   </span>
+                                        <i class="fas fa-arrow-left"></i>
+                                    </button>
+
+                                </div>
+                            </div>
+                            <div class="step-item tab-content personal_data " id="personal_data">
+                                <div class="step-content">
+
+                                    <form enctype="multipart/form-data" class="wizard-form" action="javascript:void(0);" id="formpersonal_data">
+
+
+
+                                        <div class="row">
+                                            <div class="col-12">
+
+                                                <div class="form-group">
+                                                    <div class="upload-files-area">
+                                                        <i class="fa-redo-alt fas removebtnownerlogo d-none" onclick="RemoveImage('ownerlogo')"></i>
+                                                        <button class="upload-btn" onclick="$('#fupownerlogo').click()" id="ownerlogo">
+                                                            <span>
+                                                                <img id="img_ownerlogo" class="img_set" style="max-width:45px;" src='data:image/svg+xml;base64,ICAgIDxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNTIuOTYiIGhlaWdodD0iNTIuOTYiIHZpZXdCb3g9IjAgMCA1Mi45NiA1Mi45NiI+DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxwYXRoIGlkPSJQYXRoXzE2MDYiIGRhdGEtbmFtZT0iUGF0aCAxNjA2IiBkPSJNMjYuNDgsMEEyNi40OCwyNi40OCwwLDEsMSwwLDI2LjQ4LDI2LjQ4LDI2LjQ4LDAsMCwxLDI2LjQ4LDBaIiBmaWxsPSIjZjFlM2JlIiAvPg0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8cGF0aCBpZD0iSWNvbl9hd2Vzb21lLWNsb3VkLXVwbG9hZC1hbHQiIGRhdGEtbmFtZT0iSWNvbiBhd2Vzb21lLWNsb3VkLXVwbG9hZC1hbHQiIGQ9Ik0yMi44NDksMTAuNTIxQTQuMDg1LDQuMDg1LDAsMCwwLDE5LjA0MSw0Ljk3YTQuMDU5LDQuMDU5LDAsMCwwLTIuMjY1LjY4OUE2LjgsNi44LDAsMCwwLDQuMDgsOS4wNWMwLC4xMTUsMCwuMjMuMDA5LjM0NGE2LjEyMiw2LjEyMiwwLDAsMCwyLjAzMiwxMS45SDIxLjc2MWE1LjQ0LDUuNDQsMCwwLDAsMS4wODgtMTAuNzdaTTE2LjcyLDEzLjEzSDEzLjk0djQuNzZhLjY4Mi42ODIsMCwwLDEtLjY4LjY4SDExLjIyYS42ODIuNjgyLDAsMCwxLS42OC0uNjhWMTMuMTNINy43NjFhLjY3OS42NzksMCwwLDEtLjQ4LTEuMTZsNC40OC00LjQ4YS42ODIuNjgyLDAsMCwxLC45NjEsMGw0LjQ4LDQuNDhhLjY4LjY4LDAsMCwxLS40OCwxLjE2WiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTIuODggMTQuNzEpIiBmaWxsPSIjNjgyMzAwIiAvPg0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvc3ZnPg==' />
+                                                            </span>
+                                                            @Homemade.UI.Resources.Homemade.PersonalPicture
+                                                        </button>
+
+                                                        <input type="file" id="fupownerlogo" name="fupownerlogo" class="form-control-file  validate[required] d-none" accept="image/*" onchange="ConvertToBase64(this,'img_ownerlogo')" />
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+
+                                                <div class="form-group">
+
+                                                    <label class="form-label">@Homemade.UI.Resources.Homemade.Name   </label>
+                                                    <input type="text" class="form-control input-focus" id="Txt_FnameAr" name="Txt_FnameAr" title="@Homemade.BLL.Resources.HomemadeErrorMessages.FirstNameARRequierd" required>
+
+
+                                                </div>
+
+
+                                            </div>
+                                            <div class="col-md-6">
+
+                                                <div class="form-group">
+
+                                                    <label class="form-label">@Homemade.UI.Resources.Homemade.Nationality</label>
+                                                    <select required class="form-control js-select2" id="WizzardNationalityID" name="WizzardNationalityID" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1" title="@Homemade.BLL.Resources.HomemadeErrorMessages.Requierd">
+                                                        <option selected value=""></option>
+                                                    </select>
+
+                                                </div>
+
+
+                                            </div>
+
+                                            @*<div class="col-md-3">
+
+                                            <div class="form-group">
+
+                                            <label class="form-label">@Homemade.UI.Resources.Homemade.First_Name_EN</label>
+                                            <input type="text" required class="form-control input-focus" id="Txt_FnameEn" name="Txt_FnameEn" title="@Homemade.BLL.Resources.HomemadeErrorMessages.FirstNameENRequierd">
+
+                                            </div>
+
+
+                                            </div>
+                                            <div class="col-md-3">
+
+                                            <div class="form-group">
+
+                                            <label class="form-label">@Homemade.UI.Resources.Homemade.Family_Name_AR</label>
+                                            <input type="text" class="form-control input-focus" id="Txt_SnameAr" name="Txt_SnameAr">
+
+                                            </div>
+
+
+                                            </div>
+                                            <div class="col-md-3">
+
+                                            <div class="form-group">
+
+                                            <label class="form-label">@Homemade.UI.Resources.Homemade.Family_Name_EN</label>
+                                            <input type="text" class="form-control input-focus" id="Txt_SnameEn" name="Txt_SnameEn">
+
+                                            </div>
+
+
+                                            </div>*@
+
+
+                                            <div class="col-md-6">
+
+                                                <div class="form-group">
+
+                                                    <label class="form-label">@Homemade.UI.Resources.Homemade.City</label>
+                                                    <select required class="form-control js-select2" onchange="LoadBlocks(this)" id="cities" name="cities" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1" title="@Homemade.BLL.Resources.HomemadeErrorMessages.CityRequierd">
+                                                        <option selected value=""></option>
+                                                    </select>
+
+                                                </div>
+
+
+                                            </div>
+                                            <div class="col-md-6">
+
+                                                <div class="form-group">
+
+                                                    <label class="form-label">@Homemade.UI.Resources.Homemade.Block </label>
+                                                    <select class="form-control js-select2" id="blocks" name="blocks" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1" title="@Homemade.BLL.Resources.HomemadeErrorMessages.BlockRequierd">
+                                                        <option selected value=""></option>
+                                                    </select>
+                                                </div>
+
+
+                                            </div>
+
+
+
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+
+                                                    <label class="form-label">@Homemade.UI.Resources.Homemade.Password   </label>
+                                                    <div class="password-field">
+
+                                                        <input type="password" class="form-control password-input input-focus" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least /n 8 characters including /n 1 uppercase letter, /n 1 lowercase letter and numeric characters" id="Txt_password" name="Txt_password">
+
+                                                        <div class="eye-icon"></div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+
+                                                <div class="form-group">
+
+                                                    <label class="form-label">@Homemade.UI.Resources.Homemade.ConfirmPassword  </label>
+                                                    <div class="password-field">
+
+                                                        <input type="password" class="form-control password-input input-focus" id="Txt_confirmPassword" name="Txt_confirmPassword">
+                                                        <div class="eye-icon"></div>
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+
+                                                <div class="form-group">
+                                                    <label class="form-label">@Homemade.UI.Resources.Homemade.MobileNumber  <span style="color:red"> @Homemade.UI.Resources.Homemade.Mobile_Validation </span> </label>
+                                                    <input type="tel" class="form-control input-focus" id="Txt_Mobile" name="Txt_Mobile" required title="@Homemade.BLL.Resources.HomemadeErrorMessages.MobileRequierd"
+                                                           maxlength="10" minlength="9" />
+
+                                                </div>
+
+
+                                            </div>
+                                            <div class="col-md-6">
+
+                                                <div class="form-group">
+
+                                                    <label class="form-label">@Homemade.UI.Resources.Homemade.Email    </label>
+                                                    <input type="email" class="form-control input-focus" id="Txt_Email" name="Txt_Email" title="@Homemade.BLL.Resources.HomemadeErrorMessages.Email">
+
+
+                                                </div>
+
+
+                                            </div>
+                                            <div class="col-md-12">
+
+                                                <div class="form-group">
+
+                                                    <label class="form-label">@Homemade.UI.Resources.Homemade.Gender   </label>
+                                                    <div class="col-xs-12">
+                                                        <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbMale">
+                                                            <input type="radio" checked id="rdbMale" name="Gender" value="0">
+                                                            <span></span>
+                                                            @Homemade.UI.Resources.Homemade.Male
+                                                        </label>
+                                                        <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbFemale">
+                                                            <input type="radio" id="rdbFemale" name="Gender" value="1">
+                                                            <span></span>
+                                                            @Homemade.UI.Resources.Homemade.Female
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                    </form>
+
+                                </div>
+
+                                <div class="wizard-arrow">
+                                    <button type="button" class="arrow-btn " onclick="prevTab('','terms_data')">
+                                        <i class="fas fa-arrow-right"></i>
+                                        <span class="tab_name_prev">@Homemade.UI.Resources.Homemade.Terms_and_Conditions </span>
+                                    </button>
+                                    <button type="button" class="arrow-btn next-btn " current-tab="1" onclick="nextTab('#formpersonal_data','store_data')">
+                                        <span class="tab_name_next">@Homemade.UI.Resources.Homemade.Store_Data   </span>
+                                        <i class="fas fa-arrow-left"></i>
+                                    </button>
+
+                                </div>
+                            </div>
+                            <div class="step-item tab-content store_data ">
+
+
+                                <div class="step-content">
+
+                                    <form enctype="multipart/form-data" class="wizard-form" action="javascript:void(0);" id="formstore_data">
+
+                                        <div class="row align-items-center">
+
+
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">@Homemade.UI.Resources.Homemade.Store_Name_Ar    </label>
+                                                    <input type="text" required class="form-control input-focus" id="Txt_storenameAr" name="Txt_storenameAr" title="@Homemade.BLL.Resources.HomemadeErrorMessages.ArNameRequierd">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label"> @Homemade.UI.Resources.Homemade.Store_Name_En  </label>
+                                                    <input type="text" class="form-control input-focus" id="Txt_storenameEn" name="Txt_storenameEn">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+
+                                                <div class="form-group">
+
+                                                    <label class="form-label">@Homemade.UI.Resources.Homemade.StoreActivity </label>
+
+
+                                                    <select required class="form-control js-select2" id="Activities" name="Activities" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1" title="@Homemade.BLL.Resources.HomemadeErrorMessages.Requierd">
+                                                        <option value=""></option>
+                                                    </select>
+
+
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+
+                                                <div class="form-group">
+
+                                                    <label class="form-label"> @Homemade.UI.Resources.Homemade.CRnumbermar  </label>
+                                                    <input type="number" class="form-control input-focus" inputmode="tel" id="Txt_CommercialNumber" name="Txt_CommercialNumber">
+
+                                                </div>
+
+
+                                            </div>
+                                            <div class="col-md-6">
+
+                                                <div class="form-group">
+                                                    <div class="upload-files-area">
+                                                        <i class="fa-redo-alt fas removebtnstorelogo d-none" onclick="RemoveImage('storelogo')"></i>
+                                                        <button class="upload-btn" onclick="$('#fupstorelogo').click()" id="storelogo">
+
+                                                            <span>
+
+                                                                <img id="img_storelogo" class="img_set" style="max-width:45px;" src='data:image/svg+xml;base64,ICAgIDxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNTIuOTYiIGhlaWdodD0iNTIuOTYiIHZpZXdCb3g9IjAgMCA1Mi45NiA1Mi45NiI+DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxwYXRoIGlkPSJQYXRoXzE2MDYiIGRhdGEtbmFtZT0iUGF0aCAxNjA2IiBkPSJNMjYuNDgsMEEyNi40OCwyNi40OCwwLDEsMSwwLDI2LjQ4LDI2LjQ4LDI2LjQ4LDAsMCwxLDI2LjQ4LDBaIiBmaWxsPSIjZjFlM2JlIiAvPg0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8cGF0aCBpZD0iSWNvbl9hd2Vzb21lLWNsb3VkLXVwbG9hZC1hbHQiIGRhdGEtbmFtZT0iSWNvbiBhd2Vzb21lLWNsb3VkLXVwbG9hZC1hbHQiIGQ9Ik0yMi44NDksMTAuNTIxQTQuMDg1LDQuMDg1LDAsMCwwLDE5LjA0MSw0Ljk3YTQuMDU5LDQuMDU5LDAsMCwwLTIuMjY1LjY4OUE2LjgsNi44LDAsMCwwLDQuMDgsOS4wNWMwLC4xMTUsMCwuMjMuMDA5LjM0NGE2LjEyMiw2LjEyMiwwLDAsMCwyLjAzMiwxMS45SDIxLjc2MWE1LjQ0LDUuNDQsMCwwLDAsMS4wODgtMTAuNzdaTTE2LjcyLDEzLjEzSDEzLjk0djQuNzZhLjY4Mi42ODIsMCwwLDEtLjY4LjY4SDExLjIyYS42ODIuNjgyLDAsMCwxLS42OC0uNjhWMTMuMTNINy43NjFhLjY3OS42NzksMCwwLDEtLjQ4LTEuMTZsNC40OC00LjQ4YS42ODIuNjgyLDAsMCwxLC45NjEsMGw0LjQ4LDQuNDhhLjY4LjY4LDAsMCwxLS40OCwxLjE2WiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTIuODggMTQuNzEpIiBmaWxsPSIjNjgyMzAwIiAvPg0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvc3ZnPg==' />
+
+
+                                                            </span>
+                                                            @Homemade.UI.Resources.Homemade.Vendor_Logo
+                                                        </button>
+
+                                                        <input type="file" id="fupstorelogo" name="fupstorelogo" class="form-control-file  validate[required] d-none" accept="image/*" onchange="ConvertToBase64(this,'img_storelogo')" />
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+
+                                                <div class="form-group">
+                                                    <div class="upload-files-area">
+                                                        <i class="fa-redo-alt fas removebtncommercialcumber d-none" onclick="RemoveImage('commercialcumber')"></i>
+                                                        <button class="upload-btn" onclick="$('#fupcommercialcumber').click()" id="commercialcumber">
+
+                                                            <span>
+
+                                                                <img id="img_commercialcumber" class="img_set" style="max-width:45px;" src='data:image/svg+xml;base64,ICAgIDxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNTIuOTYiIGhlaWdodD0iNTIuOTYiIHZpZXdCb3g9IjAgMCA1Mi45NiA1Mi45NiI+DQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxwYXRoIGlkPSJQYXRoXzE2MDYiIGRhdGEtbmFtZT0iUGF0aCAxNjA2IiBkPSJNMjYuNDgsMEEyNi40OCwyNi40OCwwLDEsMSwwLDI2LjQ4LDI2LjQ4LDI2LjQ4LDAsMCwxLDI2LjQ4LDBaIiBmaWxsPSIjZjFlM2JlIiAvPg0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8cGF0aCBpZD0iSWNvbl9hd2Vzb21lLWNsb3VkLXVwbG9hZC1hbHQiIGRhdGEtbmFtZT0iSWNvbiBhd2Vzb21lLWNsb3VkLXVwbG9hZC1hbHQiIGQ9Ik0yMi44NDksMTAuNTIxQTQuMDg1LDQuMDg1LDAsMCwwLDE5LjA0MSw0Ljk3YTQuMDU5LDQuMDU5LDAsMCwwLTIuMjY1LjY4OUE2LjgsNi44LDAsMCwwLDQuMDgsOS4wNWMwLC4xMTUsMCwuMjMuMDA5LjM0NGE2LjEyMiw2LjEyMiwwLDAsMCwyLjAzMiwxMS45SDIxLjc2MWE1LjQ0LDUuNDQsMCwwLDAsMS4wODgtMTAuNzdaTTE2LjcyLDEzLjEzSDEzLjk0djQuNzZhLjY4Mi42ODIsMCwwLDEtLjY4LjY4SDExLjIyYS42ODIuNjgyLDAsMCwxLS42OC0uNjhWMTMuMTNINy43NjFhLjY3OS42NzksMCwwLDEtLjQ4LTEuMTZsNC40OC00LjQ4YS42ODIuNjgyLDAsMCwxLC45NjEsMGw0LjQ4LDQuNDhhLjY4LjY4LDAsMCwxLS40OCwxLjE2WiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTIuODggMTQuNzEpIiBmaWxsPSIjNjgyMzAwIiAvPg0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvc3ZnPg==' />
+
+
+                                                            </span>
+                                                            @Homemade.UI.Resources.Homemade.CRPic
+                                                        </button>
+
+                                                        <input type="file" id="fupcommercialcumber" name="fupcommercialcumber" class="form-control-file  validate[required] d-none" accept="image/*" onchange="ConvertToBase64(this,'img_commercialcumber')" />
+
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="col-md-12">
+
+                                                <div class="form-group">
+
+                                                    <label class="form-label">@Homemade.UI.Resources.Homemade.Addressvendor  </label>
+                                                    <input type="text" required class="form-control input-focus" id="Txt_Address" name="Txt_Address" title="@Homemade.BLL.Resources.HomemadeErrorMessages.Requierd">
+
+                                                </div>
+
+
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">@Homemade.UI.Resources.Homemade.About_Store_Ar   </label>
+                                                    <textarea class="form-control input-focus" id="Txt_MoreaboutservicesAr" name="Txt_MoreaboutservicesAr"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">@Homemade.UI.Resources.Homemade.About_Store_En  </label>
+                                                    <textarea class="form-control input-focus" id="Txt_MoreaboutservicesEn" name="Txt_MoreaboutservicesEn"></textarea>
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label class="form-label">@Homemade.UI.Resources.Homemade.Location </label>
+                                                    <label class="text-center" style="margin-bottom:10px;">
+                                                        <span style="color:red" class="field-validation-valid" data-valmsg-for="lat" data-valmsg-replace="true"> </span>
+                                                    </label>
+                                                    <input id="pac-input"
+                                                           class="controls"
+                                                           type="text"
+                                                           placeholder="Enter a location" />
+                                                    <div id="map" style="width: 100%; height: 307px;overflow:initial"></div>
+                                                    <div id="infowindow-content">
+                                                        <span id="place-name" style="display:none" class="title"></span><br />
+                                                        <strong style="display:none;">Place ID:</strong> <span id="place-id"></span><br />
+                                                        <span id="place-address"></span>
+                                                    </div>
+                                                    <div class="latlngxop" style="opacity:0">
+                                                        <input type="text" required id="txtLatHidden" value="24.786505" name="lat" data-val="true" data-val-required="@Homemade.UI.Resources.Homemade.ChooseCityOnMap" />
+                                                        <input type="text" required id="txtLngHidden" value="46.723831" name="lng" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </form>
+
+                                </div>
+
+                                <div class="wizard-arrow">
+
+                                    <button type="button" class="arrow-btn " onclick="prevTab('','personal_data')">
+                                        <i class="fas fa-arrow-right"></i>
+                                        <span class="tab_name_prev">@Homemade.UI.Resources.Homemade.Personal_Data    </span>
+                                    </button>
+
+                                    <button type="button" class="arrow-btn  " onclick="nextTab('#formstore_data','payment_data')">
+                                        <span class="tab_name_next">@Homemade.UI.Resources.Homemade.PaymentType   </span>
+                                        <i class="fas fa-arrow-left"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="step-item tab-content payment_data ">
+
+                                <div class="step-content">
+
+                                    <form enctype="multipart/form-data" class="wizard-form" action="javascript:void(0);" id="formpayment_data">
+
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+
+                                                <div class="form-group">
+
+                                                    <label class="form-label">@Homemade.UI.Resources.Homemade.Bank_Name </label>
+                                                    <select required class="form-control js-select2" id="Banks" name="Banks" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1" title="@Homemade.BLL.Resources.HomemadeErrorMessages.BankRequierd">
+                                                        <option value=""></option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+
+                                                <div class="form-group">
+
+                                                    <label class="form-label">@Homemade.UI.Resources.Homemade.AccountNumber    </label>
+                                                    <input type="number" required class="form-control input-focus" inputmode="tel" id="Txt_AccountNo" name="Txt_AccountNo" title="@Homemade.BLL.Resources.HomemadeErrorMessages.AccountNumberRequierd">
+
+                                                </div>
+
+
+                                            </div>
+
+
+                                            @*<div class="col-md-4">
+                                            <div class="form-group">
+                                            <label class="form-label">@Homemade.UI.Resources.Homemade.SwiftCode   </label>
+                                            <input type="text" class="form-control input-focus" onkeypress="return (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 48 && event.charCode <= 57)" inputmode="tel" id="Txt_SwiftCode" name="Txt_SwiftCode">
+                                            </div>
+                                            </div>*@
+                                            @*<div class="col-md-6">
+                                            <div class="form-group">
+                                            <label class="form-label">@Homemade.UI.Resources.Homemade.Package  </label>
+
+
+                                            <select required class="form-control js-select2" id="Packages" name="Packages" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1" title="@Homemade.BLL.Resources.HomemadeErrorMessages.Requierd">
+                                            <option value=""></option>
+                                            </select>
+
+
+                                            </div>
+                                            </div>*@
+
+                                            <div class="col-md-12">
+
+                                                <div class="form-group">
+
+                                                    <label class="form-label">@Homemade.UI.Resources.Homemade.IBANNumber  </label>
+                                                    <input type="text" required class="form-control input-focus" id="Txt_IBAN" name="Txt_IBAN" title="@Homemade.BLL.Resources.HomemadeErrorMessages.IBANnumberRequierd">
+
+                                                </div>
+
+
+                                            </div>
+
+
+                                        </div>
+
+                                    </form>
+
+                                </div>
+                                <div class="wizard-arrow">
+
+                                    <button type="button" class="arrow-btn " onclick="prevTab('','store_data')">
+                                        <i class="fas fa-arrow-right"></i>
+                                        <span class="tab_name_prev">@Homemade.UI.Resources.Homemade.Store_Data   </span>
+                                    </button>
+
+                                    <button type="button" class="arrow-btn " onclick="CheckSendData();">
+                                        <span class="tab_name_next">@Homemade.UI.Resources.Homemade.Send_Request  </span>
+                                        <i class="fas fa-arrow-left"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-12">
+
+                <hr class="section-line">
+
+            </div>
+            <div class="col-12">
+
+                <div class="app-banner">
+
+                    <div class="row">
+
+
+                        <div class="col-lg-8">
+
+                            <div class="app-banner-details">
+
+                                <div class="app-banner-title">@Homemade.UI.Resources.Homemade.Download_Home_Made_app_Vendor_now </div>
+                                <div class="app-banner-text">
+
+                                    @Homemade.UI.Resources.Homemade.Download_Home_Made_app_Vendor_now_Content
+
+
+                                </div>
+                                <div class="app-banner-links">
+
+                                    <a class="download-link" href="https://play.google.com/store/apps/details?id=app.tech_time.homemade_vendor">
+                                        <img class="img-fluid" src="~/assets/homeMadeSite/img/Asset%201.svg">
+                                    </a>
+                                    <a class="download-link" href="https://apps.apple.com/sa/app/%D8%B4%D8%BA%D9%84-%D8%A8%D9%8A%D8%AA-%D8%A7%D9%84%D8%AA%D8%A7%D8%AC%D8%B1/id1587587661">
+
+                                        <img class="img-fluid" src="~/assets/homeMadeSite/img/Asset%202.svg">
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-4">
+
+                            <div class="app-banner-img">
+
+                                <img class="img-fluid" src="~/assets/homeMadeSite/img/Mask%20Group%2010.svg">
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="custom-bootstrap-modal modal fade scheduled-request-modal" id="VerviedCodeModal" tabindex="-1" aria-labelledby="VerviedCodeModalLabel" aria-hidden="true"
+     data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+
+
+                <div class="col-title title-4">@Homemade.UI.Resources.Homemade.Mobile_Number_Verification</div>
+
+                <p class="col-text" id="Div_Loading">
+                    <img src="../../assets/homeMadeSite/css/ajax-loader.gif" style="width: 50px;">
+                    @Homemade.UI.Resources.Homemade.Verification_code_is_being_sent
+                </p>
+                <p class="col-text" id="Div_sendcode" style="display:none">
+                    @Homemade.UI.Resources.Homemade.Please_enter_the_code_sent_to_your_phone
+                </p>
+                <div class="modal-body-content">
+
+                    <div class="row" id="divMsgParentRegisterVendorCode" style="display:none">
+                        <div class="col-xs-12">
+                            <div id="divMsgClassRegisterVendorCode" class="alert alert-danger" role="alert">
+                                <strong id="lblMsgRegisterVendorCode"></strong>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="scheduled-request-form">
+
+                        <div class="form-group">
+
+                            <div class="form-group tel-field">
+                                <label class="form-label">@Homemade.UI.Resources.Homemade.The_code_sent_to_you </label>
+                                <input type="number" class="form-control input-focus code-input" id="VendorRegisterCode">
+                            </div>
+
+                        </div>
+                        <div class="registration-btns small">
+
+                            <button type="button" class="registration-btn step-btn theme-btn theme-btn-lg" onclick="SubmitVerfiedVendorRegisterCode()">@Homemade.UI.Resources.Homemade.Activation</button>
+
+
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/App/Site/NewVendor/wizzardScript.js"></script>
+    <script src="~/Scripts/App/Site/NewVendor/ImagesPlugin.js"></script>
+    <script src="~/Scripts/App/Site/NewVendor/NewVendor.js"></script>
+
+
+    <script src="~/assets/homeMadeSite/js/mainWizzard.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $(function() {
+                try {
+                    initMap();
+                } catch (e) {
+
+                }
+            });
+        });
+
+        $('.eye-icon').click(function() {
+            debugger;
+            if ($("#Txt_password").attr("type") === "password") {
+                $("#Txt_password").attr("type", "text");
+                $("#Txt_confirmPassword").attr("type", "text");
+
+            } else {
+                $("#Txt_password").attr("type", "password");
+                $("#Txt_confirmPassword").attr("type", "password");
+
+            }
+            $(".eye-icon").toggleClass("hide");
+        })
+    </script>
+    <script src="~/Scripts/App/Google/VendorMapScript.js" id="txtScript"></script>
+}
+
+

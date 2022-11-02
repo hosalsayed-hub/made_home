@@ -1,0 +1,143 @@
+﻿@inject Homemade.BLL.BLPermission blPermission
+@{
+    var IsPermissionView = @blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Customer, (int)Homemade.BLL.ActionEnum.View) ? 1 : 0;
+    var IsPermissionUpdate = @blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Customer, (int)Homemade.BLL.ActionEnum.Update) ? 1 : 0;
+    var IsPermissionDelete = @blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Customer, (int)Homemade.BLL.ActionEnum.Delete) ? 1 : 0;
+}
+<script>
+    var table;
+    $(document).ready(function() {
+        table = $('#tbl_Customers').DataTable({
+            pageLength: 10,
+            pagijngType: "full_numbers",
+            serverSide: true,
+            processing: true,
+            lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+            sAjaxSource: '@Url.Action("LoadTableVendor")',
+            sServerMethod: "POST",
+            bPaginate: true,
+            paging: true,
+            bFilter: true,
+            bLengthChange: false,
+            columns: [
+                {
+                    "data": null,
+                    "sortable": false,
+                    render: function(data, type, row, meta) {
+                        return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                    }
+                },
+
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<input type="hidden" value="' + data.customersID + '"/><label class="arName">' + data.firstName + '</label>';
+                    }
+
+                },
+                //{
+                //    data: null,
+                //    bSortable: true,
+                //    render: function (data, type, row) {
+                //        return '<label >' + data.email + '</label>';
+                //    }
+
+                //},
+                //{
+                //    data: null,
+                //    bSortable: true,
+                //    render: function (data, type, row) {
+                //        return '<label >' + data.mobileNo + '</label>';
+                //    }
+
+                //},
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label >' + data.cityName + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label >' + data.address + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        var IsEnable = data.isEnable == 1 ? "<span style='background: #ddf7e8;color: #3c763d;padding:8px;'>@Homemade.UI.Resources.Homemade.Enabled</span>"
+                            : "<span style='background: #f9eae8;color:#c54736;padding:8px;'>@Homemade.UI.Resources.Homemade.Disabled</span>";
+
+                        return '<label>' + IsEnable + '</label>';
+                    }
+                },
+    @*{
+                data: null,
+                bSortable: true,
+                render: function (data, type, row) {
+                var databutton = '';
+                var xtitle = data.isEnable ? "@Homemade.UI.Resources.Homemade.Disable" : "@Homemade.UI.Resources.Homemade.Enable";
+                var icon = data.isEnable ? "fa fa-ban" : "fa fa-check";
+                databutton += ` <a class="btn btn-xs btn-info" href="@Url.Action("Details")/${data.customersGuid}" type="button" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Details">
+                <i class="fa fa-search"></i>
+                </a>`;
+
+                databutton += '<button class="btn btn-xs btn-warning" style="margin:4px" type="button" data-toggle="tooltip" onclick="ChangeStatue(this);" data-id="' + data.customersID + '" title="' + xtitle + '"><i class="' + icon + '"></i></button>';
+
+                return databutton;
+                }
+                }*@
+                ],
+            drawCallback: function(s) {
+                $('[data-toggle="tooltip"]').tooltip();
+            },
+            buttons: [
+                {
+                    text: '@Homemade.UI.Resources.Homemade.Excel',
+                    className: "btn btn-success btn-xs",
+                    action: function(e, dt, node, config) {
+                        DownloadExcel();
+                    }
+                }, {
+                    extend: "pdfHtml5",
+                    download: 'open',
+                    className: "btn btn-info btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.PDF'
+                }],
+            "language": {
+                "search": "_INPUT_",
+                "searchPlaceholder": "Search",
+                "lengthMenu": "_MENU_",
+            }, dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+
+        });
+        table.buttons().container().appendTo('.dt_buttons_wrap');
+    });
+
+    function readtable() {
+        table.ajax.url('/Customer/Customer/LoadTableVendor?listCityID=' + $("#ListCityID").val() + '&name=' + $("#Name").val() + '&mobile=' + $("#Mobile").val());
+        table.ajax.reload();
+    }
+    function DownloadExcel() {
+        if ($("#tbl_Customers tbody tr").length > 0 && ($("#tbl_Customers tbody tr td").hasClass("dataTables_empty") == false)) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.ExportExcel , "ConfirmExcel();"))
+                }
+        else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false)
+                { Title = "\"" + Homemade.UI.Resources.Homemade.NoDataFound + "\"" })
+                }
+    }
+    function ConfirmExcel() {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+            Title = "\"" + Homemade.UI.Resources.Homemade.Excel + "\""})
+            window.open('/Customer/Customer/ExcelCustomers', "_blank");
+    }
+</script>

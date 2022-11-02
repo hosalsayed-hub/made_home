@@ -1,0 +1,63 @@
+﻿@model Homemade.BLL.ViewModel.Site.SiteDepartmentsViewModel
+@inject Homemade.BLL.Setting.BlDepartments _blDepartments
+@{
+    ViewData["Title"] = @Homemade.UI.Resources.HomemadeMenu.Vendors;
+}
+
+<!-- ***** shop-content-section Start ***** -->
+
+<section class="section-style shop-content-section">
+
+    <div class="shop-search-area">
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-12">
+
+                    <div class="shop-search">
+
+                        <div class="form-group">
+                            <input type="search" class="form-control shop-search-input input-focus" id="Txt_SearchVendors" placeholder="@Homemade.UI.Resources.Homemade.Vendor">
+                        </div>
+                        <button type="button" class="shop-search-btn" onclick="SearchVendors()">@Homemade.UI.Resources.Homemade.Search</button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-lg-12" id="DevVendorsPartial">
+            </div>
+
+        </div>
+
+    </div>
+</section>
+<!-- ***** shop-content-section End ***** -->
+<style>
+    .vendor-circle {
+        width: 200px;
+        height: 200px;
+        border-radius: 100%;
+        object-fit: cover;
+    }
+</style>
+@section Scripts{
+    <script>
+        $(document).ready(function() {
+            SearchVendors();
+        });
+        function SearchVendors() {
+            $("#DevVendorsPartial").load("/Site/Home/GetSiteVendorsViewModel?searchVendors=" + $("#Txt_SearchVendors").val());
+        }
+    </script>
+}

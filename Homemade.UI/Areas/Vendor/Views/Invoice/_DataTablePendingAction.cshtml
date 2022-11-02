@@ -1,0 +1,193 @@
+﻿@inject Homemade.BLL.BLPermission blPermission
+@{
+    var IsPermissionOperation = blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)ControllerEnum.Invoice, (int)ActionEnum.Update) ? 1 : 0;
+    var IsPermissionAdmin = blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)ControllerEnum.Invoice, (int)ActionEnum.Update) ? 1 : 0;
+}
+<script>
+    var table;
+    $(document).ready(function() {
+        table = $('#tbl_Branch').DataTable({
+
+            pageLength: 10,
+            pagijngType: "full_numbers",
+            serverSide: true,
+            processing: true,
+            lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+            sAjaxSource: '@Url.Action("LoadTableInvoiceMasterForPendingAction")',
+            sServerMethod: "POST",
+            bPaginate: true,
+            paging: true,
+            columns: [
+                {
+                    "data": null,
+                    "sortable": false,
+                    render: function(data, type, row, meta) {
+                        return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<input type="hidden" value="' +
+                            data.invoiceMasterID +
+                            '"/><label class="arName">' +
+                            data.invoiceNo +
+                            '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="enName">' + data.vendorName + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="enName">' + data.total + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="enName">' + data.invoiceTypeName + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        var databutton = `<div class="btn-group">`;
+                        databutton += ` <a class="btn btn-xs btn-info" href="/Vendor/Invoice/PendingActionDetails/${data.invoiceMasterGuid}" style="margin:4px" type="button" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Details">
+                                            <i class="fa fa-search"></i>
+                                        </a>`;
+                        if (@IsPermissionOperation == 1 && data.invoiceTypeId == 1) {
+                            databutton += ` <button class="btn btn-xs btn-success" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Pending_Admin" style="margin:4px" type="button" data-toggle="tooltip" onclick="PendingOperation(this);" data-id="${data.invoiceMasterID}"><i class="fa fa-check"></i></button>`;
+                        }
+                        if (@IsPermissionAdmin == 1 && data.invoiceTypeId == 2) {
+                            databutton += ` <button class="btn btn-xs btn-success" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Waiting_Transfer_Confirmation" style="margin:4px" type="button" data-toggle="tooltip" onclick="PendingAdmin(this);" data-id="${data.invoiceMasterID}"><i class="fa fa-check"></i></button>`;
+                        }
+                        databutton += `</div>`;
+                        return databutton;
+                    }
+                }
+            ],
+            buttons: [
+    @*{
+                extend: "copy",
+                className: "btn btn-info btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Copy'
+                },*@
+                {
+                    extend: "excelHtml5",
+                    autoFilter: true,
+                    sheetName: 'Exported data',
+                    className: "btn btn-success btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.Excel'
+                },
+                {
+                    text: '@Homemade.UI.Resources.Homemade.Print',
+                    className: "btn btn-warning btn-xs",
+                    extend: "print",
+                },
+                {
+                    extend: "pdfHtml5",
+                    download: 'open',
+                    className: "btn btn-info btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.PDF'
+                }
+            ],
+            drawCallback: function(s) {
+                $('[data-toggle="tooltip"]').tooltip();
+            }
+            , dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+
+        });
+        table.buttons().container().appendTo('.dt_buttons_wrap');
+    });
+    function readtable() {
+        table.ajax.url('/Vendor/Invoice/LoadTableInvoiceMasterForPendingAction?listClientID=' + $("#ListVendorID").val() + '&fromDate=' + $("#FromDate").val() + '&toDate=' + $("#ToDate").val());
+        table.ajax.reload();
+    }
+    function PendingOperation(e) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.ChangeStaute , " ConfirmPendingOperation(e);"))
+        }
+    function ConfirmPendingOperation(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeInvoiceType")',
+            data: {
+                'InvoiceMasterID': id, 'invoiceTypeId': 2/*InvoiceTypeEnum.Pending_Admin*/
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                var msg = '@Homemade.UI.Resources.Homemade.SuccessChangeMessage';
+                if (result.status) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                        Title = "\"" + Homemade.UI.Resources.Homemade.SuccessChangeMessage + "\""})
+
+                        readtable();
+
+                }
+                else {
+                    msg = '@Homemade.UI.Resources.Homemade.FailChangeStatueMessage'
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) {
+                        Title = "\"" + Homemade.UI.Resources.Homemade.FailChangeStatueMessage + "\""})
+                    }
+            },
+            error: function() {
+
+            }
+        });
+    }
+    function PendingAdmin(e) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.ChangeStaute , " ConfirmPendingAdmin(e);"))
+        }
+    function ConfirmPendingAdmin(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeInvoiceType")',
+            data: {
+                'InvoiceMasterID': id, 'invoiceTypeId': 3/*InvoiceTypeEnum.Pending_Paid*/
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                var msg = '@Homemade.UI.Resources.Homemade.SuccessChangeMessage';
+                if (result.status) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                        Title = "\"" + Homemade.UI.Resources.Homemade.SuccessChangeMessage + "\""})
+
+                        readtable();
+
+                }
+                else {
+                    msg = '@Homemade.UI.Resources.Homemade.FailChangeStatueMessage'
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) {
+                        Title = "\"" + Homemade.UI.Resources.Homemade.FailChangeStatueMessage + "\""})
+                    }
+            },
+            error: function() {
+
+            }
+        });
+    }
+</script>

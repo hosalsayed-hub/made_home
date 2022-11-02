@@ -1,0 +1,36 @@
+﻿<script>
+    function GetType(id) {
+        $("#SendTypeId").val(id);
+        $("#SubscribeModal").modal('show');
+    }
+    function SendMessage() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SendSubscribe")',
+            data: {
+                'checkedItems': $("#CheckedItems").val(),
+                'sendTypeId': $("#SendTypeId").val(),
+                'message': CKEDITOR.instances['editorMessage'].getData(),
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                var msg = result.message;
+
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+                        {
+                        Title = "msg"
+                        });
+                    $("#SubscribeModal").modal('hide');
+                    $('#tbl_Subscribe').DataTable().ajax.reload();
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Error, "", false, false, false) { Title = "msg" });
+                }
+            }
+        });
+    }
+</script>

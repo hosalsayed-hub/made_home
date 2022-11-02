@@ -1,0 +1,585 @@
+﻿@model Homemade.BLL.ViewModel.Vendor.ProductViewModel
+@inject Homemade.BLL.General.BLGeneral bLGeneral
+@inject Homemade.BLL.Setting.BlNationality blNationality
+@inject Homemade.BLL.Vendor.BlProduct blProduct
+@inject Homemade.BLL.Vendor.BlVendor blVendor
+@inject Homemade.BLL.General.BLUser bLUser
+@{
+    var user = bLUser.GetUserInfo(User.GetUserIdInt());
+    int UserTypeId = user.UserType;
+    int VendorsID = 0;
+    if (UserTypeId == (int)UserTypeEnum.Vendor)
+    {
+        var vednor = blVendor.GetVendorByUserId(User.GetUserIdInt());
+        if (vednor != null)
+        {
+            VendorsID = vednor.VendorsID;
+        }
+    }
+}
+<div class="content">
+    <div class="block">
+        <div class="block-content h_scroll">
+            <h3 class="form-group">
+                <span class="header-title">     @Html.DisplayFor(x => x.Name)</span>
+            </h3>
+            <ul class="nav nav-tabs" id="VendorTabs">
+                <li class="active">
+                    <a href="#Main_Data" data-toggle="tab"><i class="fa fa-user push-5-r"></i> @Homemade.UI.Resources.Homemade.Product_Data</a>
+                </li>
+
+                <li>
+                    <a href="#Store_Data" data-toggle="tab"><i class="fa fa-file push-5-r"></i> @Homemade.UI.Resources.Homemade.Product_Images</a>
+                </li>
+                <li>
+                    <a href="#Account_Data" data-toggle="tab"><i class="fa fa-file push-5-r"></i> @Homemade.UI.Resources.Homemade.Quesions_Answers</a>
+                </li>
+            </ul>
+            <div class="block-content tab-content">
+                <div class="tab-pane active" id="Main_Data">
+                    <form method="post" id="frmCreate" onsubmit="return false" data-action="Create"
+                          data-ajax="true"
+                          data-ajax-method="post"
+                          data-ajax-success="formSuccessUpdate">
+                        @Html.AntiForgeryToken()
+                        <div class="row" id="divMsgParent" style="display:none">
+                            <div class="form-group row">
+                                <div class="col-xs-12">
+                                    <div id="divMsgClass" class="alert alert-danger" role="alert">
+                                        <strong id="lblMsg"></strong>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <input type="hidden" asp-for="ProductID" />
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.NameArabic <span style="color:red">*</span></label>
+                                    @Html.TextBoxFor(x => x.NameAr, new { @class = "form-control" })
+
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.NameAr)</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.NameEnglish</label>
+                                    @Html.TextBoxFor(x => x.NameEn, new { @class = "form-control" })
+
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.NameEn)</span>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="material-select2">@Homemade.UI.Resources.Homemade.Department <span style="color:red">*</span></label>
+                                    <select class="form-control js-select2" asp-for="DepartmentsID" name="DepartmentsID" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1">
+                                        <option value=""></option>
+                                    </select>
+
+                                    <span style="color:red" asp-validation-for="DepartmentsID"> </span>
+
+                                </div>
+                            </div>
+                            @if (VendorsID == 0)
+                            {
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="material-select2">@Homemade.UI.Resources.Homemade.Vendor <span style="color:red">*</span></label>
+                                        <select class="form-control js-select2" asp-for="VendorsID" name="VendorsID" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1">
+                                            <option value=""></option>
+                                        </select>
+
+                                        <span style="color:red" asp-validation-for="VendorsID"> </span>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="material-text2">@Homemade.UI.Resources.Homemade.Price</label>
+                                        @Html.TextBoxFor(x => x.Price, new { @class = "form-control", @placeholder = @Homemade.UI.Resources.Homemade.Price, @maxlength = "10", onkeypress = "return isNumberKey(event)" })
+
+                                        <span style="color:red"> @Html.ValidationMessageFor(x => x.Price)</span>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <input type="hidden" asp-for="VendorsID" value="@VendorsID" />
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="material-text2">@Homemade.UI.Resources.Homemade.Price</label>
+                                        @Html.TextBoxFor(x => x.Price, new { @class = "form-control", @placeholder = @Homemade.UI.Resources.Homemade.Price, @maxlength = "10", onkeypress = "return isNumberKey(event)" })
+
+                                        <span style="color:red"> @Html.ValidationMessageFor(x => x.Price)</span>
+                                    </div>
+                                </div>
+                            }
+                            <div class="clearfix"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.SKU </label>
+                                    @Html.TextBoxFor(x => x.SKU, new { @class = "form-control" })
+
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.SKU)</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Discount_Rate</label>
+                                    @Html.TextBoxFor(x => x.Discount, new { @class = "form-control", @placeholder = @Homemade.UI.Resources.Homemade.Discount_Rate, @maxlength = "10", onkeypress = "return isNumberKey(event)" })
+
+
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.Discount)</span>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group col-md-6">
+                                <div class="row">
+                                    <input asp-for="IsLimited" class="AddData" type="hidden" />
+                                    <label class="col-xs-12">@Homemade.UI.Resources.Homemade.DailyLimit</label>
+                                    <div class="col-xs-12">
+                                        <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbNotLimited">
+                                            <input type="radio" id="rdbNotLimited" name="IsLimited" onclick="ChangeLimit()" value="false">
+                                            <span></span>
+                                            @Homemade.UI.Resources.Homemade.NotLimited
+                                        </label>
+                                        <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbLimited">
+                                            <input type="radio" id="rdbLimited" name="IsLimited" onclick="ChangeLimit()" value="true">
+                                            <span></span>
+                                            @Homemade.UI.Resources.Homemade.Limited
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Quantity</label>
+                                    @Html.TextBoxFor(x => x.Quantity, new { @class = "form-control", @placeholder = @Homemade.UI.Resources.Homemade.Quantity, @maxlength = "10", onkeypress = "return isNumberKey(event)" })
+
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.Quantity)</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Weight</label>
+                                    @Html.TextBoxFor(x => x.Weight, new { @class = "form-control", @placeholder = @Homemade.UI.Resources.Homemade.Weight, @maxlength = "10", onkeypress = "return isNumberKey(event)" })
+
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.Weight)</span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <div class="row">
+                                    <input asp-for="MeasurementId" class="AddData" type="hidden" />
+                                    <label class="col-xs-12">@Homemade.UI.Resources.Homemade.Measurement</label>
+                                    <div class="col-xs-12">
+                                        <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbKilo">
+                                            <input type="radio" id="rdbKilo" name="MeasurementId" value="0">
+                                            <span></span>
+                                            @Homemade.UI.Resources.Homemade.Kilo
+                                        </label>
+                                        <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbGram">
+                                            <input type="radio" id="rdbGram" name="MeasurementId" value="1">
+                                            <span></span>
+                                            @Homemade.UI.Resources.Homemade.Gram
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="clearfix"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="example-datepicker1">@Homemade.UI.Resources.Homemade.StartDiscountDate</label>
+                                    <input asp-for="StartDiscountDate" class="js-datepicker form-control AddData " type="text" name="StartDiscountDate" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd">
+
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.StartDiscountDate)</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="example-datepicker1">@Homemade.UI.Resources.Homemade.EndDiscountDate</label>
+                                    <input asp-for="EndDiscountDate" class="js-datepicker form-control AddData " type="text" name="EndDiscountDate" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd">
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.EndDiscountDate)</span>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Description_Ar</label>
+                                    <textarea class="form-control" asp-for="DescAr" rows="5"></textarea>
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.DescAr)</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Description_En</label>
+                                    <textarea class="form-control" asp-for="DescEn" rows="5"></textarea>
+
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.DescEn)</span>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <div class="clearfix"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="material-select2">@Homemade.UI.Resources.Homemade.ProductQuantityType <span style="color:red">*</span></label>
+                                    <select class="form-control js-select2" asp-for="ProductQuantityType" name="ProductQuantityType" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1">
+                                        <option value=""></option>
+                                        <option value="1">@Homemade.UI.Resources.Homemade.pieces</option>
+                                        <option value="2">@Homemade.UI.Resources.Homemade.Persons</option>
+                                    </select>
+
+                                    <span style="color:red" asp-validation-for="ProductQuantityType"> </span>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="material-select2">@Homemade.UI.Resources.Homemade.ProductQuantity <span style="color:red">*</span></label>
+                                    <select class="form-control js-select2" asp-for="ProductQuantity" name="ProductQuantity" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1">
+                                        <option value=""></option>
+                                    </select>
+
+                                    <span style="color:red" asp-validation-for="ProductQuantity"> </span>
+
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            @*<div class="col-md-6">
+            <div class="form-group">
+                <label for="material-text2">@Homemade.UI.Resources.Homemade.PiecesAr</label>
+                @Html.TextBoxFor(x => x.PiecesAr, new { @class = "form-control" })
+
+                <span style="color:red"> @Html.ValidationMessageFor(x => x.PiecesAr)</span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="material-text2">@Homemade.UI.Resources.Homemade.PiecesEn</label>
+                @Html.TextBoxFor(x => x.PiecesEn, new { @class = "form-control" })
+
+                <span style="color:red"> @Html.ValidationMessageFor(x => x.PiecesEn)</span>
+            </div>
+        </div>
+        <div class="clearfix"></div>*@
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Size</label>
+                                    @Html.TextBoxFor(x => x.Size, new { @class = "form-control" })
+
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.Size)</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <div class="row">
+                                    <input asp-for="IsAvailable" class="AddData" type="hidden" />
+                                    <label class="col-xs-12">@Homemade.UI.Resources.Homemade.Product_Status</label>
+                                    <div class="col-xs-12">
+                                        <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbNotAvailable">
+                                            <input type="radio" id="rdbNotAvailable" name="IsAvailable" value="false">
+                                            <span></span>
+                                            @Homemade.UI.Resources.Homemade.NotAvailable
+                                        </label>
+                                        <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbAvailable">
+                                            <input type="radio" id="rdbAvailable" name="IsAvailable" value="true">
+                                            <span></span>
+                                            @Homemade.UI.Resources.Homemade.Available
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group col-md-6">
+                                <div class="row">
+                                    <input asp-for="IsFixed" class="AddData" type="hidden" />
+                                    <label class="col-xs-12">@Homemade.UI.Resources.Homemade.Fixed_Status</label>
+                                    <div class="col-xs-12">
+                                        <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbNotFixed">
+                                            <input type="radio" id="rdbNotFixed" name="IsFixed" value="false">
+                                            <span></span>
+                                            @Homemade.UI.Resources.Homemade.NotFixed
+                                        </label>
+                                        <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbFixed">
+                                            <input type="radio" id="rdbFixed" name="IsFixed" value="true">
+                                            <span></span>
+                                            @Homemade.UI.Resources.Homemade.Fixed
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <div class="row">
+                                    <input asp-for="IsHidden" class="AddData" type="hidden" />
+                                    <label class="col-xs-12">@Homemade.UI.Resources.Homemade.Hidden_Status</label>
+                                    <div class="col-xs-12">
+                                        <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbNotHidden">
+                                            <input type="radio" id="rdbNotHidden" name="IsHidden" value="false">
+                                            <span></span>
+                                            @Homemade.UI.Resources.Homemade.NotHidden
+                                        </label>
+                                        <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbHidden">
+                                            <input type="radio" id="rdbHidden" name="IsHidden" value="true">
+                                            <span></span>
+                                            @Homemade.UI.Resources.Homemade.Hidden
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @{
+                                        List<string> keyIds = new List<string>();
+                                        if (Model.KeyWordsListString != null)
+                                        {
+                                            if (Model.KeyWordsListString.Contains(","))
+                                            {
+                                                keyIds = Model.KeyWordsListString.Split(',').ToList();
+                                            }
+                                            else
+                                            {
+                                                keyIds.Add(Model.KeyWordsListString);
+                                            }
+                                        }
+                                    }
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.KeyWords</label>
+                                    <select multiple="" asp-for="KeyWords" class="js-select2 form-control AddData" style="width: 100%;" size="5" asp-items="@(new MultiSelectList(blProduct.GetAllKeyWords().Select(x=>new {
+                                                x.KeyWordsID,Name = Homemade.UI.InfraStructure.Utility.CurrentLanguageCode == "ar" ? x.NameAR : x.NameEN
+                                                }),"KeyWordsID","Name",keyIds))">
+                                    </select>
+
+
+
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.KeyWords)</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="material-select2">@Homemade.UI.Resources.Homemade.Product_Type <span style="color:red">*</span></label>
+                                    <select class="form-control js-select2" asp-for="ProductTypeId" name="ProductTypeId" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1">
+                                        <option value=""></option>
+                                    </select>
+                                    <span style="color:red" asp-validation-for="ProductTypeId"> </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Time_Taken_Process (@Homemade.UI.Resources.Homemade.Minutes)</label>
+                                    @Html.TextBoxFor(x => x.TimeTakenProcess, new { @class = "form-control", @placeholder = @Homemade.UI.Resources.Homemade.Time_Taken_Process, @maxlength = "10", onkeypress = "return isNumberKey(event)" })
+
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.TimeTakenProcess)</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Time_Taken_Process (@Homemade.UI.Resources.Homemade.Hours)</label>
+                                    @Html.TextBoxFor(x => x.TimeTakenProcessHours, new { @class = "form-control", @placeholder = @Homemade.UI.Resources.Homemade.Time_Taken_Process, @maxlength = "10", onkeypress = "return isNumberKey(event)" })
+
+                                    <span style="color:red"> @Html.ValidationMessageFor(x => x.TimeTakenProcessHours)</span>
+                                </div>
+                            </div>
+                            @if (UserTypeId == (int)UserTypeEnum.Admin)
+                            {
+                                <div class="clearfix"></div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="material-select2">@Homemade.UI.Resources.Homemade.ProductOrder <span style="color:red">*</span></label>
+                                        <select class="form-control js-select2" asp-for="ProductOrder" name="ProductOrder" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1">
+                                            <option value=""></option>
+                                        </select>
+                                        <span style="color:red" asp-validation-for="ProductOrder"> </span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-custom bg-orange" id="btnSave" type="submit"><i class="ion-checkmark push-5-r"></i> @Homemade.UI.Resources.Homemade.save</button>
+                        </div>
+
+
+                    </form>
+                </div>
+                <div class="tab-pane" id="Store_Data">
+
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <img src="@Model.Logo" id="img_prod_logo" class="img" width="100" height="100" style="display:@(!string.IsNullOrEmpty(Model.Logo) ? Html.Raw("block") : Html.Raw("none"));margin-bottom:7px;" />
+                            <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.Main_Prod_Image</label> (301 * 152)
+                            <input type="file" class="form-control-file" onchange="UploadProductMainImage()" accept="image/*" id="fupLogo">
+                            @Html.HiddenFor(m => m.Logo)
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <hr />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.Sub_Product_Images</label>
+                            <input type="file" class="form-control-file" onchange="UploadProductImages()" accept="image/*" id="ProductImgFile" multiple>
+                        </div>
+
+                    </div>
+                    <div class="row" id="ProductImgPartial">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-custom bg-gray" onclick="GoToTab('Main_Data')"><i class=""></i> @Homemade.UI.Resources.Homemade.Previous</button>
+                        <button class="btn btn-custom bg-info" onclick="GoToTab('Account_Data')"><i class=""></i> @Homemade.UI.Resources.Homemade.Next</button>
+                    </div>
+
+                </div>
+                <div class="tab-pane" id="Account_Data">
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <div class="text-right row">
+                                <div class="col-md-10 paddingleft-0">
+                                    <div class="form-group block-search push-5-r pull-right">
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="ion-search"></i></div>
+                                            <input type="text" class="form-control" id="DT_search" placeholder="@Homemade.UI.Resources.Homemade.EnterSearchKeywords">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2" onclick="ShowModal()">
+                                    <a class="btn btn-md btn-block addBtn btn-width100" onclick="ShowModal()" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.New">
+                                        <i class="ion-plus-round push-5-r"></i>
+                                        @Homemade.UI.Resources.Homemade.New
+                                    </a>
+                                </div>
+                                <div class="dt_buttons_wrap text-right"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <table id="tbl_Questions" class="table table-custom js-dataTable-buttons" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">@Homemade.UI.Resources.Homemade.SNumber</th>
+                                        <th class="text-center">@Homemade.UI.Resources.Homemade.Question</th>
+                                        <th class="text-center">@Homemade.UI.Resources.Homemade.Answer</th>
+                                        <th class="text-center">@Homemade.UI.Resources.Homemade.Actions</th>
+                                    </tr>
+                                </thead>
+
+                            </table>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-custom bg-gray" onclick="GoToTab('Store_Data')"><i class=""></i> @Homemade.UI.Resources.Homemade.Previous</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="_QuesionsModal" model="@(new Homemade.BLL.ViewModel.Vendor.ProductQuestionViewModel())" />
+@section Styles{
+
+    <!-- Data_Table Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" />
+
+    <!-- Select 2 Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2-bootstrap.min.css" />
+
+    <!-- Date_Picker Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/Hijiri-Plugin/css/bootstrap-datetimepicker.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+
+    <style>
+        .dataTables_filter {
+            display: none;
+        }
+    </style>
+}
+
+    @section Scripts{
+
+    <!-- Data_table Plugins -->
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+
+    <!-- Select 2 Scripts -->
+    <script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+
+    <!-- Date_picker Plugins -->
+    <script src="~/assets/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/Hijiri-Plugin/js/bootstrap-hijri-datetimepicker.js"></script>
+
+    <script src="~/assets/js/plugins/autonumeric/autoNumeric.min.js"></script>
+
+    <partial name="_Scripts" />
+    <partial name="_QuestionsScripts" />
+    <partial name="_QuesionsDataTable" />
+
+    <script>
+        $(".js-datepicker").keypress(function(e) {
+            e.preventDefault();
+        });
+        $('.js-datepicker').datepicker({
+            dateFormat: 'mm/dd/yyyy'
+        }).on('changeDate', function(ev) {
+            $(this).datepicker('hide');
+        });
+
+        $(document).ready(function() {
+            /*disable non active tabs*/
+            GetDepartments(@Model.DepartmentsID);
+            GetProductType(@Model.ProductTypeId);
+            GetProductOrder(@Model.ProductOrder);
+            GetProductQuantity(@Model.ProductQuantity);
+
+        @*GetKeyWords(@Model.KeyWords);*@
+                var vendorId = @VendorsID;
+            if (vendorId == "0") {
+                GetVendors(@Model.VendorsID);
+            }
+            readtableFiles($("#ProductID").val());
+            $("#ProductImgPartial").load('/Vendor/Product/ProductImgPartial?ProductID=' + $("#ProductID").val());
+            var ishidden = false;
+            if ("@Model.IsHidden" == "True") {
+                ishidden = true;
+            }
+            var IsHidden = $($('input[name=IsHidden][type=radio][value="' + ishidden + '"]')[0]);
+            IsHidden.prop('checked', true);
+            var isavailable = false;
+            if ("@Model.IsAvailable" == "True") {
+                isavailable = true;
+            }
+            var IsAvailable = $($('input[name=IsAvailable][type=radio][value="' + isavailable + '"]')[0]);
+            IsAvailable.prop('checked', true);
+            var isfixed = false;
+            if ("@Model.IsFixed" == "True") {
+                isfixed = true;
+            }
+            var IsFixed = $($('input[name=IsFixed][type=radio][value="' + isfixed + '"]')[0]);
+            IsFixed.prop('checked', true);
+
+            var isLimited = false;
+            if ("@Model.IsLimited" == "True") {
+                isLimited = true;
+            }
+            var IsLimited = $($('input[name=IsLimited][type=radio][value="' + isLimited + '"]')[0]);
+            IsLimited.prop('checked', true);
+
+            var MeasurementId = $($('input[name=MeasurementId][type=radio][value="' + @Model.MeasurementId + '"]')[0]);
+            MeasurementId.prop('checked', true);
+            ChangeLimit();
+        });
+
+    </script>
+}

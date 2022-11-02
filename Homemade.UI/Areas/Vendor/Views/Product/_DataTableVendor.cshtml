@@ -1,0 +1,175 @@
+﻿@inject Homemade.BLL.BLPermission blPermission
+@{
+    var IsPermissionView = ((blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Product, (int)Homemade.BLL.ActionEnum.View) == true)) ? 1 : 0;
+    var IsPermissionUpdate = ((blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Product, (int)Homemade.BLL.ActionEnum.Update) == true)) ? 1 : 0;
+    var IsPermissionDelete = ((blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Product, (int)Homemade.BLL.ActionEnum.Delete) == true)) ? 1 : 0;
+}
+<script>
+    var table;
+    $(document).ready(function() {
+        table = $('#tbl_Product').DataTable({
+            pageLength: 10,
+            pagijngType: "full_numbers",
+            serverSide: true,
+            processing: true,
+            lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+            sAjaxSource: '@Url.Action("LoadTable")?listVendorID=' + $("#ListVendorID").val(),
+            sServerMethod: "POST",
+            bPaginate: true,
+            paging: true,
+            bFilter: true,
+            bLengthChange: false,
+            columns: [
+                {
+                    "data": null,
+                    "sortable": false,
+                    render: function(data, type, row, meta) {
+                        return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label><img src=' + data.logo + ' class="img" width="100" height="100" /></label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<input type="hidden" value="' + data.productID + '"/><label class="arName">' + data.name + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label >' + data.departmentName + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label >' + data.vendorsName + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        var IsEnable = data.isAvailable == 1 ? "<span style='background: #ddf7e8;color: #3c763d;padding:8px;'>@Homemade.UI.Resources.Homemade.True</span>"
+                            : "<span style='background: #f9eae8;color:#c54736;padding:8px;'>@Homemade.UI.Resources.Homemade.False</span>";
+
+                        return '<label>' + IsEnable + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        var IsHidden = data.isHidden == 1 ? "<span style='background: #ddf7e8;color: #3c763d;padding:8px;'>@Homemade.UI.Resources.Homemade.True</span>"
+                            : "<span style='background: #f9eae8;color:#c54736;padding:8px;'>@Homemade.UI.Resources.Homemade.False</span>";
+
+                        return '<label>' + IsHidden + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        var IsFixed = data.isFixed == 1 ? "<span style='background: #ddf7e8;color: #3c763d;padding:8px;'>@Homemade.UI.Resources.Homemade.True</span>"
+                            : "<span style='background: #f9eae8;color:#c54736;padding:8px;'>@Homemade.UI.Resources.Homemade.False</span>";
+
+                        return '<label>' + IsFixed + '</label>';
+                    }
+                },
+                {
+
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        var databutton = '';
+                        var xtitle = data.isAvailable ? "@Homemade.UI.Resources.Homemade.NotAvailable" : "@Homemade.UI.Resources.Homemade.Available";
+                        var icon = data.isAvailable ? "fa fa-ban" : "fa fa-check";
+                        var xtitlehidden = data.isHidden ? "@Homemade.UI.Resources.Homemade.NotHidden" : "@Homemade.UI.Resources.Homemade.Hidden";
+                        var iconhidden = data.isHidden ? "fa fa-eye" : "fa fa-eye-slash";
+                        var xtitlefixed = data.isFixed ? "@Homemade.UI.Resources.Homemade.NotFixed" : "@Homemade.UI.Resources.Homemade.Fixed";
+                        var iconfixed = data.isFixed ? "fa fa-plus" : "fa fa-minus";
+                        if (@IsPermissionView == 1) {
+                            databutton += ` <a class="btn btn-xs btn-info" href="@Url.Action("Details")/${data.productGuid}" type="button" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Details">
+                                            <i class="fa fa-search"></i>
+                                        </a>`;
+                        }
+                        if (@IsPermissionUpdate == 1) {
+                            databutton += '<button class="btn btn-xs btn-warning" style="margin:4px" type="button" data-toggle="tooltip" onclick="ChangeStatue(this,2);" data-id="' + data.productID + '" title="' + xtitlehidden + '"><i class="' + iconhidden + '"></i></button>';
+                            databutton += '<button class="btn btn-xs btn-warning" style="margin:4px" type="button" data-toggle="tooltip" onclick="ChangeStatue(this,1);" data-id="' + data.productID + '" title="' + xtitlefixed + '"><i class="' + iconfixed + '"></i></button>';
+
+                            databutton += ` <a class="btn btn-xs btn-success" style="margin:0 5px" href="@Url.Action("Edit")/${data.productGuid}" type="button" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Update">
+                                            <i class="fa fa-edit"></i>
+                                        </a>`;
+                        }
+
+                        if (@IsPermissionDelete == 1) {
+                            databutton += '<a class="btn btn-xs btn-danger" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Delete" style="margin:4px"' +
+                                ' onclick="Delete(this)" data-id="' + data.productID + '" data-toggle="tooltip"><i class="fa fa-trash"></i></a>';
+                        }
+                        return databutton;
+                    }
+                }
+            ],
+            drawCallback: function(s) {
+                $('[data-toggle="tooltip"]').tooltip();
+            },
+            buttons: [
+    @*{
+                extend: "copy",
+                className: "btn btn-info btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Copy'
+                },*@{
+                    extend: "excelHtml5",
+                    autoFilter: true,
+                    sheetName: 'Exported data',
+                    className: "btn btn-success btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.Excel'
+                }, @*{
+                extend: "print",
+                className: "btn btn-warning btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Print'
+                },*@{
+                    extend: "pdfHtml5",
+                    download: 'open',
+                    className: "btn btn-info btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.PDF'
+                }],
+            "language": {
+                "search": "_INPUT_",
+                "searchPlaceholder": "Search",
+                "lengthMenu": "_MENU_",
+            }, dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+
+        });
+        table.buttons().container().appendTo('.dt_buttons_wrap');
+        if ($("#IsVendor").val() == "True") {
+            table.column(3).visible(false);
+        }
+    });
+    function readtable() {
+        table.ajax.url('/Vendor/product/LoadTable?name=' + $("#Name").val() + '&listDepartmentID=' + $("#ListDepartmentID").val()
+            + '&listKeyWordsID=' + $("#ListKeyWordsID").val()
+            + '&listVendorID=' + $("#ListVendorID").val()
+        );
+        setTimeout(function() {
+            if ($("#tbl_Product tbody tr").length > 0 && ($("#tbl_Product tbody tr td").hasClass("dataTables_empty") == false)) {
+                $("#DevAllProduct").show();
+            }
+            else {
+                $("#DevAllProduct").hide();
+            }
+        }, 2000);
+
+    }
+</script>

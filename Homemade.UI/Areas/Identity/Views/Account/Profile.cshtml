@@ -1,0 +1,396 @@
+﻿@using System.Linq
+@inject Homemade.BLL.Emp.BlEmployee BlEmployee
+@inject Homemade.BLL.General.BLUser blUser
+@model Homemade.BLL.ViewModel.Employees.ProfileViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    bool IsAr = Homemade.UI.InfraStructure.Utility.CurrentLanguageCode == "ar";
+    var UserType = blUser.GetUserInfo(User.GetUserIdInt()).UserType;
+}
+<section class="content">
+    <!-- User Header -->
+    <!--<div id="divProfileImage">
+        <partial name="_ProfileImage" model="Model" />
+    </div>-->
+    <!-- END User Header -->
+    <!-- Main Content -->
+
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <h5 class="remove-margin">@Homemade.UI.Resources.Homemade.MainData</h5>
+        </div>
+        <div class="block-content block-content-full">
+            <!-- User Header -->
+            <div id="divProfileImage">
+                <partial name="_ProfileImage" model="Model" />
+            </div>
+            <!-- END User Header -->
+            <div class="row">
+                <div class="col-md-12">
+                    <hr  style="border-top: 2px solid #eb580d;" />
+                </div>
+            </div>
+         
+            <partial name="_ShowProfile" model="Model" />
+            <hr style="border-top: 2px solid #eb580d;" />
+            <partial name="_ChangePassword" model="Model" />
+        </div>
+    </div>
+    <!-- END Main Content -->
+</section>
+
+@section Styles{
+    <!-- Select 2 Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2-bootstrap.min.css" />
+
+}
+
+@section Scripts{
+    <!-- Select 2 Scripts -->
+    <script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+
+    <style>
+        .select2-container {
+            width: 100% !important;
+        }
+    </style>
+    <script>
+        $(function () {
+            $('#divVerification').hide();
+                                let btnSavePassword = $("#btnSavePassword"),
+                btnSaveMainData = $("#btnSaveMainData"),
+                btnSaveBranchData = $("#btnSaveBranchData"),
+                divShowMainProfile = $("#btabs-static-home"),
+                antiToken = $('@Html.AntiForgeryToken()').val(),
+                fuProfilr = $("#fuProfilr")
+                                // Change Password
+                                btnSavePassword.click(function(e) {
+                                    e.preventDefault();
+                                    let frm = $($(this).closest('form'));
+                                    if (frm.valid()) {
+                                        swal({
+                                        title: "@Homemade.UI.Resources.Homemade.AreYouSureToSave",
+                            text: "",
+                            type: "info",
+                            showCancelButton: true,
+                            confirmButtonClass: "btn-info",
+                            confirmButtonText: "@Homemade.UI.Resources.Homemade.Yes",
+                            cancelButtonText: "@Homemade.UI.Resources.Homemade.No",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                                            },
+                        function(isConfirm) {
+                                            if (isConfirm) {
+                                                let mdl = new Object();
+                                                frm.find("input").each(function() {
+                                                    mdl[$(this).attr('name')] = $(this).val();
+                                                });
+
+                                $.post('/Identity/Account/ChangePassword',
+                                                    { 'mdl': mdl, '__RequestVerificationToken': antiToken },
+                                    function(res) {
+
+                                                    if (res.status == true) {
+                                                        swal(res.message, '', 'success');
+                                                        setTimeout(function() {swal.close()}, 2000);
+                                                        frm.trigger('reset');
+                                                    } else {
+                                                        swal(res.message, '', 'error');
+                                                    }
+                                                });
+                                            } else {
+                                                swal.close();
+                                            }
+                                        });
+                                    }
+                                });
+                                // Change MainData
+                                btnSaveMainData.click(function (e) {
+                                    e.preventDefault();
+                                    let frm = $($(this).closest('form'));
+                                    if (frm.valid()) {
+                                        swal({
+                                        title: "@Homemade.UI.Resources.Homemade.AreYouSureToSave",
+                            text: "",
+                            type: "info",
+                            showCancelButton: true,
+                            confirmButtonClass: "btn-info",
+                            confirmButtonText: "@Homemade.UI.Resources.Homemade.Yes",
+                            cancelButtonText: "@Homemade.UI.Resources.Homemade.No",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                                            },
+                        function (isConfirm) {
+                                            if (isConfirm) {
+
+                                                var frmData = new FormData();
+                                                frmData.append("model.VendorFirstName", $("#FirstNameAR").val());
+                                                frmData.append("model.VendorLastName", $("#FirstNameAR").val());
+
+
+                                                frm.find("input,select").each(function () {
+                                                    frmData.append('model.' + $(this).attr('name'), $(this).val());
+                                                });
+
+                                                frmData.append('__RequestVerificationToken', antiToken);
+
+                                $.ajax({
+                                                url: "@Url.Action("ChangeMainData")",
+                                    method: "post",
+                                    data: frmData,
+                                    contentType: false,
+                                    enctype: "multipart/form-data",
+                                    processData: false,
+                                    success: function (response) {
+
+                                                        if (response.status == true) {
+                                                            swal(response.message, '', 'success');
+                                                            setTimeout(function() {swal.close()}, 3000);
+
+                                                            try {
+                                                @*$.get('@Url.Action("ShowProfileImage")', {}, function (res) {
+                                                    divProfileImage.html(res);
+                                                });*@
+                                                $.get('@Url.Action("ShowProfile")', {}, function (res) {
+                                                    divShowMainProfile.html(res);
+                                                });
+                                            } catch (e) {
+
+                                            }
+                                        } else {
+                                            swal(response.message, '', 'error');
+                                        }
+                                    },
+                                    error: function (err) {
+                                        console.log(err);
+                                        console.log(err.responseText);
+                                    }
+                                });
+                            } else {
+                                swal.close();
+                            }
+                        });
+                }
+            });
+            // Change BranchData
+            $("form").submit(function(e) {
+   e.preventDefault();
+                let frm = $($(this).closest('form'));
+                if (frm.valid()) {
+                    swal({
+                            title: "@Homemade.UI.Resources.Homemade.AreYouSureToSave",
+                            text: "",
+                            type: "info",
+                            showCancelButton: true,
+                            confirmButtonClass: "btn-info",
+                            confirmButtonText: "@Homemade.UI.Resources.Homemade.Yes",
+                            cancelButtonText: "@Homemade.UI.Resources.Homemade.No",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        },
+                        function (isConfirm) {
+                            if (isConfirm) {
+
+                                var frmData = new FormData();
+                                /* frmData.append("mdl.staffID", staffID);*/
+
+                                frm.find("input,select").each(function () {
+                                    frmData.append('mdl.' + $(this).attr('name'), $(this).val());
+                                });
+
+                                frmData.append('__RequestVerificationToken', antiToken);
+
+                                $.ajax({
+                                    url: "@Url.Action("ChangeBranchData")",
+                                    method: "post",
+                                    data: frmData,
+                                    contentType: false,
+                                    enctype: "multipart/form-data",
+                                    processData: false,
+                                    success: function (response) {
+
+                                        if (response.status == true) {
+                                            swal(response.message, '', 'success');
+                                            setTimeout(function() {swal.close()}, 2000);
+
+                                            try {
+                                                $.get('@Url.Action("ShowProfile")', {}, function (res) {
+                                                    divShowMainProfile.html(res);
+                                                });
+                                            } catch (e) {
+
+                                            }
+                                        } else {
+                                            swal(response.message, '', 'error');
+                                        }
+                                    },
+                                    error: function (err) {
+                                        console.log(err);
+                                        console.log(err.responseText);
+                                    }
+                                });
+                            } else {
+                                swal.close();
+                            }
+                        });
+                }
+            });
+
+            $(fuProfilr.prev()).click(function () {
+                fuProfilr.click();
+            });
+             // change image
+            fuProfilr.change(function () {
+                if ($(this).val() != null && fuProfilr.val().trim() != '' && fuProfilr[0] != null && fuProfilr[0].files != null) {
+                    var isImage = fuProfilr[0].files[0].type.toLowerCase().includes('image');
+
+                    if (isImage == true) {
+                        swal({
+                            title: "@Homemade.UI.Resources.Homemade.AreYouSureToSave",
+                            text: "",
+                            type: "info",
+                            showCancelButton: true,
+                            confirmButtonClass: "btn-info",
+                            confirmButtonText: "@Homemade.UI.Resources.Homemade.Yes",
+                            cancelButtonText: "@Homemade.UI.Resources.Homemade.No",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        },
+                            function (isConfirm) {
+                                if (isConfirm) {
+                                    let frmData = new FormData();
+                                    frmData.append('__RequestVerificationToken', antiToken);
+                                   // frmData.append(fuProfilr[0].files[0].name, fuProfilr[0].files[0]);
+                                    frmData.append("fuProfilr", fuProfilr[0].files[0]);
+                                    frmData.append('Id', @Model.EntityEmpID);
+                                    $.ajax({
+                                        url: "@Url.Action("ChangeProfileImage")",
+                                        method: "post",
+                                        data: frmData,
+                                        contentType: false,
+                                        enctype: "multipart/form-data",
+                                        processData: false,
+                                        success: function (response) {
+                                            swal.close();
+                                            if (response.resultMessage.status == true) {
+                                                swal(response.resultMessage.message, '', 'success');
+                                                setTimeout(function() {swal.close()}, 2000);
+
+                                                $(fuProfilr.prev()).attr('src', 'https://cdn.made-home.com/Shared/Images/Clients/' + response.data);
+                                            } else {
+                                                swal(response.resultMessage.message, '', 'error');
+                                            }
+                                        },
+                                        error: function (err) {
+                                            console.log(err);
+                                            console.log(err.responseText);
+                                        }
+                                    });
+                                } else {
+                                    swal.close();
+                                    fuProfilr.val('');
+                                }
+                            });
+
+                    } else {
+                        swal('invalid Image', '', 'error')
+                    }
+                }
+            });
+        });
+        $(document).ready(function () {
+             if (@UserType == 1)
+                 {
+                     if (@Model.JobTypeId != 2)
+                     {
+                         GetEntityType(@Model.EntityTypeID);
+
+                     }
+            }
+            GetJobs(@Model.JobTypeId, @Model.JobsID);
+             });
+                         function GetEntityType(entityTypeID) {
+            $.ajax({
+                                 type: "POST",
+                url: '/Places/Entities/GetAllEntityType',
+                data: {},
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function (result) {
+                    $("#EntityTypeID").html('');
+                    $("#EntityTypeID").append('<option></option>');
+                                     for (var i = 0; i < result.length; i++) {
+                                         var item = result[i];
+                                         if (entityTypeID != undefined && entityTypeID > 0 && entityTypeID == item.entityTypeID) {
+                            $("#EntityTypeID").append('<option selected value="' + item.entityTypeID + '">' + item.entityTypeName + '</option>');
+                            $("#EntityTypeID").val(entityTypeID).trigger('change');
+                                         }
+                                         else
+                            $("#EntityTypeID").append('<option value="' + item.entityTypeID + '">' + item.entityTypeName + '</option>');
+                                     }
+                    $($("#EntityTypeID")).select2();
+                     },
+                error: function () {
+
+                     }
+                 });
+            $("#EntityTypeID").trigger('change');
+             }
+             function GetEntity(e, entityID) {
+                 var entityTypeID = $(e).val();
+            $.ajax({
+                     type: "POST",
+                url: '/Places/Entities/GetAllEntityByEntityType',
+                data: { 'entityTypeID': entityTypeID },
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function (result) {
+                    $("#EntityID").html('');
+                    $("#EntityID").append('<option></option>');
+                 for (var i = 0; i < result.length; i++) {
+                     var item = result[i];
+                     if (entityID != undefined && entityID > 0 && entityID == item.entityID) {
+                            $("#EntityID").append('<option selected value="' + item.entityID + '">' + item.entityName + '</option>');
+                            $("#EntityID").val(entityID).trigger('change');
+                     }
+                     else
+                            $("#EntityID").append('<option value="' + item.entityID + '">' + item.entityName + '</option>');
+
+                 }
+                    $($("#EntityID")).select2();
+             },
+                error: function () {
+
+             }
+            });
+        }
+        function GetJobs(jobTypeId, jobsID) {
+            $.ajax({
+                     type: "POST",
+                url: '/Setting/Jobs/GetAllJobsByJobType',
+                data: { 'JobTypeId': jobTypeId },
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function (result) {
+                    $("#JobsID").html('');
+                    $("#JobsID").append('<option></option>');
+                 for (var i = 0; i < result.length; i++) {
+                     var item = result[i];
+                     if (jobsID != undefined && jobsID > 0 && jobsID == item.jobsID) {
+                            $("#JobsID").append('<option selected value="' + item.jobsID + '">' + item.jobsName + '</option>');
+                            $("#JobsID").val(jobsID).trigger('change');
+                     }
+                     else
+                            $("#JobsID").append('<option value="' + item.jobsID + '">' + item.jobsName + '</option>');
+
+                 }
+                    $($("#JobsID")).select2();
+             },
+                error: function () {
+
+             }
+            });
+        }
+    </script>
+}

@@ -1,0 +1,130 @@
+﻿@model IEnumerable<Homemade.BLL.ViewModel.Driver.TotalBalanceViewModel>
+@{ 
+    int Counter = 1;
+}
+@Html.Hidden("RowCount",Model.Count())
+<div class="content">
+    <!-- Dynamic Table Full -->
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <h3>
+                @Homemade.UI.Resources.Homemade.Statment_Drivers
+            </h3>
+        </div>
+        <div class="block-content">
+            <div class="row">
+                <div class="col-sm-6 Dev-Print">
+                    <a href="javascript:void(0);" onclick="printDiv()" class="btn btn-info btn-icon">
+                        <span><i class="fa fa-print"></i> @Homemade.UI.Resources.Homemade.Print</span>
+                    </a>
+                    <button class="btn btn-info" type="button" onclick="DownloadExcel()"><span><i class="fa fa-file"></i> @Homemade.UI.Resources.Homemade.Excel</span></button>
+                </div>
+                <div class="col-sm-12">
+                    <div class="page" id="printDiv">
+                        <div class="subpage">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <b>@Homemade.UI.Resources.Homemade.Homemade_Company</b>
+                                    <br />
+                                    @Homemade.UI.Resources.Homemade.Date: @DateTime.UtcNow.AddHours(3).ToString("dd-MM-yy")
+                                    <br />
+                                    @Homemade.UI.Resources.Homemade.Time: @DateTime.UtcNow.AddHours(3).ToString("hh:mm tt")
+                                </div>
+                                <div class="col-sm-3 col-sm-offset-6">
+                                    <img src="/assets/homeMadeSite/img/logo.svg" height="60" />
+                                </div>
+                                <div class="col-sm-12">
+                                    <h3 class="text-center"><b>@Homemade.UI.Resources.Homemade.Driver_Balance_Report</b></h3>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table table-bordered col-sm-12">
+                                        <tbody>
+                                            <tr style="background-color:darkgray;">
+                                                <th class="text-center"><b>No#</b></th>
+                                                <th class="text-center"><b>@Homemade.UI.Resources.Homemade.Driver</b></th>
+                                                <th class="text-center"><b>@Homemade.UI.Resources.Homemade.Total_Credit</b></th>
+                                                <th class="text-center"><b>@Homemade.UI.Resources.Homemade.Total_Debit</b></th>
+                                                <th class="text-center"><b>@Homemade.UI.Resources.Homemade.Balance</b></th>
+                                            </tr>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td class="text-center">@Counter</td>
+                                                    <td class="text-center">@(Homemade.UI.InfraStructure.Utility.CurrentLanguageCode == "ar" ? item.DriverNameAr : item.DriverNameEn)</td>
+                                                    <td class="text-center">@String.Format("{0:0.00}", item.TotalCredit)</td>
+                                                    <td class="text-center">@String.Format("{0:0.00}", item.TotalDebit)</td>
+                                                    @if (item.TotalDebit > item.TotalCredit)
+                                                    {
+                                                        <td class="text-center" style="color:red">@String.Format("{0:0.00}", item.NetBalance)</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-center">@String.Format("{0:0.00}", item.NetBalance)</td>
+                                                    }
+                                                </tr>
+                                                Counter++;
+                                            }
+                                        </tbody>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="2" style="font-size:larger;font-weight:bolder;">@Homemade.UI.Resources.Homemade.Total</td>
+                                                <td class="text-center">@String.Format("{0:0.00}", Model.Sum(e => e.TotalCredit))</td>
+                                                <td class="text-center">@String.Format("{0:0.00}", Model.Sum(e => e.TotalDebit))</td>
+                                                @if (Model.Sum(e => e.TotalDebit) > Model.Sum(e => e.TotalCredit))
+                                                {
+                                                    <td class="text-center" style="color:red">@String.Format("{0:0.00}", Model.Sum(e => e.NetBalance))</td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="text-center">@String.Format("{0:0.00}", Model.Sum(e => e.NetBalance))</td>
+                                                }
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<link href="~/Content/Print.css" rel="stylesheet" />
+@section Scripts
+{
+    <script src="~/Scripts/App/Print.js"></script>
+}
+<script>
+     function DownloadExcel() {
+         if ($("#RowCount").val() > 0) {
+            swal({
+                title: '@Homemade.UI.Resources.Homemade.AreYouSureToExportExcel',
+                text: "",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: '@Homemade.UI.Resources.Homemade.Yes',
+                cancelButtonText: '@Homemade.UI.Resources.Homemade.No',
+                closeOnConfirm: true,
+                closeOnCancel: false
+            },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        ConfirmExcel();
+                    } else {
+                        swal.close();
+                    }
+                });
+        }
+        else {
+            swal("@Homemade.UI.Resources.Homemade.NoDataFound", "", "error");
+        }
+    }
+
+    function ConfirmExcel() {
+        window.location.href = '/Drivers/DriverBlance/ExportTotalBalance';
+    }
+</script>

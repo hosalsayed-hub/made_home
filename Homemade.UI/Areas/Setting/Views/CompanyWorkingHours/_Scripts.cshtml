@@ -1,0 +1,99 @@
+﻿<script>
+
+    var divMsgClass = $("#divMsgClass");
+    var lblMsg = $("#lblMsg");
+    var divMsgParent = $("#divMsgParent");
+
+    $("#btnSave").click(function() {
+        let frmCreate = $("#frmCreate");
+        if (frmCreate.valid()) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Add , "frmCreate.submit();"))
+            }
+    });
+
+    function formSuccess(data) {
+        divMsgParent.hide();
+        divMsgParent.slideUp();
+        divMsgParent.show();
+        if (data.status) {
+            divMsgClass.attr("class", "alert alert-success");
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false)
+                { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\"" })
+                lblMsg.html(data.message);
+        }
+        else {
+            divMsgClass.attr("class", "alert alert-danger");
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false)
+                { Title = "data.message" })
+                lblMsg.html(data.message);
+        }
+    }
+    function GetAllDaysWork(dayID) {
+        $.ajax({
+            type: "POST",
+            url: '/Vendor/Vendors/GetAllDayOfWeek',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $('#ListDaysWork').html('');
+                $('#ListDaysWork').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (dayID != undefined && dayID > 0 && dayID == item.dayID) {
+                        $('#ListDaysWork').append('<option selected value="' + item.dayID + '">' + item.dayName + '</option>');
+                        $('#ListDaysWork').val(dayID).trigger('change');
+                    }
+                    else {
+                        $('#ListDaysWork').append('<option value="' + item.dayID + '">' + item.dayName + '</option>');
+                    }
+
+                }
+                isPaused = false;
+            },
+            error: function() {
+                isPaused = false;
+            }
+        });
+    }
+    function GetAllDaysVac(dayID) {
+        $.ajax({
+            type: "POST",
+            url: '/Vendor/Vendors/GetAllDayOfWeek',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $('#ListDaysVac').html('');
+                $('#ListDaysVac').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (dayID != undefined && dayID > 0 && dayID == item.dayID) {
+                        $('#ListDaysVac').append('<option selected value="' + item.dayID + '">' + item.dayName + '</option>');
+                        $('#ListDaysVac').val(dayID).trigger('change');
+                    }
+                    else {
+                        $('#ListDaysVac').append('<option value="' + item.dayID + '">' + item.dayName + '</option>');
+                    }
+                }
+                isPaused = false;
+            },
+            error: function() {
+                isPaused = false;
+            }
+        });
+    }
+    function UpdateReadDaysVac(id) {
+        if ($('#ListDaysWork').val() != "" && $('#ListDaysWork').val() != null) {
+            if (id != 1) {
+                GetAllDaysVac();
+            }
+            for (const element of $('#ListDaysWork').val()) {
+                $('#ListDaysVac').find('option[value="' + element + '"]').remove();
+            }
+        }
+    }
+</script>
+

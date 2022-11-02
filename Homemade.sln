@@ -1,0 +1,79 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Homemade.UI", "Homemade.UI\Homemade.UI.csproj", "{6E279ACB-EC97-4F4D-B27E-7228BC23DD1B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Homemade.BLL", "Homemade.BLL\Homemade.BLL.csproj", "{350CA056-0ED0-46B2-832E-FC89508D2F6A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Homemade.Model", "Homemade.Model\Homemade.Model.csproj", "{DD938277-90D4-490D-B807-2BC70E0188C2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Homemade.DAL", "Homemade.DAL\Homemade.DAL.csproj", "{57FC3A21-D88D-41BC-B52C-842B2C261D13}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Homemade.DAL.Contract", "Homemade.DAL.Contract\Homemade.DAL.Contract.csproj", "{6319F679-32E7-46C9-BF30-EB6FBAF74BA2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Homemade.Api", "Homemade.Api\Homemade.Api.csproj", "{57CC628F-0D4D-4069-B230-4E862D93D001}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6E279ACB-EC97-4F4D-B27E-7228BC23DD1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E279ACB-EC97-4F4D-B27E-7228BC23DD1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E279ACB-EC97-4F4D-B27E-7228BC23DD1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E279ACB-EC97-4F4D-B27E-7228BC23DD1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{350CA056-0ED0-46B2-832E-FC89508D2F6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{350CA056-0ED0-46B2-832E-FC89508D2F6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{350CA056-0ED0-46B2-832E-FC89508D2F6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{350CA056-0ED0-46B2-832E-FC89508D2F6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD938277-90D4-490D-B807-2BC70E0188C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD938277-90D4-490D-B807-2BC70E0188C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD938277-90D4-490D-B807-2BC70E0188C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD938277-90D4-490D-B807-2BC70E0188C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57FC3A21-D88D-41BC-B52C-842B2C261D13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57FC3A21-D88D-41BC-B52C-842B2C261D13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57FC3A21-D88D-41BC-B52C-842B2C261D13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57FC3A21-D88D-41BC-B52C-842B2C261D13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6319F679-32E7-46C9-BF30-EB6FBAF74BA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6319F679-32E7-46C9-BF30-EB6FBAF74BA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6319F679-32E7-46C9-BF30-EB6FBAF74BA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6319F679-32E7-46C9-BF30-EB6FBAF74BA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57CC628F-0D4D-4069-B230-4E862D93D001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57CC628F-0D4D-4069-B230-4E862D93D001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57CC628F-0D4D-4069-B230-4E862D93D001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57CC628F-0D4D-4069-B230-4E862D93D001}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A910BFF9-00A8-4476-8E25-D568F5EC2F2F}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 7
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://devahmedsayed.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Homemade.BLL\\Homemade.BLL.csproj
+		SccProjectName1 = Homemade.BLL
+		SccLocalPath1 = Homemade.BLL
+		SccProjectUniqueName2 = Homemade.DAL.Contract\\Homemade.DAL.Contract.csproj
+		SccProjectName2 = Homemade.DAL.Contract
+		SccLocalPath2 = Homemade.DAL.Contract
+		SccProjectUniqueName3 = Homemade.DAL\\Homemade.DAL.csproj
+		SccProjectName3 = Homemade.DAL
+		SccLocalPath3 = Homemade.DAL
+		SccProjectUniqueName4 = Homemade.Model\\Homemade.Model.csproj
+		SccProjectName4 = Homemade.Model
+		SccLocalPath4 = Homemade.Model
+		SccProjectUniqueName5 = Homemade.UI\\Homemade.UI.csproj
+		SccProjectName5 = Homemade.UI
+		SccLocalPath5 = Homemade.UI
+		SccProjectUniqueName6 = Homemade.Api\\Homemade.Api.csproj
+		SccProjectName6 = Homemade.Api
+		SccLocalPath6 = Homemade.Api
+	EndGlobalSection
+EndGlobal

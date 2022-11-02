@@ -1,0 +1,975 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Agents" xml:space="preserve">
+    <value>وكلاء</value>
+  </data>
+  <data name="Agent_Add" xml:space="preserve">
+    <value>إضافة وكيل</value>
+  </data>
+  <data name="Agent_Report" xml:space="preserve">
+    <value>تقرير الوكلاء</value>
+  </data>
+  <data name="Agent_Reports" xml:space="preserve">
+    <value>تقارير الوكلاء</value>
+  </data>
+  <data name="Agent_Table" xml:space="preserve">
+    <value>قائمة الوكلاء</value>
+  </data>
+  <data name="Assign_Driver_Add" xml:space="preserve">
+    <value>إضافة تعيين كابتن</value>
+  </data>
+  <data name="Assign_Driver_Table" xml:space="preserve">
+    <value>تعيين كابتن</value>
+  </data>
+  <data name="Brand" xml:space="preserve">
+    <value>ماركة</value>
+  </data>
+  <data name="Cancel_Reason" xml:space="preserve">
+    <value>سبب الرفض</value>
+  </data>
+  <data name="Captain_Taxis" xml:space="preserve">
+    <value>كابتن و تاكسى</value>
+  </data>
+  <data name="Category_Fare" xml:space="preserve">
+    <value>حسابات الفروع</value>
+  </data>
+  <data name="Category_Fare_Add" xml:space="preserve">
+    <value>إضافة حسابات الفروع</value>
+  </data>
+  <data name="Category_Fare_Table" xml:space="preserve">
+    <value>حسابات الفروع</value>
+  </data>
+  <data name="Cities" xml:space="preserve">
+    <value>المدن</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>لون</value>
+  </data>
+  <data name="Company_Finances" xml:space="preserve">
+    <value>ماليات الشركة</value>
+  </data>
+  <data name="ContactUs" xml:space="preserve">
+    <value>التواصل معانا</value>
+  </data>
+  <data name="Countries" xml:space="preserve">
+    <value>الدول</value>
+  </data>
+  <data name="DashBoard" xml:space="preserve">
+    <value>الرئيسية</value>
+  </data>
+  <data name="Delivery_Setting" xml:space="preserve">
+    <value>إعدادت التوصيل</value>
+  </data>
+  <data name="Delivery_Type" xml:space="preserve">
+    <value>نوع التوصيل</value>
+  </data>
+  <data name="DriverInterval" xml:space="preserve">
+    <value>الفاصل الزمني للكابتن</value>
+  </data>
+  <data name="Drivers" xml:space="preserve">
+    <value>الكباتن</value>
+  </data>
+  <data name="Drivers_Help" xml:space="preserve">
+    <value>مساعدة الكباتن</value>
+  </data>
+  <data name="Driver_Balance" xml:space="preserve">
+    <value>ماليات الكباتن</value>
+  </data>
+  <data name="Driver_Report" xml:space="preserve">
+    <value>تقرير الكابتن</value>
+  </data>
+  <data name="Driver_Trip_Status" xml:space="preserve">
+    <value>حالة طلب الكابتن</value>
+  </data>
+  <data name="Finances_History" xml:space="preserve">
+    <value>سجل الماليات</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>مساعدة</value>
+  </data>
+  <data name="HelpQuestions" xml:space="preserve">
+    <value>اسئلة مساعدة</value>
+  </data>
+  <data name="Industy" xml:space="preserve">
+    <value>صناعة</value>
+  </data>
+  <data name="List_Captain_Taxis" xml:space="preserve">
+    <value>سجل الكباتن</value>
+  </data>
+  <data name="List_Category_Fare" xml:space="preserve">
+    <value>قائمة فئة الاجرة</value>
+  </data>
+  <data name="List_Driver_Balance" xml:space="preserve">
+    <value>قائمة رصيد الكابتن</value>
+  </data>
+  <data name="List_Operator" xml:space="preserve">
+    <value>قائمة المستخدمين</value>
+  </data>
+  <data name="List_Client_Balance" xml:space="preserve">
+    <value>قائمة رصيد العميل</value>
+  </data>
+  <data name="List_Promo_Code" xml:space="preserve">
+    <value>قائمة الكود الترويجى</value>
+  </data>
+  <data name="List_Voucher_Code" xml:space="preserve">
+    <value>قائمة القسيمة</value>
+  </data>
+  <data name="Model" xml:space="preserve">
+    <value>موديل</value>
+  </data>
+  <data name="Nationality" xml:space="preserve">
+    <value>الجنسية</value>
+  </data>
+  <data name="New_Captain_Taxis" xml:space="preserve">
+    <value>كابتن جديد</value>
+  </data>
+  <data name="New_Category_Fare" xml:space="preserve">
+    <value>إضافة حسابات فرع</value>
+  </data>
+  <data name="New_Driver_Balance" xml:space="preserve">
+    <value>إضافة رصيد</value>
+  </data>
+  <data name="New_Operator" xml:space="preserve">
+    <value>مستخدم جديد</value>
+  </data>
+  <data name="New_Client_Balance" xml:space="preserve">
+    <value>إضافة رصيد</value>
+  </data>
+  <data name="New_Promo_Code" xml:space="preserve">
+    <value>إضافة كود ترويجى</value>
+  </data>
+  <data name="New_Voucher_Code" xml:space="preserve">
+    <value>إضافة قسيمة</value>
+  </data>
+  <data name="Operators" xml:space="preserve">
+    <value>مستخدمين</value>
+  </data>
+  <data name="Operators_Add" xml:space="preserve">
+    <value>إضافة مستخدم</value>
+  </data>
+  <data name="Operators_Table" xml:space="preserve">
+    <value>قائمة المستخدمين</value>
+  </data>
+  <data name="Clients" xml:space="preserve">
+    <value>العملاء</value>
+  </data>
+  <data name="Clients_Table" xml:space="preserve">
+    <value>سجل العملاء</value>
+  </data>
+  <data name="Client_Balance" xml:space="preserve">
+    <value>رصيد العميل</value>
+  </data>
+  <data name="Client_Balance_Add" xml:space="preserve">
+    <value>إضافة رصيد العميل</value>
+  </data>
+  <data name="Permissions" xml:space="preserve">
+    <value>الصلاحيات</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>منصب</value>
+  </data>
+  <data name="Promo_Code" xml:space="preserve">
+    <value>الكود الترويجي</value>
+  </data>
+  <data name="Promo_Code_Add" xml:space="preserve">
+    <value>إضافة كود ترويجى</value>
+  </data>
+  <data name="Promo_Code_Table" xml:space="preserve">
+    <value>قائمة الكود الترويجي</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>التقارير</value>
+  </data>
+  <data name="Role_Permissions" xml:space="preserve">
+    <value>صلاحيات المنصب</value>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>الإعدادات</value>
+  </data>
+  <data name="Support" xml:space="preserve">
+    <value>الدعم</value>
+  </data>
+  <data name="Taxis" xml:space="preserve">
+    <value>تاكسى</value>
+  </data>
+  <data name="Taxi_Report" xml:space="preserve">
+    <value>تقرير التاكسى</value>
+  </data>
+  <data name="Transaction_Type" xml:space="preserve">
+    <value>نوع المعاملة</value>
+  </data>
+  <data name="Trips" xml:space="preserve">
+    <value>طلبات</value>
+  </data>
+  <data name="Trip_Finanical" xml:space="preserve">
+    <value>ماليات الطلب</value>
+  </data>
+  <data name="Trip_History" xml:space="preserve">
+    <value>سجل الطلبات</value>
+  </data>
+  <data name="Trip_Promo" xml:space="preserve">
+    <value>اكواد الطلب</value>
+  </data>
+  <data name="Trip_Status" xml:space="preserve">
+    <value>حالة الطلب</value>
+  </data>
+  <data name="Users_In_Role" xml:space="preserve">
+    <value>صلاحية المستخدم</value>
+  </data>
+  <data name="Voucher_Add" xml:space="preserve">
+    <value>اضافة قسيمة</value>
+  </data>
+  <data name="Voucher_Code" xml:space="preserve">
+    <value>كود القسيمة</value>
+  </data>
+  <data name="Voucher_Driver" xml:space="preserve">
+    <value>قسائم الكابتن </value>
+  </data>
+  <data name="Voucher_Table" xml:space="preserve">
+    <value>القسيمة</value>
+  </data>
+  <data name="Work_Type" xml:space="preserve">
+    <value>نوع العمل</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>سنة</value>
+  </data>
+  <data name="Staff" xml:space="preserve">
+    <value>الموظفين</value>
+  </data>
+  <data name="Branchs" xml:space="preserve">
+    <value>الفروع</value>
+  </data>
+  <data name="Active_Trip" xml:space="preserve">
+    <value>طلبات نشطة</value>
+  </data>
+  <data name="Requests" xml:space="preserve">
+    <value>الطلبات</value>
+  </data>
+  <data name="Finances" xml:space="preserve">
+    <value>الماليات</value>
+  </data>
+  <data name="New_Request" xml:space="preserve">
+    <value>طلب جديد</value>
+  </data>
+  <data name="Invoice" xml:space="preserve">
+    <value>فاتورة</value>
+  </data>
+  <data name="Delivery_Invoice" xml:space="preserve">
+    <value>فواتير التوصيل</value>
+  </data>
+  <data name="Generate_Invoice" xml:space="preserve">
+    <value>فاتورة جديدة</value>
+  </data>
+  <data name="Invoice_Report" xml:space="preserve">
+    <value>فواتير بانتظار التحويل</value>
+  </data>
+  <data name="Pending_Action" xml:space="preserve">
+    <value>انتظار</value>
+  </data>
+  <data name="Collect_Invoice" xml:space="preserve">
+    <value>تحويل المستحقات</value>
+  </data>
+  <data name="List_Collected" xml:space="preserve">
+    <value>الفواتير المحولة</value>
+  </data>
+  <data name="List_Transfer" xml:space="preserve">
+    <value>فواتير تم تحويلها</value>
+  </data>
+  <data name="Pending_Invoice" xml:space="preserve">
+    <value>انتظار الفاتورة</value>
+  </data>
+  <data name="Not_Found" xml:space="preserve">
+    <value>طلبات لم تقبل</value>
+  </data>
+  <data name="Receivers" xml:space="preserve">
+    <value>المستلمين</value>
+  </data>
+  <data name="New_Client" xml:space="preserve">
+    <value>عميل جديد</value>
+  </data>
+  <data name="Reward" xml:space="preserve">
+    <value>مكافئة</value>
+  </data>
+  <data name="List_Reward" xml:space="preserve">
+    <value>قائمة المكافئات</value>
+  </data>
+  <data name="New_Reward" xml:space="preserve">
+    <value>مكافئة جديدة</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>شركة</value>
+  </data>
+  <data name="Operations" xml:space="preserve">
+    <value>مستخدمين</value>
+  </data>
+  <data name="Company_Support" xml:space="preserve">
+    <value>دعم الشركة</value>
+  </data>
+  <data name="My_Ticket" xml:space="preserve">
+    <value>سجل التذاكر</value>
+  </data>
+  <data name="Sent_Ticket" xml:space="preserve">
+    <value>تذكرة جديدة</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>المنطقة</value>
+  </data>
+  <data name="Become_a_Captain" xml:space="preserve">
+    <value>كن كابتن</value>
+  </data>
+  <data name="Become_a_Partner" xml:space="preserve">
+    <value>كن شريكا</value>
+  </data>
+  <data name="Contact_us" xml:space="preserve">
+    <value>اتصل بنا</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>الرئيسية</value>
+  </data>
+  <data name="Log_in" xml:space="preserve">
+    <value>تسجيل دخول</value>
+  </data>
+  <data name="Services" xml:space="preserve">
+    <value>خدمتنا</value>
+  </data>
+  <data name="Track" xml:space="preserve">
+    <value>تتبع</value>
+  </data>
+  <data name="OperationsNotFound" xml:space="preserve">
+    <value>العمليات</value>
+  </data>
+  <data name="Auto_Verify" xml:space="preserve">
+    <value>تحقق تلقائي</value>
+  </data>
+  <data name="Companies" xml:space="preserve">
+    <value>شركات</value>
+  </data>
+  <data name="Active_Requests" xml:space="preserve">
+    <value>الطلبات النشطة</value>
+  </data>
+  <data name="Add_New_Branchs" xml:space="preserve">
+    <value>إضافة فروع جديدة</value>
+  </data>
+  <data name="Add_New_Staff" xml:space="preserve">
+    <value>إضافة  موظف جديد</value>
+  </data>
+  <data name="Balances" xml:space="preserve">
+    <value>الأرصدة</value>
+  </data>
+  <data name="Branchs_History" xml:space="preserve">
+    <value>سجل الفروع</value>
+  </data>
+  <data name="Cancel_Requests" xml:space="preserve">
+    <value>طلبات ملغيه</value>
+  </data>
+  <data name="Items" xml:space="preserve">
+    <value>الأصناف</value>
+  </data>
+  <data name="Main_Category" xml:space="preserve">
+    <value>التصنيفات الرئيسية</value>
+  </data>
+  <data name="New_Ticket" xml:space="preserve">
+    <value>تذكرة جديدة</value>
+  </data>
+  <data name="Pending_Requests" xml:space="preserve">
+    <value>الطلبات المعلقة</value>
+  </data>
+  <data name="Requests_History" xml:space="preserve">
+    <value>ارشيف الطلبات</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>المناصب</value>
+  </data>
+  <data name="Schedule_Requests" xml:space="preserve">
+    <value>طلبات مجدولة</value>
+  </data>
+  <data name="staffs_History" xml:space="preserve">
+    <value>سجل الموظفين</value>
+  </data>
+  <data name="Staff_Permissions" xml:space="preserve">
+    <value>صلاحيات المستخدم</value>
+  </data>
+  <data name="Sub_Category" xml:space="preserve">
+    <value>الفئات الرئيسية</value>
+  </data>
+  <data name="Tickets" xml:space="preserve">
+    <value>سجل التذاكر</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>العملاء</value>
+  </data>
+  <data name="Client_Support" xml:space="preserve">
+    <value>دعم العملاء</value>
+  </data>
+  <data name="PortalPaid_History" xml:space="preserve">
+    <value>الدفع من بوابة لوجى</value>
+  </data>
+  <data name="Delivered_History" xml:space="preserve">
+    <value>الطلبات الموصلة</value>
+  </data>
+  <data name="Staff_Roles" xml:space="preserve">
+    <value>مناصب الفروع</value>
+  </data>
+  <data name="Delivered_History_2" xml:space="preserve">
+    <value>تم التوصيل</value>
+  </data>
+  <data name="Pending_Invoices" xml:space="preserve">
+    <value>طلبات معلقة</value>
+  </data>
+  <data name="New_Requests" xml:space="preserve">
+    <value>طلبات جديدة</value>
+  </data>
+  <data name="Rejected_Requests" xml:space="preserve">
+    <value>طلبات مرفوضة</value>
+  </data>
+  <data name="Waiting_Activation" xml:space="preserve">
+    <value>طلبات تمت مراجعتها</value>
+  </data>
+  <data name="Captains" xml:space="preserve">
+    <value>الكباتن</value>
+  </data>
+  <data name="Captain_Reg" xml:space="preserve">
+    <value>طلبات تسجيل الكباتن</value>
+  </data>
+  <data name="Clients_Reg" xml:space="preserve">
+    <value>طلبات تسجيل المتاجر</value>
+  </data>
+  <data name="Companies_List" xml:space="preserve">
+    <value>سجل الشركات</value>
+  </data>
+  <data name="UnderScrutiny" xml:space="preserve">
+    <value>طلبات تحت المراجعة</value>
+  </data>
+  <data name="Company_Reg" xml:space="preserve">
+    <value>طلبات تسجيل الشركات</value>
+  </data>
+  <data name="About_us" xml:space="preserve">
+    <value>عن الشركة</value>
+  </data>
+  <data name="Devices_Setting" xml:space="preserve">
+    <value>اعدادات الاجهزة</value>
+  </data>
+  <data name="General_Setting" xml:space="preserve">
+    <value>الاعدادات العامة</value>
+  </data>
+  <data name="Jobs" xml:space="preserve">
+    <value>الوظائف</value>
+  </data>
+  <data name="Entities" xml:space="preserve">
+    <value>المستشفيات</value>
+  </data>
+  <data name="List_Entities" xml:space="preserve">
+    <value>قائمة المستشفيات</value>
+  </data>
+  <data name="New_Entity" xml:space="preserve">
+    <value>إضافة مستشفى</value>
+  </data>
+  <data name="Departments" xml:space="preserve">
+    <value>الاقسام</value>
+  </data>
+  <data name="EntitiesGroup" xml:space="preserve">
+    <value>المجموعات</value>
+  </data>
+  <data name="Patient" xml:space="preserve">
+    <value>المريض</value>
+  </data>
+  <data name="List_Patient" xml:space="preserve">
+    <value>قائمة المرضى</value>
+  </data>
+  <data name="New_Patient" xml:space="preserve">
+    <value>إضافة مريض</value>
+  </data>
+  <data name="Patients" xml:space="preserve">
+    <value>المرضى</value>
+  </data>
+  <data name="Add_Doctor" xml:space="preserve">
+    <value>طبيب جديد</value>
+  </data>
+  <data name="Add_Employee" xml:space="preserve">
+    <value>موظف جديد</value>
+  </data>
+  <data name="Doctors" xml:space="preserve">
+    <value>الاطباء</value>
+  </data>
+  <data name="Medical_Administration" xml:space="preserve">
+    <value>الإدارة الطبية</value>
+  </data>
+  <data name="System_Administrators" xml:space="preserve">
+    <value>مسؤولي النظام</value>
+  </data>
+  <data name="List_Doctors" xml:space="preserve">
+    <value>سجل الأطباء</value>
+  </data>
+  <data name="List_Employees" xml:space="preserve">
+    <value>سجل الموظفين</value>
+  </data>
+  <data name="Appointments" xml:space="preserve">
+    <value>تعيينات</value>
+  </data>
+  <data name="Add_Appointment" xml:space="preserve">
+    <value>حجز موعد</value>
+  </data>
+  <data name="View_Appointment" xml:space="preserve">
+    <value>عرض المواعيد</value>
+  </data>
+  <data name="Edit_Appointment" xml:space="preserve">
+    <value>تعديل موعد</value>
+  </data>
+  <data name="Case_List" xml:space="preserve">
+    <value>الكشوفات</value>
+  </data>
+  <data name="Under_Observation" xml:space="preserve">
+    <value>تحت الملاحظة</value>
+  </data>
+  <data name="All_Diagnosis" xml:space="preserve">
+    <value>كل التشخيصات</value>
+  </data>
+  <data name="Diagnosis_List" xml:space="preserve">
+    <value>التشاخيص</value>
+  </data>
+  <data name="Diseases" xml:space="preserve">
+    <value>الأمراض</value>
+  </data>
+  <data name="Medicines" xml:space="preserve">
+    <value>الأدوية</value>
+  </data>
+  <data name="Diseases_List" xml:space="preserve">
+    <value>قائمة الأمراض</value>
+  </data>
+  <data name="Medicines_List" xml:space="preserve">
+    <value>قائمة الأدوية</value>
+  </data>
+  <data name="FilesTypes" xml:space="preserve">
+    <value>انواع الملفات</value>
+  </data>
+  <data name="Laboratory" xml:space="preserve">
+    <value>المختبر</value>
+  </data>
+  <data name="Pharmacy" xml:space="preserve">
+    <value>الصيدلية</value>
+  </data>
+  <data name="Role_Configration" xml:space="preserve">
+    <value>صلاحيات الأدوار</value>
+  </data>
+  <data name="EntityType" xml:space="preserve">
+    <value>انواع المستشفيات</value>
+  </data>
+  <data name="Visits" xml:space="preserve">
+    <value>الزيارات</value>
+  </data>
+  <data name="Captain" xml:space="preserve">
+    <value>الكباتن</value>
+  </data>
+  <data name="Orders_Delivered" xml:space="preserve">
+    <value>طلبات تم التوصيل</value>
+  </data>
+  <data name="Pending_Delivery_Orders" xml:space="preserve">
+    <value>طلبات قيد التوصيل</value>
+  </data>
+  <data name="Processing_Requests" xml:space="preserve">
+    <value>طلبات قيد التجهيز</value>
+  </data>
+  <data name="View_Appointments" xml:space="preserve">
+    <value>عرض المواعيد</value>
+  </data>
+  <data name="Doctor_Managment" xml:space="preserve">
+    <value>ادارة الطبيب</value>
+  </data>
+  <data name="Genetic_Profile" xml:space="preserve">
+    <value>الملف الوراثي</value>
+  </data>
+  <data name="Groups" xml:space="preserve">
+    <value>المجموعات</value>
+  </data>
+  <data name="High_Risk" xml:space="preserve">
+    <value>الأعلى خطورة</value>
+  </data>
+  <data name="Hospital_Managment" xml:space="preserve">
+    <value>ادارة المستشفي</value>
+  </data>
+  <data name="Medical_Managment" xml:space="preserve">
+    <value>الادارة الطبية</value>
+  </data>
+  <data name="Metal_Map" xml:space="preserve">
+    <value>خريطة المعادن</value>
+  </data>
+  <data name="Patient_Managment" xml:space="preserve">
+    <value>ادارة المريض</value>
+  </data>
+  <data name="System_Admin" xml:space="preserve">
+    <value>مسئول النظام</value>
+  </data>
+  <data name="System_Managment" xml:space="preserve">
+    <value>ادارة النظام</value>
+  </data>
+  <data name="ConfigrationCompany" xml:space="preserve">
+    <value>اعدادت الشركه</value>
+  </data>
+  <data name="Banks" xml:space="preserve">
+    <value>البنوك</value>
+  </data>
+  <data name="Activities" xml:space="preserve">
+    <value>الأنشطة</value>
+  </data>
+  <data name="PaymentWays" xml:space="preserve">
+    <value>طرق الدفع</value>
+  </data>
+  <data name="Blocks" xml:space="preserve">
+    <value>الأحياء</value>
+  </data>
+  <data name="Vendors" xml:space="preserve">
+    <value>المتاجر</value>
+  </data>
+  <data name="PaymentConfiguration" xml:space="preserve">
+    <value>اعدادت الدفع</value>
+  </data>
+  <data name="Banar" xml:space="preserve">
+    <value>البنرات</value>
+  </data>
+  <data name="Sliders" xml:space="preserve">
+    <value>البنرات</value>
+  </data>
+  <data name="Packages" xml:space="preserve">
+    <value>باقات التجار</value>
+  </data>
+  <data name="PaymentsStatus" xml:space="preserve">
+    <value>حالات الدفع</value>
+  </data>
+  <data name="CustomersDetails" xml:space="preserve">
+    <value>تفاصيل العملاء</value>
+  </data>
+  <data name="Inquiries" xml:space="preserve">
+    <value>استفسارات الموقع</value>
+  </data>
+  <data name="Add_New_Vendor" xml:space="preserve">
+    <value>إضافة متجر</value>
+  </data>
+  <data name="List_Vendors" xml:space="preserve">
+    <value>المتاجر</value>
+  </data>
+  <data name="Service_Providers" xml:space="preserve">
+    <value>مزودي الخدمة</value>
+  </data>
+  <data name="Add_New_Product" xml:space="preserve">
+    <value>إضافة منتج جديد</value>
+  </data>
+  <data name="Product" xml:space="preserve">
+    <value>المنتجات</value>
+  </data>
+  <data name="MainPages" xml:space="preserve">
+    <value>صفحات الموقع</value>
+  </data>
+  <data name="MainPageDetails" xml:space="preserve">
+    <value>تفاصيل الصفحة الرئيسية</value>
+  </data>
+  <data name="List_Products" xml:space="preserve">
+    <value>قائمة المنتجات</value>
+  </data>
+  <data name="New_Product" xml:space="preserve">
+    <value>منتج جديد</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>المنتجات</value>
+  </data>
+  <data name="AddressTypes" xml:space="preserve">
+    <value>أنواع العناوين</value>
+  </data>
+  <data name="KeyWords" xml:space="preserve">
+    <value>الكلمات المفتاحية</value>
+  </data>
+  <data name="FavouriteProducts" xml:space="preserve">
+    <value>المنتجات المفضلة</value>
+  </data>
+  <data name="Locations" xml:space="preserve">
+    <value>العناوين</value>
+  </data>
+  <data name="ShippingCompany" xml:space="preserve">
+    <value>شركات الشحن</value>
+  </data>
+  <data name="Employees" xml:space="preserve">
+    <value>موظفين</value>
+  </data>
+  <data name="Orders" xml:space="preserve">
+    <value>الطلبات</value>
+  </data>
+  <data name="Add_New_Employee" xml:space="preserve">
+    <value>إضافة موظف جديد</value>
+  </data>
+  <data name="AddShippingCompany" xml:space="preserve">
+    <value>اضافة شركة شحن</value>
+  </data>
+  <data name="ShippingCompanies" xml:space="preserve">
+    <value>شركات الشحن</value>
+  </data>
+  <data name="AddBranches" xml:space="preserve">
+    <value>اضافة فروع</value>
+  </data>
+  <data name="Add_Admin" xml:space="preserve">
+    <value>اضافة ادمن</value>
+  </data>
+  <data name="List_Admins" xml:space="preserve">
+    <value>قائمة الادمن</value>
+  </data>
+  <data name="System_Employees" xml:space="preserve">
+    <value>موظفين النظام</value>
+  </data>
+  <data name="AcceptedOrders" xml:space="preserve">
+    <value>طلبات مقبولة</value>
+  </data>
+  <data name="Being_DeliveredOrders" xml:space="preserve">
+    <value>طلبات مع الكابتن</value>
+  </data>
+  <data name="Being_ProcessedOrders" xml:space="preserve">
+    <value>طلبات جاري التجهيز</value>
+  </data>
+  <data name="CanceledOrders" xml:space="preserve">
+    <value>طلبات ملغيه</value>
+  </data>
+  <data name="CreatedOrders" xml:space="preserve">
+    <value>طلبات جديدة</value>
+  </data>
+  <data name="DeliveredOrders" xml:space="preserve">
+    <value>طلبات تم توصيلها</value>
+  </data>
+  <data name="ShippingOrders" xml:space="preserve">
+    <value>طلبات بإنتظار التسليم</value>
+  </data>
+  <data name="VacHistory" xml:space="preserve">
+    <value>الاجازات</value>
+  </data>
+  <data name="EnbaleHistory" xml:space="preserve">
+    <value>سجل الاشتراكات</value>
+  </data>
+  <data name="List_a_Vendors" xml:space="preserve">
+    <value>قائمة المتاجر </value>
+  </data>
+  <data name="Mangment" xml:space="preserve">
+    <value>الإدارة</value>
+  </data>
+  <data name="Add_New_Vend" xml:space="preserve">
+    <value>إضافة متجر - أسرة منتجة</value>
+  </data>
+  <data name="List_Captain_Active" xml:space="preserve">
+    <value>الكباتن المفعلين</value>
+  </data>
+  <data name="Send_Message" xml:space="preserve">
+    <value>ارسال رسالة</value>
+  </data>
+  <data name="Certified_Captain" xml:space="preserve">
+    <value>الكابتن المعتمدين</value>
+  </data>
+  <data name="CitiesCovered" xml:space="preserve">
+    <value>المدن المغطاه</value>
+  </data>
+  <data name="AssignOrder" xml:space="preserve">
+    <value>توزيع الطلبات</value>
+  </data>
+  <data name="CaptainZone" xml:space="preserve">
+    <value>مناطق الكابتن</value>
+  </data>
+  <data name="TrackingOrders" xml:space="preserve">
+    <value>تتبع الطلبات</value>
+  </data>
+  <data name="Edit_Data" xml:space="preserve">
+    <value>تعديل البيانات</value>
+  </data>
+  <data name="New_Captain" xml:space="preserve">
+    <value>كابتن جديد</value>
+  </data>
+  <data name="Converted" xml:space="preserve">
+    <value>تم التحويل</value>
+  </data>
+  <data name="Invoices" xml:space="preserve">
+    <value>الفواتير</value>
+  </data>
+  <data name="Pending_Transfer" xml:space="preserve">
+    <value>انتظار التحويل</value>
+  </data>
+  <data name="Reports_Inquiries" xml:space="preserve">
+    <value>تقارير واستعلامات</value>
+  </data>
+  <data name="Questions" xml:space="preserve">
+    <value>الاسئلة</value>
+  </data>
+  <data name="Add_Blocks" xml:space="preserve">
+    <value>اضافة مناطق</value>
+  </data>
+  <data name="Assign_Captains" xml:space="preserve">
+    <value>توزيع الكابتن</value>
+  </data>
+  <data name="CaptainBlocks" xml:space="preserve">
+    <value>احياء الكابتن</value>
+  </data>
+  <data name="List_Customers" xml:space="preserve">
+    <value>سجل العملاء</value>
+  </data>
+  <data name="Pending_Approve" xml:space="preserve">
+    <value>انتظار الاعتماد</value>
+  </data>
+  <data name="Processes" xml:space="preserve">
+    <value>العمليات</value>
+  </data>
+  <data name="Subscriptions" xml:space="preserve">
+    <value>الاشتراكات</value>
+  </data>
+  <data name="Update_Assigns" xml:space="preserve">
+    <value>تعديل التوزيعات</value>
+  </data>
+  <data name="Update_Blocks" xml:space="preserve">
+    <value>تعديل المناطق</value>
+  </data>
+  <data name="Orders_History" xml:space="preserve">
+    <value>سجل الطلبات</value>
+  </data>
+  <data name="Rate" xml:space="preserve">
+    <value>التقييم</value>
+  </data>
+  <data name="Schedule_Orders" xml:space="preserve">
+    <value>الطلبات المجدولة</value>
+  </data>
+  <data name="Questions_Ratings" xml:space="preserve">
+    <value>الاسئلة والتقييمات</value>
+  </data>
+  <data name="Ratings" xml:space="preserve">
+    <value>التقييمات</value>
+  </data>
+  <data name="Increase_Orders" xml:space="preserve">
+    <value>طلبات الزيادة</value>
+  </data>
+  <data name="DriverSupport" xml:space="preserve">
+    <value>استفسارات الكابتن</value>
+  </data>
+  <data name="Subscriptions_Email" xml:space="preserve">
+    <value>بريد الاشتراكات</value>
+  </data>
+  <data name="PaymentReports" xml:space="preserve">
+    <value>تقرير المبيعات</value>
+  </data>
+  <data name="Company_Working_Hours" xml:space="preserve">
+    <value>اوقات عمل الشركة</value>
+  </data>
+  <data name="Customers_Balance" xml:space="preserve">
+    <value>رصيد العملاء</value>
+  </data>
+  <data name="Favourite_Products" xml:space="preserve">
+    <value>المنتجات المفضلة</value>
+  </data>
+</root>

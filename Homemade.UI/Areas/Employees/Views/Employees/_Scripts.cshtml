@@ -1,0 +1,355 @@
+﻿<script>
+    
+    function Delete(e) {
+       @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Delete , "ConfirmDelete(e)"))
+    }
+
+
+    function ConfirmDelete(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete")',
+            data: {
+                'id': id
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                var msg = result.message;
+
+                if (result.resultType == 'success') {
+                     @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                   Title = "\"" + Homemade.UI.Resources.Homemade.SuccessDeleteMessage + "\""})
+                    $('#tbl_Employees').DataTable().ajax.reload();
+                }
+                else {
+                     @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+                }
+            }
+        });
+    }
+
+    function GetRegions(regionID) {
+        $.ajax({
+                type: "POST",
+                url: '/Setting/Region/GetAllRegionBySACountry',
+                data: { },
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function (result) {
+                    $("#RegionID").html('');
+                    $("#RegionID").append('<option></option>');
+                    for (var i = 0; i < result.length; i++) {
+                        var item = result[i];
+                        if (regionID != undefined && regionID > 0 && regionID == item.regionID) {
+                            $("#RegionID").append('<option selected value="' + item.regionID + '">' + item.regionName + '</option>');
+                            $("#RegionID").val(regionID).trigger('change');
+                        }
+                        else
+                            $("#RegionID").append('<option value="' + item.regionID + '">' + item.regionName + '</option>');
+                    }
+                    $($("#RegionID")).select2();
+                },
+                error: function () {
+
+                }
+            });
+    }
+    function GetCitys(e, cityID) {
+        var regionID = $(e).val();
+        $($("#CityID")).prop("disabled", false);
+        if (regionID != '' || regionID != undefined) {
+            $.ajax({
+                type: "POST",
+                url: '/Setting/City/GetAllCityByRegion',
+                data: { 'regionID': regionID },
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function (result) {
+                    $("#CityID").html('');
+                    $("#CityID").append('<option></option>');
+                    for (var i = 0; i < result.length; i++) {
+                        var item = result[i];
+                        if (cityID != undefined && cityID > 0 && cityID == item.cityID) {
+                            $("#CityID").append('<option selected value="' + item.cityID + '">' + item.cityName + '</option>');
+                            $("#CityID").val(cityID).trigger('change');
+                        }
+                        else
+                            $("#CityID").append('<option value="' + item.cityID + '">' + item.cityName + '</option>');
+
+                    }
+                    $($("#CityID")).select2();
+                },
+                error: function () {
+
+                }
+            });
+        }
+    }
+    function ChangeStatue(e) {
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.ChangeStaute , "ConfirmStatue(e)"))
+    }
+    function ConfirmStatue(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeStatue")',
+            data: {
+                'id': id
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                if (result.resultType == 'success') {
+                    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                   Title = "result.message"})
+                    $('#tbl_Employees').DataTable().ajax.reload();
+                }
+                else {
+                    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "result.message" })
+                }
+
+
+            }
+        });
+    }
+
+    function ConvertToBase64(e) {
+        var fileUpload = $(e);
+        var pID = '#' + fileUpload.attr('id').replace('fup', '');
+        // console.log(pID);
+
+
+        var FR = new FileReader();
+
+        FR.addEventListener("load", function (e) {
+            $("#Photo").val(e.target.result.replace(/^data:.+;base64,/, ''));
+        }, false);
+
+        FR.readAsDataURL($(fileUpload)[0].files[0]);
+
+    }
+    var divMsgClass = $("#divMsgClass");
+    var lblMsg = $("#lblMsg");
+    var divMsgParent = $("#divMsgParent");
+
+    $("#btnSave").click(function (e) {
+        e.preventDefault();
+        let frmCreate = $("#frmCreate");
+        if (frmCreate.valid()) {
+            $('#Gender').val($("input[type='radio'][name='Gender']:checked").val());
+            $("#BirthDateMiladyString").val($("#BirthDateMilady").val());
+            @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Add , "frmCreate.submit();"))
+        }
+    });
+
+    function formSuccess(data) {
+        divMsgParent.slideUp();
+        divMsgParent.show();
+        if (data.status == true) {
+            divMsgClass.attr("class", "alert alert-success");
+            @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success, "" , false , false , false)
+            { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\"" })
+            lblMsg.html(data.message);
+            $("#frmCreate").trigger("reset");
+            $('#GeneralSettingID').val('');
+            $('#GeneralSettingID').trigger('change');
+            $('#RegionID').val('');
+            $('#RegionID').trigger('change');
+            $('#CityID').val('');
+            $('#CityID').trigger('change');
+            $('.checkbox').not(":disabled").prop('checked', true);
+        }
+        else {
+            @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false)
+         { Title = "data.message" })
+            divMsgClass.attr("class", "alert alert-danger");
+            lblMsg.html(data.message);
+        }
+    }
+
+    function formSuccessUpdate(data) {
+        divMsgParent.slideUp();
+        divMsgParent.show();
+        if (data.status == true) {
+            divMsgClass.attr("class", "alert alert-success");
+            @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+            {Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\""})
+            lblMsg.html(data.message);
+            setTimeout(function() {
+                    window.location.reload();
+                },
+                2000);
+        } else {
+            @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Error, "", false, false, false)
+            {Title = "data.message"})
+            divMsgClass.attr("class", "alert alert-danger");
+            lblMsg.html(data.message);
+        }
+    }
+
+    function GetEntityType(entityTypeID) {
+        $.ajax({
+            type: "POST",
+            url: '/Employees/Employees/GetAllEntityType',
+            data: {},
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                $("#EntityTypeID").html('');
+                $("#EntityTypeID").append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (entityTypeID != undefined && entityTypeID > 0 && entityTypeID == item.entityTypeID) {
+                        $("#EntityTypeID").append('<option selected value="' + item.entityTypeID + '">' + item.entityTypeName + '</option>');
+                        $("#EntityTypeID").val(entityTypeID).trigger('change');
+                    }
+                    else
+                        $("#EntityTypeID").append('<option value="' + item.entityTypeID + '">' + item.entityTypeName + '</option>');
+                }
+                $($("#EntityTypeID")).select2();
+            },
+            error: function () {
+
+            }
+        });
+        $("#EntityTypeID").trigger('change');
+    }
+    function GetEntity(e, entityID) {
+        var entityTypeID = $(e).val();
+        $.ajax({
+                type: "POST",
+            url: '/Employees/Employees/GetAllEntityByEntityType',
+            data: { 'entityTypeID': entityTypeID },
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function (result) {
+                    $("#EntityID").html('');
+                    $("#EntityID").append('<option></option>');
+                    for (var i = 0; i < result.length; i++) {
+                        var item = result[i];
+                        if (entityID != undefined && entityID > 0 && entityID == item.entityID) {
+                            $("#EntityID").append('<option selected value="' + item.entityID + '">' + item.entityName + '</option>');
+                            $("#EntityID").val(entityID).trigger('change');
+                        }
+                        else
+                            $("#EntityID").append('<option value="' + item.entityID + '">' + item.entityName + '</option>');
+
+                    }
+                    $($("#EntityID")).select2();
+                },
+                error: function () {
+
+                }
+            });
+    }
+    function GetRoles(type) {
+        debugger;
+        $.ajax({
+            type: "POST",
+            url: '/Permission/Permissions/GetRoles',
+            data: { 'type': type },
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                debugger;
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    $("#Roles").append('<option value="' + item.roleId + '">' + item.roleName + '</option>');
+            
+                }
+            },
+            error: function () {
+
+            }
+        });
+    }
+    function GetJobs(jobTypeId, jobsID) {
+        $.ajax({
+            type: "POST",
+            url: '/Setting/Jobs/GetAllJobsBre',
+            data: { 'JobTypeId': jobTypeId },
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                $("#JobsID").html('');
+                $("#JobsID").append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (jobsID != undefined && jobsID > 0 && jobsID == item.jobsID) {
+                        $("#JobsID").append('<option selected value="' + item.jobsID + '">' + item.jobsName + '</option>');
+                        $("#JobsID").val(jobsID).trigger('change');
+                    }
+                    else
+                        $("#JobsID").append('<option value="' + item.jobsID + '">' + item.jobsName + '</option>');
+
+                }
+                $($("#JobsID")).select2();
+            },
+            error: function () {
+
+            }
+        });
+    }
+    function GetDepartments(departmentsID) {
+        $.ajax({
+            type: "POST",
+            url: '/Setting/Departments/GetAllDepartments',
+            data: { },
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                $("#DepartmentsID").html('');
+                $("#DepartmentsID").append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (departmentsID != undefined && departmentsID > 0 && departmentsID == item.departmentsID) {
+                        $("#DepartmentsID").append('<option selected value="' + item.departmentsID + '">' + item.departmentsName + '</option>');
+                        $("#DepartmentsID").val(departmentsID).trigger('change');
+                    }
+                    else
+                        $("#DepartmentsID").append('<option value="' + item.departmentsID + '">' + item.departmentsName + '</option>');
+                }
+                $($("#DepartmentsID")).select2();
+            },
+            error: function () {
+
+            }
+        });
+    }
+    function GetStatus(statusID) {
+        $.ajax({
+            type: "POST",
+            url: '/Employees/Employees/GetAllStatusEnum',
+            data: {},
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                $("#ListStatusID").html('');
+                $("#ListStatusID").append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (statusID != undefined && statusID > 0 && statusID == item.value) {
+                        $("#ListStatusID").append('<option selected value="' + item.value + '">' + item.text + '</option>');
+                        $("#ListStatusID").val(statusID).trigger('change');
+                    }
+                    else
+                        $("#ListStatusID").append('<option value="' + item.value + '">' + item.text + '</option>');
+                }
+                $($("#ListStatusID")).select2();
+            },
+            error: function () {
+
+            }
+        });
+    }
+</script>
+

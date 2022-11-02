@@ -1,0 +1,523 @@
+﻿<script>
+    var table;
+    var tableOrderVendor;
+    var tableCaptain;
+    $(document).ready(function() {
+        table = $('#tbl_Blocks').DataTable({
+            pageLength: 10,
+            pagijngType: "full_numbers",
+            serverSide: true,
+            processing: true,
+            lengthMenu: [[5, 10, 10, 20, 50, 100], [5, 10, 10, 20, 50, 100]],
+            sAjaxSource: '@Url.Action("LoadTableBlocks")',
+            sServerMethod: "POST",
+            bPaginate: true,
+            paging: true,
+            bFilter: true,
+            bLengthChange: false,
+            columns: [
+                {
+                    data: null,
+                    bSortable: false,
+                    render: function(data, type, row) {
+                        return `<label class="css-input css-checkbox css-checkbox-warning"><input type="checkbox" class="checkbox" onclick="checkBlock(this)" id="hfID" value="${data.blockID}" /> <span></span></label>`
+                    }
+                },
+                {
+                    "data": null,
+                    "sortable": false,
+                    render: function(data, type, row, meta) {
+                        return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="cityName">' + data.blockName + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label>' + data.ordersCount + '</label>';
+                    }
+                },
+            ],
+            drawCallback: function(s) {
+                $('[data-toggle="tooltip"]').tooltip();
+            },
+            buttons: [
+    @*{
+                extend: "copy",
+                className: "btn btn-info btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Copy'
+                },*@
+                {
+                    extend: "excelHtml5",
+                    autoFilter: true,
+                    sheetName: 'Exported data',
+                    className: "btn btn-success btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.Excel'
+                }, @*{
+                extend: "print",
+                className: "btn btn-warning btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Print'
+                },*@{
+                    extend: "pdfHtml5",
+                    download: 'open',
+                    className: "btn btn-info btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.PDF'
+                }],
+            //"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "language": {
+                "search": "_INPUT_",
+                "searchPlaceholder": "Search",
+                "lengthMenu": "_MENU_",
+            }, dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+
+        });
+        table.buttons().container().appendTo('.dt_buttons_wrap');
+        tableCaptain = $('#tbl_Captain').DataTable({
+            pageLength: 10,
+            pagijngType: "full_numbers",
+            serverSide: true,
+            processing: true,
+            lengthMenu: [[5, 10, 10, 20, 50, 100], [5, 10, 10, 20, 50, 100]],
+            sAjaxSource: '@Url.Action("LoadTableCaptain")',
+            sServerMethod: "POST",
+            bPaginate: true,
+            paging: true,
+            bFilter: true,
+            bLengthChange: false,
+            columns: [
+                {
+                    data: null,
+                    bSortable: false,
+                    render: function(data, type, row) {
+                        return `<label class="css-input css-radio css-radio-warning" for="Captain_${data.driversID}"><input type="radio" id="Captain_${data.driversID}" name="CaptainhfID" class="checkbox" onclick="checkCaptain(this)" value="${data.driversID}" /> <span></span></label>`
+                    }
+                },
+                {
+                    "data": null,
+                    "sortable": false,
+                    render: function(data, type, row, meta) {
+                        return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label>' + data.driversID + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label>' + data.driversName + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label>' + data.blockName + '</label>';
+                    }
+                },
+            ],
+            drawCallback: function(s) {
+                $('[data-toggle="tooltip"]').tooltip();
+            },
+            buttons: [
+    @*{
+                extend: "copy",
+                className: "btn btn-info btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Copy'
+                },*@
+                {
+                    extend: "excelHtml5",
+                    autoFilter: true,
+                    sheetName: 'Exported data',
+                    className: "btn btn-success btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.Excel'
+                }, @*{
+                extend: "print",
+                className: "btn btn-warning btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Print'
+                },*@{
+                    extend: "pdfHtml5",
+                    download: 'open',
+                    className: "btn btn-info btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.PDF'
+                }],
+            "language": {
+                "search": "_INPUT_",
+                "searchPlaceholder": "Search",
+                "lengthMenu": "_MENU_",
+            }, dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+
+        });
+        tableCaptain.buttons().container().appendTo('.dt_buttons_wrap');
+        tableOrderVendor = $('#tbl_OrderVendor').DataTable({
+            pageLength: 10,
+            pagijngType: "full_numbers",
+            serverSide: true,
+            processing: true,
+            lengthMenu: [[5, 10, 10, 20, 50, 100], [5, 10, 10, 20, 50, 100]],
+            sAjaxSource: '@Url.Action("LoadTableOrderVendor")',
+            sServerMethod: "POST",
+            bPaginate: true,
+            paging: true,
+            bFilter: true,
+            bLengthChange: false,
+            "createdRow": function(row, data, dataIndex) {
+                if ($('#CaptainTypeID').val() == 2 &&
+                    ($('#ShippingCompanyID').val() == "" || data.distanceKM > $("#ExternalCompanyMinKM").val() || $('#ExternalCompanyBlocksArr').val().includes(data.blockID) == false)) {
+                    $(row).css({ 'background': 'rgb(243 132 132 / 28%)' });
+                }
+                if ($('#CaptainTypeID').val() == 1 && data.distanceKM > $("#HomeMadeMinKM").val()) {
+                    $(row).css({ 'background': 'rgb(243 132 132 / 28%)' });
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    bSortable: false,
+                    render: function(data, type, row) {
+                        if ($('#CaptainTypeID').val() == 2 &&
+                            ($('#ShippingCompanyID').val() == "" || data.distanceKM > $("#ExternalCompanyMinKM").val() || $('#ExternalCompanyBlocksArr').val().includes(data.blockID) == false)) {
+                            return `<label class="css-input css-checkbox css-checkbox-warning"><input type="checkbox" disabled class="checkbox" onclick="checkOrderVendor(this)" id="hfID" value="${data.orderVendorID}" /> <span></span></label>`
+                        }
+                        else {
+                            return `<label class="css-input css-checkbox css-checkbox-warning"><input type="checkbox" class="checkbox" onclick="checkOrderVendor(this)" id="hfID" value="${data.orderVendorID}" /> <span></span></label>`
+
+                        }
+                    }
+                },
+                {
+                    "data": null,
+                    "sortable": false,
+                    render: function(data, type, row, meta) {
+                        return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label>' + data.orderVendorID + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="cityName">' + data.customersName + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label>' + data.blockName + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label>' + data.orderStatusName + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label>' + data.distanceKM + '</label>';
+                    }
+                }
+            ],
+            drawCallback: function(s) {
+                $('[data-toggle="tooltip"]').tooltip();
+            },
+            buttons: [
+    @*{
+                extend: "copy",
+                className: "btn btn-info btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Copy'
+                },*@
+                {
+                    extend: "excelHtml5",
+                    autoFilter: true,
+                    sheetName: 'Exported data',
+                    className: "btn btn-success btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.Excel'
+                }, @*{
+                extend: "print",
+                className: "btn btn-warning btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Print'
+                },*@{
+                    extend: "pdfHtml5",
+                    download: 'open',
+                    className: "btn btn-info btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.PDF'
+                }],
+            "language": {
+                "search": "_INPUT_",
+                "searchPlaceholder": "Search",
+                "lengthMenu": "_MENU_",
+            }, dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+
+        });
+        tableOrderVendor.buttons().container().appendTo('.dt_buttons_wrap');
+        setTimeout(function() {
+            $("#lbl_BlockCount").html(table.rows().count());
+            $("#lbl_OrderCount").html(tableOrderVendor.rows().count());
+            $("#lbl_CaptainCount").html(tableCaptain.rows().count());
+
+        }, 2000);
+        GetShippingCompany();
+    });
+    function GetSelectedItems() {
+        var i = 0;
+        ActionCheck = "";
+        $("#tbl_Blocks tbody").find('tr').each(
+            function() {
+                var Viewid = $(this).find('#hfID').val();
+
+                var IsView = $(this).find('#hfID').is(':checked');
+                if (IsView === true) {
+                    ActionCheck = ActionCheck + Viewid + ',';
+                    i++;
+                }
+            }
+        );
+        $("#ListBlockID").val(ActionCheck);
+        readCaptainOrdertable();
+    }
+    function checkBlock(e) {
+        var state = $(e).is(':checked');
+        if (state === true) {
+            $(e).prop('checked', true);
+        }
+        else {
+            $(e).not(":disabled").prop('checked', false);
+        }
+        GetSelectedItems()
+    }
+    function checkAllBlock(ele) {
+        var state = $(ele).is(':checked');
+        if (state === true) {
+            $('#tbl_Blocks .checkbox').not(":disabled").prop('checked', true);
+        }
+        else {
+            $('#tbl_Blocks .checkbox').not(":disabled").prop('checked', false);
+        }
+        GetSelectedItems();
+    }
+    function readBlockTable() {
+        table.ajax.url('/Order/Orders/LoadTableBlocks');
+        table.ajax.reload();
+    }
+    function readCaptainTable() {
+        $('#OnlineTypeID').val($("input[type='radio'][name='OnlineType']:checked").val());
+        tableCaptain.ajax.url('/Order/Orders/LoadTableCaptain?listBlockID=' + $("#ListBlockID").val() + '&onlineTypeID=' + $('#OnlineTypeID').val());
+        tableCaptain.ajax.reload();
+    }
+    function checkCaptain(e) {
+        var state = $(e).is(':checked');
+        if (state === true) {
+            $(e).prop('checked', true);
+            $("#DriversID").val($(e).val());
+        }
+        else {
+            $(e).not(":disabled").prop('checked', false);
+        }
+    }
+    function readOrderVendorTable() {
+        tableOrderVendor.ajax.url('/Order/Orders/LoadTableOrderVendor?listBlockID=' + $("#ListBlockID").val());
+        tableOrderVendor.ajax.reload();
+    }
+    function GetSelectedItemsOrders() {
+        var i = 0;
+        var ActionCheck = "";
+        $("#tbl_OrderVendor tbody").find('tr').each(
+            function() {
+                var Viewid = $(this).find('#hfID').val();
+
+                var IsView = $(this).find('#hfID').is(':checked');
+                if (IsView === true) {
+                    ActionCheck = ActionCheck + Viewid + ',';
+                    i++;
+                }
+            }
+        );
+        $("#ListOrderVendorID").val(ActionCheck);
+        if ($("#ListOrderVendorID").val() != "") {
+            $("#Dev_ButtonSend").show();
+        }
+        else {
+            $("#Dev_ButtonSend").hide();
+        }
+    }
+    function checkOrderVendor(e) {
+        var state = $(e).is(':checked');
+        if (state === true) {
+            $(e).prop('checked', true);
+        }
+        else {
+            $(e).not(":disabled").prop('checked', false);
+        }
+        GetSelectedItemsOrders();
+    }
+    function checkAllOrders(ele) {
+        var state = $(ele).is(':checked');
+        if (state === true) {
+            $('#tbl_OrderVendor .checkbox').not(":disabled").prop('checked', true);
+        }
+        else {
+            $('#tbl_OrderVendor .checkbox').not(":disabled").prop('checked', false);
+        }
+        GetSelectedItemsOrders();
+    }
+    function readCaptainOrdertable() {
+        readOrderVendorTable();
+        readCaptainTable();
+        setTimeout(function() {
+            $("#lbl_BlockCount").html(table.rows().count());
+            $("#lbl_OrderCount").html(tableOrderVendor.rows().count());
+            $("#lbl_CaptainCount").html(tableCaptain.rows().count());
+        }, 2000);
+    }
+    $("#btnSave").click(function(e) {
+        e.preventDefault();
+        if ($("#ListOrderVendorID").val() == "") {
+            var msg = "@Homemade.UI.Resources.Homemade.Please_Select_One_Order_At_Least";
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Error, "", false, false, false) { Title = "msg" });
+        }
+        else {
+            if ($('#CaptainTypeID').val() == 2) {
+                if ($("#ShippingCompanyID").val() == "") {
+                    var msg = "@Homemade.UI.Resources.Homemade.Please_Select_Shipping_Company";
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Error, "", false, false, false) { Title = "msg" });
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.AssignOrder, "AssignOrder();"));
+                }
+
+            }
+            else {
+                if ($("#DriversID").val() == "") {
+                    var msg = "@Homemade.UI.Resources.Homemade.Please_Select_Captain";
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Error, "", false, false, false) { Title = "msg" });
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.AssignOrder, "AssignOrder();"));
+                }
+            }
+        }
+    });
+    function AssignOrder() {
+        $.ajax({
+            type: "POST",
+            url: '/Order/Orders/AssignOrder',
+            data: {
+                ListOrderVendorID: $("#ListOrderVendorID").val(),
+                CaptainTypeID: $("#CaptainTypeID").val(),
+                ShippingCompanyID: $("#ShippingCompanyID").val(),
+                DriversID: $("#DriversID").val(),
+            },
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                if (result.status == true) {
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+                        { Title = "result.message" });
+                    $("#ListBlockID").val("");
+                    $("#ListOrderVendorID").val("");
+                    $("#DriversID").val("");
+                    $('#OnlineTypeID').val("");
+                    $("input[type=radio][name='OnlineType']:checked").removeAttr('checked');
+                    readBlockTable();
+                    readCaptainOrdertable();
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false)
+                        { Title = "result.message" })
+            }
+            },
+            error: function() {
+
+            }
+        });
+    }
+    function GetShippingCompany(shippingCompanyID) {
+        $.ajax({
+            type: "POST",
+            url: '/Setting/ShippingCompany/GetAllShippingCompanies',
+            data: {},
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $("#ShippingCompanyID").html('');
+                $("#ShippingCompanyID").append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (shippingCompanyID != undefined && shippingCompanyID > 0 && shippingCompanyID == item.shippingCompanyID) {
+                        $("#ShippingCompanyID").append('<option selected value="' + item.shippingCompanyID + '">' + item.shippingCompanyName + '</option>');
+                        $("#ShippingCompanyID").val(shippingCompanyID).trigger('change');
+                    }
+                    else
+                        $("#ShippingCompanyID").append('<option value="' + item.shippingCompanyID + '">' + item.shippingCompanyName + '</option>');
+                }
+                $($("#ShippingCompanyID")).select2();
+            },
+            error: function() {
+
+            }
+        });
+        $("#ShippingCompanyID").trigger('change');
+    }
+    function ChangeCaptainType() {
+        $('#CaptainTypeID').val($("input[type='radio'][name='CaptainType']:checked").val());
+        if ($('#CaptainTypeID').val() == 2) {
+            $("#Dev_Captain").hide();
+            $("#Dev_Blocks").addClass("col-md-6").removeClass("col-md-4");
+            $("#Dev_Orders").addClass("col-md-6").removeClass("col-md-4");
+            GetShippingCompany();
+            $("#Dev_ShippingCompany").show();
+            $("#Dev_ButtonSend").addClass("col-md-5").removeClass("col-md-8");
+        }
+        else {
+            $("#Dev_Captain").show();
+            $("#Dev_Blocks").removeClass("col-md-6").addClass("col-md-4");
+            $("#Dev_Orders").removeClass("col-md-6").addClass("col-md-4");
+            $("#Dev_ShippingCompany").hide();
+            $("#Dev_ButtonSend").addClass("col-md-8").removeClass("col-md-5");
+            readOrderVendorTable();
+        }
+    }
+    function ChangeOnlineType() {
+        $('#OnlineTypeID').val($("input[type='radio'][name='OnlineType']:checked").val());
+        readCaptainTable();
+    }
+    function ChangeShippingCompany() {
+        if ($("#ShippingCompanyID").val() != "") {
+            $.getJSON('/Setting/ShippingCompany/GetShippingCompanyMaxKM?ShippingCompanyID=' + $("#ShippingCompanyID").val(), '', function(data) {
+                $('#ExternalCompanyMinKM').val(data.shippingCompanyMaxKM);
+                $('#ExternalCompanyBlocksArr').val(data.listBlocks);
+                readOrderVendorTable();
+            });
+        }
+        else {
+            $('#ExternalCompanyMinKM').val(0);
+            $('#ExternalCompanyMinKM').val("");
+        }
+    }
+</script>

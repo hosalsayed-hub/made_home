@@ -1,0 +1,122 @@
+﻿@model Homemade.BLL.ViewModel.User.AutoVerifyViewModel
+@{
+    ViewBag.Title = Homemade.UI.Resources.HomemadeMenu.Auto_Verify;
+    Layout = "~/Views/Shared/_LogInLayout.cshtml";
+
+}
+<section class="login_wrap">
+    <div class="">
+        <div class="row  ">
+             
+            <div class="col-md-12">
+                <div class="login_form">
+                    <!-- Nav tabs -->
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <form class="js-validation-login form-horizontal" method="post"
+                              data-ajax="true"
+                              data-ajax-complete="afterResetPass"
+                              data-ajax-method="post"
+                              data-ajax-success="afterResetPass"
+                              id="frmCreate">
+
+                            <div class="" id="divMsgParent" style="display:none;">
+                                <div id="divMsgClass" class="text-danger text-center" role="alert">
+                                    <i class="ion-alert-circled" style="font-size: 35px;"></i>
+                                    <p class="remove-margin" style="font-size: 20px;" id="lblMsg"></p>
+                                </div>
+                            </div>
+                            <div id="divConfirmPass" style="display:none;">
+                                <div class="form-group">
+                                    <label for="Password">@Homemade.UI.Resources.Homemade.Password</label>
+                                    <input class="form-control" type="password" id="Password" name="Password" data-val="true" data-val-required="@Homemade.BLL.Resources.HomemadeErrorMessages.Required" />
+                                    @Html.ValidationMessage("Password", htmlAttributes: new { style = "color:red;", @class = "help-block text-right animated fadeInDown" })
+                                </div>
+                                <div class="form-group">
+                                    <label for="ConfirmPassword">@Homemade.UI.Resources.Homemade.ConfirmPassword</label>
+                                    <input class="form-control" type="password" id="ConfirmPassword" data-val="true"
+                                           data-val-equalto="@Homemade.UI.Resources.Homemade.PasswordNotMatched"
+                                           data-val-equalto-other="*.Password"
+                                           name="ConfirmPassword" data-val-required="@Homemade.BLL.Resources.HomemadeErrorMessages.Required">
+                                    @Html.ValidationMessage("ConfirmPassword", htmlAttributes: new { style = "color:red;", @class = "help-block text-right animated fadeInDown" })
+                                </div>
+                                <div class="form-group push-30-t">
+                                    <div class="col-xs-12">
+                                        <button class="btn btn-sm btn-block btn-primary" id="btnSave" type="button"> @Homemade.UI.Resources.Homemade.save</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts{
+    <script charset="utf-8" src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script charset="utf-8" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script charset="utf-8" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script>
+        let antiToken = $('[name=__RequestVerificationToken]').val(),
+            lblMsg = $("#lblMsg"),
+            divMsgParent = $("#divMsgParent"),
+            btnSave = $("#btnSave");
+        $(document).ready(function () {
+            setTimeout(function () {
+                AutoVerify()
+            }, 500);
+        });
+        function AutoVerify() {
+            $.ajax({
+                type: "POST",
+                url: '/Identity/Account/AutoVerifyResetPassword',
+                data: {
+                    'id': '@Model.Id',
+                     'type': @Model.Type,
+                },
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    if (result.status) {
+                        $("#divConfirmPass").slideDown().prev().slideUp();
+                    }
+                    else {
+                        lblMsg.html(result.message);
+                        divMsgParent.slideDown();
+                        setTimeout(function () {
+                            window.location.href = '/Site/Home/login';
+                        }, 5000);
+                    }
+                }
+            });
+        }
+        $(function () {
+            btnSave.click(function (e) {
+                e.preventDefault();
+                if ($('#frmCreate').valid()) {
+                    $.post('/Identity/Account/AutoResetPassword',
+                        {
+                            'Password': $('#Password').val(),
+                            'id': '@Model.Id',
+                     'type': @Model.Type,
+                            '__RequestVerificationToken': antiToken
+                        }, afterSubmitPass);
+                }
+            });
+        });
+        function afterSubmitPass(res) {
+            if (res.status == true) {
+                lblMsg.html(res.message);
+                divMsgParent.slideDown();
+                window.location.href = '/Site/Home/BeforeLogin';
+            }
+            else {
+                lblMsg.html(res.message);
+                divMsgParent.slideDown();
+            }
+        }
+    </script>
+}

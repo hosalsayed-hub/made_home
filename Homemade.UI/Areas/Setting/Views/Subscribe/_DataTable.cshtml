@@ -1,0 +1,118 @@
+﻿<script>
+    var table;
+    $(document).ready(function() {
+        table = $('#tbl_Subscribe').DataTable({
+            pageLength: 1000,
+            pagijngType: "full_numbers",
+            serverSide: true,
+            processing: true,
+            lengthMenu: [[5, 10, 20, 25, -1], [5, 10, 20, 50, 100]],
+            sAjaxSource: '@Url.Action("LoadTable")',
+            sServerMethod: "POST",
+            bPaginate: false,
+            paging: false,
+            columns: [
+                {
+                    data: null,
+                    "sortable": false,
+                    render: function(data, type, row) {
+                        return `<label class="css-input css-checkbox css-checkbox-warning"><input type="checkbox" class="checkbox" onclick="check(this)" id="hfID" value="${data.subscribeID}" /> <span></span></label>`
+                    }
+
+                },
+                {
+                    "data": null,
+                    "sortable": false,
+                    render: function(data, type, row, meta) {
+                        return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<input type="hidden" value="' + data.subscribeID + '"/><label class="arName">' + data.name + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label >' + data.email + '</label>';
+                    }
+                },
+            ],
+            drawCallback: function(s) {
+                $('[data-toggle="tooltip"]').tooltip();
+            },
+            buttons: [
+                {
+                    extend: "excelHtml5",
+                    autoFilter: true,
+                    sheetName: 'Exported data',
+                    className: "btn btn-success btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.Excel'
+                }, {
+                    extend: "pdfHtml5",
+                    download: 'open',
+                    className: "btn btn-info btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.PDF'
+                }],
+            "language": {
+                "search": "_INPUT_",
+                "searchPlaceholder": "Search",
+                "lengthMenu": "_MENU_",
+            }, dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+
+        });
+        table.buttons().container().appendTo('.dt_buttons_wrap');
+    });
+    function readtable() {
+        table.ajax.url('/Setting/Subscribe/LoadTable');
+        table.ajax.reload();
+    }
+    function GetSelectedItems() {
+        var ActionCheck = "";
+        var i = 0;
+        $("#tbl_Subscribe tbody").find('tr').each(
+            function() {
+                var Viewid = $(this).find('#hfID').val();
+
+                var IsView = $(this).find('#hfID').is(':checked');
+                if (IsView === true) {
+                    ActionCheck = ActionCheck + Viewid + ',';
+                    i++;
+                }
+            }
+        );
+        if (ActionCheck != "") {
+            $("#lbl_Send").html(i);
+            $("#Dev_Send").show();
+        }
+        else {
+            $("#Dev_Send").hide();
+        }
+        $("#CheckedItems").val(ActionCheck);
+    }
+    function check(e) {
+        var state = $(e).is(':checked');
+        if (state === true) {
+            $(e).prop('checked', true);
+        }
+        else {
+            $(e).not(":disabled").prop('checked', false);
+        }
+        GetSelectedItems();
+    }
+    function checkAll(ele) {
+        var state = $(ele).is(':checked');
+        if (state === true) {
+            $('.checkbox').not(":disabled").prop('checked', true);
+        }
+        else {
+            $('.checkbox').not(":disabled").prop('checked', false);
+        }
+        GetSelectedItems();
+    }
+</script>

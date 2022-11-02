@@ -1,0 +1,114 @@
+﻿<script>
+
+    var divMsgClass = $("#divMsgClass");
+    var lblMsg = $("#lblMsg");
+    var divMsgParent = $("#divMsgParent");
+
+    $("#btnSave").click(function(e) {
+        e.preventDefault();
+        let frmCreate = $("#frmCreate");
+        if (frmCreate.valid()) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Add , "frmCreate.submit();"))
+            }
+    });
+
+
+
+    function completed(xhr) {
+
+        var obj = JSON.parse(xhr.responseText);
+        var result = obj.result;
+
+        var msg = result.message;
+        if (result.resultType == 'success') {
+
+
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false)
+                { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\"" })
+                if (obj.operationType == 'update') {
+                $("#modal").modal('hide');
+
+            }
+            else {
+                $("#frmCreate").trigger('reset');
+
+            }
+            $('#tbl').DataTable().ajax.reload();
+
+
+
+        }
+        else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) {
+                Title = "msg"
+                })
+                lblMsg.html(msg);
+        }
+    };
+
+
+    function Delete(e) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Delete , "ConfirmDelete(e);"))
+        }
+
+
+    function ConfirmDelete(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+        var name = button.attr("data-name");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete")',
+            data: {
+                'id': id,
+                'name': name
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                var msg = result.message;
+
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false)
+                        { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessDeleteMessage + "\"" })
+                        $('#tbl').DataTable().ajax.reload();
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) {
+                        Title = "msg"
+                        })
+                    }
+            }
+        });
+    }
+
+    function ShowModal(e) {
+        if (e == undefined) {
+            $('#title').html('@Homemade.UI.Resources.HomemadeMenu.Users_In_Role')
+        }
+        else
+            $('#title').html('@Homemade.UI.Resources.HomemadeMenu.Users_In_Role');
+        let fields = $('#frmCreate span');
+        fields.each(function() {
+            if ($(this).attr('data-valmsg-for') != null) {
+                $($(this).children()[0]).text('');
+            }
+        });
+        var button = $(e);
+        var tr = $(button.closest('tr'));
+
+        var id = button.attr("data-id");
+        var name = button.attr("data-name");
+        $("#UserID").val(id);
+        $("#RoleName").val(name);
+        $("#UserID").val($(tr.find('.UserID')[0]).val());
+        $("#UserID").trigger('change');
+        $('#modal').modal('show');
+    }
+
+
+
+</script>
+

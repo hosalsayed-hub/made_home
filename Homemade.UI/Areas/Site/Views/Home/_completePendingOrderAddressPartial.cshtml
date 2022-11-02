@@ -1,0 +1,60 @@
+﻿@inject Homemade.BLL.Customer.BlCustomerAddress _BlCustomerAddress
+@inject Homemade.BLL.Site.BLSite _BLSite
+@inject Homemade.BLL.Customer.BlCustomer _BlCustomer
+@inject Homemade.BLL.Order.BlOrders _blOrders
+@{
+    int OrdersID = (int)ViewBag.OrdersID;
+    int CusId = _BlCustomer.GetCustomerByUser(User.GetUserIdInt()).CustomersID;
+
+    var resultsMaster = _blOrders.getOrderData(OrdersID);
+    var results = _BLSite.GeCartDetailsVMByOrder(OrdersID, Utility.CurrentLanguageCode, User.GetUserIdInt()).ToList();
+    var cusAddress = _BlCustomerAddress.GetAllCutomerAddress(CusId, Utility.CurrentLanguageCode);
+}
+@if (cusAddress.Count() > 0)
+{
+
+    foreach (var itemcusAddress in cusAddress)
+    {
+        <div class="step-details step-radios">
+            <div class="form-check">
+                <input class="form-check-input address-radio-btn" @(resultsMaster.CustomerLocationID == itemcusAddress.addressID ? "checked" : "") type="radio" name="flexRadioDefault" onclick="ChangeAddress(@itemcusAddress.addressID)" id="radio_@itemcusAddress.addressID">
+                <label class="form-check-label" for="radio_@itemcusAddress.addressID">
+                    <span class="label-text"> @itemcusAddress.buildingNumber  , @itemcusAddress.address ,@itemcusAddress.streetNo , @itemcusAddress.blockName , @itemcusAddress.cityName , @itemcusAddress.regionName </span>
+                    <span class="label-icon">
+                        (
+                        <i class="fas fa-home"></i>
+                        @itemcusAddress.addressTypesName
+                        )
+                    </span>
+                </label>
+            </div>
+        </div>
+        if (cusAddress.Count() == 1)
+        {
+
+            <script>
+
+                setTimeout(function() {
+                    ChangeAddress(@itemcusAddress.addressID)
+                }, 5000);
+
+            </script>
+        }
+    }
+}
+else
+{
+    <div class="step-body-empty d-none">
+        @Homemade.UI.Resources.Homemade.No_Address
+
+
+    </div>
+}
+
+
+
+<div class="step-details">
+
+    <button type="button" class="add-new-address-btn theme-btn theme-btn-7" data-toggle="tooltip" onclick="ShowDeliveryAddressModal(0,1)">@Homemade.UI.Resources.Homemade.Add_New_Address</button>
+
+</div>

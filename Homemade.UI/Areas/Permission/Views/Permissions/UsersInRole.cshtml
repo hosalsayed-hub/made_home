@@ -1,0 +1,132 @@
+﻿@inject Homemade.BLL.BLPermission bLPermission
+@model Homemade.BLL.ViewModel.UserRoleViewModel
+@{
+    var Users = @bLPermission.GetAllUserOperatorAndClient().ToList().Select(p => new SelectListItem
+            {
+                Text = Homemade.UI.InfraStructure.Utility.CurrentLanguageCode == "ar" ? p.UserNameAR : p.UserNameEN,
+                Value = p.UserID + ""
+            });
+}
+<div class="content">
+    <!-- Dynamic Table Full -->
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <h3 class="block-title" data-toggle="collapse" data-target="#collapseProd" aria-expanded="false" aria-controls="collapseProd">
+                <i class="ion-code-working push-5-r"></i>
+                <span class="header-title">@Homemade.UI.Resources.HomemadeMenu.Users_In_Role</span>
+                @if (bLPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Permission, (int)Homemade.BLL.ActionEnum.Insert))
+                {
+                    <a class="btn btn-xs addBtn" onclick="ShowModal()" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.New">
+                        <i class="ion-plus-round push-5-r"></i>
+                        @Homemade.UI.Resources.Homemade.New
+                    </a>
+                }
+            </h3>
+        </div>
+        <div class="collapse in" id="collapseProd">
+            <div class="block-content block-content-full">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.User</label>
+                            <select asp-for="UserID" name="UserID"
+                                    style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select"
+                                    asp-items="Users" class="js-select2 form-control AddData">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="margin-top: 25px;">
+                        <button id="btnRest" onclick="Rest();" type="button" style="margin:12px 0px" class="btn btn-custom btn-info">
+                            <i class="ion-refresh push-5-r"></i>
+                            @Homemade.UI.Resources.Homemade.Reset
+                        </button>
+                        <button onclick="GetValue()" type="button" style="margin:12px 5px" class="btn btn-custom bg-orange">
+                            <i class="ion-search push-5-r" aria-hidden="true"></i>
+                            @Homemade.UI.Resources.Homemade.Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="block-title" data-toggle="collapse" data-target="#collapseOrder" aria-expanded="false" aria-controls="collapseOrder">
+                        <i class="ion-code-working push-5-r"></i>
+                        @Homemade.UI.Resources.Homemade.Result
+                    </h3>
+                </div>
+                <div class="col-md-6 text-right">
+                    <div class="dt_buttons_wrap text-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="collapse in" id="collapseOrder">
+            <div class="block-content h_scroll">
+                <div class="row" id="divMsgParent" style="display:none">
+                    <div class="form-group row">
+                        <div class="col-xs-12">
+                            <div id="divMsgClass" class="alert alert-danger" role="alert">
+                                <strong id="lblMsg"></strong>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table id="tbl" class="table table-custom js-dataTable-buttons">
+                    <thead>
+                        <tr>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.SNumber</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.Name</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="_UsersInRoleModal" model="Model" />
+
+@section Styles {
+    <!-- Data_Table Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" />
+
+    <!-- Select 2 Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2-bootstrap.min.css" />
+}
+
+    @section Scripts {
+    <!-- Data_table Plugins -->
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+
+    <!-- Select 2 Scripts -->
+    <script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+
+    <partial name="_UsersInRoleScripts" />
+    <partial name="_UsersInRoleDataTable" />
+    <script>
+        function GetValue() {
+            readtable($("#UserID").val());
+        }
+        function Rest() {
+            $('#UserID').val('');
+            $('#UserID').trigger('change');
+            GetValue();
+        }
+    </script>
+}
+
+

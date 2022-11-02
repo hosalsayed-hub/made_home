@@ -1,0 +1,175 @@
+﻿@inject Homemade.BLL.BLPermission bLPermission
+@model Homemade.BLL.ViewModel.PermissionViewModel
+<div class="content">
+    <!-- Dynamic Table Full -->
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="block-title">
+                        <span class="header-title">@Homemade.UI.Resources.HomemadeMenu.Role_Configration</span>
+                    </h3>
+                </div>
+                <div class="col-md-6 text-right">
+                    <div class="dt_buttons_wrap text-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="block-content">
+            <div class="row" id="divMsgParent" style="display:none">
+                <div class="form-group row">
+                    <div class="col-xs-12">
+                        <div id="divMsgClass" class="alert alert-danger" role="alert">
+                            <strong id="lblMsg"></strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @Html.HiddenFor(m => m.CheckedItems)
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Role <span style="color:red">*</span></label>
+                    <select class="form-control js-select2" onchange="GetValue()" asp-for="RoleID" name="RoleName" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1" asp-items="@bLPermission.GetRoles(Homemade.UI.InfraStructure.Utility.CurrentLanguageCode).ToList().Select(p => new SelectListItem { Text = Homemade.UI.InfraStructure.Utility.CurrentLanguageCode=="ar"? p.RoleName:p.RoleName, Value = p.RoleId + "" })">
+                        <option value=""></option>
+                    </select>
+
+                </div>
+            </div>
+            <div class="col-md-6 pull-right text-right" style="margin-top: 25px;display:none" id="Dev_Save">
+                <button id="btnSave" type="button" onclick="Update()" class="btn btn-custom bg-orange">
+                    <i class="fa fa-edit push-5-r" aria-hidden="true"></i>
+                    @Homemade.UI.Resources.Homemade.save
+                </button>
+                <button id="btnSave" type="button" onclick="UpdateAll()" class="btn btn-custom bg-orange">
+                    <i class="fa fa-edit push-5-r" aria-hidden="true"></i>
+                    @Homemade.UI.Resources.Homemade.Update_Permissions_To_All_Users
+                </button>
+            </div>
+            <table id="tbl" class="table table-custom js-dataTable-buttons">
+                <thead>
+                    <tr>
+                        <th>
+                            <label class="css-input css-checkbox css-checkbox-warning">
+                                <input type='checkbox' id='chkSelectAll' onclick='checkAll(this)' /><span></span> @Homemade.UI.Resources.Homemade.All
+                            </label>
+                        </th>
+                        <th>@Homemade.UI.Resources.Homemade.SNumber</th>
+                        <th>@Homemade.UI.Resources.Homemade.Permission</th>
+                        <th>@Homemade.UI.Resources.Homemade.View</th>
+                        <th>@Homemade.UI.Resources.Homemade.Insert</th>
+                        <th>@Homemade.UI.Resources.Homemade.Update</th>
+                        <th>@Homemade.UI.Resources.Homemade.Delete</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <!-- Data_Table Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" />
+
+    <!-- Select 2 Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2-bootstrap.min.css" />
+    <style>
+        .dataTables_filter {
+            display: none;
+        }
+    </style>
+}
+
+    @section Scripts {
+    <!-- Data_table Plugins -->
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+
+    <!-- Select 2 Scripts -->
+    <script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+
+    <partial name="_RoleConfigrationDataTable" />
+    <script>
+        function GetValue() {
+            if ($("#RoleID").val() != "") {
+                $("#Dev_Save").show();
+            }
+            else {
+                $("#Dev_Save").hide();
+            }
+            readtable($("#RoleID").val());
+        }
+        function Update() {
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Edit , "ConfirmUpdate();"))
+                }
+
+        function ConfirmUpdate() {
+            debugger;
+            $.ajax({
+                type: "POST",
+                url: '/Permission/Permissions/UpdateRoleConfigration',
+                data: {
+                    'RoleID': $("#RoleID").val(),
+                    'CheckedItems': $("#CheckedItems").val()
+                },
+                dataType: "json",
+                async: false,
+
+                contentType: "application/x-www-form-urlencoded",
+                success: function(result) {
+                    var msg = result.message;
+
+                    if (result.resultType == 'success') {
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false)
+                        { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\"" })
+                        }
+                    else {
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) {
+                        Title = "msg"
+                        })
+                        }
+                }
+            });
+        }
+        function UpdateAll() {
+            GetSelectedItems();
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Edit , "ConfirmUpdateAll();"))
+                }
+
+        function ConfirmUpdateAll() {
+            $.ajax({
+                type: "POST",
+                url: '/Permission/Permissions/UpdateRolePermissionsForAllUsers',
+                data: {
+                    'RoleID': $("#RoleID").val(),
+                    'CheckedItems': $("#CheckedItems").val()
+                },
+                dataType: "json",
+                async: false,
+
+                contentType: "application/x-www-form-urlencoded",
+                success: function(result) {
+                    var msg = result.message;
+
+                    if (result.resultType == 'success') {
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false)
+                        { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\"" })
+                        }
+                    else {
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) {
+                        Title = "msg"
+                        })
+                        }
+                }
+            });
+        }
+    </script>
+}

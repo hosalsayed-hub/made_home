@@ -1,0 +1,252 @@
+﻿@model Homemade.BLL.ViewModel.Setting.ConfigurationViewModel
+@inject Homemade.BLL.Setting.BlCountry blCountry
+<style>
+    .controls {
+        width: 250px !important;
+    }
+</style>
+
+<div class="content">
+    <form enctype="multipart/form-data" method="post" id="frmCreate" onsubmit="return false"
+          data-ajax="true"
+          data-ajax-complete="completed"
+          data-ajax-method="post">
+        <div class="block ">
+            <div class="block-header">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>
+                            <span class="header-title">@Homemade.UI.Resources.HomemadeMenu.ConfigrationCompany</span>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="block-content tab-content">
+
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input asp-for="ConfigurationID" type="hidden" />
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Name_En <span style="color:red">*</span></label>
+                            @Html.TextBoxFor(x => x.CompanNameEn, new { @class = "form-control" })
+
+                            <span style="color:red"> @Html.ValidationMessageFor(x => x.CompanNameEn)</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Name_Ar, <span style="color:red">*</span></label>
+                            @Html.TextBoxFor(x => x.CompanNameAr, new { @class = "form-control" })
+
+                            <span style="color:red"> @Html.ValidationMessageFor(x => x.CompanNameAr)</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Address <span style="color:red">*</span></label>
+                            <input asp-for="Address" type="text" class="form-control" />
+
+                            <span style="color:red" asp-validation-for="Address"> </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.StreetNo <span style="color:red">*</span></label>
+                            <input asp-for="StreetNo" type="text" class="form-control" />
+
+                            <span style="color:red" asp-validation-for="StreetNo"> </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.fax <span style="color:red">*</span></label>
+                            <input asp-for="Fax" type="text" class="form-control" />
+
+                            <span style="color:red" asp-validation-for="Fax"> </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.PhoneNumber <span style="color:red">*</span></label>
+                            <input asp-for="PhoneNumber" type="text" class="form-control" />
+
+                            <span style="color:red" asp-validation-for="PhoneNumber"> </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.MobileNumber <span style="color:red">@Homemade.UI.Resources.Homemade.Mobile_Validation</span></label>
+                            <input asp-for="MobileNumber" type="text" class="form-control" placeholder="@Homemade.UI.Resources.Homemade.Mobile_Validation" />
+
+                            <span style="color:red" asp-validation-for="MobileNumber"> </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.FirstEmail <span style="color:red">*</span></label>
+                            <input asp-for="Email" type="text" class="form-control" />
+                            <span style="color:red" asp-validation-for="Email"> </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.SecondEmail <span style="color:red">*</span></label>
+                            <input asp-for="SeconedEmail" type="text" class="form-control" />
+                            <span style="color:red" asp-validation-for="SeconedEmail"> </span>
+                        </div>
+                    </div>
+                    <input type="hidden" asp-for="DeliveryPriceVatPercentstring" />
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.DeliveryPrice <span style="color:red">*</span></label>
+                            <input asp-for="DeliveryPriceWithoutVat" type="number" step=".01" class="form-control" placeholder="" />
+
+                            <span style="color:red" asp-validation-for="DeliveryPriceWithoutVat"> </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.DeliveryPriceVatPercent <span style="color:red">*</span></label>
+                            <input asp-for="DeliveryPriceVatPercent" type="number" step=".01" class="form-control" placeholder="" />
+
+                            <span style="color:red" asp-validation-for="DeliveryPriceVatPercent"> </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.HomeDeliveryPriceWithVat <span id="vatpers"></span> <span style="color:red">*</span></label>
+                            <input asp-for="DeliveryPrice" readonly type="number" step=".01" class="form-control" placeholder="" />
+
+                            <span style="color:red" asp-validation-for="DeliveryPrice"> </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Min_KM <span style="color:red">*</span></label>
+                            <input asp-for="MinKM" type="number" step=".01" class="form-control" placeholder="@Homemade.UI.Resources.Homemade.Min_KM" />
+
+                            <span style="color:red" asp-validation-for="MinKM"> </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Over_Km_Fare <span style="color:red">*</span></label>
+                            <input asp-for="OverKmFare" type="number" step=".01" class="form-control" placeholder="@Homemade.UI.Resources.Homemade.Over_Km_Fare" />
+
+                            <span style="color:red" asp-validation-for="OverKmFare"> </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.LessDeliveryPrice <span style="color:red">*</span></label>
+                            <input asp-for="MinDeliveryPrice" type="number" step=".01" class="form-control" placeholder="" />
+
+                            <span style="color:red" asp-validation-for="MinDeliveryPrice"> </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.MoreDeliveryPrice <span style="color:red">*</span></label>
+                            <input asp-for="MaxDeliveryPrice" type="number" step=".01" class="form-control" placeholder="" />
+
+                            <span style="color:red" asp-validation-for="MaxDeliveryPrice"> </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Whatsapp_Link</label>
+                            <input asp-for="WhatsappLink" type="text" class="form-control" />
+                            <span style="color:red" asp-validation-for="WhatsappLink"> </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Twitter_Link</label>
+                            <input asp-for="TwitterLink" type="text" class="form-control" />
+                            <span style="color:red" asp-validation-for="TwitterLink"> </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Instagram_Link</label>
+                            <input asp-for="InstagramLink" type="text" class="form-control" />
+                            <span style="color:red" asp-validation-for="InstagramLink"> </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Snapchat_Link</label>
+                            <input asp-for="SnapchatLink" type="text" class="form-control" />
+                            <span style="color:red" asp-validation-for="SnapchatLink"> </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.Banner</label>
+                            <div id="baner_img">
+                            </div>
+                            <input type="file" class="form-control-file " accept="image/*" id="fupBanner" onchange="ConvertToBase64Banner(this)">
+                            @Html.HiddenFor(m => m.Banner)
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.Logo</label>
+                            <div id="logo_img">
+                            </div>
+                            <input type="file" class="form-control-file " accept="image/*" id="fupLogo" onchange="ConvertToBase64Logo(this)">
+                            @Html.HiddenFor(m => m.Logo)
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.Cr_Image</label>
+                            <div id="cr_img">
+                            </div>
+                            <input type="file" class="form-control-file " accept="image/*" id="fupCRImage" onchange="ConvertToBase64CRImage(this)">
+                            @Html.HiddenFor(m => m.CRImage)
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <button class="btn btn-custom bg-orange" id="btnSave" type="button"><i class="ion-checkmark push-5-r"></i> @Homemade.UI.Resources.Homemade.save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+
+
+@section Scripts {
+    <!-- Data_table Plugins -->
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+    <!-- Select 2 Scripts -->
+    <script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+    <partial name="_Scripts" />
+
+
+
+}

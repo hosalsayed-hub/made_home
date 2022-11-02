@@ -1,0 +1,386 @@
+
+
+
+
+/*//////////////////////////////////////////////////////////////////
+[ FONT ]*/
+
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Tajawal'), local('Tajawal-Regular'), url(../../fonts/tajawal/Tajawal-Regular.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 500;
+    src: local('Tajawal Medium'), local('Tajawal-Medium'), url(../../fonts/tajawal/Tajawal-Medium.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Tajawal Bold'), local('Tajawal-Bold'), url(../../fonts/tajawal/Tajawal-Bold.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 900;
+    src: local('Tajawal Black'), local('Tajawal-Black'), url(../../fonts/tajawal/Tajawal-Black.ttf) format('truetype');
+}
+
+.btn {
+    background-color: #019e4f;
+    color: #fff;
+}
+
+
+/*//////////////////////////////////////////////////////////////////
+[ RESTYLE TAG ]*/
+
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    direction: rtl;
+}
+
+body, html {
+    height: 100%;
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 500;
+}
+
+/*---------------------------------------------*/
+a {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #666666;
+    margin: 0px;
+    transition: all 0.4s;
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+}
+
+    a:focus {
+        outline: none !important;
+    }
+
+    a:hover {
+        text-decoration: none;
+        color: #6a7dfe;
+        color: -webkit-linear-gradient(left, #21d4fd, #b721ff);
+        color: -o-linear-gradient(left, #21d4fd, #b721ff);
+        color: -moz-linear-gradient(left, #21d4fd, #b721ff);
+        color: linear-gradient(left, #21d4fd, #b721ff);
+    }
+
+/*---------------------------------------------*/
+h1, h2, h3, h4, h5, h6 {
+    margin: 0px;
+}
+
+p {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #666666;
+    margin: 0px;
+}
+
+ul, li {
+    margin: 0px;
+    list-style-type: none;
+}
+
+
+/*---------------------------------------------*/
+input {
+    outline: none;
+    border: none;
+}
+
+textarea {
+    outline: none;
+    border: none;
+}
+
+    textarea:focus, input:focus {
+        border-color: transparent !important;
+    }
+
+        input:focus::-webkit-input-placeholder {
+            color: transparent;
+        }
+
+        input:focus:-moz-placeholder {
+            color: transparent;
+        }
+
+        input:focus::-moz-placeholder {
+            color: transparent;
+        }
+
+        input:focus:-ms-input-placeholder {
+            color: transparent;
+        }
+
+        textarea:focus::-webkit-input-placeholder {
+            color: transparent;
+        }
+
+        textarea:focus:-moz-placeholder {
+            color: transparent;
+        }
+
+        textarea:focus::-moz-placeholder {
+            color: transparent;
+        }
+
+        textarea:focus:-ms-input-placeholder {
+            color: transparent;
+        }
+
+input::-webkit-input-placeholder {
+    color: #adadad;
+}
+
+input:-moz-placeholder {
+    color: #adadad;
+}
+
+input::-moz-placeholder {
+    color: #adadad;
+}
+
+input:-ms-input-placeholder {
+    color: #adadad;
+}
+
+textarea::-webkit-input-placeholder {
+    color: #adadad;
+}
+
+textarea:-moz-placeholder {
+    color: #adadad;
+}
+
+textarea::-moz-placeholder {
+    color: #adadad;
+}
+
+textarea:-ms-input-placeholder {
+    color: #adadad;
+}
+
+/*---------------------------------------------*/
+button {
+    outline: none !important;
+    border: none;
+    background: transparent;
+}
+
+    button:hover {
+        cursor: pointer;
+        background-color: #027b3e;
+    }
+
+iframe {
+    border: none !important;
+}
+
+
+/*//////////////////////////////////////////////////////////////////
+[ Utility ]*/
+.txt1 {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 13px;
+    color: #666666;
+    line-height: 1.5;
+}
+
+.txt2 {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 13px;
+    color: #333333;
+    line-height: 1.5;
+}
+
+/*//////////////////////////////////////////////////////////////////
+[ login ]*/
+
+.log_wrap {
+
+}
+.img_side {
+    position: relative;
+    height: 100vh;
+}
+    .img_side:before {
+        position: absolute;
+        content: "";
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background-color: rgb(203 153 82 / 13%);
+        height: 100vh;
+        width: 100%;
+        border-radius: 1280px 0 460px 320px;
+        /*background-image: url(../images/log_pattern.png);*/
+        background-size: 800px;
+        z-index: -1;
+    }
+
+.log_logo {
+    width: 250px;
+    text-align: center;
+    display: block;
+    margin: 13rem auto 0;
+}
+.log_bg {
+    position: absolute;
+    bottom: 0;
+    right: 50%;
+    width: 47%;
+    transform: translateX(50%);
+}
+.form_wrap {
+    padding: 0 100px;
+    margin-top: 50%;
+}
+    .form_wrap h3 {
+        color: #682300;
+        font-weight: 600;
+        font-size: 2.3rem;
+    }
+    .form_wrap p {
+        color: #cb9952;
+        font-size: 1.4rem;
+        margin-top: 5px;
+        margin-bottom: 1.5rem;
+    }
+.forget_p,
+.btn-log {
+    text-align: right;
+}
+    .forget_p a {
+        color: #cb9952;
+    }
+        .forget_p a:hover,
+        .forget_p a:focus {
+            color: #cb9952;
+        }
+    .btn-log button,
+    .btn-log button:hover {
+        background-color: #cb9952;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 3px;
+        outline: none;
+        box-shadow: none
+    }
+    /*------------------------------------------------------------------
+[ Responsive ]*/
+    @media (max-width: 576px) {
+        .img_side {
+            position: relative;
+            height: 50vh;
+        }
+            .img_side:before {
+                height:  50vh;
+            }
+        .log_logo {
+            width: 160px;
+            text-align: center;
+            display: block;
+            margin: 6rem auto 0;
+        }
+        .form_wrap {
+            padding: 0 30px;
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
+    }
+
+
+
+/*------------------------------------------------------------------
+[ Alert validate ]*/
+
+.validate-input {
+    position: relative;
+}
+
+.alert-validate::before {
+    content: attr(data-validate);
+    position: absolute;
+    max-width: 70%;
+    background-color: #fff;
+    border: 1px solid #c80000;
+    border-radius: 2px;
+    padding: 4px 25px 4px 10px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    right: 0px;
+    pointer-events: none;
+    font-family: 'Tajawal', sans-serif;
+    color: #c80000;
+    font-size: 13px;
+    line-height: 1.4;
+    text-align: left;
+    visibility: hidden;
+    opacity: 0;
+    -webkit-transition: opacity 0.4s;
+    -o-transition: opacity 0.4s;
+    -moz-transition: opacity 0.4s;
+    transition: opacity 0.4s;
+}
+
+.alert-validate::after {
+    content: "\f06a";
+    font-family: FontAwesome;
+    font-size: 16px;
+    color: #c80000;
+    display: block;
+    position: absolute;
+    background-color: #fff;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    right: 5px;
+}
+
+.alert-validate:hover:before {
+    visibility: visible;
+    opacity: 1;
+}
+
+@media (max-width: 992px) {
+    .alert-validate::before {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+
+
+input:-internal-autofill-selected {
+    -webkit-appearance: menulist-button;
+    background-color: transparent !important;
+    background-image: none !important;
+    color: -internal-light-dark-color(black, white) !important;
+}
+

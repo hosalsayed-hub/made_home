@@ -1,0 +1,277 @@
+﻿/*------------- #provider-apply-section --------------*/
+
+.provider-apply-area .provider-apply-area-head {
+    margin-bottom: 3rem;
+}
+
+    .provider-apply-area .provider-apply-area-head .provider-apply-title {
+        margin-bottom: 10px;
+    }
+
+    .provider-apply-area .provider-apply-area-head .provider-apply-head-text {
+        font-size: 16px;
+        color: #8E8E8E;
+        margin-bottom: 0;
+    }
+
+.provider-apply-steps-area .wizard-btns {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 600px;
+    margin: 1.5rem auto 3rem;
+}
+
+    .provider-apply-steps-area .wizard-btns > * {
+        width: calc(100% / 3);
+    }
+
+    .provider-apply-steps-area .wizard-btns .step-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        position: relative;
+        cursor: pointer;
+    }
+
+        .provider-apply-steps-area .wizard-btns .step-btn:not(:last-child)::after {
+            position: absolute;
+            left: -50%;
+            top: 13px;
+            width: 100%;
+            height: 2px;
+            background-color: #C8D1DB;
+            content: '';
+            z-index: -2;
+        }
+
+        .provider-apply-steps-area .wizard-btns .step-btn .step-icon {
+            position: relative;
+            color: #C8D1DB;
+            font-size: 10px;
+            margin-bottom: 35px;
+            background-color: #fff;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+            .provider-apply-steps-area .wizard-btns .step-btn .step-icon i {
+                position: relative;
+            }
+
+        .provider-apply-steps-area .wizard-btns .step-btn .step-name {
+            font-size: 16px;
+            color: #C8D1DB;
+            text-align: center;
+        }
+
+        .provider-apply-steps-area .wizard-btns .step-btn .step-icon::before {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+            content: '';
+            width: 60px;
+            height: 60px;
+            border-radius: 100%;
+            background-color: #D5C99B;
+            transition: all .3s ease;
+            opacity: 0;
+        }
+
+
+
+        .provider-apply-steps-area .wizard-btns .step-btn.active .step-icon::before {
+            opacity: 1;
+        }
+
+        .provider-apply-steps-area .wizard-btns .step-btn.active .step-icon {
+            color: #682300;
+        }
+
+        .provider-apply-steps-area .wizard-btns .step-btn.active .step-name {
+            font-weight: bold;
+            color: var(--clr-1);
+        }
+
+        .provider-apply-steps-area .wizard-btns .step-btn.done::after {
+            background-color: #D5C99B;
+        }
+
+        .provider-apply-steps-area .wizard-btns .step-btn.done .step-icon {
+            color: #D5C99B;
+        }
+
+        .provider-apply-steps-area .wizard-btns .step-btn.done .step-name {
+            color: #A1835C;
+        }
+
+        .provider-apply-steps-area .wizard-btns .step-btn.done.active .step-icon {
+            color: var(--clr-1)
+        }
+
+
+.provider-apply-steps-area .steps-items .step-item .step-content .form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+    .provider-apply-steps-area .steps-items .step-item .step-content .form-group .form-label {
+        font-size: 16px;
+        margin-bottom: 10px;
+        font-family: 'Cairo-SemiBold';
+    }
+
+    .provider-apply-steps-area .steps-items .step-item .step-content .form-group .form-control,
+    .provider-apply-steps-area .steps-items .step-item .step-content .form-group .form-select {
+        background-color: #F9FAFC;
+        border-color: #CBCBCB;
+        border-radius: 10px;
+        box-shadow: none;
+        padding: .7rem .75rem;
+        font-size: 14px;
+        color: #686868;
+    }
+
+        .provider-apply-steps-area .steps-items .step-item .step-content .form-group .form-control:placeholder {
+            color: #686868;
+        }
+
+    .provider-apply-steps-area .steps-items .step-item .step-content .form-group textarea.form-control {
+        min-height: 100px;
+    }
+
+    .provider-apply-steps-area .steps-items .step-item .step-content .form-group .upload-files-area .upload-btn-title {
+        font-size: 16px;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .provider-apply-steps-area .steps-items .step-item .step-content .form-group .upload-files-area .upload-btn {
+        display: flex;
+        align-items: center;
+        transition: all .3s ease;
+        background-color: #fff;
+        padding: 0;
+        outline: none;
+        border: none;
+        font-size: 16px;
+        color: #686868;
+    }
+
+        .provider-apply-steps-area .steps-items .step-item .step-content .form-group .upload-files-area .upload-btn span {
+            margin-left: 10px;
+        }
+
+            .provider-apply-steps-area .steps-items .step-item .step-content .form-group .upload-files-area .upload-btn span svg {
+                width: 50px;
+                height: 50px;
+            }
+
+        .provider-apply-steps-area .steps-items .step-item .step-content .form-group .upload-files-area .upload-btn:hover {
+            color: var(--clr-1)
+        }
+
+
+    .provider-apply-steps-area .steps-items .step-item .step-content .form-group .upload-img-area .upload-img-title {
+        display: block;
+        font-size: 16px;
+        margin-bottom: 1rem;
+    }
+
+    .provider-apply-steps-area .steps-items .step-item .step-content .form-group .upload-img-area .upload-btns {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+        .provider-apply-steps-area .steps-items .step-item .step-content .form-group .upload-img-area .upload-btns .upload-btn {
+            background-color: #F1E3BE;
+            border-radius: 15px;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0;
+            outline: none;
+            border: none;
+            color: var(--clr-1);
+            transition: all .3s ease;
+            font-size: 14px;
+            margin-left: 20px;
+            box-shadow: 0px 3px 6px rgba(0,0,0,.1);
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+            .provider-apply-steps-area .steps-items .step-item .step-content .form-group .upload-img-area .upload-btns .upload-btn:hover {
+                box-shadow: 0px 3px 6px rgba(0,0,0,.2)
+            }
+
+            .provider-apply-steps-area .steps-items .step-item .step-content .form-group .upload-img-area .upload-btns .upload-btn:last-child {
+                margin-left: 0;
+            }
+
+            .provider-apply-steps-area .steps-items .step-item .step-content .form-group .upload-img-area .upload-btns .upload-btn span {
+                margin-bottom: 5px;
+            }
+
+                .provider-apply-steps-area .steps-items .step-item .step-content .form-group .upload-img-area .upload-btns .upload-btn span svg {
+                    width: 20px;
+                    height: 20px;
+                }
+
+    .provider-apply-steps-area .steps-items .step-item .step-content .form-group.upload-area {
+        margin-bottom: .5rem;
+    }
+
+.provider-apply-steps-area .wizard-arrow {
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+    .provider-apply-steps-area .wizard-arrow .arrow-btn {
+        display: flex;
+        align-items: baseline;
+        padding: 0;
+        border: none;
+        outline: none;
+        transition: all .3s ease;
+        color: var(--clr-1);
+        font-size: 16px;
+        font-family: 'Cairo-SemiBold';
+        background-color: #fff;
+    }
+
+        .provider-apply-steps-area .wizard-arrow .arrow-btn span {
+            padding: 0px 5px;
+        }
+
+        .provider-apply-steps-area .wizard-arrow .arrow-btn.disabled {
+            color: #CBCBCB;
+            pointer-events: none;
+        }
+
+        .provider-apply-steps-area .wizard-arrow .arrow-btn:not(.disabled):hover {
+            color: var(--clr-2);
+        }
+
+@media(max-width:575.98px) {
+
+    .provider-apply-steps-area .wizard-btns {
+        max-width: none;
+    }
+
+        .provider-apply-steps-area .wizard-btns .step-btn .step-name {
+            font-size: 14px;
+        }
+}
+/*------------- #provider-apply-section --------------*/

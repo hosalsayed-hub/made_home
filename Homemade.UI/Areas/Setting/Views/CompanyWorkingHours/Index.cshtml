@@ -1,0 +1,147 @@
+﻿@model Homemade.BLL.ViewModel.Setting.CompanyWorkingHoursViewModel
+@inject Homemade.BLL.Vendor.BlVendor blVendor
+<div class="content">
+    <form method="post" id="frmCreate" onsubmit="return false"
+          data-ajax="true"
+          data-ajax-method="post"
+          data-ajax-success="formSuccess">
+        @Html.AntiForgeryToken()
+        <div class="block block-themed">
+            <div class="block-header">
+                <h3 class="">
+                    <span class="header-title">@Homemade.UI.Resources.HomemadeMenu.Company_Working_Hours</span>
+                </h3>
+            </div>
+            <div class="block-content">
+                <div class="row" id="divMsgParent" style="display:none">
+                    <div class="form-group row">
+                        <div class="col-xs-12">
+                            <div id="divMsgClass" class="alert alert-danger" role="alert">
+                                <strong id="lblMsg"></strong>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <input asp-for="CompanyWorkingHoursID" type="hidden" />
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.DaysWork <span style="color:red">*</span></label>
+                            <select multiple="" class="form-control js-select2" asp-for="ListDaysWork" name="ListDaysWork" onchange="UpdateReadDaysVac()" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select"
+                                    asp-items="@(new MultiSelectList(blVendor.GetDayOfWeekEnum(Homemade.UI.InfraStructure.Utility.CurrentLanguageCode).Select(x=>new {x.Value,Name = x.Text}),"Value","Name",Model.ListDaysWork))">
+                                <option value=""></option>
+                            </select>
+                            <span style="color:red" asp-validation-for="ListDaysWork"> </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.FirstShiftFrom </label>
+                            <input asp-for="FirstShiftWorkFrom" class="js-datetimepicker form-control AddData" type="text" value="@Model.FirstShiftWorkFromString">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.FirstShiftTo </label>
+                            <input asp-for="FirstShiftWorkTo" class="js-datetimepicker form-control AddData" type="text" value="@Model.FirstShiftWorkToString">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.SecondShiftFrom </label>
+                            <input asp-for="SecondShiftWorkFrom" class="js-datetimepicker form-control AddData" type="text" value="@Model.SecondShiftWorkFromString">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.SecondShiftTo </label>
+                            <input asp-for="SecondShiftWorkTo" class="js-datetimepicker form-control AddData" type="text" value="@Model.SecondShiftWorkToString">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="block block-themed">
+            <div class="block-content">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Holidays</label>
+                            <select multiple="" class="form-control js-select2" asp-for="ListDaysVac" name="ListDaysVac" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select"
+                                    asp-items="@(new MultiSelectList(blVendor.GetDayOfWeekEnum(Homemade.UI.InfraStructure.Utility.CurrentLanguageCode).Select(x=>new {x.Value,Name = x.Text}),"Value","Name",Model.ListDaysVac))">
+                                <option value=""></option>
+                            </select>
+                            <span style="color:red" asp-validation-for="ListDaysVac"> </span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.FirstShiftFrom </label>
+                            <input asp-for="FirstShiftVacWorkFrom" class="js-datetimepicker form-control AddData" type="text" value="@Model.FirstShiftVacWorkFromString">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.FirstShiftTo </label>
+                            <input asp-for="FirstShiftVacWorkTo" class="js-datetimepicker form-control AddData" type="text" value="@Model.FirstShiftVacWorkToString">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.SecondShiftFrom </label>
+                            <input asp-for="SecondShiftVacWorkFrom" class="js-datetimepicker form-control AddData" type="text" value="@Model.SecondShiftVacWorkFromString">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.SecondShiftTo </label>
+                            <input asp-for="SecondShiftVacWorkTo" class="js-datetimepicker form-control AddData" type="text" value="@Model.SecondShiftVacWorkToString">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-custom bg-orange" id="btnSave" type="button"><i class="ion-checkmark push-5-r"></i> @Homemade.UI.Resources.Homemade.save</button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+@section Styles{
+    <!-- Select 2 Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2-bootstrap.min.css" />
+
+    <!-- Date_Picker Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/Hijiri-Plugin/css/bootstrap-datetimepicker.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+}
+    @section Scripts{
+    <!-- Select 2 Scripts -->
+    <script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+
+    <!-- Date_picker Plugins -->
+    <script src="~/assets/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/Hijiri-Plugin/js/bootstrap-hijri-datetimepicker.js"></script>
+    <partial name="_Scripts" />
+
+    <script>
+        $(function() {
+            $('.js-datetimepicker').datetimepicker({
+                format: 'LT'
+            }).on('dp.show', function() {
+                $('.block.block-content').css({ 'overflow': 'visible' });
+            }).on('dp.hide', function() {
+                $('.block.block-content').css({ 'overflow': 'hidden' });
+            });
+        });
+    </script>
+}

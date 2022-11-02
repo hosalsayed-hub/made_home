@@ -1,0 +1,64 @@
+﻿@model Homemade.BLL.ViewModel.Order.OrdersVendorViewModel
+<div class="block-content block-content-full dep_b_wrap">
+    <div class="row">
+        <div class="col-md-6">
+            <h4>
+                <strong class="text-secondary">
+                    @Homemade.UI.Resources.Homemade.Order_Number: @Model.OrdersID - @Homemade.UI.Resources.Homemade.Block: @Model.VendorBlockName
+                </strong>
+            </h4>
+        </div>
+        @if (Model.IsEdit)
+        {
+            <div class="col-md-6 text-right pull-right" id="Dev_SaveQuantity">
+                <div class="form-group">
+                    <button class="btn btn-info" onclick="SaveQuantity()"><i class="ion-checkmark push-5-r"></i> @Homemade.UI.Resources.Homemade.SaveWithApprove</button>
+                    <button class="btn btn-custom bg-orange" onclick="CancelEdit()"><i class="fa fa-close"></i> @Homemade.UI.Resources.Homemade.Cancel</button>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-6 text-right pull-right" id="Dev_ActionBtn">
+                <div class="form-group">
+                    <button class="btn btn-info" onclick="ShowSaveQuantity()"><i class="fa fa-edit"></i> @Homemade.UI.Resources.Homemade.EditQuantity</button>
+                    <button class="btn btn-custom bg-orange" onclick="ApproveOrder()"><i class="ion-checkmark push-5-r"></i> @Homemade.UI.Resources.Homemade.Approve</button>
+                    <button class="btn btn-danger" onclick="RejectOrder()"><i class="fa fa-close"></i> @Homemade.UI.Resources.Homemade.Reject</button>
+                </div>
+            </div>
+        }
+    </div>
+    <table class="table prod_pay">
+        <tr>
+            <th>#</th>
+            <th>@Homemade.UI.Resources.Homemade.Product</th>
+            <th>@Homemade.UI.Resources.Homemade.Quantity</th>
+        </tr>
+        @{
+            var ProdCount = 1;
+        }
+        @foreach (var product in Model.Products)
+        {
+            <tr>
+                <td>@ProdCount @{
+                        ProdCount++;
+                    }</td>
+                <td class="product_inf">
+                    <img src="@product.Logo" alt="Alternate Text" class="prod_img" />
+                    <span class="push-5-r">@product.Name</span>
+                </td>
+                <td>
+                    @if (Model.IsEdit)
+                    {
+                        <input id="Quantity_@product.ProductID" name="Quantity_@product.ProductID" data-id="@product.ProductID" type="number" class="form-control" maxlength="6" value="@product.Quantity" onkeypress="return isNumberKey(event)" />
+                    }
+                    else
+                    {
+                        <input id="Quantity_@product.ProductID" name="Quantity_@product.ProductID" data-id="@product.ProductID" disabled type="number" class="form-control" maxlength="6" value="@product.Quantity" onkeypress="return isNumberKey(event)" />
+                    }
+
+                </td>
+            </tr>
+        }
+    </table>
+</div>

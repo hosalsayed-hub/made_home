@@ -1,0 +1,180 @@
+﻿ html,
+    body,
+    .tg {
+        margin: 0;
+        /*width: 380px;*/
+    }
+* {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+.tg {
+    border-collapse: collapse;
+    border-spacing: 0;
+    page-break-after: always;
+}
+
+    .tg td {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        padding: 0px 5px;
+        border-style: solid;
+        border-width: 1px;
+        overflow: hidden;
+        word-break: normal;
+        border-color: black;
+    }
+
+    .tg th {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        padding: 10px 5px;
+        border-style: solid;
+        border-width: 1px;
+        overflow: hidden;
+        word-break: normal;
+        border-color: black;
+    }
+
+    .tg .tg-lboi {
+        border-color: inherit;
+        text-align: left;
+        vertical-align: middle
+    }
+
+    .tg .tg-1do4 {
+        border-color: inherit;
+        text-align: left;
+        vertical-align: middle
+    }
+
+    .tg .tg-l93j {
+        border-color: inherit;
+        text-align: center;
+        vertical-align: top
+    }
+
+    .tg .tg-0pky {
+        border-color: inherit;
+        text-align: left;
+        vertical-align: middle;
+    }
+
+    .tg .tg-j0pp {
+        border-color: inherit;
+        text-align: left;
+        vertical-align: middle
+    }
+
+    .tg .tg-h6w4 {
+        border-color: inherit;
+        text-align: left;
+        vertical-align: top
+    }
+
+.brq-logo {
+    width: 100px;
+}
+
+.bc-container {
+    max-width: 100%;
+    padding: 0 10px;
+}
+
+    .bc-container img,
+    .bc-container p {
+        max-width: 100%;
+    }
+
+.qc-container {
+    max-width: 100%;
+    padding: 8px 0;
+    padding: 5px;
+    margin-top: 5%;
+}
+
+    .qc-container img,
+    .qc-container p {
+        max-width: 100%;
+    }
+
+.qc-container-big-lable {
+    max-width: 100%;
+    padding: 8px 0;
+    padding: 5px;
+    margin-top: 5%;
+    background-color: black;
+    padding: 0px 0px;
+    color: white;
+    font-size: 55px;
+    text-align: center;
+    font-weight: bold;
+}
+
+    .qc-container-big-lable img,
+    .qc-container-big-lable p {
+        max-width: 100%;
+    }
+
+.tg h4 {
+    margin: 0;
+}
+
+.tg p {
+    margin: 0px 0 0px 0;
+}
+
+.vr-item {
+    transform: rotate(-90deg) translateX(0%);
+    width: 70px;
+    text-align: center;
+    white-space: nowrap;
+    letter-spacing: .8;
+    margin: 0 0 0 -27px;
+}
+
+.align-center {
+    display: block;
+    text-align: center;
+}
+
+.bc-container-vr {
+    transform: rotate(-90deg) translateX(0%);
+    width: 230%;
+    height: 30px;
+    text-align: center;
+    white-space: nowrap;
+    letter-spacing: .8;
+    margin: 0 0 0 -65px;
+}
+
+    .bc-container-vr img,
+    .bc-container-vr p {
+        width: 100%;
+    }
+
+
+@media print {
+    * {
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+    }
+
+    html,
+    body,
+    .tg {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    @page :first {
+        margin-top: 0;
+    }
+}
+
+ 
+.text-bold {
+    font-weight: bold;
+}

@@ -1,0 +1,141 @@
+﻿@inject Homemade.BLL.BLPermission blPermission
+@{
+    var IsPermissionView = @blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.PromoCode, (int)Homemade.BLL.ActionEnum.Update) ? 1 : 0;
+    var IsPermissionUpdate = @blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.PromoCode, (int)Homemade.BLL.ActionEnum.Update) ? 1 : 0;
+    var IsPermissionDelete = @blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.PromoCode, (int)Homemade.BLL.ActionEnum.Delete) ? 1 : 0;
+}
+<script>
+    $(document).ready(function() {
+
+        table = $('#tbl').DataTable({
+            pageLength: 10,
+            pagijngType: "full_numbers",
+            serverSide: true,
+            processing: true,
+            lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+            sAjaxSource: '@Url.Action("LoadTablePromo")',
+            sServerMethod: "POST",
+            bPaginate: true,
+            paging: true,
+            bFilter: true,
+            bLengthChange: false,
+            columns: [
+                {
+                    "data": null,
+                    "sortable": false,
+                    render: function(data, type, row, meta) {
+                        return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="arName">' + data.startDate + '</label>'
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="text-center">' + data.expiryDate + '</label>'
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="text-center">' + data.subject + '</label>'
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="text-center">' + data.content + '</label>'
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="text-center">' + data.limitCount + '</label>'
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="text-center">' + data.promoCode + '</label>'
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="text-center">' + data.discountValue + '</label>'
+                    }
+                },
+
+                {
+
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        var databutton = `<div class="btn-group">`;
+                        if (@IsPermissionView == 1) {
+                            databutton += ` <a class="btn btn-xs btn-info" href="@Url.Action("DetailsPromo")/${data.promoCodeGuid}" type="button" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Details">
+                                            <i class="fa fa-search"></i>
+                                        </a>`;
+                        }
+                        if (@IsPermissionUpdate == 1) {
+                            databutton += ` <a class="btn btn-xs btn-success" style="margin:0 5px" href="@Url.Action("EditPromo")/${data.promoCodeGuid}" type="button" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Update">
+                                            <i class="fa fa-edit"></i>
+                                        </a>`;
+                        }
+                        if (@IsPermissionDelete == 1) {
+                            databutton += `<button class="btn btn-xs btn-danger" type="button" data-toggle="tooltip" onclick="Delete(this ,'${data.promoCodeMasterID}');" data-id="${data.promoCodeGuid}" title="@Homemade.UI.Resources.Homemade.Delete">
+                                            <i class="fa fa-trash"></i>
+                                        </button>`;
+                        }
+                        databutton += `</div>`;
+                        return databutton;
+                    }
+                }
+            ],
+            drawCallback: function(s) {
+                $('[data-toggle="tooltip"]').tooltip();
+            },
+            buttons: [
+    @*{
+                extend: "copy",
+                className: "btn btn-info btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Copy'
+                },*@{
+                    extend: "excelHtml5",
+                    autoFilter: true,
+                    sheetName: 'Exported data',
+                    className: "btn btn-success btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.Excel'
+                }, @*{
+                extend: "print",
+                className: "btn btn-warning btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Print'
+                },*@{
+                    extend: "pdfHtml5",
+                    download: 'open',
+                    className: "btn btn-info btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.PDF'
+                }],
+            "language": {
+                "search": "_INPUT_",
+                "searchPlaceholder": "Search",
+                "lengthMenu": "_MENU_",
+            }, dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+        });
+        table.buttons().container().appendTo('.dt_buttons_wrap');
+
+    });
+
+</script>

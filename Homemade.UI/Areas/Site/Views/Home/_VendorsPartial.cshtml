@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Homemade.BLL.ViewModel.Site.SiteVendorsViewModel>
+@if (Model != null)
+{
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3 form-group text-center" style="margin-bottom:40px;">
+                <a class="vendor-details" href="/Site/home/vendor?id=@item.VendorsGuid">
+                    <img class="vendor-circle" src="@item.VendorsLogo" >
+                    @if (!blVendor.IsVendorWorking(item.VendorsDaysWork, item.VendorsWorkFrom, item.VendorsWorkTo, item.VendorsDaysVac, item.VendorsVacWorkFrom, item.VendorsVacWorkTo))
+                    {
+                        <img class="vendor-circle" src="https://cdn.made-home.com/Home/Product/closed.png" style="margin-top: -360px; margin-right:12px; opacity: 0.8; height: 57px; width:57px; border-radius: 0px;">  }
+
+                </a>
+                <h3 class="vendor-name" onclick="location.href='/Site/home/vendor?id=@item.VendorsGuid'" style="padding-top:5px;">@item.VendorsName</h3>
+                @*@{
+                    var working = blVendor.GetVendorWorkingTimeByID(item.VendorsID, Homemade.UI.InfraStructure.Utility.CurrentLanguageCode);
+                }
+            <span style="color:red">
+                @working.SiteDaysWork
+                @if (!string.IsNullOrEmpty(working.SiteTimeWork))
+                {
+                    <br />
+                    @working.SiteTimeWork
+                }
+            </span>*@
+                @*@if (!string.IsNullOrEmpty(working.SiteDaysVac))
+                {
+                    <br />
+                    <span style="color:red">
+                        @working.SiteDaysVac
+                        @if (!string.IsNullOrEmpty(working.SiteTimeVac))
+                        {
+                            <br />
+                            @working.SiteTimeVac
+                        }
+                    </span>
+                }*@
+            </div>
+        }
+    </div>
+}

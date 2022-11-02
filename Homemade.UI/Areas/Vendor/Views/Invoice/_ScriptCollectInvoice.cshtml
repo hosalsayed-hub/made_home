@@ -1,0 +1,69 @@
+﻿<script>
+    var ddlBank = $("#BankID");
+    var InvoiceMasterId;
+    function PaidInvoice(id) {
+        InvoiceMasterId = id;
+        $('#modal').modal('show');
+    }
+    function ConfirmPaidInvoice() {
+        if ($("#BankID").val() === "") {
+            swal('@Homemade.UI.Resources.Homemade.Please_Choose_Bank', "", "error");
+        }
+        else if ($("#ReferenceNo").val() === "") {
+            swal('@Homemade.UI.Resources.Homemade.Please_Insert_ReferenceNo', "", "error");
+        }
+        else if ($("#TransferDate").val() === "") {
+            swal('@Homemade.UI.Resources.Homemade.Please_Insert_Transfer_Date', "", "error");
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PaidInvoiceMaster")',
+                data: {
+                    InvoiceMasterID: InvoiceMasterId, BankID: $("#BankID").val(), ReferenceNo: $("#ReferenceNo").val(), TransferDate: $("#TransferDate").val(), Image: $("#pfupAttach").html(),
+                },
+                success: function(response) {
+                    if (response.status == true) {
+                        readtable();
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                            Title = "response.message"});
+                    }
+                    else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) {
+                            Title = "response.message"});
+                    }
+                }
+            });
+            $("#modal").modal('hide');
+        }
+    }
+    function GetBank() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetBanks")',
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function(result) {
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    ddlBank.append('<option value="' + item.bankID + '">' + item.name + '</option>');
+                }
+            },
+            error: function() {
+            }
+        });
+    }
+    function ConvertToBase64(e) {
+        var fileUpload = $(e);
+        var pID = '#p' + fileUpload.attr('id');
+
+        var FR = new FileReader();
+
+        FR.addEventListener("load", function(e) {
+            $(pID).html(e.target.result.replace(/^data:.+;base64,/, ''));
+        }, false);
+
+        FR.readAsDataURL($(fileUpload)[0].files[0]);
+
+    }
+</script>

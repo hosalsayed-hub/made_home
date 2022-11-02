@@ -1,0 +1,116 @@
+﻿@model IEnumerable<Homemade.BLL.ViewModel.Driver.DriverBlanceViewModel>
+@{
+    List<int> lstDriverID = Model.GroupBy(x => x.DriverID).Select(m => m.Key).ToList();
+    List<int> lstDriverIDExist = new List<int>();
+}
+<div class="content">
+    <!-- Dynamic Table Full -->
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <h3>
+                @Homemade.UI.Resources.Homemade.DriverBlance
+            </h3>
+        </div>
+        <div class="block-content">
+            <div class="row">
+                <div class="col-sm-6 Dev-Print">
+                    <a href="javascript:void(0);" onclick="printDiv()" class="btn btn-info btn-icon">
+                        <span><i class="fa fa-print"></i> @Homemade.UI.Resources.Homemade.Print</span>
+                    </a>
+                </div>
+                <div class="col-sm-12">
+                    <div id="printDiv">
+                        @foreach (var DriverID in lstDriverID)
+                        {
+                            int Counter = 1;
+                            var driverBlance = Model.Where(x => x.DriverID == DriverID);
+                            lstDriverIDExist.Add(DriverID);
+                            <div class="page">
+                                <div class="subpage">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <b>@Homemade.UI.Resources.Homemade.Homemade_Company</b>
+                                            <br />
+                                            @Homemade.UI.Resources.Homemade.Date: @DateTime.UtcNow.AddHours(3).ToString("dd-MM-yy")
+                                            <br />
+                                            @Homemade.UI.Resources.Homemade.Time: @DateTime.UtcNow.AddHours(3).ToString("hh:mm tt")
+
+                                        </div>
+                                        <div class="col-sm-3 col-sm-offset-6">
+                                            <img src="/assets/homeMadeSite/img/logo.svg" height="60" />
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <h3 class="text-center"><b>@Homemade.UI.Resources.Homemade.DriverBlance</b></h3>
+                                            <hr style="margin: 15px 0;" />
+                                            <div class="row">
+
+                                                <div class="col-sm-3 form-group"><label class="bold">@Homemade.UI.Resources.Homemade.Driver : </label> @(Model.Any(x => x.DriverID == DriverID) ? Model.Where(x => x.DriverID == DriverID).FirstOrDefault().DriverName : Model.FirstOrDefault().DriverName)</div>
+
+                                            </div>
+                                            <hr style="margin: 15px 0;" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <table class="table table-bordered col-sm-12">
+                                                <tr style="background-color:lightgray">
+                                                    <th class="text-center"><b>#</b></th>
+                                                    <th class="text-center">@Homemade.UI.Resources.Homemade.DriverName</th>
+                                                    <th class="text-center">@Homemade.UI.Resources.Homemade.OperationType</th>
+                                                    <th class="text-center">@Homemade.UI.Resources.Homemade.Transaction</th>
+                                                    <th class="text-center">@Homemade.UI.Resources.Homemade.Amount</th>
+                                                    <th class="text-center">@Homemade.UI.Resources.Homemade.Before</th>
+                                                    <th class="text-center">@Homemade.UI.Resources.Homemade.After</th>
+                                                    <th class="text-center">@Homemade.UI.Resources.Homemade.Date</th>
+
+                                                </tr>
+
+                                                @foreach (var item in driverBlance)
+                                                {
+                                                    <tr>
+                                                        <td class="text-center">@Counter</td>
+                                                        <td class="text-center">@item.DriverName</td>
+                                                        @if (item.TypeOperationID == (int)Homemade.BLL.TypeOperationEnum.CR)
+                                                        {
+                                                            <td class="text-center">
+                                                                @Homemade.UI.Resources.Homemade.CR
+                                                            </td>
+                                                        }
+                                                        else if (item.TypeOperationID == (int)Homemade.BLL.TypeOperationEnum.DR)
+                                                        {
+                                                            <td class="text-center">
+                                                                @Homemade.UI.Resources.Homemade.DR
+                                                            </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td class="text-center">
+                                                            </td>
+                                                        }
+                                                        <td class="text-center">@item.TransactionTypeName</td>
+
+
+                                                        <td class="text-center">@String.Format("{0:0.00}", item.Amount)</td>
+                                                        <td class="text-center">@String.Format("{0:0.00}", item.Before)</td>
+                                                        <td class="text-center">@String.Format("{0:0.00}", item.After)</td>
+                                                        <td class="text-center">@item.DateOperation.ToString("dd/MM/yyyy hh:mm tt")</td>
+                                                    </tr>
+                                                    Counter++;
+                                                }
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<link href="~/Content/Print.css" rel="stylesheet" />
+@section Scripts
+{
+    <script src="~/Scripts/App/Print.js"></script>
+}

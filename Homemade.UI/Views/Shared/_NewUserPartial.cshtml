@@ -1,0 +1,268 @@
+﻿ <!-- ***** new-user modal  ***** -->
+
+<div class="custom-bootstrap-modal modal fade registration-modal new-user-modal " id="newUsermodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+
+
+                <div class="modal-body-title title-4">@Homemade.UI.Resources.Homemade.New_User</div>
+                <div class="modal-body-content">
+
+                    <div class="new-user-modal-area registration-area">
+
+                        <form class="new-user-form" id="RegisterCustomerForm" asp-action="RegisterCustomer" asp-controller="Home" asp-area="Site" data-ajax="true"
+                              data-ajax-complete="completedRegister"
+                              data-ajax-method="post">
+                            <div class="row" id="divMsgParentRegister" style="display:none">
+                                <div class="form-group">
+                                    <div class="col-xs-12">
+                                        <div id="divMsgClassRegister" class="alert alert-danger" role="alert">
+                                            <strong id="lblMsgRegister"></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-lg-12">
+
+                                    <div class="form-group">
+
+                                        <label class="form-label">@Homemade.UI.Resources.Homemade.Name</label>
+                                        <input type="text" class="form-control input-focus" id="UserName" name="UserName" placeholder="@Homemade.UI.Resources.Homemade.Enter_your_triple_name" data-val="true" data-val-required="@Homemade.BLL.Resources.HomemadeErrorMessages.UserNameRequierd">
+                                        <span style="color:red" class="field-validation-valid" data-valmsg-for="UserName" data-valmsg-replace="true"></span>
+
+                                    </div>
+
+                                </div>
+                            
+                            <div class="col-lg-6">
+                                <input id="RegisterTypeId" name="RegisterTypeId" value="1" hidden />
+                                <div class="form-group  tel-field">
+
+                                    <label class="form-label">@Homemade.UI.Resources.Homemade.MobileNumber</label>
+                                    <div class="input_group">
+
+                                        <input type="number" class="form-control input-focus" id="MobileNo" inputmode="tel" name="MobileNo" data-val="true" data-val-required="@Homemade.BLL.Resources.HomemadeErrorMessages.MobileRequierd">
+                                        <div class="country-code">
+
+                                            <span>+966</span>
+                                            <img src="~/assets/homeMadeSite/img/sr.svg">
+
+
+                                        </div>
+
+
+                                    </div>
+                                    <span style="color:red" class="field-validation-valid" data-valmsg-for="MobileNo" data-valmsg-replace="true"></span>
+
+                                </div>
+
+                            </div>
+                                <div class="col-lg-6">
+
+                                    <div class="form-group">
+
+                                        <label class="form-label">@Homemade.UI.Resources.Homemade.Email</label>
+                                        <input type="email" class="form-control input-focus" id="Email" placeholder="@Homemade.UI.Resources.Homemade.Enter_your_email_address" title="@Homemade.BLL.Resources.HomemadeErrorMessages.Email" name="Email" data-val="true" data-val-required="@Homemade.BLL.Resources.HomemadeErrorMessages.EmailRequierd">
+                                        <span style="color:red" class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-6">
+
+                                    <div class="form-group">
+
+                                        <label class="form-label">@Homemade.UI.Resources.Homemade.Password</label>
+                                        <div class="password-field">
+
+                                            <input type="password" id="Password" class="form-control password-input input-focus" name="Password" data-val="true" data-val-required="@Homemade.BLL.Resources.HomemadeErrorMessages.PasswordRequierd">
+                                            <div class="eye-icon"></div>
+
+                                        </div>
+                                        <span style="color:red" class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-6">
+
+                                    <div class="form-group">
+
+                                        <label class="form-label">@Homemade.UI.Resources.Homemade.ConfirmPassword</label>
+                                        <div class="password-field">
+
+                                            <input type="password" id="ConfirmPassword" class="form-control password-input input-focus" name="ConfirmPassword" data-val="true" data-val-equalto="@Homemade.BLL.Resources.HomemadeErrorMessages.Password_not_match"
+                                                   data-val-equalto-other="*.Password" data-val-required="@Homemade.BLL.Resources.HomemadeErrorMessages.ConfirmPasswordRequierd">
+                                            <div class="eye-icon"></div>
+
+                                        </div>
+                                        <span style="color:red" class="field-validation-valid" data-valmsg-for="ConfirmPassword" data-valmsg-replace="true"></span>
+
+                                    </div>
+
+                                </div>
+                                <div class="col-12">
+
+                                    <div class="form-group">
+
+                                        <div class="form-check terms-checkbox">
+
+                                            <input class="form-check-input" type="checkbox" id="IsAgreeTerms" name="IsAgreeTerms" value="true">
+                                            <label class="form-check-label" for="IsAgreeTerms">
+                                                @Homemade.UI.Resources.Homemade.I_agree_to
+
+                                                <a class="terms-link" href="/Site/Home/Terms">@Homemade.UI.Resources.Homemade.Terms_and_Conditions</a>
+
+                                            </label>
+                                        </div>
+                                        <p style="font-size: 12px;color: #009ab5;font-weight: bold;margin-bottom: 0;">@Homemade.UI.Resources.Homemade.We_serve_the_city_of_Riyadh_at_the_current_stage_only </p>
+
+
+                                    </div>
+
+                                </div>
+                                <div class="col-12">
+
+                                    <div class="registration-btns">
+
+                                        <button type="submit" class="registration-btn sign-up-btn theme-btn theme-btn-lg">  @Homemade.UI.Resources.Homemade.Register</button>
+
+                                        <a class="registration-btn underline-link h-account toggle-modal-btn" href="#" data-bs-toggle="modal" data-bs-target="#signInmodal">@Homemade.UI.Resources.Homemade.Do_you_already_have_an_account</a>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<!-- ***** new-use modal  ***** -->
+
+<div class="custom-bootstrap-modal modal fade registration-modal registration-two-column forgot-password-modal" id="newUsermodalStep2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+
+
+                <div class="modal-body-content">
+
+                    <div class="registration-two-column-area">
+
+                      
+                        <div class="row">
+
+                            <div class="col-lg-5">
+
+                                <div class="registration-col">
+
+                                    <div class="site-logo">
+
+                                        <img class="img-fluid" src="~/assets/homeMadeSite/img/logo.svg">
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="col-lg-1">
+
+                                <div class="col-divider">
+
+                                    <div></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-5" id="Div_Verfied_Success" style="display:none">
+                                <div class="forgot-password-modal-area registration-col registration-area">
+
+                                    <div class="col-head">
+
+                                        <div class="col-title title-4">@Homemade.UI.Resources.Homemade.Register_successfully_and_you_are_logged_in </div>
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="col-lg-5" id="Div_Verfied">
+
+                                    <div class="forgot-password-modal-area registration-col registration-area">
+
+                                        <div class="col-head">
+
+                                            <div class="col-title title-4">@Homemade.UI.Resources.Homemade.Mobile_Number_Verification</div>
+                                            <p class="col-text" id="Div_Loading">
+                                                <img src="../../assets/homeMadeSite/css/ajax-loader.gif" style="width: 50px;">
+                                                @Homemade.UI.Resources.Homemade.Verification_code_is_being_sent
+                                            </p>
+                                            <p class="col-text" id="Div_sendcode" style="display:none">
+                                                @Homemade.UI.Resources.Homemade.Please_enter_the_code_sent_to_your_phone
+                                            </p>
+                                        </div>
+                                        <div class="col-body">
+
+                                            <div class="row" id="divMsgParentRegisterCode" style="display:none">
+                                                    <div class="col-xs-12">
+                                                        <div id="divMsgClassRegisterCode" class="alert alert-danger" role="alert">
+                                                            <strong id="lblMsgRegisterCode"></strong>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                            <form class="forgot-password-form">
+
+                                                <div class="form-group">
+
+                                                    <div class="form-group  tel-field">
+                                                        <input id="UserRegisterID" hidden>
+                                                        <label class="form-label">@Homemade.UI.Resources.Homemade.The_code_sent_to_you </label>
+                                                        <input type="number" class="form-control input-focus code-input" id="RegisterCode">
+                                                    </div>
+
+                                                </div>
+                                                <div class="registration-btns small">
+
+                                                    <button type="button" class="registration-btn step-btn theme-btn theme-btn-lg" onclick="SubmitVerfiedRegisterCode()">@Homemade.UI.Resources.Homemade.Activation</button>
+
+
+                                                </div>
+
+                                            </form>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+

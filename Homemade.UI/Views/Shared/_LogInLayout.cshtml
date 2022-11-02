@@ -1,0 +1,148 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor IhttpContextAccessor
+@{
+    var cookieLingua = "ar";
+
+    if (Context.Request.Cookies["Language"] != null)
+    {
+        cookieLingua = Context.Request.Cookies["Language"];
+    }
+
+}
+<!DOCTYPE html>
+@{
+    var direction = "";
+    var munemain = "";
+    var Dashborad = "";
+}
+@if (Context.Request.Cookies["Language"] != null)
+{
+
+
+    if (Context.Request.Cookies["Language"] == "en")
+    {
+        direction = "ltr";
+        munemain = "Home Made";
+        Dashborad = "Login";
+    }
+    else
+    {
+
+        direction = "rtl";
+        munemain = "شغل بيت";
+        Dashborad = "الدخول";
+    }
+}
+else
+{
+    direction = "rtl";
+    munemain = "شغل بيت";
+    Dashborad = "الدخول";
+}
+<!--[if IE 9]>         <html class="ie9 no-focus" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!-->
+<html class="no-focus" lang="en">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    <title>@munemain - @Dashborad</title>
+
+    <meta name="description" content="Login">
+    <meta name="author" content="Home Made">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0">
+
+    <!-- Icons -->
+    <!-- fave icon -->
+    <link rel="apple-touch-icon" sizes="152x152" href="~/Images/logo.jpeg">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Images/logo.jpeg">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/Images/logo.jpeg">
+    <link rel="mask-icon" href="~/Images/logo.jpeg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/Login/vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/Login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/Login/fonts/iconic/css/material-design-iconic-font.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/Login/vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/Login/vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/Login/vendor/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/Login/vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/Login/vendor/daterangepicker/daterangepicker.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Content/Login/css/util.css">
+
+    @if (Context.Request.Cookies["Language"] != null)
+    {
+        if (Context.Request.Cookies["Language"] == "ar")
+        {
+            <link rel="stylesheet" type="text/css" href="~/Content/Login/css/main_ar.css">
+        }
+        else
+        {
+            <link rel="stylesheet" type="text/css" href="~/Content/Login/css/main.css">
+        }
+    }
+    else
+    {
+        <link rel="stylesheet" type="text/css" href="~/Content/Login/css/main_ar.css">
+    }
+
+    <!-- Main Styles -->
+</head>
+<body>
+    <!-- New login content-->
+
+    <section class="log_wrap">
+        <div class="row no-gutters">
+            <div class="col-md-8 img_side">
+                <img src="~/Content/Login/images/beet_logo.png" class="log_logo" />
+                <img src="~/Content/Login/images/log_bg.svg" class="log_bg"/>
+            </div>
+            <div class="col-md-4">
+                <div class="form_wrap">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </section>
+
+  
+    <!--End login content-->
+    <!--===============================================================================================-->
+    <script src="~/Content/Login/vendor/jquery/jquery-3.2.1.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Content/Login/vendor/animsition/js/animsition.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Content/Login/vendor/bootstrap/js/popper.js"></script>
+    <script src="~/Content/Login/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Content/Login/vendor/select2/select2.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Content/Login/vendor/daterangepicker/moment.min.js"></script>
+    <script src="~/Content/Login/vendor/daterangepicker/daterangepicker.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Content/Login/vendor/countdowntime/countdowntime.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Content/Login/js/main.js"></script>
+
+    <!-- OneUI Core JS: jQuery, Bootstrap, slimScroll, scrollLock, Appear, CountTo, Placeholder, Cookie and App.js -->
+    <!-- Page JS Code -->
+
+    @RenderSection("Scripts", false)
+    <script>
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : evt.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+            return true;
+        }
+    </script>
+</body>
+</html>

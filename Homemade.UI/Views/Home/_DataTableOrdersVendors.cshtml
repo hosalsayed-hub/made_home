@@ -1,0 +1,178 @@
+﻿<script>
+    var tableOrder;
+    $(document).ready(function () {
+        tableOrder = $('#tbl_Order').DataTable({
+            pageLength: 5,
+            pagijngType: "full_numbers",
+            serverSide: true,
+            processing: true,
+            lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+            sAjaxSource: '/Home/LoadTableOrdersVendor',
+            sServerMethod: "POST",
+            bPaginate: true,
+            paging: true,
+            bFilter: true,
+            bLengthChange: false,
+            columns: [
+                {
+                    "data": null,
+                    "sortable": false,
+                    render: function (data, type, row, meta) {
+                        return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) {
+                        return '<label >' + data.orderVendorID + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) {
+                        return '<label >' + data.integrationOrderId + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) {
+                        return '<input type="hidden" value="' + data.orderVendorID + '"/><label class="arName">' + data.customersName + '</label>';
+                    }
+
+                },
+
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) {
+                        return '<label >' + data.customersMobileNo + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) {
+                        return '<label >' + data.vendorsName + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) {
+                        return '<label >' + data.orderStatusName + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) { return '<label>' + getFormatDate(data.createDate) + " " + data.createDateString + '</label>' }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) {
+                        return '<label >' + data.orderTypeName + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) {
+                        if (data.scheduleDate != "null" && data.scheduleDate != null) {
+                            return '<label>' + getFormatDate(data.scheduleDate) + '</label>'
+                        } else {
+                            return '<label> -- </label>'
+                        }
+                    }
+                },
+
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) {
+                        return '<label >' + data.scheduleTimeString + '</label>';
+                    }
+                }
+            ],
+            drawCallback: function (s) {
+                $('[data-toggle="tooltip"]').tooltip();
+            },
+            buttons: [
+                {
+                    extend: "excelHtml5",
+                    autoFilter: true,
+                    sheetName: 'Exported data',
+                    className: "btn btn-success btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.Excel'
+                },
+                @* {
+            extend: "print",
+            className: "btn btn-warning btn-xs",
+            text: '@Homemade.UI.Resources.Homemade.Print'
+        },*@
+                {
+                    extend: "pdfHtml5",
+                    download: 'open',
+                    className: "btn btn-info btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.PDF'
+                }],
+            "language": {
+                "search": "_INPUT_",
+                "searchPlaceholder": "Search",
+                "lengthMenu": "_MENU_",
+            }, dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+
+        });
+        tableOrder.buttons().container().appendTo('.dt_buttons_wrap');
+        GetAllOrdersStatusList();
+    });
+    function zeroPadded(val) {
+        if (val >= 10)
+            return val;
+        else
+            return '0' + val;
+    }
+    function getFormatDate(d) {
+        var d = new Date(d);
+        return d.getFullYear() + "-" + zeroPadded(d.getMonth() + 1) + "-" + zeroPadded(d.getDate())/* + "  " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()*/;
+    }
+    function readOrdertable() {
+        tableOrder.ajax.url('/Home/LoadTableOrdersVendor?listOrdersStatusId=' + $("#ListOrdersStatusId").val());
+        tableOrder.ajax.reload();
+    }
+    function GetAllOrdersStatusList(orderStatusId) {
+        $.ajax({
+            type: "POST",
+            url: '/Order/Orders/GetAllOrdersStatusList',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                $('#ListOrdersStatusId').html('');
+                $('#ListOrdersStatusId').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (orderStatusId != undefined && orderStatusId > 0 && orderStatusId == item.orderStatusID) {
+                        $('#ListOrdersStatusId').append('<option selected value="' + item.orderStatusID + '">' + item.orderStatusName + '</option>');
+                        $('#ListOrdersStatusId').val(orderStatusId).trigger('change');
+                    }
+                    else {
+                        $('#ListOrdersStatusId').append('<option value="' + item.orderStatusID + '">' + item.orderStatusName + '</option>');
+                    }
+                }
+                isPaused = false;
+            },
+            error: function () {
+                isPaused = false;
+            }
+        });
+    }
+</script>

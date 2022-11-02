@@ -1,0 +1,548 @@
+﻿@model Homemade.BLL.ViewModel.Driver.AssignDriverVewModel
+<!-- Page Header -->
+<!-- END Page Header -->
+<!-- Page Content -->
+<script charset="utf-8" src="~/assets/js/plugins/fullcalendar/moment.min.js"></script>
+
+<div class="content">
+    <div class="">
+        <form method="post" enctype="multipart/form-data" id="form">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="block">
+                        <div class="block-header bg-gray-lighter">
+                            <h3 class="block-title" data-toggle="collapse" data-target="#collapseDriver" aria-expanded="false" aria-controls="collapseDriver">
+                                <i class="ion-code-working push-5-r"></i>
+                                <span class="header-title">@Homemade.UI.Resources.Homemade.Basic_Data</span>
+                            </h3>
+                        </div>
+                        <div class="collapse in" id="collapseDriver">
+                            <div class="block-content">
+                                <div class="row" id="divMsgParent" style="display:none">
+                                    <div class="form-group row">
+                                        <div class="col-xs-12">
+                                            <div id="divMsgClass" class="alert alert-danger" role="alert">
+                                                <strong id="lblMsg"></strong>
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <input asp-for="DriverGuid" class="AddData" value="@Model.DriverGuid" type="hidden" />
+                                    <input asp-for="DriverID" class="AddData" type="hidden" value="@Model.DriverID" />
+                                    <input asp-for="FileNumber" class="AddData" value="@Model.FileNumber" type="hidden" />
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+
+                                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Name_Ar <span style="color:red">*</span></label>
+                                            @Html.TextBoxFor(x => x.NameAr, new { @class = "form-control AddData" })
+
+                                            <span style="color:red"> @Html.ValidationMessageFor(x => x.NameAr)</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group floating">
+                                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Name_En <span style="color:red">*</span></label>
+                                            @Html.TextBoxFor(x => x.NameEn, new { @class = "form-control AddData" })
+
+                                            <span style="color:red"> @Html.ValidationMessageFor(x => x.NameEn)</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="material-select2">@Homemade.UI.Resources.Homemade.IdNo <span style="color:red">*</span></label>
+                                            @Html.TextBoxFor(x => x.IDNo, new { @class = "form-control AddData", @maxlength = "10", onkeypress = "return isNumberKey(event)" })
+                                            <span asp-validation-for="IDNo" style="color:red;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="material-text2">@Homemade.UI.Resources.Homemade.PhoneNumberStc <span style="color:red">*</span></label>
+
+                                            @Html.TextBoxFor(x => x.PhoneNumberStc, new { @class = "form-control AddData", @maxlength = "10", onkeypress = "return isNumberKey(event)" })
+
+                                            <span style="color:red"> @Html.ValidationMessageFor(x => x.PhoneNumberStc)</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="material-select2">@Homemade.UI.Resources.Homemade.City <span style="color:red">*</span></label>
+                                            <select required="" class="form-control js-select2 AddData" asp-for="CityID" name="CityID" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1">
+                                                <option value=""></option>
+                                            </select>
+
+                                            <span style="color:red" asp-validation-for="CityID"> </span>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="material-select2">@Homemade.UI.Resources.Homemade.RegionCity</label>
+                                            <select required="" class="form-control js-select2 AddData" asp-for="RegionCityID" name="RegionCityID" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1">
+                                                <option value=""></option>
+                                            </select>
+
+                                            <span style="color:red" asp-validation-for="RegionCityID"> </span>
+
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Nationality <span style="color:red">*</span></label>
+                                            <select asp-for="NationalityID" class="js-select2 form-control AddData" size="1" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                                                <option></option><!-- Empty value for demostrating material select box -->
+
+                                            </select>
+                                            <span asp-validation-for="NationalityID" style="color:red;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="material-select2">@Homemade.UI.Resources.Homemade.CarNumber <span style="color:red">*</span></label>
+                                            @Html.TextBoxFor(x => x.CarNumber, new { @class = "form-control AddData" })
+                                            <span asp-validation-for="CarNumber" style="color:red;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="form-group col-md-6">
+                                        <div class="row">
+                                            <input asp-for="Gender" class="AddData" type="hidden" />
+                                            <label class="col-xs-12">@Homemade.UI.Resources.Homemade.GenderType</label>
+                                            <div class="col-xs-12">
+                                                <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbMale">
+                                                    <input id="rdbMale" type="radio" name="Gender" checked class="AddData" value="0"><span></span> @Homemade.UI.Resources.Homemade.Male
+                                                </label>
+                                                <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbFemale">
+                                                    <input id="rdbFemale" type="radio" name="Gender" class="AddData" value="1"><span></span> @Homemade.UI.Resources.Homemade.Female
+                                                </label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        <div class="row">
+                                            <input asp-for="VerifyStc" class="AddData" type="hidden" />
+                                            <label class="col-xs-12">@Homemade.UI.Resources.Homemade.Stc_Verfiy <span style="color:red">*</span></label>
+                                            <div class="col-xs-12">
+                                                <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbNotVerfied">
+                                                    <input type="radio" id="rdbNotVerfied" checked name="VerifyStc" class="AddData" value="0"><span></span> @Homemade.UI.Resources.Homemade.Not_Verfied_STCPAY
+                                                </label>
+                                                <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbVerfied">
+                                                    <input type="radio" id="rdbVerfied" name="VerifyStc" class="AddData" value="1"><span></span> @Homemade.UI.Resources.Homemade.Verfied_STCPAY
+                                                </label>
+                                                <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbCash">
+                                                    <input type="radio" id="rdbCash" name="VerifyStc" class="AddData" value="2"><span></span> @Homemade.UI.Resources.Homemade.Cash
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="block">
+                <div class="block-header bg-gray-lighter">
+                    <h3 class="block-title" data-toggle="collapse" data-target="#collapseOption" aria-expanded="false" aria-controls="collapseOption">
+                        <i class="ion-code-working push-5-r"></i>
+                        @Homemade.UI.Resources.Homemade.OptionalData
+                    </h3>
+                </div>
+                <div class="block-content collapse" id="collapseOption">
+                    <div class="block">
+                        <ul class="nav nav-tabs" data-toggle="tabs">
+                            <li class="active">
+                                <a href="#taxi"><i class="ion-android-car push-5-r"></i> @Homemade.UI.Resources.Homemade.TaxiTab</a>
+                            </li>
+                            <li class="">
+                                <a href="#driver"><i class="fa fa-male push-5-r"></i> @Homemade.UI.Resources.Homemade.DriverTab</a>
+                            </li>
+                        </ul>
+                        <div class="block-content tab-content">
+                            <div class="tab-pane active" id="taxi">
+                                    <div class="row">
+
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="material-select2" style="padding-top: 9px;">@Homemade.UI.Resources.Homemade.InsuranceNumber </label>
+                                                @Html.TextBoxFor(x => x.InsuranceNumber, new { @class = "form-control AddData", @maxlength = "20", onkeypress = "return isNumberKey(event)" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <div class="row parentDate">
+                                              
+                                                <div class="col-xs-12">
+                                                    <label>@Homemade.UI.Resources.Homemade.InsuranceEndDate </label>
+                                                    <input asp-for="InsuranceEndDateType" class="AddData" type="hidden" />
+                                                    <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbInsuranceEndDateType">
+                                                        <input id="rdbInsuranceEndDateType" name="InsuranceEndDateType" type="radio" checked class="AddData" onchange="ChangeDateType(this)" value="0"><span></span> @Homemade.UI.Resources.Homemade.HijiriDate
+                                                    </label>
+                                                    <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbNormalInsuranceEndDateType">
+                                                        <input id="rdbNormalInsuranceEndDateType" name="InsuranceEndDateType" type="radio" class="AddData" onchange="ChangeDateType(this)" value="1"><span></span> @Homemade.UI.Resources.Homemade.NormalDate
+                                                    </label>
+
+                                                </div>
+                                                <div class="col-xs-12">
+
+                                                    <div class="form-group datetype">
+                                                        <input asp-for="InsuranceEndDate" autocomplete="off" class="js-datepicker form-control NormalDate AddData" type="text" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd">
+                                                        <input asp-for="HijiriInsuranceEndDate" autocomplete="off" type="text" class="form-control Hijiri AddData">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                    @*<div class="row ">
+
+                                        </div>*@
+                                    <div class="row">
+
+
+                                        <div class="form-group col-md-4">
+                                            <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.CarPicture</label>
+                                            <input type="file" class="form-control-file " accept="image/*" asp-for="fupCarPictrue" onchange="ConvertToBase64(this,'fupCarPictrue')">
+                                            <p style="display:none" class="AddData" id="CarPicture"></p>
+                                            @if (!string.IsNullOrEmpty(Model.CarPictrue))
+                                            {
+                                                <br />
+                                                <img style="width: 80px; height: 80px" src="@Model.CarPictrue" />
+                                                <br />
+                                                <a class="btn" target="_blank" href="@Model.CarPictrue">@Homemade.UI.Resources.Homemade.View</a>
+                                            }
+                                        </div>
+                                      
+                                        <div class="form-group col-md-4">
+                                            <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.CarLicensePicture</label>
+                                            <input type="file" class="form-control-file" accept="image/*" asp-for="fupCarLicensePicture" onchange="ConvertToBase64(this,'fupCarLicensePicture')">
+                                            <p style="display:none" class="AddData" id="CarLicensePicture"></p>
+                                            @if (!string.IsNullOrEmpty(Model.CarLicensePicture))
+                                            {
+                                                <br />
+                                                <img style="width: 80px; height: 80px" src="@Model.CarLicensePicture" />
+                                                <br />
+                                                <a class="btn" target="_blank" href="@Model.CarLicensePicture">@Homemade.UI.Resources.Homemade.View</a>
+                                            }
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="driver">
+                                    <div class="row">
+
+                                        <div class="col-md-4">
+                                            <div class="form-group floating">
+                                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Nick_Name </label>
+                                                @Html.TextBoxFor(x => x.NickName, new { @class = "form-control AddData" })
+
+                                                <span style="color:red"> @Html.ValidationMessageFor(x => x.NickName)</span>
+                                                <span asp-validation-for="NickName" style="color:red;"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group floating">
+                                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Email </label>
+                                                @Html.TextBoxFor(x => x.Email, new { @class = "form-control AddData" })
+
+                                                <span style="color:red"> @Html.ValidationMessageFor(x => x.Email)</span>
+                                                <span asp-validation-for="Email" style="color:red;"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group floating">
+                                                <label for="material-textarea-large2">@Homemade.UI.Resources.Homemade.IBANNumber </label>
+                                                @Html.TextBoxFor(x => x.IBANNumber, new { @class = "form-control AddData" })
+
+                                                <span style="color: red"> @Html.ValidationMessageFor(x => x.IBANNumber)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <div class="row parentDate">
+
+                                                <div class="col-xs-12">
+                                                    <label>@Homemade.UI.Resources.Homemade.BirthDate </label>
+                                                    <input asp-for="BirthDateType" class="AddData" type="hidden" />
+                                                    <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbBirthDateType">
+                                                        <input id="rdbBirthDateType" name="BirthDateType" type="radio" checked class="AddData" onchange="ChangeDateType(this)" value="0"><span></span> @Homemade.UI.Resources.Homemade.HijiriDate
+                                                    </label>
+                                                    <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbNormalBirthDateType">
+                                                        <input type="radio" id="rdbNormalBirthDateType" name="BirthDateType" class="AddData" onchange="ChangeDateType(this)" value="1"><span></span> @Homemade.UI.Resources.Homemade.NormalDate
+                                                    </label>
+
+                                                </div>
+                                                <div class="col-xs-12">
+
+                                                    <div class="form-group datetype">
+                                                   
+                                                        <input asp-for="BirthDate" class="js-datepicker form-control NormalDate AddData" type="text" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd">
+                                                        <input asp-for="HijriBirthDate" type="text" class="form-control Hijiri AddData">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+
+                                            <div class="form-group floating">
+                                                <label for="material-textarea-large2" style="padding-top: 9px;">@Homemade.UI.Resources.Homemade.Address </label>
+                                                @Html.TextBoxFor(x => x.Address, new { @class = "form-control AddData" })
+
+                                                <span style="color:red"> @Html.ValidationMessageFor(x => x.Address)</span>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="material-select2" style="padding-top: 9px;">@Homemade.UI.Resources.Homemade.PrivateLicenseNumber </label>
+                                                @Html.TextBoxFor(x => x.PrivateLicenseNumber, new { @class = "form-control AddData", @maxlength = "20", onkeypress = "return isNumberKey(event)" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <div class="row parentDate">
+                                               
+                                                <div class="col-xs-12">
+                                                    <label>@Homemade.UI.Resources.Homemade.PrivateLicenseEndDate </label>
+                                                    <input asp-for="PrivateLicenseTypeEndDate" class="AddData" type="hidden" />
+                                                    <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbPrivateLicenseTypeEndDate">
+                                                        <input id="rdbPrivateLicenseTypeEndDate" name="PrivateLicenseTypeEndDate" type="radio" checked class="AddData" onchange="ChangeDateType(this)" value="0"><span></span> @Homemade.UI.Resources.Homemade.HijiriDate
+                                                    </label>
+                                                    <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbNormalPrivateLicenseTypeEndDate">
+                                                        <input id="rdbNormalPrivateLicenseTypeEndDate" name="PrivateLicenseTypeEndDate" type="radio" class="AddData" onchange="ChangeDateType(this)" value="1"><span></span> @Homemade.UI.Resources.Homemade.NormalDate
+                                                    </label>
+
+                                                </div>
+                                                <div class="col-xs-12">
+
+                                                    <div class="form-group datetype">
+                                                        <input asp-for="PrivateLicenseEndDate" class="js-datepicker form-control NormalDate AddData" type="text" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd">
+                                                        <input asp-for="PrivateHijriLicenseEndDate" type="text" class="form-control Hijiri AddData">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.PersonalFileUpload</label>
+                                                <input type="file" class="form-control-file " accept="image/*" asp-for="fupPersonalPicture" onchange="ConvertToBase64(this,'fupPersonalPicture')">
+                                                <p style="display:none" class="AddData" id="PersonalPicture"></p>
+                                                @if (!string.IsNullOrEmpty(Model.PersonalPicture))
+                                                {
+                                                    <br />
+                                                    <img style="width: 80px; height: 80px" src="@Model.PersonalPicture" />
+                                                    <br />
+                                                    <a class="btn" target="_blank" href="@Model.PersonalPicture">@Homemade.UI.Resources.Homemade.View</a>
+                                                }
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.IDFileUpload</label>
+                                                <input type="file" class="form-control-file" accept="image/*" asp-for="fupIDPicture" onchange="ConvertToBase64(this,'fupIDPicture')">
+                                                <p style="display:none" class="AddData" id="IDPicture"></p>
+                                                @if (!string.IsNullOrEmpty(Model.IDPicture))
+                                                {
+                                                    <br />
+                                                    <img style="width: 80px; height: 80px" src="@Model.IDPicture" />
+                                                    <br />
+                                                    <a class="btn" target="_blank" href="@Model.IDPicture">@Homemade.UI.Resources.Homemade.View</a>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.LicensePicture</label>
+                                                <input type="file" class="form-control-file" accept="image/*" asp-for="fupLicensePicture" onchange="ConvertToBase64(this,'fupLicensePicture')">
+                                                <p style="display:none" class="AddData" id="LicensePicture"></p>
+                                                @if (!string.IsNullOrEmpty(Model.LicensePicture))
+                                                {
+                                                    <br />
+                                                    <img style="width: 80px; height: 80px" src="@Model.LicensePicture" />
+                                                    <br />
+                                                    <a class="btn" target="_blank" href="@Model.LicensePicture">@Homemade.UI.Resources.Homemade.View</a>
+                                                }
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.BankAccountPicture</label>
+                                                <input type="file" class="form-control-file" accept="image/*" asp-for="fupBankAccountPicture" onchange="ConvertToBase64(this,'fupBankAccountPicture')">
+                                                <p style="display:none" class="AddData" id="BankAccountPicture"></p>
+                                                @if (!string.IsNullOrEmpty(Model.BankAccountPicture))
+                                                {
+                                                    <br />
+                                                    <img style="width: 80px; height: 80px" src="@Model.BankAccountPicture" />
+                                                    <br />
+                                                    <a class="btn" target="_blank" href="@Model.BankAccountPicture">@Homemade.UI.Resources.Homemade.View</a>
+                                                }
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-custom bg-orange" id="btnSave" type="button"><i class="ion-checkmark push-5-r"></i> @Homemade.UI.Resources.Homemade.save</button>
+                    <br /><br />
+                </form>
+            </div>
+
+        </div>
+
+        <!-- END Material Design -->
+        <!-- Bootstrap Design -->
+
+        @section Styles{
+            <!-- Date_Picker Styles -->
+            <link rel="stylesheet" href="~/assets/js/plugins/Hijiri-Plugin/css/bootstrap-datetimepicker.css" />
+            <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css">
+            <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+
+            <!-- Select 2 Styles -->
+            <link rel="stylesheet" href="~/assets/js/plugins/select2/select2.min.css" />
+            <link rel="stylesheet" href="~/assets/js/plugins/select2/select2-bootstrap.min.css" />
+        }
+
+        @section Scripts{
+            <!-- Date_picker Plugins -->
+            <script src="~/assets/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+            <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+            <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+            <script charset="utf-8" src="~/assets/js/plugins/Hijiri-Plugin/js/bootstrap-hijri-datetimepicker.js"></script>
+            <script>
+                $(".js-datepicker").keypress(function (e) {
+                    e.preventDefault();
+                });
+                $('.js-datepicker').datepicker({
+                    dateFormat: 'yyyy-mm-dd'
+                }).on('changeDate', function (ev) {
+                    $(this).datepicker('hide');
+                });
+            </script>
+
+            <!-- Select 2 Scripts -->
+            <script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+
+            <script>
+
+                $('#btnSave').click(function (e) {
+                    e.preventDefault();
+                    $('#PhoneType').val($("input[type='radio'][name='PhoneType']:checked").val());
+                    $('#VerifyStc').val($("input[type='radio'][name='VerifyStc']:checked").val());
+                    $('#Gender').val($("input[type='radio'][name='Gender']:checked").val());
+                    if (!($("form").valid())) { return }
+                    $('.validation-summary-errors').hide();
+                      @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Add, "ConfirmUpdate();"));
+        });
+
+        $(".btn-xopbloxkc").on("click", function () {
+            if ($(this).siblings(".xopbloxkc").hasClass("open")) {
+                $(this).siblings(".xopbloxkc").slideUp();
+                $(this).siblings(this).siblings(".xopbloxkc").addClass("close");
+                $(this).siblings(".xopbloxkc").removeClass("open");
+            } else {
+                $(this).siblings(".xopbloxkc").slideDown();
+                $(this).siblings(".xopbloxkc").addClass("open");
+                $(this).siblings(".xopbloxkc").removeClass("close");
+
+            }
+        })
+
+
+                $(document).ready(function () {
+                            GetCountries(@Model.CountryID);
+                    GetNationalities(@Model.NationalityID);
+                    GetRegionCity(@Model.RegionCityID);
+                    GetCitys(@Model.CityID)
+                                        $('.NormalDate').hide();
+                                          initDefault();
+
+                                                setTimeout(function () {
+
+                                                          /////////
+                                                          var InsuranceEndDateType = $($('input[name=InsuranceEndDateType][type=radio][value="' + @Model.InsuranceEndDateType + '"]')[0]);
+                                                          InsuranceEndDateType.prop('checked', true);
+                                                          ChangeDateType(InsuranceEndDateType);
+                                                          $("#InsuranceEndDate").datepicker("setDate", "@Model.InsuranceEndDate");
+                                                          //////////
+
+                                                          var PrivateLicenseEndDate = $($('input[name=PrivateLicenseTypeEndDate][type=radio][value="' + @Model.PrivateLicenseTypeEndDate+ '"]')[0]);
+                                                          PrivateLicenseEndDate.prop('checked', true);
+                                                          ChangeDateType(PrivateLicenseEndDate);
+                                                          $("#PrivateLicenseEndDate").datepicker("setDate", "@Model.PrivateLicenseEndDate");
+                                                          //////////
+
+                                                          /////////
+                                                          var BirthDateType = $($('input[name=BirthDateType][type=radio][value="' + @Model.BirthDateType+ '"]')[0]);
+                                                          BirthDateType.prop('checked', true);
+                                                          ChangeDateType(BirthDateType);
+                                                          $("#BirthDate").datepicker("setDate", "@Model.BirthDate");
+                                                          //////////
+
+                                                          /////////
+                                                          var PCOEndDate = $($('input[name=PCOEndDateType][type=radio][value="' + @Model.PCOEndDateType+ '"]'));
+                                                          PCOEndDate.prop('checked', true);
+                                                          ChangeDateType(PCOEndDate);
+                                                          $("#PCOEndDate").datepicker("setDate", "@Model.PCOEndDate");
+                                                          //////////
+
+                                                          /////////
+                                                          var DriverInsuranceEndDateType = $($('input[name=DriverInsuranceEndDateType][type=radio][value="' + @Model.DriverInsuranceEndDateType+ '"]')[0]);
+                                                          DriverInsuranceEndDateType.prop('checked', true);
+                                                          ChangeDateType(DriverInsuranceEndDateType);
+                                                          $("#DriverInsuranceEndDate").datepicker("setDate", "@Model.DriverInsuranceEndDate");
+                                                          //////////
+
+
+                                                          $("lstDeliveryTypeID").each(function () {
+                $(this).select2('val', '')
+            });
+
+
+
+
+                                                          $('#IsActive').prop('checked', '@Model.IsActive');
+
+
+
+                                                          var gender = $($('input[name=Gender][type=radio][value="' + @Model.Gender+ '"]')[0]);
+                                                          gender.prop('checked', true);
+                                                          gender.trigger('change');
+                                                                   var PhoneType = $($('input[name=PhoneType][type=radio][value="' + @Model.PhoneType+ '"]')[0]);
+                                                                   PhoneType.prop('checked', true);
+                                                                   PhoneType.trigger('change');
+
+                                                                   var VerifyStc = $($('input[name=VerifyStc][type=radio][value="' + @Model.VerifyStc+ '"]')[0]);
+                                                                   VerifyStc.prop('checked', true);
+                                                                   VerifyStc.trigger('change');
+
+                                                }, 100);
+
+
+                        $.validator.setDefaults({ ignore: '' });
+                });
+
+
+
+            </script>
+            <partial name="_ScriptsEditDriver" />
+            <script src="~/Scripts/App/Pickup/AssignDriver/uploadScript.js"></script>
+        }
+
+        <!-- END Page Content -->

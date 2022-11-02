@@ -1,0 +1,50 @@
+﻿<script>
+    $('#tbl_Product').each(function (index, value) {
+        $("#DT_search_Products").keyup(function () {
+            $('#' + value.id + '').DataTable().search($(this).val()).draw();
+        })
+    });
+    $('#tbl_FavouriteProduct').each(function (index, value) {
+        $("#DT_search_Favourite_Products").keyup(function () {
+            $('#' + value.id + '').DataTable().search($(this).val()).draw();
+        })
+    });
+    function RemoveFromFavourite(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("RemoveFromFavouriteProducts")',
+            data: {
+                'id': id
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                $('#tbl_Product').DataTable().ajax.reload();
+                $('#tbl_FavouriteProduct').DataTable().ajax.reload();
+                }
+        });
+    }
+    function AddToFavourite(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("AddToFavouriteProducts")',
+            data: {
+                'id': id
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                $('#tbl_Product').DataTable().ajax.reload();
+                $('#tbl_FavouriteProduct').DataTable().ajax.reload();
+                }
+        });
+    }
+</script>

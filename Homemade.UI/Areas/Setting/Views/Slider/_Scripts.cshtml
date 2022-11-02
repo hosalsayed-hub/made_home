@@ -1,0 +1,197 @@
+﻿<script>
+    var divMsgClass = $("#divMsgClass");
+    var lblMsg = $("#lblMsg");
+    var divMsgParent = $("#divMsgParent"),
+        txtLatHidden = $("#txtLatHidden"),
+        txtLngHidden = $("#txtLngHidden");
+
+    $(function() {
+        try {
+            initMap();
+        } catch (e) {
+
+        }
+    });
+
+    $("#btnSave").click(function() {
+        let frmCreate = $("#frmCreate");
+        if (frmCreate.valid()) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Add , "frmCreate.submit();"))
+            }
+    });
+    function ConvertToBase64Image(e) {
+        var fileUpload = $(e);
+        var pID = '#' + fileUpload.attr('id').replace('fup', '');
+        var FR = new FileReader();
+        FR.addEventListener("load", function(e) {
+            $("#Image").val(e.target.result.replace(/^data:.+;base64,/, ''));
+        }, false);
+        FR.readAsDataURL($(fileUpload)[0].files[0]);
+    }
+
+
+    function completed(xhr) {
+
+        var obj = JSON.parse(xhr.responseText);
+        var result = obj.result;
+
+        var msg = result.message;
+        if (result.resultType == 'success') {
+
+
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\"" })
+                if (obj.operationType == 'update') {
+                $("#modal").modal('hide');
+
+            }
+            else {
+                $("#frmCreate").trigger('reset');
+
+            }
+            $('#tbl').DataTable().ajax.reload();
+        }
+        else {
+
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+                lblMsg.html(msg);
+        }
+    };
+
+
+    function Delete(e) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Delete , "ConfirmDelete(e)"))
+        }
+
+
+    function ConfirmDelete(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete")',
+            data: {
+                'id': id
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                var msg = result.message;
+
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                        Title = "\"" + Homemade.UI.Resources.Homemade.SuccessDeleteMessage + "\""})
+                        $('#tbl').DataTable().ajax.reload();
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+                    }
+            }
+        });
+    }
+
+    function ShowModal(e) {
+        if (e == undefined) {
+            $('#title').html('@Homemade.UI.Resources.Homemade.Add')
+        }
+        else
+            $('#title').html('@Homemade.UI.Resources.Homemade.Update');
+
+        let fields = $('#frmCreate span');
+        fields.each(function() {
+            if ($(this).attr('data-valmsg-for') != null) {
+                $($(this).children()[0]).text('');
+            }
+        });
+        var button = $(e);
+        var tr = $(button.closest('tr'));
+
+        var id = button.attr("data-id");
+        $("#SliderID").val(id);
+
+        $("#SliderNameAR").val(button.attr("data-nameAr"));
+        $("#SliderNameEN").val(button.attr("data-nameEn"));
+        $("#DescAr").val(button.attr("data-descAR"));
+        $("#DescEN").val(button.attr("data-descEN"));
+        $("#SliderTypeId").val(button.attr("data-typeSlider"));
+        $('#SliderTypeId').trigger('change');
+        $("#DisplayIn").val(button.attr("data-displayInId"));
+        $('#DisplayIn').trigger('change');
+        $('#Image').val(button.attr("data.image"));
+        $('#modal').modal('show');
+    }
+
+    function GetRegions(country) {
+
+        var countryID = country;
+        $($("#RegionID")).prop("disabled", false);
+        if (countryID != '' || countryID != undefined) {
+            $.ajax({
+                type: "POST",
+                url: '/Setting/Region/GetAllRegionByCountry',
+                data: { 'countryID': countryID },
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function(result) {
+                    $("#RegionID").html('');
+                    for (var i = 0; i < result.length; i++) {
+                        var item = result[i];
+                        $("#RegionID").append('<option ' + (i == 0 ? 'selected' : "") + ' value="' + item.regionID + '">' + item.regionName + '</option>');
+                    }
+                    $($("#RegionID")).select2();
+                },
+                error: function() {
+
+                }
+            });
+        }
+    }
+    function ChangeStatue(e) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.ChangeStaute , "ConfirmStatue(e)"))
+        }
+    function ConfirmStatue(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeStatue")',
+            data: {
+                'id': id
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                        Title = "result.message"})
+                        $('#tbl').DataTable().ajax.reload();
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "result.message" })
+                    }
+
+
+            }
+        });
+    }
+    function DownloadFile(e) {
+        var button = $(e);
+        var adress = button.attr("data-id");
+        const link = document.createElement('a')
+        link.href = adress
+        link.download = 'image file name here'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+    }
+    function openImage(e) {
+        var button = $(e);
+        var adress = button.attr("data-id");
+        window.win = open(adress);
+    }
+</script>
+

@@ -1,0 +1,101 @@
+﻿@model Homemade.BLL.ViewModel.Setting.ConfigurationViewModel
+@inject Homemade.BLL.Setting.BlCountry blCountry
+<style>
+    .controls {
+        width: 250px !important;
+    }
+</style>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal-block-large" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-popout modal-dialog-scrollable" role="document">
+
+        <div class="modal-content">
+            <div class="block block-themed block-transparent remove-margin-b">
+                <div class="block-header">
+                    <h3 class="block-title" id="title">
+                        @Homemade.UI.Resources.Homemade.AddCity
+                    </h3>
+                    <div class="block-options">
+                        <button type="button" class="close btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="ion-android-close"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content modal-body">
+                    <form enctype="multipart/form-data" method="post" id="frmCreate" onsubmit="return false"
+                          data-ajax="true"
+                          data-ajax-complete="completed"
+                          data-ajax-method="post">
+                        <div class="form-group">
+                            <input asp-for="ConfigurationID" type="hidden" />
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Name_En <span style="color:red">*</span></label>
+                            <input asp-for="CompanNameEn" type="text" class="form-control" />
+
+                            <span style="color:red" asp-validation-for="CompanNameEn"> </span>
+                        </div>
+                        <div class="form-group">
+
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Name_Ar, <span style="color:red">*</span></label>
+                            <input asp-for="CompanNameAr" type="text" class="form-control" />
+
+                            <span style="color:red" asp-validation-for="CompanNameAr"> </span>
+                        </div>
+                        <div class="form-group">
+
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Address <span style="color:red">*</span></label>
+                            <input asp-for="Address" type="text" class="form-control" />
+
+                            <span style="color:red" asp-validation-for="Address"> </span>
+                        </div>
+                        <div class="form-group">
+
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.StreetNo <span style="color:red">*</span></label>
+                            <input asp-for="StreetNo" type="text" class="form-control" />
+
+                            <span style="color:red" asp-validation-for="StreetNo"> </span>
+                        </div>
+                        <div class="form-group">
+
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.fax <span style="color:red">*</span></label>
+                            <input asp-for="Fax" type="text" class="form-control" />
+
+                            <span style="color:red" asp-validation-for="Fax"> </span>
+                        </div>
+                        <div class="form-group">
+
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.PhoneNumber <span style="color:red">*</span></label>
+                            <input asp-for="PhoneNumber" type="text" class="form-control" />
+
+                            <span style="color:red" asp-validation-for="PhoneNumber"> </span>
+                        </div>
+                        <div class="form-group">
+
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Mobile <span style="color:red">*</span></label>
+                            <input asp-for="MobileNumber" type="text" class="form-control" />
+
+                            <span style="color:red" asp-validation-for="MobileNumber"> </span>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.Banner</label>
+                            <input type="file" class="form-control-file " accept="image/*" id="fupPhoto" onchange="ConvertToBase64Banner(this)">
+                            @Html.HiddenFor(m => m.Banner)
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.Logo</label>
+                            <input type="file" class="form-control-file " accept="image/*" id="fupPhoto" onchange="ConvertToBase64Logo(this)">
+                            @Html.HiddenFor(m => m.Logo)
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.Photo</label>
+                            <input type="file" class="form-control-file " accept="image/*" id="fupPhoto" onchange="ConvertToBase64CRImage(this)">
+                            @Html.HiddenFor(m => m.CRImage)
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer border-white-op-t">
+                <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"> @Homemade.UI.Resources.Homemade.Close </button>
+                <button class="btn btn-sm bg-orange" id="btnSave" type="button"> @Homemade.UI.Resources.Homemade.save</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,176 @@
+﻿@model Homemade.BLL.ViewModel.Driver.DriverBlanceViewModel
+
+<div class="content">
+    <form method="post" id="frmCreate"
+          data-ajax="true"
+          data-ajax-method="post"
+          data-ajax-success="formSuccess">
+        <div class="block block-themed">
+            <div class="block-header bg-gray-lighter">
+                <h3 class="">
+                    <span class="header-title">@Homemade.UI.Resources.Homemade.DriverBlance</span>
+                    <span class="sub-page-name">@Homemade.UI.Resources.Homemade.New</span>
+                </h3>
+            </div>
+            <div class="block-content" style="overflow: hidden;">
+                <div class="row" id="divMsgParent" style="display:none">
+                    <div class="form-group row">
+                        <div class="col-xs-12">
+                            <div id="divMsgClass" class="alert alert-danger" role="alert">
+                                <strong id="lblMsg"></strong>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Choose_Driver <span style="color:red">*</span></label>
+                            <select asp-items="@Model.LstDrivers.Select(p => new SelectListItem { Text = Homemade.UI.InfraStructure.Utility.CurrentLanguageCode == "ar" ? p.NameAr : p.NameEn , Value = p.DriversID + "" })"
+                                    asp-for="DriverID" data-pl class="js-select2 form-control AddData" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                                <option></option>
+
+                            </select>
+                            <span style="color:red" asp-validation-for="DriverID"> </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Choose_Transaction_Type <span style="color:red">*</span></label>
+                            <select asp-items="@Model.LstTransactionType.Select(p => new SelectListItem { Text = Homemade.UI.InfraStructure.Utility.CurrentLanguageCode == "ar" ? p.NameAR : p.NameEN , Value = p.TransactionTypeID + "" })" asp-for="TransactionTypeID"
+                                    data-pl class="js-select2 form-control AddData" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                                <option></option>
+
+                            </select>
+
+                            <span style="color:red" asp-validation-for="TransactionTypeID"> </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group ">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.DateOperation <span style="color:red">*</span></label>
+                            <input asp-for="DateOperation" class="js-datepicker form-control AddData " type="text" value="" name="DateOperation" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd">
+                            @Html.HiddenFor(m => m.DateOperationString)
+                            <span style="color:red" asp-validation-for="DateOperation"> </span>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Amount <span style="color:red">*</span></label>
+                            <input asp-for="Amount" type="number" class="form-control" maxlength="6" value="" onkeypress="return isNumberKey(event)" />
+                            <span style="color:red" asp-validation-for="Amount"> </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Discripe </label>
+                            <textarea asp-for="Discripe" class="form-control AddData" style="height: 34px;"></textarea>
+                            <span style="color:red" asp-validation-for="Discripe"> </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.Attachment</label>
+                        <input type="file" class="form-control-file " accept="image/*" id="fupAttachment" onchange="ConvertToBase64(this)">
+                        @Html.HiddenFor(m => m.Attachment)
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-custom bg-orange" id="btnSave" type="submit"><i class="ion-checkmark push-5-r"></i> @Homemade.UI.Resources.Homemade.save</button>
+                </div>
+            </div>
+        </div>
+      
+    </form>
+
+</div>
+
+@section Styles{
+    <!-- Date_Picker Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/Hijiri-Plugin/css/bootstrap-datetimepicker.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+
+    <!-- Select 2 Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2-bootstrap.min.css" />
+}
+
+@section Scripts{
+    <!-- Date_picker Plugins -->
+    <script src="~/assets/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/Hijiri-Plugin/js/bootstrap-hijri-datetimepicker.js"></script>
+    <script>
+        $(".js-datepicker").keypress(function (e) {
+            e.preventDefault();
+        });
+        $('.js-datepicker').datepicker({
+            dateFormat: 'yyyy-mm-dd'
+        }).on('changeDate', function (ev) {
+            $(this).datepicker('hide');
+        });
+    </script>
+
+    <!-- Select 2 Scripts -->
+    <script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+
+    <script>
+        var divMsgClass = $("#divMsgClass");
+    var lblMsg = $("#lblMsg");
+    var divMsgParent = $("#divMsgParent");
+
+        $("#btnSave").click(function (e) {
+            e.preventDefault();
+            $("#DateOperationString").val($('#DateOperation').val());
+            let frmCreate = $("#frmCreate");
+            if (frmCreate.valid()) {
+                 @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Add , "frmCreate.submit();"))
+            }
+        });
+
+        function formSuccess(data) {
+            divMsgParent.slideUp();
+            divMsgParent.show();
+            if (data.status == true) {
+                divMsgClass.attr("class", "alert alert-success");
+                 @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success, "" , false , false , false)
+            { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\"" })
+                lblMsg.html(data.message);
+                $("#frmCreate").trigger("reset");
+                $('#DriverID').val('');
+                $('#DriverID').trigger('change');
+                $('#TransactionTypeID').val('');
+                $('#TransactionTypeID').trigger('change');
+            }
+            else {
+                  @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false)
+         { Title = "data.message" })
+                divMsgClass.attr("class", "alert alert-danger");
+                lblMsg.html(data.message);
+            }
+        }
+
+        function ConvertToBase64(e) {
+            var fileUpload = $(e);
+            var pID = '#' + fileUpload.attr('id').replace('fup', '');
+           // console.log(pID);
+
+
+            var FR = new FileReader();
+
+            FR.addEventListener("load", function (e) {
+                $("#Attachment").val(e.target.result.replace(/^data:.+;base64,/, ''));
+            }, false);
+
+            FR.readAsDataURL($(fileUpload)[0].files[0]);
+
+        }
+    </script>
+}

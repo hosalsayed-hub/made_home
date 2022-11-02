@@ -1,0 +1,114 @@
+﻿@model Homemade.BLL.ViewModel.Site.SiteInqueriesViewModel
+<!-- ***** help Start ***** -->
+<section class="section-style help-section">
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-12">
+
+                <div class="help-area">
+
+                    <div class="help-area-head">
+
+                        <div class="help-area-title title-2">@Homemade.UI.Resources.Homemade.How_can_we_help_you </div>
+                        <p class="help-area-text">@Homemade.UI.Resources.Homemade.How_can_we_help_you_Content</p>
+
+                    </div>
+                    <div class="help-form-area">
+
+                        <form class="help-form" id="HelpForm" method="post"
+                              data-ajax="true"
+                              data-ajax-method="post"
+                              data-ajax-success="formSuccess"
+                              data-ajax-failure="failed">
+                            <div class="row" id="divMsgParent" style="display:none">
+                                <div class="form-group row">
+                                    <div class="col-xs-12">
+                                        <div id="divMsgClass" class="alert alert-danger" role="alert">
+                                            <strong id="lblMsg"></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <label class="form-label">@Homemade.UI.Resources.Homemade.Name <span style="color:red">*</span></label>
+                                <input asp-for="Name" type="text" class="form-control input-focus" placeholder="@Homemade.UI.Resources.Homemade.Name" />
+                                <span style="color:red" asp-validation-for="Name"> </span>
+
+
+                            </div>
+                            <div class="form-group">
+
+                                <label class="form-label">@Homemade.UI.Resources.Homemade.Email</label>
+                                <input asp-for="Email" type="text" class="form-control input-focus" placeholder="@Homemade.UI.Resources.Homemade.Email" />
+                                <span style="color:red" asp-validation-for="Email"> </span>
+
+                            </div>
+                            <div class="form-group  tel-field">
+
+                                <label class="form-label">@Homemade.UI.Resources.Homemade.PhoneNumber</label>
+                                <div class="input_group">
+
+                                    <input asp-for="MobileNo" type="number" class="form-control input-focus" inputmode="tel" placeholder="@Homemade.UI.Resources.Homemade.PhoneNumber">
+                                    <div class="country-code">
+
+                                        <span>+966</span>
+                                        <img src="~/assets/homeMadeSite/img/sr.svg" />
+
+
+                                    </div>
+
+
+                                </div>
+                                <span style="color:red" asp-validation-for="MobileNo"> </span>
+                            </div>
+                            <div class="form-group">
+
+                                <label class="form-label">@Homemade.UI.Resources.Homemade.Message <span style="color:red">*</span></label>
+                                <textarea asp-for="Message" rows="4" class="form-control input-focus" placeholder="@Homemade.UI.Resources.Homemade.Write_you_message_here"></textarea>
+                                <span style="color:red" asp-validation-for="Message"> </span>
+
+                            </div>
+                            <div class="form-group">
+
+                                <div class="g-recaptcha" data-sitekey="6Le2A6IbAAAAAANPEsY_DZiAiQwxIVcnMRpdK-z8"></div>
+                            </div>
+
+                            <button type="submit" class="send-btn show-all-lg">@Homemade.UI.Resources.Homemade.Send</button>
+                        </form>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+<!-- ***** help-section End ***** -->
+@section Scripts{
+    <script>
+        function formSuccess(data) {
+            $("#divMsgParent").slideUp();
+            $("#divMsgParent").show();
+            if (data.status == true) {
+                $("#divMsgClass").attr("class", "alert alert-success");
+
+                $("#lblMsg").html(data.message);
+                $("#HelpForm").trigger("reset");
+            }
+            else {
+                $("#divMsgClass").attr("class", "alert alert-site");
+                $("#lblMsg").html(data.message);
+            }
+        }
+    </script>
+}

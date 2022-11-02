@@ -1,0 +1,134 @@
+﻿<script charset="utf-8" type="text/javascript">
+    function LoadQuestionsReply() {
+        $("#DevReplayPartial").load("/Order/ProductQuestion/GetQuestionsReplyPartial?listVendorID=" + $("#ListVendorID").val());
+    }
+    function LoadQuestionsReplyVendor() {
+        $("#DevReplayPartial").load("/Order/ProductQuestion/GetQuestionsReplyPartialVendor");
+    }
+    function LoadQuestionsNotReply() {
+        $("#DevNotReplayPartial").load("/Order/ProductQuestion/GetQuestionsNotReplyPartial?listVendorID=" + $("#ListVendorID").val());
+    }
+    function LoadQuestionsNotReplyVendor() {
+        $("#DevNotReplayPartial").load("/Order/ProductQuestion/GetQuestionsNotReplyPartialVendor");
+    }
+    function ShowAddQuestionsReply(prodQuestionID) {
+        $("#AnswerQuestions_" + prodQuestionID).show();
+        $("#Chk_IsPublish_" + prodQuestionID).show();
+        $("#AddQuestionsReply_" + prodQuestionID).hide();
+        $("#SaveQuestionsReply_" + prodQuestionID).show();
+    }
+    function SaveQuestionsReply(prodQuestionID) {
+        if ($("#AnswerQuestions_" + prodQuestionID).val() != "") {
+      @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Add , "ConfirmUpdateAnswer(prodQuestionID)"))
+        }
+        else {
+            var msg = "@Homemade.UI.Resources.Homemade.Please_Insert_Answer";
+           @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+        }
+    }
+
+    function ConfirmUpdateAnswer(prodQuestionID) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateAnswer")',
+            data: {
+                Answer: $("#AnswerQuestions_" + prodQuestionID).val(),
+                ProdQuestionID: prodQuestionID,
+                IsPublish : $("#IsPublish_" + prodQuestionID).is(':checked')
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                var msg = result.message;
+
+                if (result.resultType == 'success') {
+                   @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+              {
+                  Title = "msg"
+              });
+                    LoadQuestionsReplyVendor();
+                    LoadQuestionsNotReplyVendor();
+
+                }
+                else {
+                    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+                }
+            }
+        });
+    }
+    function GetVendorList(vendorsID) {
+        $.ajax({
+            type: "POST",
+            url: '/Vendor/Vendors/GetAllVendors',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                $('#ListVendorID').html('');
+                $('#ListVendorID').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (vendorsID != undefined && vendorsID > 0 && vendorsID == item.vendorsID) {
+                        $('#ListVendorID').append('<option selected value="' + item.vendorsID + '">' + item.vendorsName + '</option>');
+                        $('#ListVendorID').val(vendorsID).trigger('change');
+                    }
+                    else {
+                        $('#ListVendorID').append('<option value="' + item.vendorsID + '">' + item.vendorsName + '</option>');
+                    }
+
+                }
+                isPaused = false;
+            },
+            error: function () {
+                isPaused = false;
+            }
+        });
+    }
+    function SearchByVendor() {
+        LoadQuestionsReply();
+        LoadQuestionsNotReply();
+        GetQuestionsCount(false, $("#ListVendorID").val());
+    }
+    function GetQuestionsCount(IsVendor, listVendorID) {
+        $.getJSON('/Order/ProductQuestion/GetQuestionsCount?IsVendor=' + IsVendor + '&IsReply=' + true + '&listVendorID=' + listVendorID, '', function (data) {
+            $('#lblReplyCount').html(data);
+        });
+        $.getJSON('/Order/ProductQuestion/GetQuestionsCount?IsVendor=' + IsVendor + '&IsReply=' + false + '&listVendorID=' + listVendorID, '', function (data) {
+            $('#lblNotReplyCount').html(data);
+        });
+    }
+    function DeleteQuestions(id) {
+       @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Delete , "ConfirmDeleteQuestions(id)"))
+    }
+    function ConfirmDeleteQuestions(id) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DeleteQuestions")',
+            data: {
+                'id': id
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                var msg = result.message;
+
+                if (result.resultType == 'success') {
+                     @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+                {
+                    Title = "\"" + Homemade.UI.Resources.Homemade.SuccessDeleteMessage + "\""
+                });
+                    SearchByVendor();
+                }
+                else {
+                     @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+                }
+            }
+        });
+    }
+</script>
+

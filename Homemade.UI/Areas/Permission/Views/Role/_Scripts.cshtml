@@ -1,0 +1,160 @@
+﻿<script>
+
+    var divMsgClass = $("#divMsgClass");
+    var lblMsg = $("#lblMsg");
+    var divMsgParent = $("#divMsgParent");
+
+    $("#btnSave").click(function() {
+        let frmCreate = $("#frmCreate");
+        if (frmCreate.valid()) {
+            swal({
+                title: "@Homemade.UI.Resources.Homemade.AreYouSureToSave",
+                text: "",
+                type: "info",
+                showCancelButton: true,
+                confirmButtonClass: "btn-info",
+                confirmButtonText: "@Homemade.UI.Resources.Homemade.Yes",
+                cancelButtonText: "@Homemade.UI.Resources.Homemade.No",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+                function(isConfirm) {
+                    if (isConfirm) {
+                        frmCreate.submit();
+                    } else {
+                        swal.close();
+                    }
+                });
+        }
+    });
+
+
+
+    function completed(xhr) {
+
+        var obj = JSON.parse(xhr.responseText);
+        var result = obj.result;
+
+
+        var msg = result.message;
+        if (result.resultType == 'success') {
+
+            swal({
+                title: msg,
+                text: '',
+                type: 'success',
+                timer: 2000,
+                showCancelButton: false,
+                showConfirmButton: false
+            });
+            if (obj.operationType == 'update') {
+                $("#modal").modal('hide');
+            }
+            else {
+                $("#modal").modal('hide');
+            }
+            $('#tbl').DataTable().ajax.reload();
+
+
+        }
+        else {
+            swal({
+                title: msg,
+                text: '',
+                type: 'error',
+                timer: 2000,
+                showCancelButton: false,
+                showConfirmButton: false
+            });
+
+
+        }
+    };
+
+
+    function Delete(e) {
+        swal({
+            title: '@Homemade.UI.Resources.Homemade.AreYouSureToDelete',
+            text: "",
+            type: "error",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: '@Homemade.UI.Resources.Homemade.Yes',
+            cancelButtonText: '@Homemade.UI.Resources.Homemade.No',
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+            function(isConfirm) {
+                if (isConfirm) {
+                    ConfirmDelete(e);
+                }
+                else {
+                    swal.close();
+                }
+            }
+        );
+    }
+
+    function ConfirmDelete(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete")',
+            data: {
+                'id': id
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                var msg = result.message;
+                if (result.resultType == 'success') {
+                    swal({
+                        title: msg,
+                        text: '',
+                        type: 'success',
+                        timer: 2000,
+                        showCancelButton: false,
+                        showConfirmButton: false
+                    });
+                    $('#tbl').DataTable().ajax.reload();
+
+                }
+                else {
+                    swal(msg, '', 'error');
+                }
+            }
+        });
+    }
+
+    function ShowModal(e) {
+        if (e == undefined) {
+            $('#title').html('@Homemade.UI.Resources.Homemade.AddRole')
+        }
+        else
+            $('#title').html('@Homemade.UI.Resources.Homemade.UpdateRole');
+
+        let fields = $('#frmCreate span');
+        fields.each(function() {
+            if ($(this).attr('data-valmsg-for') != null) {
+                $($(this).children()[0]).text('');
+            }
+        });
+        var button = $(e);
+        var tr = $(button.closest('tr'));
+
+        var id = button.attr("data-id");
+        $("#Id").val(id);
+
+        $("#Name").val($(tr.find('.arName')[0]).text().trim());
+        $('#modal').modal('show');
+    }
+    function Edit() {
+        var RoleID = $("#Id").val();
+    }
+
+
+</script>
+

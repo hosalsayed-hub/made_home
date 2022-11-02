@@ -1,0 +1,189 @@
+﻿@model Homemade.BLL.ViewModel.Site.SiteOrdersVatViewModel
+<!-- ***** order-details modal  ***** -->
+@*<div class="modal-body-title">
+
+    </div>*@
+<div class="modal-body-content">
+    <div class="row">
+        <div class="col-lg-12 form-group text-center">
+            <img class="img-fluid" src="~/assets/homeMadeSite/img/logo.svg">
+        </div>
+        <div class="col-lg-12 form-group text-center">
+            <span><strong> فاتورة ضريبة القيمة المضافة</strong></span>
+        </div>
+        <div class="col-lg-12 form-group text-center">
+            <span><strong>VAT Invoice</strong></span>
+        </div>
+        <div class="col-lg-12 form-group text-center">
+            <span><strong>شركة شغل بيت</strong></span>
+        </div>
+        <div class="col-lg-12 form-group text-center">
+            <span><strong>Home Made Company</strong></span>
+        </div>
+        <div class="col-lg-12 form-group text-center">
+            <span>@Model.Address</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 form-group">
+            <span>
+                @Model.TaxIdentificationNumber
+            </span>
+        </div>
+        <div class="col-lg-6 form-group" style="text-align:left">
+            <span>
+                <strong>
+                    رقم التعريف الضريبي
+                </strong>
+            </span>
+            <br />
+            <span>
+                <strong>
+                    Tax Identification Number
+                </strong>
+            </span>
+        </div>
+        <div class="col-lg-6 form-group">
+            <span>
+                @Model.TrackNo
+            </span>
+        </div>
+        <div class="col-lg-6 form-group" style="text-align:left">
+            <span>
+                <strong>
+                    رقم الفاتورة / رقم الطلب
+                </strong>
+            </span>
+            <br />
+            <span>
+                <strong>
+                    Invoice Number / Order Request
+                </strong>
+            </span>
+        </div>
+        <div class="col-lg-6 form-group">
+            <span>
+                @Model.OrderDate
+            </span>
+        </div>
+        <div class="col-lg-6 form-group" style="text-align:left">
+            <span>
+                <strong>
+                    تاريخ الفاتورة
+                </strong>
+            </span>
+            <br />
+            <span>
+                <strong>
+                    Invoice Date
+                </strong>
+            </span>
+        </div>
+
+        <div class="col-lg-12 form-group">
+            <hr style="border: 1px dotted gray;" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 form-group">
+        </div>
+        <div class="col-lg-6 form-group" style="text-align:left">
+            <span>
+                <strong>
+                    تفاصيل الفاتورة
+                </strong>
+            </span>
+            <br />
+            <span>
+                <strong>
+                    Details
+                </strong>
+            </span>
+        </div>
+        <div class="col-lg-6 form-group">
+            <span>
+                @Model.DeliveryPrice
+            </span>
+        </div>
+        <div class="col-lg-6 form-group" style="text-align:left">
+            <span>
+                <strong>
+                    رسوم التوصيل
+                </strong>
+            </span>
+            <br />
+            <span>
+                <strong>
+                    Delivery Fees
+                </strong>
+            </span>
+        </div>
+        <div class="col-lg-12 form-group">
+            <hr style="border: 1px dotted gray;" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 form-group">
+            <span>
+                @Model.DeliveryPrice
+            </span>
+        </div>
+        <div class="col-lg-6 form-group" style="text-align:left">
+            <span>
+                <strong>
+                    الاجمالى شامل الضريبة
+                </strong>
+            </span>
+            <br />
+            <span>
+                <strong>
+                    Sub Total Vat Inclusive
+                </strong>
+            </span>
+        </div>
+        <div class="col-lg-6 form-group">
+            <span>
+                @Model.DeliveryVatPercent %
+            </span>
+        </div>
+        <div class="col-lg-6 form-group" style="text-align:left">
+            <span>
+                <strong>
+                    معدل ضريبة القيمة المضافة
+                </strong>
+            </span>
+            <br />
+            <span>
+                <strong>
+                    Vat
+                </strong>
+            </span>
+        </div>
+        <div class="col-lg-6 form-group">
+            <span>
+                @Model.DeliveryVatValue SR
+            </span>
+        </div>
+        <div class="col-lg-6 form-group" style="text-align:left">
+            <span>
+                <strong>
+                    إجمالى ضريبة القيمة المضافة التى تم جمعها
+                </strong>
+            </span>
+            <br />
+            <span>
+                <strong>
+                    Total Vat Collected
+                </strong>
+            </span>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+
+<!-- ***** order-details modal  ***** -->

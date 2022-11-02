@@ -1,0 +1,413 @@
+﻿@model Homemade.BLL.ViewModel.Vendor.ProductViewModel
+@inject Homemade.BLL.General.BLGeneral bLGeneral
+@inject Homemade.BLL.Setting.BlNationality blNationality
+@inject Homemade.BLL.Vendor.BlProduct blProduct
+@inject Homemade.BLL.Vendor.BlVendor blVendor
+@inject Homemade.BLL.General.BLUser bLUser
+@{
+    var user = bLUser.GetUserInfo(User.GetUserIdInt());
+    int UserTypeId = user.UserType;
+    int VendorsID = 0;
+    if (UserTypeId == (int)UserTypeEnum.Vendor)
+    {
+        var vednor = blVendor.GetVendorByUserId(User.GetUserIdInt());
+        if (vednor != null)
+        {
+            VendorsID = vednor.VendorsID;
+        }
+    }
+}
+<div class="content">
+    <div class="block">
+        <div class="block-content block-content-full h_scroll">
+            <h3 class="form-group">
+                <span>     @Html.DisplayFor(x => x.Name)</span>
+            </h3>
+            <ul class="nav nav-tabs" id="VendorTabs">
+                <li class="active">
+                    <a href="#Main_Data" data-toggle="tab"><i class="fa fa-user push-5-r"></i> @Homemade.UI.Resources.Homemade.Product_Data</a>
+                </li>
+
+                <li>
+                    <a href="#Store_Data" data-toggle="tab"><i class="fa fa-file push-5-r"></i> @Homemade.UI.Resources.Homemade.Product_Images</a>
+                </li>
+                <li>
+                    <a href="#Account_Data" data-toggle="tab"><i class="fa fa-file push-5-r"></i> @Homemade.UI.Resources.Homemade.Quesions_Answers</a>
+                </li>
+            </ul>
+            <div class="block-content tab-content">
+                <div class="tab-pane active" id="Main_Data">
+                    @Html.AntiForgeryToken()
+                    <div class="row" id="divMsgParent" style="display:none">
+                        <div class="form-group row">
+                            <div class="col-xs-12">
+                                <div id="divMsgClass" class="alert alert-danger" role="alert">
+                                    <strong id="lblMsg"></strong>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="hidden" asp-for="ProductID" />
+                        <input type="hidden" asp-for="VendorsID" />
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.NameAr)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.NameArabic</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.NameEn)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.NameEnglish</label>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.DepartmentName)
+                                <label for="material-select2">@Homemade.UI.Resources.Homemade.Department</label>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.SKU)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.SKU </label>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.Price)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Price</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.Discount)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Discount_Rate</label>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @if (Model.IsLimited)
+                                {
+                                    @Homemade.UI.Resources.Homemade.Limited
+                                }
+                                else
+                                {
+                                    @Homemade.UI.Resources.Homemade.NotLimited
+                                }
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.DailyLimit</label>
+                            </div>
+                        </div>
+                        @if (Model.IsLimited)
+                        {
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    @Html.DisplayFor(x => x.Quantity)
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Quantity</label>
+                                </div>
+                            </div>
+                        }
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @if (Model.MeasurementId == (int)MeasurementEnum.Gram)
+                                {
+                                    @Homemade.UI.Resources.Homemade.Gram
+                                }
+                                else
+                                {
+                                    @Homemade.UI.Resources.Homemade.Kilo
+                                }
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Measurement</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.Weight)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Weight</label>
+                            </div>
+                        </div>
+
+                        <div class="clearfix"></div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.DescAr)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Description_Ar</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.DescEn)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Description_En</label>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        @*<div class="col-md-6">
+        <div class="form-group">
+        <label for="example-datepicker1">@Homemade.UI.Resources.Homemade.StartDiscountDate</label>
+        <input asp-for="StartDiscountDate" class="js-datepicker form-control AddData " type="text" value="@Model.StartDiscountDate?.ToString("yyyy-MM-dd")" name="StartDiscountDate" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd">
+
+        <span style="color:red"> @Html.ValidationMessageFor(x => x.StartDiscountDate)</span>
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="form-group">
+        <label for="example-datepicker1">@Homemade.UI.Resources.Homemade.EndDiscountDate</label>
+        <input asp-for="EndDiscountDate" class="js-datepicker form-control AddData " type="text" name="EndDiscountDate" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd">
+        <span style="color:red"> @Html.ValidationMessageFor(x => x.EndDiscountDate)</span>
+        </div>
+        </div>
+        <div class="clearfix"></div>
+
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.PiecesAr)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.PiecesAr</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.PiecesEn)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.PiecesEn</label>
+                            </div>
+                        </div>*@
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.ProductQuantityType)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.ProductQuantityType</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.ProductQuantity)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.ProductQuantity</label>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.Size)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Size</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.IsAvailableString)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Product_Status </label>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.IsFixedString)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Fixed_Status </label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.IsHiddenString)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Hidden_Status </label>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-6 form-group">
+                            @if (!string.IsNullOrEmpty(Model.Logo))
+                            {
+                                <img src="@Model.Logo" class="img" width="100" height="100" style="display:block;margin-bottom:7px;" />
+                            }
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.ProductTypeName)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Product_Type </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.KeyWordsString)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.KeyWords </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.TimeTakenProcess)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Time_Taken_Process (@Homemade.UI.Resources.Homemade.Minutes)</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.TimeTakenProcessHours)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Time_Taken_Process (@Homemade.UI.Resources.Homemade.Hours)</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @Html.DisplayFor(x => x.ProductOrder)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.ProductOrder </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-custom bg-info" onclick="GoToTab('Store_Data')"><i class=""></i> @Homemade.UI.Resources.Homemade.Next</button>
+                    </div>
+
+                </div>
+                <div class="tab-pane" id="Store_Data">
+
+                    <div id="ProductImgPartial">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-custom bg-gray" onclick="GoToTab('Main_Data')"><i class=""></i> @Homemade.UI.Resources.Homemade.Previous</button>
+                        <button class="btn btn-custom bg-info" onclick="GoToTab('Account_Data')"><i class=""></i> @Homemade.UI.Resources.Homemade.Next</button>
+                    </div>
+
+                </div>
+                <div class="tab-pane" id="Account_Data">
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <div class="text-right row">
+                                <div class="col-md-10 paddingleft-0">
+                                    <div class="form-group block-search push-5-r pull-right">
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="ion-search"></i></div>
+                                            <input type="text" class="form-control" id="DT_search" placeholder="@Homemade.UI.Resources.Homemade.EnterSearchKeywords">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="dt_buttons_wrap text-right"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <table id="tbl_Questions" class="table table-custom js-dataTable-buttons" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">@Homemade.UI.Resources.Homemade.SNumber</th>
+                                        <th class="text-center">@Homemade.UI.Resources.Homemade.Question</th>
+                                        <th class="text-center">@Homemade.UI.Resources.Homemade.Answer</th>
+                                    </tr>
+                                </thead>
+
+                            </table>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-custom bg-gray" onclick="GoToTab('Store_Data')"><i class=""></i> @Homemade.UI.Resources.Homemade.Previous</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Styles{
+
+    <!-- Data_Table Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" />
+
+
+    <style>
+        .dataTables_filter {
+            display: none;
+        }
+    </style>
+}
+
+    @section Scripts{
+
+    <!-- Data_table Plugins -->
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+
+
+    <script>
+
+        $(document).ready(function() {
+            $("#ProductImgPartial").load('/Vendor/Product/ProductImgPartial?ProductID=' + $("#ProductID").val());
+            var tablequestion = $('#tbl_Questions').DataTable({
+                pageLength: 10,
+                pagijngType: "full_numbers",
+                serverSide: true,
+                processing: true,
+                lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+                sAjaxSource: '@Url.Action("LoadTableQuestions")?productID=' + $("#ProductID").val(),
+                sServerMethod: "POST",
+                bPaginate: true,
+                paging: true,
+                bFilter: true,
+                bLengthChange: false,
+                columns: [
+                    {
+                        "data": null,
+                        "sortable": false,
+                        render: function(data, type, row, meta) {
+                            return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                        }
+                    },
+
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function(data, type, row) {
+                            return '<input type="hidden" value="' + data.productQuestionID + '"/><label class="arName">' + data.question + '</label>';
+                        }
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function(data, type, row) {
+                            return '<label class="enName">' + data.answer + '</label>';
+                        }
+
+                    }
+                ],
+                drawCallback: function(s) {
+                    $('[data-toggle="tooltip"]').tooltip();
+                },
+                buttons: [
+        @*{
+                extend: "copy",
+                className: "btn btn-info btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Copy'
+                },*@{
+                        extend: "excelHtml5",
+                        autoFilter: true,
+                        sheetName: 'Exported data',
+                        className: "btn btn-success btn-xs",
+                        text: '@Homemade.UI.Resources.Homemade.Excel'
+                    }, @*{
+                extend: "print",
+                className: "btn btn-warning btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Print'
+                },*@{
+                        extend: "pdfHtml5",
+                        download: 'open',
+                        className: "btn btn-info btn-xs",
+                        text: '@Homemade.UI.Resources.Homemade.PDF'
+                    }],
+                //"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "language": {
+                    "search": "_INPUT_",
+                    "searchPlaceholder": "Search",
+                    "lengthMenu": "_MENU_",
+                }, dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+
+            });
+            tablequestion.buttons().container().appendTo('.dt_buttons_wrap');
+        });
+    </script>
+}

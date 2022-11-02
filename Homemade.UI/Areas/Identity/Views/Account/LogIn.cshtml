@@ -1,0 +1,60 @@
+﻿@model LoginModel
+@{
+    Layout = "~/Views/Shared/_LogInLayout.cshtml";
+}
+
+<div class="text-right">
+    @if (Context.Request.Cookies["Language"] == "ar")
+    {
+        <a href="/Home/ChangeLang?LangId=en" class="log-lang"><strong>English Language</strong></a>
+    }
+    else
+    {
+        <a href="/Home/ChangeLang?LangId=ar" class="log-lang"><strong>اللغة العربية</strong></a>
+    }
+</div>
+<h3>@Homemade.UI.Resources.Homemade.Welcome_to_management_Home_Made</h3>
+<p class="log_stat">@Homemade.UI.Resources.Homemade.Login </p>
+<form method="post" id="frmLogIn">
+    <div style="margin-bottom:10px;">
+        @Html.ValidationMessage("Error", htmlAttributes: new { style = "color:red;" })
+    </div>
+    @Html.AntiForgeryToken()
+    <div id="divMsgParent" style="display:none">
+        <div id="divMsgClass" class="alert alert-danger" role="alert">
+            <span id="lblMsg"></span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <i class="ion-close text-black" style="font-size: 14px; top: -10px; display: block;" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="form-group push-15">
+        <label>@Homemade.UI.Resources.Homemade.Mobile </label>
+        <input class="form-control" asp-for="Mobile" />
+        <span style="color:red" asp-validation-for="Mobile"> </span>
+    </div>
+    <div class="form-group push-15">
+        <div class="row">
+            <div class="col-md-5">
+                <label>@Homemade.UI.Resources.Homemade.Password</label>
+            </div>
+            @*<div class="col-md-7 forget_p">
+                <a href="#">@Homemade.UI.Resources.Homemade.Forgot_Password</a>
+            </div>*@
+        </div>
+        <input class="form-control" type="password" asp-for="Password" />
+        <span style="color:red" asp-validation-for="Password"> </span>
+        <a href="@Url.Action("ForgetPassword")" style="margin-top: 5px; display: block">@Homemade.UI.Resources.Homemade.ResetPassword ?</a>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-log">
+                <button type="submit">@Homemade.UI.Resources.Homemade.Login</button>
+            </div>
+
+        </div>
+    </div>
+</form>
+

@@ -1,0 +1,93 @@
+﻿@using Homemade.BLL.ViewModel.Vendor
+@model IEnumerable<Homemade.BLL.ViewModel.Vendor.InvoiceDetailsViewModel>
+@inject Homemade.BLL.Vendor.BlInvoice _blInvoice
+@{
+    int Counter = 1;
+    var Invoicemaster = new InvoiceMasterViewModel();
+    if (Model.Any())
+    {
+        Invoicemaster = _blInvoice.GetInvoiceMasterViewModelById(Model.FirstOrDefault().InvoiceMasterID, Homemade.UI.InfraStructure.Utility.CurrentLanguageCode);
+    }
+}
+<div class="content">
+    <!-- Dynamic Table Full -->
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <h3>
+                @Homemade.UI.Resources.Homemade.Invoice_Report
+            </h3>
+        </div>
+        <div class="block-content">
+            <div class="row">
+                <div class="col-sm-6 Dev-Print">
+                    <a href="javascript:void(0);" onclick="printDiv()" class="btn btn-info btn-icon">
+                        <span><i class="fa fa-print"></i> @Homemade.UI.Resources.Homemade.Print</span>
+                    </a>
+                </div>
+                <div class="col-sm-12">
+                    <div id="printDiv">
+                        <div class="page">
+                            <div class="subpage">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        @Homemade.UI.Resources.Homemade.Date: @DateTime.UtcNow.AddHours(3).ToString("dd-MM-yy")
+                                        <br />
+                                        @Homemade.UI.Resources.Homemade.Time: @DateTime.UtcNow.AddHours(3).ToString("hh:mm tt")
+
+                                    </div>
+                                    <div class="col-sm-3 col-sm-offset-6">
+                                        <img src="/Images/homemade-logo.svg" height="60" style="width: 100%;" />
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <h3 class="text-center"><b>@Homemade.UI.Resources.Homemade.Invoice_Report</b></h3>
+                                        <hr style="margin: 15px 0;" />
+                                        <div class="row">
+
+                                            <div class="col-sm-4 form-group"><label class="bold">@Homemade.UI.Resources.Homemade.Invoice_No : </label> @Invoicemaster.InvoiceNo</div>
+                                            <div class="col-sm-4 form-group"><label class="bold">@Homemade.UI.Resources.Homemade.Vendor : </label> @Invoicemaster.VendorName</div>
+                                            <div class="col-sm-4 form-group"><label class="bold">@Homemade.UI.Resources.Homemade.Amount_Due : </label> @Invoicemaster.Total</div>
+
+                                        </div>
+                                        <hr style="margin: 15px 0;" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table class="table table-bordered col-sm-12">
+                                            <tr style="background-color:lightgray">
+                                                <th class="text-center"><b>#</b></th>
+                                                <th class="text-center">@Homemade.UI.Resources.Homemade.TripNo</th>
+                                                <th class="text-center">@Homemade.UI.Resources.Homemade.Customer</th>
+                                                <th class="text-center">@Homemade.UI.Resources.Homemade.Mobile</th>
+                                                <th class="text-center">@Homemade.UI.Resources.Homemade.Date</th>
+                                                <th class="text-center">@Homemade.UI.Resources.Homemade.Due</th>
+                                            </tr>
+
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td class="text-center">@Counter</td>
+                                                    <td class="text-center">@item.OrderVendorID</td>
+                                                    <td class="text-center">@item.CustomerName</td>
+                                                    <td class="text-center">@item.CustomerMobile</td>
+                                                    <td class="text-center">@item.CreateDate</td>
+                                                    <td class="text-center">@String.Format("{0:0.00}", item.DebitAmount)</td>
+                                                </tr>
+                                                Counter++;
+                                            }
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<link href="~/Content/Print.css" rel="stylesheet" />
+@section Scripts
+    {
+    <script src="~/Scripts/App/Print.js"></script>
+}

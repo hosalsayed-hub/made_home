@@ -1,0 +1,227 @@
+﻿<div class="content">
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <div class="row">
+                <div class="col-md-9">
+                    <h3 class="block-title">
+                        <span>@Homemade.UI.Resources.HomemadeMenu.Assign_Captains</span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="collapse in">
+            <div class="block-content block-content-full">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.City</label>
+                            <select multiple="" id="ListCityID" onchange="ReloadTables()" class="js-select2 form-control AddData" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.RegionCity</label>
+                            <select multiple="" id="ListRegionCityID" onchange="readCaptainTable()" class="js-select2 form-control AddData" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form method="post" id="frmCreate" onsubmit="return false" data-action="Create"
+          data-ajax="true"
+          data-ajax-method="post"
+          data-ajax-success="formSuccess" asp-action="AddCaptainZone">
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-md-6">
+                <div class="block" style=" height: 500px; overflow: auto;">
+                    <div class="block-header bg-gray-lighter">
+                        <div class="col-md-6">
+
+                            <h3 class="block-title">
+                                <span class="header-title">@Homemade.UI.Resources.HomemadeMenu.Blocks</span>
+                            </h3>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="text-right row">
+                                <div class="col-md-9 paddingleft-0">
+                                    <div class="form-group block-search push-5-r pull-right">
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="ion-search"></i></div>
+                                            <input type="text" class="form-control" id="DT_search_Block" placeholder="@Homemade.UI.Resources.Homemade.EnterSearchKeywords">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="dt_buttons_wrap text-right"></div>
+                        </div>
+                    </div>
+
+
+                    <div class="collapse in">
+                        <div class="block-content h_scroll">
+                            <table id="tbl_Blocks" class="table table-custom js-dataTable-buttons" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <label class="css-input css-checkbox css-checkbox-warning">
+                                                <input type='checkbox' id='chkSelectAll' onclick='checkAllBlock(this)' /><span></span> @Homemade.UI.Resources.Homemade.All
+                                            </label>
+                                        </th>
+                                        <th class="text-center">@Homemade.UI.Resources.Homemade.Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="block" style=" height: 500px; overflow: auto;">
+                    <div class="block-header bg-gray-lighter">
+                        <div class="col-md-6">
+                            <h3 class="block-title">
+                                <span class="header-title">@Homemade.UI.Resources.HomemadeMenu.Captains</span>
+                            </h3>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="text-right row">
+                                <div class="col-md-9 paddingleft-0">
+                                    <div class="form-group block-search push-5-r pull-right">
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><i class="ion-search"></i></div>
+                                            <input type="text" class="form-control" id="DT_search_Captain" placeholder="@Homemade.UI.Resources.Homemade.EnterSearchKeywords">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="dt_buttons_wrap text-right"></div>
+                        </div>
+                    </div>
+                    <div class="collapse in">
+                        <div class="Captain-content h_scroll">
+                            <table id="tbl_Captain" class="table table-custom js-dataTable-buttons" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <label class="css-input css-checkbox css-checkbox-warning">
+                                                <input type='checkbox' id='chkSelectAll' onclick='checkAllCaptain(this)' /><span></span> @Homemade.UI.Resources.Homemade.All
+                                            </label>
+                                        </th>
+                                        <th class="text-center">@Homemade.UI.Resources.Homemade.Name</th>
+                                        <th class="text-center">@Homemade.UI.Resources.Homemade.PhoneNumber</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="block">
+                    <div class="block-header bg-gray-lighter">
+                        <h3 class="block-title">
+                            <span class="header-title">@Homemade.UI.Resources.Homemade.Selected_Blocks</span>
+                        </h3>
+                    </div>
+                    <div class="collapse in">
+                        <div class="block-content h_scroll">
+                            <table class="table table-striped table-bordered">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th class="text-center">@Homemade.UI.Resources.Homemade.Name</th>
+                                        <th class="text-center">@Homemade.UI.Resources.Homemade.Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="TableResultBlock">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="block">
+                    <div class="block-header bg-gray-lighter">
+                        <h3 class="block-title">
+                            <span class="header-title">@Homemade.UI.Resources.Homemade.Selected_Captains</span>
+                        </h3>
+                    </div>
+                    <div class="collapse in">
+                        <div class="block-content h_scroll">
+                            <table class="table table-striped table-bordered">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th class="text-center">@Homemade.UI.Resources.Homemade.Name</th>
+                                        <th class="text-center">@Homemade.UI.Resources.Homemade.Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="TableResultCaptain">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <button class="btn btn-custom bg-orange" style="display:none" id="btnSave"><i class="ion-checkmark push-5-r"></i> @Homemade.UI.Resources.Homemade.save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+@section Styles {
+    <!-- Data_Table Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" />
+    <!-- Select 2 Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2-bootstrap.min.css" />
+    <style>
+        .dataTables_filter {
+            display: none;
+        }
+    </style>
+}
+
+    @section Scripts {
+    <!-- Data_table Plugins -->
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+    <!-- Select 2 Scripts -->
+    <script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+
+    <partial name="_Scripts" />
+    <partial name="_DataTableBlocks" />
+    <partial name="_DataTableCaptain" />
+    <script>
+        $(document).ready(function() {
+            GetCities();
+            GetRegionCity();
+        });
+    </script>
+}

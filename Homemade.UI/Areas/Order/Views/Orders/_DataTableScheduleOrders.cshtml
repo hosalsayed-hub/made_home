@@ -1,0 +1,203 @@
+﻿<script>
+    var table;
+    $(document).ready(function() {
+        table = $('#tbl_Order').DataTable({
+            pageLength: 10,
+            pagijngType: "full_numbers",
+            serverSide: true,
+            processing: true,
+            lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+            sAjaxSource: '@Url.Action("LoadTable")?listVendorID=' + $("#ListVendorID").val() + '&orderTypeId=1',
+            sServerMethod: "POST",
+            bPaginate: true,
+            paging: true,
+            bFilter: true,
+            bLengthChange: false,
+            columns: [
+                {
+                    "data": null,
+                    "sortable": false,
+                    render: function(data, type, row, meta) {
+                        return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                    }
+                },
+
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<input type="hidden" value="' + data.orderVendorID + '"/><label class="arName">' + data.customersName + '</label>';
+                    }
+
+                },
+
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label >' + data.customersMobileNo + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label >' + data.vendorsName + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label >' + data.orderStatusName + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) { return '<label>' + getFormatDate(data.createDate) + " " + data.createDateString + '</label>' }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        if (data.scheduleDate != "null" && data.scheduleDate != null) {
+                            return '<label>' + getFormatDate(data.scheduleDate) + '</label>'
+                        } else {
+                            return '<label> -- </label>'
+                        }
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label >' + data.scheduleTimeString + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        var databutton = '';
+                        databutton += ` <a class="btn btn-xs btn-info" href="@Url.Action("Details")?orderVendorGuid=${data.orderVendorGuid}" type="button" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Details">
+                                            <i class="fa fa-search"></i>
+                                        </a>`;
+                        if (data.orderStatusID == 1 || data.orderStatusID == 2 || data.orderStatusID == 3) {
+                            databutton += `<a class="btn btn-xs btn-danger" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Cancel"
+                                         onclick="Cancel(${data.orderVendorID})" type="button"><i class="fa fa-close"></i></a>`;
+                        }
+                        return databutton;
+                    }
+                }
+            ],
+            drawCallback: function(s) {
+                $('[data-toggle="tooltip"]').tooltip();
+            },
+            buttons: [
+    @*{
+                extend: "copy",
+                className: "btn btn-info btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Copy'
+                },*@{
+                    extend: "excelHtml5",
+                    autoFilter: true,
+                    sheetName: 'Exported data',
+                    className: "btn btn-success btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.Excel'
+                }, @*{
+                extend: "print",
+                className: "btn btn-warning btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Print'
+                },*@{
+                    extend: "pdfHtml5",
+                    download: 'open',
+                    className: "btn btn-info btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.PDF'
+                }],
+            "language": {
+                "search": "_INPUT_",
+                "searchPlaceholder": "Search",
+                "lengthMenu": "_MENU_",
+            }, dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+
+        });
+        table.buttons().container().appendTo('.dt_buttons_wrap');
+        if ($("#IsVendor").val() == "True") {
+            table.column(3).visible(false);
+        }
+    });
+    function zeroPadded(val) {
+        if (val >= 10)
+            return val;
+        else
+            return '0' + val;
+    }
+    function getFormatDate(d) {
+        var d = new Date(d);
+        return d.getFullYear() + "-" + zeroPadded(d.getMonth() + 1) + "-" + zeroPadded(d.getDate())/* + "  " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()*/;
+    }
+    function readtable() {
+        table.ajax.url('/Order/Orders/LoadTable?listRegionID=' + $("#ListRegionID").val() + '&listCityID=' + $("#ListCityID").val()
+            + '&listBlockID=' + $("#ListBlockID").val()
+            + '&listVendorID=' + $("#ListVendorID").val()
+            + '&customerNameMobile=' + $("#Name").val()
+            + '&orderTypeId=1'
+            + '&fromDateTime=' + $("#FromDateTime").val()
+            + '&toDateTime=' + $("#ToDateTime").val()
+        );
+        table.ajax.reload();
+    }
+    function Cancel(id) {
+        $("#OrderVendorID").val(id);
+        $('#modal').modal('show');
+    }
+    function CancelTrip(parameters) {
+        if ($("#CancelReasonID").val() === "") {
+            swal('@Homemade.UI.Resources.Homemade.Please_Choose_Cancel_Reason', "", "error");
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: '/Order/Orders/CancelOrder',
+                data: {
+                    'OrderVendorID': $("#OrderVendorID").val(), 'CancelReasonID': $("#CancelReasonID").val()
+                },
+                dataType: "json",
+                async: false,
+                contentType: "application/x-www-form-urlencoded",
+                success: function(response) {
+                    if (response.status == true) {
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false){ Title = "response.message" });
+                        readtable();
+                    }
+                    else {
+                        swal(response.message, "", "error");
+                    }
+                }
+            });
+            $("#modal").modal('hide');
+        }
+    }
+    var ddlCancelReason = $("#CancelReasonID");
+    function GetCancelReason() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCancelReasons")',
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function(result) {
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    ddlCancelReason.append('<option value="' + item.id + '">' + item.name + '</option>');
+                }
+            },
+            error: function() {
+            }
+        });
+    }
+</script>

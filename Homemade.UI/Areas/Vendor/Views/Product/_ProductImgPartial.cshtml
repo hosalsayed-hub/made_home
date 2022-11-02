@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Homemade.BLL.ViewModel.Vendor.ProductImageViewModel>
+@foreach (var item in Model)
+{
+    <div class="prod_img_wrap">
+        @if (!string.IsNullOrEmpty(item.Image))
+        {
+            <div id="tr_@item.ProductImageID">
+                <img src="@item.Image" style="width: 150px !important" />
+                <div class="pi_actions">
+                    <i class="fa fa-trash a_item" onclick="delFileFromDBConfirm(@item.ProductImageID)"></i>
+                    <a class="a_item" href="@item.Image" target="_blank"><i class="fa fa-eye" style="cursor:pointer"></i></a>
+                    <a class="a_item" href="@item.Image" download target="_blank"><i class="fa fa-download" style="cursor:pointer"></i></a>
+                </div>
+            </div>
+        }
+    </div>
+}
+<script>
+    var idselected = 0;
+    function delFileFromDBConfirm(id) {
+        idselected = id;
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Delete , "delFileFromDB();"))
+        }
+    function delFileFromDB() {
+        $.ajax({
+            url: "/Vendor/Product/DeleteFile",
+            data: {
+                productImageID: idselected
+            },
+            type: 'POST',
+            success: function(data) {
+                debugger;
+                if (data.resultType === "success") {
+                    $("#tr_" + idselected + "").remove();
+                    idselected = 0;
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false)
+                        { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessDeleteMessage + "\"" })
+                        }
+            }
+        });
+    }
+</script>

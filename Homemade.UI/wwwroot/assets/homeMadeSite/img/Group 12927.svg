@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="143.707" height="171.768" viewBox="0 0 143.707 171.768">
+  <g id="Group_12927" data-name="Group 12927" transform="translate(-648 -280.209)">
+    <g id="Icon_feather-shopping-cart" data-name="Icon feather-shopping-cart" transform="translate(650.5 313.5)">
+      <path id="Path_21" data-name="Path 21" d="M31.214,39.607A9.607,9.607,0,1,1,21.607,30,9.607,9.607,0,0,1,31.214,39.607Z" transform="translate(25.063 85.263)" fill="none" stroke="#cbcbcb" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/>
+      <path id="Path_22" data-name="Path 22" d="M47.714,39.607A9.607,9.607,0,1,1,38.107,30,9.607,9.607,0,0,1,47.714,39.607Z" transform="translate(84.774 85.263)" fill="none" stroke="#cbcbcb" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/>
+      <path id="Path_23" data-name="Path 23" d="M1.5,1.5H26.174L42.706,84.1a12.337,12.337,0,0,0,12.337,9.931H115A12.337,12.337,0,0,0,127.337,84.1l9.87-51.754H32.343" fill="none" stroke="#cbcbcb" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/>
+    </g>
+    <path id="Path_5460" data-name="Path 5460" d="M286,0h10.294V20.587H286Z" transform="translate(447.906 280.209)" fill="#cbcbcb"/>
+    <path id="Path_5461" data-name="Path 5461" d="M0,0H10.294V20.588H0Z" transform="translate(695.37 300.436) rotate(-45)" fill="#cbcbcb"/>
+    <path id="Path_5462" data-name="Path 5462" d="M0,0H20.587V10.294H0Z" transform="translate(760.874 307.722) rotate(-45)" fill="#cbcbcb"/>
+  </g>
+</svg>

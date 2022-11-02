@@ -1,0 +1,329 @@
+﻿@model Homemade.BLL.ViewModel.Customer.CustomerViewModel
+@inject Homemade.BLL.General.BLUser blUser
+@inject Homemade.BLL.Customer.BlCustomer blCustomer
+@{
+    @Html.Hidden("UserID", Model.UserId)
+    var dashSummary = blCustomer.GetSummaryHomeCountByCustomer(Model.CustomersID);
+}
+
+<span style="display:none" class="header-title">@Homemade.UI.Resources.HomemadeMenu.Customers</span>
+<div class="content">
+    @Html.AntiForgeryToken()
+    <div class="block">
+        <div class="block-content h_scroll">
+            <div class="row">
+                <div class="col-md-12">
+                    <h6 class="block-title">
+                        <span class="header-title">@(Model.FirstName + " " + Model.SeconedName)</span>
+                    </h6>
+                </div>
+            </div>
+            <br />
+
+            <div class="block-content">
+                <div class="row">
+
+                    <input type="hidden" name="EntityEmpID" id="EntityEmpID" value="@Model.CustomersID" />
+                    <input asp-for="CustomersID" hidden />
+
+                    <div class="col-md-4 form-group">
+                        <div class="form-material">
+                            @(!string.IsNullOrEmpty(Model.FirstName) ? Html.DisplayFor(x => x.FirstName) :"----")
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Name </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <div class="form-material">
+                            @(!string.IsNullOrEmpty(Model.MobileNo) ? Html.DisplayFor(x => x.MobileNo):"----")
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Mobile </label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 form-group">
+                        <div class="form-material">
+                            @(!string.IsNullOrEmpty(Model.Email) ? Html.DisplayFor(x => x.Email):"----")
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Email </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content">
+    <!-- Dynamic Table Full -->
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="block-title collapsed" data-toggle="collapse" data-target="#collapseOrderSummary" aria-expanded="false" aria-controls="collapseOrderSummary">
+                        <i class="ion-code-working push-5-r"></i>
+                        <span class="header-title">@Homemade.UI.Resources.Homemade.Orders_Summary</span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="collapse in" id="collapseOrderSummary">
+            <div class="block-content block-content-full">
+                <div class="row">
+                    <div class="col-xs-6 col-lg-2">
+                        <a class="block block-link-hover1" href="/Order/Orders/OrdersByStatus?statusID=@((int)OrderStatusEnum.Create)&customersID=@Model.CustomersID">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="push-10-t push-10">
+                                    <i class="fa fa-file fa-2x text-primary"></i>
+                                    <div class="h2 text-primary pull-right" data-toggle="countTo" data-to="36300">@dashSummary.CreateCount</div>
+                                </div>
+                                <div class="text-uppercase font-w600 font-s12 text-muted">@Homemade.UI.Resources.Homemade.Pending_Accept</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-xs-6 col-lg-2">
+                        <a class="block block-link-hover1" href="/Order/Orders/OrdersByStatus?statusID=@((int)OrderStatusEnum.Accept)&customersID=@Model.CustomersID">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="push-10-t push-10">
+                                    <i class="fa fa-user-md fa-2x text-smooth"></i>
+                                    <div class="h2 text-smooth pull-right" data-toggle="countTo" data-to="360">@dashSummary.AcceptCount</div>
+                                </div>
+                                <div class="text-uppercase font-w600 font-s12 text-muted">@Homemade.UI.Resources.Homemade.Accepted</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-xs-6 col-lg-2">
+                        <a class="block block-link-hover1" href="/Order/Orders/OrdersByStatus?statusID=@((int)OrderStatusEnum.Being_Processed)&customersID=@Model.CustomersID">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="push-10-t push-10">
+                                    <i class="fa fa-truck fa-2x text-success"></i>
+                                    <div class="h2 text-success pull-right" data-toggle="countTo" data-to="760" data-before="$">@dashSummary.BeingProcessedCount</div>
+                                </div>
+                                <div class="text-uppercase font-w600 font-s12 text-muted">@Homemade.UI.Resources.Homemade.Being_Processed</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-xs-6 col-lg-2">
+                        <a class="block block-link-hover1" href="/Order/Orders/OrdersByStatus?statusID=@((int)OrderStatusEnum.Shipping)&customersID=@Model.CustomersID">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="push-10-t push-10">
+                                    <i class="fa fa-motorcycle fa-2x text-amethyst"></i>
+                                    <div class="h2 text-amethyst pull-right" data-toggle="countTo" data-to="48">@dashSummary.ShippingCount</div>
+                                </div>
+                                <div class="text-uppercase font-w600 font-s12 text-muted">@Homemade.UI.Resources.Homemade.Pending_Delivered</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-xs-6 col-lg-2">
+                        <a class="block block-link-hover1" href="/Order/Orders/OrdersByStatus?statusID=@((int)OrderStatusEnum.Assign)&customersID=@Model.CustomersID">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="push-10-t push-10">
+                                    <i class="fa fa-map fa-2x text-modern"></i>
+                                    <div class="h2 text-modern pull-right" data-toggle="countTo" data-to="48">@dashSummary.AssignCount</div>
+                                </div>
+                                <div class="text-uppercase font-w600 font-s12 text-muted">@Homemade.UI.Resources.Homemade.Assigned</div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-xs-6 col-lg-2">
+                        <a class="block block-link-hover1" href="/Order/Orders/OrdersByStatus?statusID=@((int)OrderStatusEnum.OnWay_Store)&customersID=@Model.CustomersID">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="push-10-t push-10">
+                                    <i class="fa fa-table fa-2x text-warning"></i>
+                                    <div class="h2 text-warning pull-right" data-toggle="countTo" data-to="48">@dashSummary.OnWayStoreCount</div>
+                                </div>
+                                <div class="text-uppercase font-w600 font-s12 text-muted">@Homemade.UI.Resources.Homemade.OnWayStore</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-xs-6 col-lg-3">
+                        <a class="block block-link-hover1" href="/Order/Orders/OrdersByStatus?statusID=@((int)OrderStatusEnum.Being_Delivery)&customersID=@Model.CustomersID">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="push-10-t push-10">
+                                    <i class="fa fa-drivers-license fa-2x text-warning"></i>
+                                    <div class="h2 text-warning pull-right" data-toggle="countTo" data-to="48">@dashSummary.BeingDeliveryCount</div>
+                                </div>
+                                <div class="text-uppercase font-w600 font-s12 text-muted">@Homemade.UI.Resources.Homemade.With_Captain</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-xs-6 col-lg-3">
+                        <a class="block block-link-hover1" href="/Order/Orders/OrdersByStatus?statusID=@((int)OrderStatusEnum.Delivered)&customersID=@Model.CustomersID">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="push-10-t push-10">
+                                    <i class="fa fa-calendar-o fa-2x text-modern"></i>
+                                    <div class="h2 text-modern pull-right" data-toggle="countTo" data-to="48">@dashSummary.DeliveredCount</div>
+                                </div>
+                                <div class="text-uppercase font-w600 font-s12 text-muted">@Homemade.UI.Resources.Homemade.Delivered</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-xs-6 col-lg-3">
+                        <a class="block block-link-hover1" href="/Order/Orders/OrdersByStatus?statusID=@((int)OrderStatusEnum.Cancel)&cancelTypeID=@((int)CancelTypeEnum.Default)&customersID=@Model.CustomersID">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="push-10-t push-10">
+                                    <i class="fa fa-genderless fa-2x text-amethyst"></i>
+                                    <div class="h2 text-amethyst pull-right" data-toggle="countTo" data-to="48">@dashSummary.CancelCount</div>
+                                </div>
+                                <div class="text-uppercase font-w600 font-s12 text-muted">@Homemade.UI.Resources.Homemade.Cancel_Orders</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-xs-6 col-lg-3">
+                        <a class="block block-link-hover1" href="/Order/Orders/OrdersByStatus?statusID=@((int)OrderStatusEnum.Cancel)&cancelTypeID=@((int)CancelTypeEnum.Auto)&customersID=@Model.CustomersID">
+                            <div class="block-content block-content-full clearfix">
+                                <div class="push-10-t push-10">
+                                    <i class="fa fa-clock-o fa-2x text-success"></i>
+                                    <div class="h2 text-success pull-right" data-toggle="countTo" data-to="48">@dashSummary.PendingCancelCount</div>
+                                </div>
+                                <div class="text-uppercase font-w600 font-s12 text-muted">@Homemade.UI.Resources.Homemade.Pending_Orders</div>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="block-title collapsed" data-toggle="collapse" data-target="#collapseOrder" aria-expanded="false" aria-controls="collapseOrder">
+                        <i class="ion-code-working push-5-r"></i>
+                        <span class="header-title">@Homemade.UI.Resources.Homemade.Orders_History</span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="collapse in" id="collapseOrder">
+            <div class="block-content block-content-full">
+                <table id="tbl_Order" class="table table-custom js-dataTable-buttons" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.SNumber</th>
+                            <th class="text-center">#</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.Integration_Number</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.Vendor</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.Status</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.Create_Date</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.Type</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.Received_Date</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.Received_Time</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.ShippingCompany</th>
+                            <th>@Homemade.UI.Resources.Homemade.Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="content">
+    @Html.AntiForgeryToken()
+    <div class="block">
+        <div class="block-content h_scroll">
+            <br />
+            <ul class="nav nav-tabs" data-toggle="tabs">
+                <li class="active">
+                    <a href="#CUstomerLocations"><i class="fa fa-user push-5-r"></i> @Homemade.UI.Resources.HomemadeMenu.Locations</a>
+                </li>
+                <li>
+                    <a href="#CUstomerFavourits" data-toggle="tab"><i class="fa fa-file push-5-r"></i> @Homemade.UI.Resources.HomemadeMenu.FavouriteProducts</a>
+                </li>
+            </ul>
+            <div class="block-content tab-content">
+                <div class="tab-pane active" id="CUstomerLocations">
+                    <div class="row">
+                        @foreach (var CustomerLocation in Model.CustomerLocations)
+                        {
+                            <div class="col-md-3 form-group">
+                                <div class="form-material">
+                                    @(!string.IsNullOrEmpty(CustomerLocation.name) ? CustomerLocation.name :"----")
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Name </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <div class="form-material">
+                                    @(!string.IsNullOrEmpty(CustomerLocation.mobileNo) ? CustomerLocation.mobileNo : "----")
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.MobileNumber </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 form-group">
+                                <div class="form-material">
+                                    @(!string.IsNullOrEmpty(CustomerLocation.cityName) ? CustomerLocation.cityName : "----")
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.City </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <div class="form-material">
+                                    @(!string.IsNullOrEmpty(CustomerLocation.blockName) ? CustomerLocation.blockName : "----")
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Block </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <div class="form-material">
+                                    @(!string.IsNullOrEmpty(CustomerLocation.address) ? Html.Display(CustomerLocation.address) : "----")
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Address </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <div class="form-material">
+                                    @(!string.IsNullOrEmpty(CustomerLocation.streetNo) ? CustomerLocation.streetNo : "----")
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.StreetNo </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <div class="form-material">
+                                    @(!string.IsNullOrEmpty(CustomerLocation.buildingNumber) ? CustomerLocation.buildingNumber : "----")
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.BuildingNumer </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <div class="form-material">
+                                    @(!string.IsNullOrEmpty(CustomerLocation.uniqueSign) ? CustomerLocation.uniqueSign : "----")
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.UniqueSign </label>
+                                </div>
+                            </div>
+                            <hr class="col-md-12" style="bottom:20px;" />
+                        }
+                    </div>
+                </div>
+                <div class="tab-pane" id="CUstomerFavourits">
+                    <div class="row">
+                        @foreach (var CustomerFavourite in Model.CustomerFavourites)
+                        {
+                            <div class="col-md-3 form-group text-center">
+                                <label>
+                                    @CustomerFavourite.ProductName
+                                    <img src="@CustomerFavourite.Logo" class="img" width="100" height="100" style="display:block;margin-bottom:7px;" />
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles{
+    <!-- Data_Table Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" />
+
+}
+
+    @section Scripts{
+    <!-- Data_table Plugins -->
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+
+    <partial name="_DataTableOrders" />
+
+}

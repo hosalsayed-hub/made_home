@@ -1,0 +1,125 @@
+﻿@model Homemade.BLL.ViewModel.Site.SiteReviewQeustionsViewModel
+<!-- ***** user-dashboard-section Start ***** -->
+
+<section class="section-style user-dashboard-section">
+
+    <div class="container">
+
+        <div class="user-dashboard-area">
+
+            <div class="row">
+
+                <partial name="_PersonalMenuPartial" />
+
+                <div class="col-xl-9 col-lg-8">
+
+                    <div class="user-dashboard-wrapper">
+
+                        <div class="user-dashboard-content reviews-area">
+
+
+                            <div class="reviews-items questions-panels">
+                                @foreach (var item in Model.ListQuestions)
+                                {
+                                    <div class="panel-items">
+
+                                        <div class="panel-header">
+
+                                            <div class="question-text">@item.Question</div>
+                                            <div class="question-date">@item.QuestionDate </div>
+
+                                        </div>
+                                        <div class="panel-body">
+
+                                            <div class="question-ans">@item.Answer </div>
+
+                                        </div>
+
+                                    </div>
+                                }
+                                @foreach (var item in Model.ListOrderRate)
+                                {
+                                    <div class="panel-items review-item">
+
+                                        <div class="panel-header review-head">
+
+                                            <div class="review-head-info">
+
+                                                <div class="review-id-wrap">
+
+                                                    <a class="info-icon" href="#"><i class="fas fa-info-circle"></i></a>
+                                                    <span class="review-id">@item.TrackNo</span>
+                                                </div>
+                                                <div class="review-date">
+
+                                                    <span>@item.RateDate</span>
+                                                    <span>@item.RateTime</span>
+                                                </div>
+
+                                            </div>
+                                            <div class="review-rating">
+
+                                                <div class="rating-icons">
+                                                    @for (int i = 0; i < 5; i++)
+                                                    {
+                                                        if (i <= item.RateOrder)
+                                                        {
+                                                            <span><i class="fas fa-star"></i></span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span><i class="far fa-star"></i></span>
+                                                        }
+
+                                                    }
+
+                                                </div>
+                                                <span class="rating-text">@item.RateTitle</span>
+
+                                            </div>
+                                            <div class="review-text">@item.CommentOrder </div>
+
+                                        </div>
+                                        <div class="panel-body review-body">
+
+                                            <div class="review-reply-area">
+
+                                                <div class="review-reply-info">
+
+                                                    <a class="vendor-details" href="/Site/home/vendor?id=@item.VendorsGuid">
+                                                        @if (string.IsNullOrEmpty(item.VendorsLogo))
+                                                        {
+                                                            <img class="img-fluid vendor-img" src="@item.VendorsLogo">
+                                                        }
+                                                        else
+                                                        {
+                                                            <img class="img-fluid vendor-img" src="~/assets/homeMadeSite/img/logo.svg">
+                                                        }
+
+                                                        <span class="vendor-name">@item.VendorsName</span>
+                                                    </a>
+                                                    <div class="review-reply-date">
+                                                        <span>@item.AnswerDate</span>
+                                                        <span>@item.AnswerTime</span>
+                                                    </div>
+
+                                                </div>
+                                                <div class="review-reply-text">
+                                                    @item.AnswerRate
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+
+<!-- *****  End ***** -->

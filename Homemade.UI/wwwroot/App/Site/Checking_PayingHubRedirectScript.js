@@ -1,0 +1,124 @@
+﻿
+
+
+
+$(document).ready(function () {
+    $("#LogStatusMessage").html("جارى التحقق من اتمام الدفع ... ");
+    setTimeout(function () {
+        debugger;
+        $.ajax({
+            type: "get",
+            url: "/site/home/Checking_PayingReditectPaidStatus",
+            data: {
+                _paymentId: $("#paymentId").val(),
+            }
+        }).done(function (res) {
+            debugger;
+
+            if (res == "OK") {
+                insertOrder();
+            } else {
+                $("#LogStatus").html(`
+<section class="section-style order-status-section">
+    <div class="container">
+        <div class="order-status-area fail">
+            <div class="status-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="165" height="165" viewBox="0 0 165 165">
+                    <defs>
+                        <filter id="Path_4098" x="77.197" y="93.158" width="47.732" height="47.706" filterUnits="userSpaceOnUse">
+                            <feOffset dy="3" input="SourceAlpha" />
+                            <feGaussianBlur stdDeviation="3" result="blur" />
+                            <feFlood flood-opacity="0.051" />
+                            <feComposite operator="in" in2="blur" />
+                            <feComposite in="SourceGraphic" />
+                        </filter>
+                        <filter id="Path_4100" x="44.57" y="93.166" width="47.732" height="47.706" filterUnits="userSpaceOnUse">
+                            <feOffset dy="3" input="SourceAlpha" />
+                            <feGaussianBlur stdDeviation="3" result="blur-2" />
+                            <feFlood flood-opacity="0.051" />
+                            <feComposite operator="in" in2="blur-2" />
+                            <feComposite in="SourceGraphic" />
+                        </filter>
+                    </defs>
+                    <circle id="Ellipse_421" data-name="Ellipse 421" cx="82.5" cy="82.5" r="82.5" fill="#d10c01" opacity="0.02" />
+                    <g id="open-cardboard-box-" transform="translate(47.026 77.663)" opacity="0.6">
+                        <g id="Group_11826" data-name="Group 11826" transform="translate(0 0)">
+                            <g transform="matrix(1, 0, 0, 1, -47.03, -77.66)" filter="url(#Path_4098)">
+                                <path id="Path_4098-2" data-name="Path 4098" d="M260.1,199.228a.6.6,0,0,0-.538-.079s-20.214,6.875-20.766,7.065a.7.7,0,0,1-.762-.241l-6.361-7.856a.595.595,0,0,0-1.057.374v28.517a.594.594,0,0,0,.822.549l28.543-11.794a.594.594,0,0,0,.367-.549v-15.5A.6.6,0,0,0,260.1,199.228Z" transform="translate(-144.42 -98.74)" fill="#d10c01" />
+                            </g>
+                            <path id="Path_4099" data-name="Path 4099" d="M75.328,87.8l-5.447-7.28a.594.594,0,0,0-.315-.216L37.9,71.365a.723.723,0,0,0-.356.008L5.881,80.314a.594.594,0,0,0-.314.216L.119,87.81a.595.595,0,0,0,.285.919l26.775,9.087a.593.593,0,0,0,.653-.188l7.5-9.238L37.549,89a.592.592,0,0,0,.315,0h0l.033-.007,2.222-.611,7.5,9.238a.594.594,0,0,0,.653.188L75.043,88.72a.595.595,0,0,0,.285-.919ZM37.74,86.469l-22.708-6.2L37.74,73.891l22.674,6.366Z" transform="translate(0 -71.347)" fill="#d10c01" />
+                            <g transform="matrix(1, 0, 0, 1, -47.03, -77.66)" filter="url(#Path_4100)">
+                                <path id="Path_4100-2" data-name="Path 4100" d="M67.862,197.98a.594.594,0,0,0-.661.187l-6.361,7.856a.7.7,0,0,1-.762.241c-.552-.19-20.766-7.066-20.766-7.066a.594.594,0,0,0-.786.563v15.5a.594.594,0,0,0,.367.549l28.543,11.794a.594.594,0,0,0,.822-.549V198.541A.594.594,0,0,0,67.862,197.98Z" transform="translate(15.04 -98.78)" fill="#d10c01" />
+                            </g>
+                        </g>
+                    </g>
+                    <g id="Group_15638" data-name="Group 15638" transform="matrix(0.978, 0.208, -0.208, 0.978, -514.191, -395.667)" opacity="0.6">
+                        <g id="Group_15635" data-name="Group 15635" transform="matrix(0.998, 0.07, -0.07, 0.998, 689.104, 298.923)">
+                            <path id="Path_5982" data-name="Path 5982" d="M24.594,23.6,2.41,25.468A2.221,2.221,0,0,1,.2,22.349l9.4-21.034A2.221,2.221,0,0,1,13.47.988L26.255,20.154A2.221,2.221,0,0,1,24.594,23.6Z" transform="translate(0.843 0.842)" fill="none" />
+                            <g id="Group_15632" data-name="Group 15632" transform="translate(0 0)">
+                                <path id="Path_5983" data-name="Path 5983" d="M25.508,25.28,3.324,27.149a3.063,3.063,0,0,1-3.053-4.3l9.4-21.034a3.063,3.063,0,0,1,5.344-.45L27.8,20.529a3.063,3.063,0,0,1-2.291,4.752ZM12.35,1.69a1.361,1.361,0,0,0-1.143.811l-9.4,21.034a1.378,1.378,0,0,0,1.374,1.936L25.366,23.6A1.379,1.379,0,0,0,26.4,21.463L13.612,2.3A1.361,1.361,0,0,0,12.35,1.69Z" fill="#d10c01" />
+                            </g>
+                            <g id="Group_15634" data-name="Group 15634" transform="translate(11.248 7.966)">
+                                <g id="Group_15633" data-name="Group 15633" transform="translate(0 0)">
+                                    <path id="Path_5984" data-name="Path 5984" d="M.906,11.913a1.615,1.615,0,0,1,.069-.641,1.48,1.48,0,0,1,.3-.531,1.588,1.588,0,0,1,.507-.376,1.979,1.979,0,0,1,.695-.178,2.022,2.022,0,0,1,.72.059,1.578,1.578,0,0,1,.568.285A1.482,1.482,0,0,1,4.153,11a1.618,1.618,0,0,1,.175.621,1.579,1.579,0,0,1-.069.636,1.491,1.491,0,0,1-.3.525,1.572,1.572,0,0,1-.513.377,2.024,2.024,0,0,1-.7.179,1.978,1.978,0,0,1-.715-.06A1.581,1.581,0,0,1,1.467,13a1.488,1.488,0,0,1-.386-.467A1.578,1.578,0,0,1,.906,11.913ZM3.635,8.719l-2.543.214L0,.275,3.264,0Z" fill="#d10c01" />
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                    <g id="Group_15637" data-name="Group 15637" transform="translate(43.752 50.081)" opacity="0.6">
+                        <g id="Group_15624" data-name="Group 15624">
+                            <path id="Path_5965" data-name="Path 5965" d="M765.632,883.347h0a1.921,1.921,0,0,1-2.277-1.214l-4.327-12.055a1.921,1.921,0,0,1,.524-2.078l2.237-2.011a1.921,1.921,0,0,1,3.185,1.146l2.09,14.066A1.921,1.921,0,0,1,765.632,883.347Zm-1.616,4.809a2.8,2.8,0,0,1,1.722-3.255,2.664,2.664,0,0,1,3.647,1.881c.4,1.605-.782,2.5-2.106,2.832S764.348,889.48,764.016,888.155Z" transform="translate(-758.915 -865.494)" fill="#d10c01" />
+                        </g>
+                    </g>
+                </svg>
+            </div>
+            <div class="status-text-content">
+                <p class="mian-text">
+                    <span>نأسف لك ,</span>
+                    لم تمم عملية الدفع بنجاح
+<br />
+`+ res + `
+                </p>
+                <p class="sub-text" onclick="location.href='/site/home/completeOrder'">أعد المحاولة مرة أخري</p>
+            </div>
+            <div class="status-links">
+                <a class="status-link back-btn theme-btn theme-btn-lg theme-btn-7  " href="/">العودة للصفحة الرئيسية</a>
+            </div>
+        </div>
+    </div>
+</section>
+`);
+            }
+        })
+
+    }, 2000);
+});
+
+function insertOrder() {
+    $("#LogStatusMessage").html("جارى معالجة الطلب ... ");
+
+    $.ajax({
+        type: "POST",
+        url: "/site/home/Checking_PayingReditectStatus",
+        data: {
+            _paymentId: $("#paymentId").val(),
+            _UserName: $("#UserName").val()
+        }
+    }).done(function (res) {
+        debugger;
+
+        if (res == "OK") {
+
+            $("#LogStatus").html("تمت العمليه بنجاح");
+
+            cart_removeCookie('sessionToken');
+            cart_removeCookie('sessionID');
+
+            setTimeout(function () {
+                location.href = "/site/home/orderSuccess";
+            }, 3000);
+        } else {
+            $("#LogStatus").html(res);
+        }
+    })
+}

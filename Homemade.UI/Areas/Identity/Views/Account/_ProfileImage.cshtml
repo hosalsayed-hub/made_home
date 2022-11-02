@@ -1,0 +1,37 @@
+﻿@model Homemade.BLL.ViewModel.Employees.ProfileViewModel
+@using Homemade.BLL
+@inject Microsoft.Extensions.Configuration.IConfiguration _configuration
+@{
+    bool IsAr = Homemade.UI.InfraStructure.Utility.CurrentLanguageCode == "ar";
+}
+
+<div class="row" style="display:flex;align-items:center">
+    <div class="col-md-3 form-group text-center">
+            <img class="img" width="160" style="display: block; margin: 7px auto; border: 1px solid #eaeaea;width:100px; height: 100px"
+             src="@(!string.IsNullOrEmpty(Model.Photo) ? _configuration["ImageView"] + Model.Photo : Url.Content("~/Images/noImage.png") )" alt="">
+        <input type="file" id="fuProfilr" style="margin-top:3px;margin-right:36px;"/>
+    </div>
+            <div class="col-md-3 form-group" style="border-left: 2px solid #eb580d;">
+                <div class="form-material">
+                    <label for="material-text2">
+                        @Homemade.UI.Resources.Homemade.Name
+                    </label>
+                        @(IsAr ? Model.FirstNameAR : Model.FirstNameEN)
+                </div>
+            </div>
+            <div class="col-md-3 form-group" style="border-left: 2px solid #eb580d;">
+                <div class="form-material">
+                    <label for="material-text2">@Homemade.UI.Resources.Homemade.FileNumber</label>
+                    @Html.DisplayFor(x => x.FileNo)
+                </div>
+            </div>
+            <div class="col-md-3 form-group">
+                <div class="form-material">
+                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Job </label>
+                    @Html.DisplayFor(x => x.JobsName)
+                </div>
+            </div>
+        </div>
+
+
+

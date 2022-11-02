@@ -1,0 +1,277 @@
+﻿@model Homemade.BLL.ViewModel.Employees.EmployeesViewModel
+@inject Homemade.BLL.Setting.BlRegion blRegion
+ @Html.HiddenFor(m => m.JobTypeId)
+@inject Homemade.BLL.General.BLUser blUser
+@Html.Hidden("UserTypeId", blUser.GetUserInfo(User.GetUserIdInt()).UserType)
+<div class="content">
+
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <h3 class="block-title" data-toggle="collapse" data-target="#collapseProd" aria-expanded="false" aria-controls="collapseProd">
+                <i class="ion-code-working push-5-r"></i>
+                <span>@Homemade.UI.Resources.Homemade.Search_Filter</span>
+            </h3>
+        </div>
+        <div class="collapse" id="collapseProd">
+            <div class="block-content block-content-full">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Region <span style="color:red"></span></label>
+                            <select multiple="" id="ListRegionID" onchange="GetCityList(this)"
+                                    asp-items="@(new MultiSelectList(blRegion.GetRegionsByCountryID((int)CountryEnum.SA).Select(x=>new {
+                                                    x.RegionID,Name = Homemade.UI.InfraStructure.Utility.CurrentLanguageCode == "ar" ? x.RegionNameAR : x.RegionNameEN
+                                                    }),"RegionID","Name",blRegion.GetRegionsByCountryID((int)CountryEnum.SA).Select(x => x.RegionID.ToString()).ToList()))"
+                                    class="js-select2 form-control AddData" name="material-select2" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.City <span style="color:red"></span></label>
+                            <select multiple="" disabled="" id="ListCityID" class="js-select2 form-control AddData" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Name</label>
+                            @Html.TextBox("Name", "", new { @class = "form-control", @placeholder = @Homemade.UI.Resources.Homemade.Name })
+
+
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.FileNumber</label>
+                            @Html.TextBox("FileNo", "", new { @class = "form-control", @placeholder = @Homemade.UI.Resources.Homemade.FileNumber, @maxlength = "10", onkeypress = "return isNumberKey(event)" })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Mobile</label>
+                            @Html.TextBox("Mobile", "", new { @class = "form-control", @placeholder = @Homemade.UI.Resources.Homemade.Mobile, @maxlength = "10", onkeypress = "return isNumberKey(event)" })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.IdNo</label>
+                            @Html.TextBox("IdNo", "", new { @class = "form-control", @placeholder = @Homemade.UI.Resources.Homemade.IdNo, @maxlength = "10", onkeypress = "return isNumberKey(event)" })
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Type</label>
+                            <select multiple="" id="JobsID" class="js-select2 form-control AddData" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Status</label>
+                            <select multiple="" id="ListStatusID" class="js-select2 form-control AddData" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-right pull-right" style="margin: 13px 0px">
+                        <button id="btnRest" onclick="Rest();" type="button" style="margin:12px 0px" class="btn btn-custom btn-info">
+                            <i class="ion-refresh push-5-r"></i>
+                            @Homemade.UI.Resources.Homemade.Reset
+                        </button>
+                        <button onclick="GetValue()" type="button" style="margin:12px 5px" class="btn btn-custom bg-orange">
+                            <i class="ion-search push-5-r" aria-hidden="true"></i>
+                            @Homemade.UI.Resources.Homemade.Search
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="block-title">
+                        @if (Model.JobTypeId == (int)JobTypeEnum.Employees)
+                        {
+                            <span class="header-title">@Homemade.UI.Resources.HomemadeMenu.Employees</span>
+                        }
+                        else
+                        {
+                            <span class="header-title">@Homemade.UI.Resources.HomemadeMenu.System_Administrators</span>
+                        }
+                       
+                    </h3>
+                </div>
+                <div class="col-md-6 text-right">
+                    <div class="text-right row">
+                        <div class="col-md-8 paddingleft-0">
+                            <div class="form-group block-search push-5-r pull-right">
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="ion-search"></i></div>
+                                    <input type="text" class="form-control" id="DT_search" placeholder="@Homemade.UI.Resources.Homemade.EnterSearchKeywords">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            @if (Model.JobTypeId == (int)JobTypeEnum.Admin)
+                            {
+                                <a class="btn btn-md btn-block addBtn btn-width120" href="/Employees/Employees/Create?jobtype=3" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Add_Doctor">
+                                    <i class="ion-plus-round push-5-r"></i>
+                                    @Homemade.UI.Resources.Homemade.Add_Employee
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-md btn-block addBtn btn-width120" href="/Employees/Employees/Create?jobtype=2" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Add_Emp">
+                                    <i class="ion-plus-round push-5-r"></i>
+                                    @Homemade.UI.Resources.Homemade.Add_Emp
+                                </a>
+                            }
+                         
+
+
+                        </div>
+                    </div>
+                    <div class="dt_buttons_wrap text-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="collapse in" id="collapseOrder">
+            <div class="block-content h_scroll">
+                <table id="tbl_Employees" class="table table-custom js-dataTable-buttons" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.SNumber</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.Name</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.Job</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.City</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.IdNo</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.Status</th>
+                            <th>@Homemade.UI.Resources.Homemade.Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section Styles {
+    <!-- Data_Table Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" />
+
+    <!-- Select 2 Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2-bootstrap.min.css" />
+    <style>
+        .dataTables_filter {
+            display: none;
+        }
+    </style>
+}
+
+@section Scripts{
+    <!-- Data_table Plugins -->
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+
+
+
+    <!-- Select 2 Scripts -->
+    <script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+
+    <partial name="_DataTable" />
+
+
+    <script>
+        function GetValue() {
+            readtable();
+        }
+        var isPaused = false;
+        function Rest() {
+            isPaused = true;
+            $.getJSON('/Setting/Region/GetAllListRegionIDBySACountry', '', function (data) {
+                $('#ListRegionID').val(data);
+                $('#ListRegionID').trigger('change');
+            });
+            //$('#FromDate').val('');
+            //$('#ToDate').val('');
+
+            $('#ListCityID').val('');
+            $('#ListCityID').trigger('change');
+            $("#Name").val("");
+            $("#FileNo").val("");
+            $("#Mobile").val("");
+            $("#IdNo").val("");
+            $('#ListStatusID').val('');
+            $('#ListStatusID').trigger('change');
+            $('#JobsID').val('');
+            $('#JobsID').trigger('change');
+            waitForIt();
+            isPaused = false;
+        }
+        $(document).ready(function () {
+            $('#ListRegionID').trigger('change');
+            GetDepartments();
+            GetJobs(@Model.JobTypeId);
+            GetStatus();
+            GetValue();
+        });
+        function waitForIt() {
+            if (isPaused) {
+                setTimeout(function () { waitForIt() }, 10);
+            } else {
+                GetValue();
+            };
+        }
+        function GetCityList(e, cityID) {
+            var listRegionID = $(e).val();
+            $('#ListCityID').prop("disabled", false);
+            if (listRegionID != '' || listRegionID != undefined) {
+                $.ajax({
+                    type: "POST",
+                    url: '/Setting/City/GetCitiesByRegionList',
+                    data: { 'listRegionID': listRegionID },
+                    dataType: "json",
+                    async: false,
+                    contentType: "application/x-www-form-urlencoded",
+                    success: function (result) {
+                        $('#ListCityID').html('');
+                        $('#ListCityID').append('<option></option>');
+                        for (var i = 0; i < result.length; i++) {
+                            var item = result[i];
+                            if (cityID != undefined && cityID > 0 && cityID == item.cityID) {
+                                $('#ListCityID').append('<option selected value="' + item.cityID + '">' + item.cityName + '</option>');
+                                $('#ListCityID').val(cityID).trigger('change');
+                            }
+                            else {
+                                $('#ListCityID').append('<option selected value="' + item.cityID + '">' + item.cityName + '</option>');
+                            }
+
+                        }
+                        isPaused = false;
+                    },
+                    error: function () {
+                        isPaused = false;
+                    }
+                });
+            }
+        }
+
+    </script>
+}
+

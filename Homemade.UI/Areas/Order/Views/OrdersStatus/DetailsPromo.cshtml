@@ -1,0 +1,97 @@
+﻿@model Homemade.BLL.ViewModel.Order.PromoCodeMasterViewModel
+
+<div class="content">
+    <div class="block block-themed">
+        <div class="block-header">
+            <h3 class="">
+                <span class="header-title">@Homemade.UI.Resources.Homemade.PromoCode</span>
+                <span class="sub-page-name">@Model.PromoCode</span>
+            </h3>
+        </div>
+
+        <div class="block-content">
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <div class="col-xs-12">
+                        <div class="form-material">
+                            @Html.DisplayFor(x => x.StartDate)
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.StartDate </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <div class="col-xs-12">
+
+                        <div class="form-material ">
+                            @Html.DisplayFor(x => x.ExpiryDate)
+
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.ExpiryDate </label>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <div class="col-xs-12">
+                        <div class="form-material">
+                            @Html.DisplayFor(x => x.LimitCount)
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.LimitCount </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <div class="col-xs-12">
+                        <div class="form-material">
+                            @Html.DisplayFor(x => x.DiscountValue)
+                            @if (Model.DiscountType == (int)Homemade.BLL.DiscountTypeEnum.Amount)
+                            {
+                                @Homemade.UI.Resources.Homemade.Amount
+                            }
+                            else
+                            {
+                                @Homemade.UI.Resources.Homemade.Percent
+                            }
+
+
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Discount </label>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <div class="col-xs-12">
+                        <div class="form-material">
+                            @Html.DisplayFor(x => x.Subject)
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Subject </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <div class="col-xs-12">
+                        <div class="form-material">
+                            @Html.DisplayFor(x => x.Content)
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Content </label>
+                        </div>
+                    </div>
+                </div>
+
+                @if (Model.lstCityName.Count() > 0)
+                {
+                    <div class="form-group col-md-12">
+                        <label class="col-xs-12" for="ddlAgents">@Homemade.UI.Resources.Homemade.Vendor</label>
+                        <div class="col-sm-9">
+                            <ul class="">
+                                @foreach (var item in Model.lstCityName)
+                                {
+                                    <li>@item</li>
+                                }
+                            </ul>
+
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

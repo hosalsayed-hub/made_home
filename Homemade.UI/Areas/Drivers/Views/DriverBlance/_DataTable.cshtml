@@ -1,0 +1,228 @@
+﻿@{
+    var direction = "";
+}
+@if (Context.Request.Cookies["Language"] != null)
+{
+
+
+    if (Context.Request.Cookies["Language"] == "ar")
+    {
+        direction = "rtl";
+    }
+    else
+    {
+        direction = "ltr";
+    }
+}
+else
+{
+    direction = "ltr";
+
+}
+<script>
+    if ('@direction' === "ltr")
+    {
+        var Ctrl_lang = {
+            "search": "_INPUT_",
+            "searchPlaceholder": "Search ...",
+            "lengthMenu": "_MENU_"
+        };
+    }
+    else
+    {
+        var Ctrl_lang = {
+            "sEmptyTable":     "ليست هناك بيانات متاحة في الجدول",
+            "search": "_INPUT_",
+            "searchPlaceholder": "بحث ...",
+            "lengthMenu": "_MENU_",
+            "sInfo":         "إظهار _START_ إلى _END_ من أصل _TOTAL_ مدخل",
+            "sInfoEmpty":    "يعرض 0 إلى 0 من أصل 0 سجل",
+            "oPaginate": {
+                "sFirst":    "الأول",
+                "sPrevious": "السابق",
+                "sNext":     "التالي",
+                "sLast":     "الأخير"
+            }
+        };
+    }
+
+    var table = $('#tbl').DataTable({
+        pageLength: 10,
+        pagijngType: "full_numbers",
+        serverSide: true,
+        processing: true,
+        lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+        sAjaxSource: '/Drivers/DriverBlance/LoadTable',
+        sServerMethod: "POST",
+        bPaginate: true,
+        paging: true,
+        columns: [
+            {
+                "data": null,
+                "sortable": false,
+                render: function (data, type, row, meta) {
+                    return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                }
+            },
+            {
+                data: null,
+                bSortable: true,
+                render: function (data, type, row) { return '<input type="hidden" value="' + data.driverBlanceID + '"/><label>' + data.driverName + '</label>' }
+
+            },
+            {
+                data: null,
+                bSortable: true,
+                render: function (data, type, row) { return '<label>' + data.orderNumber + '</label>' }
+            },
+            {
+                data: null,
+                bSortable: true,
+                render: function (data, type, row) {
+                    if (data.typeOperationID == @((int)Homemade.BLL.TypeOperationEnum.CR)) { return '<label>@Homemade.UI.Resources.Homemade.CR</label>' }
+                    else if (data.typeOperationID == @((int)Homemade.BLL.TypeOperationEnum.DR)) { return '<label>@Homemade.UI.Resources.Homemade.DR</label>' }
+                    else { return '<label></label>' }
+                    }
+
+                },
+            {
+                data: null,
+                bSortable: true,
+                render: function (data, type, row) { return '<label>' + data.transactionTypeName + '</label>' }
+
+            },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) { return '<label>' + data.amount.toFixed(2) + '</label>' }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) { return '<label>' + data.before.toFixed(2) + '</label>' }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) { return '<label>' + data.after.toFixed(2) + '</label>' }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function (data, type, row) { return '<label>' + getFormatDate(data.dateOperation) + '</label>' }
+
+            },
+            {
+
+                data: null,
+                bSortable: true,
+                render: function (data, type, row) {
+                    var databutton = '';
+                    if (data.attachment != "" && data.attachment != null) {
+                        databutton += '<a class="btn btn-xs btn-info" href="' + data.attachment +
+                            '" target="_blank" type="button" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Attachment"><i class="ion-image"></i></a>'
+                    } else {
+                        databutton += '<i class="ion-image btn btn-xs btn-info"></i>'
+                    }
+                    if (data.tripMasterID != "" && data.tripMasterID != null) {
+                        databutton += '<a class="btn btn-xs btn-success" style="margin:4px" href="Order/Orders/Index/' +
+                        data.tripMasterGuid + '" type="button" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Details"><i class="fa fa-search"/></a>';
+                    } else {
+                        databutton += '<i class=""></i>'
+                    }
+                    return databutton;
+                }
+            },
+            ],
+            buttons: [
+                {
+
+                    text: '@Homemade.UI.Resources.Homemade.Excel',
+                    className: "btn btn-success btn-xs",
+                    action: function (e, dt, node, config) {
+                        DownloadExcel();
+                    }
+                },
+                {
+                    text: '@Homemade.UI.Resources.Homemade.Print',
+                    className: "btn btn-warning btn-xs",
+                    action: function (e, dt, node, config) {
+                        Print();
+                    }
+                },
+                    {
+                    text: '@Homemade.UI.Resources.Homemade.PDF',
+                    className: "btn btn-info btn-xs",
+                    action: function (e, dt, node, config) {
+                        //PDF();
+                    }
+            }],
+        drawCallback: function (s) {
+            $('[data-toggle="tooltip"]').tooltip();
+        },
+        //"lengthMenu": [[5, 10, 20, 50, 100], [10, 25, 50, "All"]],
+       // "language": Ctrl_lang,
+        dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+
+    });
+    table.buttons().container().appendTo('.dt_buttons_wrap');
+
+
+    function readtable() {
+        table.ajax.url('/Drivers/DriverBlance/LoadTable?taxiNumber=' + $("#TaxiNumber").val()
+            + '&tripNo=' + $("#TripNo").val() + '&driverMobile=' + $("#DriverMobile").val() + '&fromDate=' + $("#FromDate").val() + '&toDate=' + $("#ToDate").val() +
+            '&isEnable=' + $("input[type='radio'][name='Enable']:checked").val()
+            + '&isActive=' + $("input[type='radio'][name='Active']:checked").val());
+        table.ajax.reload();
+    }
+    function DownloadExcel() {
+        if ($("#tbl tbody tr").length > 0 && ($("#tbl tbody tr td").hasClass("dataTables_empty") == false)) {
+             @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.ExportExcel , "ConfirmExcel();"))
+        }
+        else {
+              @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false)
+         { Title = "\"" + Homemade.UI.Resources.Homemade.NoDataFound + "\"" })
+        }
+    }
+
+    function ConfirmExcel() {
+          @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                   Title = "\"" + Homemade.UI.Resources.Homemade.Excel + "\""})
+        window.location.href = '/Drivers/DriverBlance/ExportDriverBlance?taxiNumber=' + $("#TaxiNumber").val()
+            + '&tripNo=' + $("#TripNo").val() + '&driverMobile=' + $("#DriverMobile").val() + '&fromDate=' + $("#FromDate").val() + '&toDate=' + $("#ToDate").val() +
+            '&isEnable=' + $("input[type='radio'][name='Enable']:checked").val()
+            + '&isActive=' + $("input[type='radio'][name='Active']:checked").val();
+    }
+    function Print() {
+        if ($("#tbl tbody tr").length > 0 && ($("#tbl tbody tr td").hasClass("dataTables_empty") == false)) {
+            window.open('/Drivers/DriverBlance/Print?taxiNumber=' + $("#TaxiNumber").val()
+                + '&tripNo=' + $("#TripNo").val() + '&driverMobile=' + $("#DriverMobile").val() + '&fromDate=' + $("#FromDate").val() + '&toDate=' + $("#ToDate").val() +
+                '&isEnable=' + $("input[type='radio'][name='Enable']:checked").val()
+                + '&isActive=' + $("input[type='radio'][name='Active']:checked").val(), "_blank");
+        }
+    }
+    function PDF() {
+        if ($("#tbl tbody tr").length > 0 && ($("#tbl tbody tr td").hasClass("dataTables_empty") == false)) {
+            window.open('/Drivers/DriverBlance/PDFDriverBalance?taxiNumber=' + $("#TaxiNumber").val()
+                + '&tripNo=' + $("#TripNo").val() + '&driverMobile=' + $("#DriverMobile").val()+ '&fromDate=' + $("#FromDate").val() + '&toDate=' + $("#ToDate").val() +
+                '&isEnable=' + $("input[type='radio'][name='Enable']:checked").val()
+                + '&isActive=' + $("input[type='radio'][name='Active']:checked").val(), "_blank");
+        }
+    }
+    function zeroPadded(val) {
+        if (val >= 10)
+            return val;
+        else
+            return '0' + val;
+    }
+
+    function getFormatDate(d) {
+        var d = new Date(d);
+        return d.getFullYear() + "-" + zeroPadded(d.getMonth() + 1) + "-" + zeroPadded(d.getDate()) /*+ "T" + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()*/;
+    }
+</script>
+

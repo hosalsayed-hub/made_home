@@ -1,0 +1,125 @@
+﻿<script>
+    var controllerPath = '/Drivers/DriverSetting/';
+
+
+
+
+       function GetSelectedItems() {
+        var TripCheck = "";
+        var i = 0;
+        var check;
+        $("#tbl tbody").find('tr').each(
+            function () {
+                var tripId = $(this).find('#hfID').val();
+
+                var IsCheck = $(this).find('#hfID').is(':checked');
+                if (IsCheck === true) {
+                    TripCheck = TripCheck + tripId + ',';
+                    i++;
+                }
+            }
+        );
+        $("#TripMasterCheck").val(TripCheck);
+        if ($("#TripMasterCheck").val() != "") {
+            $("#btnSend").show();
+        } else {
+            $("#btnSend").hide();
+        }
+    }
+    function check(e) {
+        var state = $(e).is(':checked');
+        if (state === true) {
+            $(e).prop('checked', true);
+        }
+        else {
+            $(e).not(":disabled").prop('checked', false);
+        }
+        GetSelectedItems();
+    }
+    function checkAll(ele) {
+        var state = $(ele).is(':checked');
+        if (state === true) {
+            $('.checkbox').not(":disabled").prop('checked', true);
+        }
+        else {
+            $('.checkbox').not(":disabled").prop('checked', false);
+        }
+        GetSelectedItems();
+    }
+
+
+        function ChangeStatue(e) {
+         @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.ChangeStaute , "ConfirmStatue(e)"))
+    }
+  //  var lblMsg = $("#lblMsg");
+
+        function ConfirmStatue(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+        $.ajax({
+            type: "POST",
+            url: controllerPath + 'ChangeEnable',
+            data: {
+                'id': id
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+               // lblMsg.html(result.message);
+
+               // divMsgParent.show();
+               // ScrollTop();
+                if (result.resultType == 'success') {
+                  @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                   Title = "\"" + Homemade.UI.Resources.Homemade.SuccessChangeMessage + "\""})
+                    $('#tbl').DataTable().ajax.reload();
+                }
+                else {
+                     @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) {
+                   Title = "\"" + Homemade.UI.Resources.Homemade.FailChangeStatueMessage + "\""})
+                    setTimeout(function () { swal.close(); }, 3000);
+                }
+
+
+            },
+            error: function () {
+
+            }
+        });
+    }
+    function Delete(e) {
+       @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Delete , "ConfirmDelete(e)"))
+    }
+
+
+    function ConfirmDelete(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete")',
+            data: {
+                'id': id
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                var msg = result.message;
+
+                if (result.resultType == 'success') {
+                     @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                   Title = "\"" + Homemade.UI.Resources.Homemade.SuccessDeleteMessage + "\""})
+                    $('#tbl').DataTable().ajax.reload();
+                }
+                else {
+                     @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+                }
+            }
+        });
+    }
+
+</script>

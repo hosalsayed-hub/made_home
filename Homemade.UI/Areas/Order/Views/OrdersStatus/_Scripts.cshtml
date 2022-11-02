@@ -1,0 +1,99 @@
+﻿<script>
+    var divMsgClass = $("#divMsgClass");
+    var lblMsg = $("#lblMsg");
+    var divMsgParent = $("#divMsgParent");
+    function GetCityList(e, cityID) {
+        var listRegionID = $(e).val();
+        $('#ListCityID').prop("disabled", false);
+        if (listRegionID != '' || listRegionID != undefined) {
+            $.ajax({
+                type: "POST",
+                url: '/Setting/City/GetCitiesByRegionist',
+                data: { 'listRegionID': listRegionID },
+                dataType: "json",
+                async: false,
+                contentType: "application/x-www-form-urlencoded",
+                success: function(result) {
+                    $('#ListCityID').html('');
+                    $('#ListCityID').append('<option></option>');
+                    for (var i = 0; i < result.length; i++) {
+                        var item = result[i];
+                        if (cityID != undefined && cityID > 0 && cityID == item.cityID) {
+                            $('#ListCityID').append('<option selected value="' + item.cityID + '">' + item.cityName + '</option>');
+                            $('#ListCityID').val(cityID).trigger('change');
+                        }
+                        else {
+                            $('#ListCityID').append('<option selected value="' + item.cityID + '">' + item.cityName + '</option>');
+                        }
+
+                    }
+                    isPaused = false;
+                },
+                error: function() {
+                    isPaused = false;
+                }
+            });
+        }
+    }
+    function GetBlockList(e, blockID) {
+        var listCityID = $(e).val();
+        $('#ListBlockID').prop("disabled", false);
+        if (listCityID != '' || listCityID != undefined) {
+            $.ajax({
+                type: "POST",
+                url: '/Setting/Block/GetBlockByCityList',
+                data: { 'listCityID': listCityID },
+                dataType: "json",
+                async: false,
+                contentType: "application/x-www-form-urlencoded",
+                success: function(result) {
+                    $('#ListBlockID').html('');
+                    $('#ListBlockID').append('<option></option>');
+                    for (var i = 0; i < result.length; i++) {
+                        var item = result[i];
+                        if (blockID != undefined && blockID > 0 && blockID == item.blockID) {
+                            $('#ListBlockID').append('<option selected value="' + item.blockID + '">' + item.blockName + '</option>');
+                            $('#ListBlockID').val(blockID).trigger('change');
+                        }
+                        else {
+                            $('#ListBlockID').append('<option value="' + item.blockID + '">' + item.blockName + '</option>');
+                        }
+                    }
+                    isPaused = false;
+                },
+                error: function() {
+                    isPaused = false;
+                }
+            });
+        }
+    }
+    function GetVendorList(vendorsID) {
+        $.ajax({
+            type: "POST",
+            url: '/Vendor/Vendors/GetAllVendors',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $('#ListVendorID').html('');
+                $('#ListVendorID').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (vendorsID != undefined && vendorsID > 0 && vendorsID == item.vendorsID) {
+                        $('#ListVendorID').append('<option selected value="' + item.vendorsID + '">' + item.vendorsName + '</option>');
+                        $('#ListVendorID').val(vendorsID).trigger('change');
+                    }
+                    else {
+                        $('#ListVendorID').append('<option value="' + item.vendorsID + '">' + item.vendorsName + '</option>');
+                    }
+
+                }
+                isPaused = false;
+            },
+            error: function() {
+                isPaused = false;
+            }
+        });
+    }
+</script>

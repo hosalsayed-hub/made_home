@@ -1,0 +1,431 @@
+﻿@model Homemade.BLL.ViewModel.Driver.DriverBlanceViewModel
+@inject Homemade.BLL.BLPermission blPermission
+@inject Homemade.BLL.Setting.BlCountry _blCountry
+@inject Homemade.BLL.Driver.BlDriver _blDriver
+
+<div class="content">
+    <!-- Dynamic Table Full -->
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="block-title collapsed" data-toggle="collapse" data-target="#collapseProd" aria-expanded="false" aria-controls="collapseProd">
+                        <i class="ion-code-working push-5-r"></i>
+                        <span class="header-title">@Homemade.UI.Resources.Homemade.Search</span>
+                    </h3>
+                </div>
+                <div class="col-md-6 text-right">
+                </div>
+            </div>
+        </div>
+        <div class="collapse" id="collapseProd">
+            <div class="block-content block-content-full">
+                <div class="row">
+                    <div class="col-md-6" style="display:none;">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.TripNo </label>
+                            <input id="TripNo" class="form-control " type="text" value="">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4" style="display:none;">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Country <span style="color:red"></span></label>
+                            <select multiple="" id="ListCountryID" onchange="GetAgent(this)"
+                                    asp-items="@(new MultiSelectList(_blCountry.GetAllCountryByOperators().Select(x=>new {
+                                                    x.CountryID,Name = Homemade.UI.InfraStructure.Utility.CurrentLanguageCode == "ar" ? x.NameAR : x.NameEN
+                                                    }),"CountryID","Name",_blCountry.GetAllCountryByOperators().Select(x => x.CountryID.ToString()).ToList()))"
+                                    class="js-select2 form-control AddData" name="material-select2" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4" style="display:none;">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Agent <span style="color:red"></span></label>
+                            <select multiple="" onchange="GetCity(this)" id="ListAgentID"
+                                    class="js-select2 form-control AddData" name="material-select2" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4" style="display:none;">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.City <span style="color:red"></span></label>
+                            <select multiple="" disabled="" id="ListCityID" class="js-select2 form-control AddData" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Mobile </label>
+                            <input id="DriverMobile" class="form-control " type="text" value="">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Choose_Driver </label>
+                            <select asp-items="@_blDriver.GetAllDriverByAgentOperator().ToList().Select(p => new SelectListItem { Text = Homemade.UI.InfraStructure.Utility.CurrentLanguageCode == " ar" ? p.NameAr : p.NameEn , Value=p.DriversID + "" })" id="DriverID" data-pl class="js-select2 form-control AddData" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                                <option selected>@Homemade.UI.Resources.Homemade.Choose_Driver</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="col-md-3" style="display:none;">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Choose_Brand </label>
+                            <select id="BrandID" onchange="GetModels(this)" data-pl class="js-select2 form-control AddData" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                                <option selected>@Homemade.UI.Resources.Homemade.Choose_Brand</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3" style="display:none;">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.ChooseModel </label>
+                            <select id="ModelID" disabled="" data-pl class="js-select2 form-control AddData" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                                <option selected>@Homemade.UI.Resources.Homemade.ChooseModel</option>
+
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.TaxiNumber </label>
+                            <input id="TaxiNumber" class="form-control " type="text" value="">
+                        </div>
+                    </div>
+                    <div class="col-md-3 form-group" style="display:none;">
+                        <div class="row">
+                            <label class="col-xs-12">@Homemade.UI.Resources.Homemade.Active</label>
+                            <div class="col-xs-12">
+                                <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbEnable">
+                                    <input id="rdbEnable" type="radio" class="AddData" name="Enable" value="1"><span></span> @Homemade.UI.Resources.Homemade.Active
+                                </label>
+                                <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbDisable">
+                                    <input id="rdbDisable" type="radio" class="AddData" name="Enable" value="0"><span></span> @Homemade.UI.Resources.Homemade.NotActive
+                                </label>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.FromDate </label>
+                            <input id="FromDate" class="js-datepicker form-control AddData " type="text" value="" name="FromDate" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.ToDate </label>
+                            <input id="ToDate" class="js-datepicker form-control AddData " type="text" value="" name="ToDate" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd">
+                        </div>
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <div class="row">
+                            <label class="col-xs-12">@Homemade.UI.Resources.Homemade.Stc_Verfiy</label>
+                            <div class="col-xs-12">
+                                <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbActive">
+                                    <input id="rdbActive" type="radio" name="Active" class="AddData" value="true"><span></span> @Homemade.UI.Resources.Homemade.Enable
+                                </label>
+                                <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbNotActive">
+                                    <input id="rdbNotActive" type="radio" name="Active" class="AddData" value="false"><span></span> @Homemade.UI.Resources.Homemade.Disable
+                                </label>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-4">
+                        <button id="btnRest" onclick="Rest();" type="button" style="margin:12px 0px" class="btn btn-custom btn-info">
+                            <i class="ion-refresh push-5-r"></i>
+                            @Homemade.UI.Resources.Homemade.Reset
+                        </button>
+                        <button onclick="GetValue()" type="button" style="margin:12px 5px" class="btn btn-custom bg-orange">
+                            <i class="ion-search push-5-r" aria-hidden="true"></i>
+                            @Homemade.UI.Resources.Homemade.Search
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="material-select2">@Homemade.UI.Resources.Homemade.Trips </label><br />
+                        <span id="Trips_SPN" style="font-size: larger; font-weight: 700; color: #eb580a;"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="material-select2">@Homemade.UI.Resources.Homemade.Drivers </label><br />
+                    <span id="Drivers_SPN" style="font-size: larger; font-weight: 700; color: #eb580a;"></span>
+                </div>
+                <div class="col-md-4">
+                    <label for="material-select2">@Homemade.UI.Resources.Homemade.Amount </label><br />
+                    <span id="Amount_SPN" style="font-size: larger; font-weight: 700; color: #eb580a;"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="block-title" data-toggle="collapse" data-target="#collapseOrder" aria-expanded="false" aria-controls="collapseOrder"><i class="ion-code-working push-5-r"></i> @Homemade.UI.Resources.Homemade.Result</h3>
+                </div>
+                <div class="col-md-6 text-right">
+                    <div class="dt_buttons_wrap text-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="collapse in" id="collapseOrder">
+            <div class="block-content h_scroll">
+                <div class="row">
+                    <div class="col-md-4" style="display:none;">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Lowest_Balance <span style="color:red">*</span></label>
+                            <input id="LowestBalance" type="number" class="form-control" maxlength="6" value="0" onkeypress="return isNumberKey(event)" />
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <table id="tbl" class="table table-custom js-dataTable-buttons" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th>@Homemade.UI.Resources.Homemade.SNumber</th>
+                                    <th>@Homemade.UI.Resources.Homemade.DriverName</th>
+                                    <th>@Homemade.UI.Resources.Homemade.Mobile</th>
+                                    <th>@Homemade.UI.Resources.Homemade.TripNo</th>
+                                    <th>@Homemade.UI.Resources.Homemade.Amount</th>
+                                    <th>@Homemade.UI.Resources.Homemade.Status</th>
+                                    <th>@Homemade.UI.Resources.Homemade.Date</th>
+                                    <th>@Homemade.UI.Resources.Homemade.Actions</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+@section Styles {
+    <!-- Data_table Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" />
+
+    <!-- Date_picker Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/Hijiri-Plugin/css/bootstrap-datetimepicker.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+
+    <!-- Select 2 Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2-bootstrap.min.css" />
+}
+
+@section Scripts {
+    <!-- Data_table Plugins -->
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+
+    <!-- Date_picker Plugins -->
+    <script src="~/assets/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/Hijiri-Plugin/js/bootstrap-hijri-datetimepicker.js"></script>
+    <script>
+        $(".js-datepicker").keypress(function (e) {
+            e.preventDefault();
+        });
+        $('.js-datepicker').datepicker({
+            dateFormat: 'yyyy-mm-dd'
+        }).on('changeDate', function (ev) {
+            $(this).datepicker('hide');
+        });
+    </script>
+
+    <!-- Select 2 Scripts -->
+    <script src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+
+    <partial name="_DataTableHistory" />
+    <script>
+        function GetValue() {
+            readtable();
+        }
+        var isPaused = false;
+        function Rest() {
+            isPaused = true;
+            $.getJSON('/Setting/Country/GetAllCountryIdByOperators', '', function (data) {
+                $('#ListCountryID').val(data);
+                $('#ListCountryID').trigger('change');
+            });
+            $('#FromDate').val('');
+            $('#ToDate').val('');
+            $('#TaxiNumber').val('');
+            $('#TripNo').val('');
+            $('#DriverMobile').val('');
+            $('#DriverID').val('');
+            $('#DriverID').trigger('change');
+            $('#ModelID').val('');
+            $('#ModelID').trigger('change');
+            $('#BrandID').val('');
+            $('#BrandID').trigger('change');
+            $("input[type='radio'][name='Enable']:checked").attr('checked', false);
+            $("input[type='radio'][name='Active']:checked").attr('checked', false);
+            waitForIt();
+            isPaused = false;
+        }
+        $(document).ready(function () {
+            $('#ListCountryID').trigger('change');
+            GetBrands();
+            GetValue();
+        });
+        function waitForIt() {
+            if (isPaused) {
+                setTimeout(function () { waitForIt() }, 10);
+            } else {
+                GetValue();
+            };
+        }
+        function GetAgent(e, agentID) {
+            var countryID = $(e).val();
+            if (countryID != '' || countryID != undefined) {
+                $.ajax({
+                    type: "POST",
+                    url: '/Setting/Agent/GetAgentByOperatorsAndCountry',
+                    data: { 'countryID': countryID },
+                    dataType: "json",
+                    async: false,
+
+                    contentType: "application/x-www-form-urlencoded",
+                    success: function (result) {
+                        $('#ListAgentID').html('');
+                        $('#ListAgentID').append('<option></option>')
+                        for (var i = 0; i < result.length; i++) {
+                            var item = result[i];
+                            if (agentID != undefined && agentID > 0 && agentID == item.agentID) {
+                                $('#ListAgentID').append('<option selected value="' + item.agentID + '">' + item.agentName + '</option>');
+                                $('#ListAgentID').val(agentID).trigger('change');
+                            }
+                            else {
+                                $('#ListAgentID').append('<option selected value="' + item.agentID + '">' + item.agentName + '</option>');
+                            }
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }
+            $('#ListAgentID').trigger('change');
+        }
+        function GetCity(e, cityID) {
+            var agentID = $(e).val();
+            $('#ListCityID').prop("disabled", false);
+            if (agentID != '' || agentID != undefined) {
+                $.ajax({
+                    type: "POST",
+                    url: '/Setting/City/GetCitiesByOperatorsAndAgent',
+                    data: { 'agentID': agentID },
+                    dataType: "json",
+                    async: false,
+                    contentType: "application/x-www-form-urlencoded",
+                    success: function (result) {
+                        $('#ListCityID').html('');
+                        $('#ListCityID').append('<option></option>')
+                        for (var i = 0; i < result.length; i++) {
+                            var item = result[i];
+                            if (cityID != undefined && cityID > 0 && cityID == item.cityID) {
+                                $('#ListCityID').append('<option selected value="' + item.cityID + '">' + item.cityName + '</option>');
+                                $('#ListCityID').val(cityID).trigger('change');
+                            }
+                            else {
+                                $('#ListCityID').append('<option selected value="' + item.cityID + '">' + item.cityName + '</option>');
+                            }
+
+                        }
+                        isPaused = false;
+                    },
+                    error: function () {
+                        isPaused = false;
+                    }
+                });
+            }
+        }
+        var ddlBrands = $("#BrandID");
+        var ddlChooseModel = $("#ModelID");
+        function GetBrands(brandID) {
+            ddlBrands.html('');
+            ddlBrands.append('<option></option>')
+            var obj = {};
+            $.ajax({
+                type: "POST",
+                url: '/Setting/Brand/GetBrands',
+                data: '{obj: ' + JSON.stringify(obj) + '}',
+                dataType: "json",
+                async: false,
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                    for (var i = 0; i < result.length; i++) {
+                        var item = result[i];
+                        if (brandID != undefined && brandID > 0 && brandID == item.brandID) {
+                            ddlBrands.append('<option selected value="' + item.brandID + '">' + item.brandName + '</option>');
+                            ddlBrands.val(brandID).trigger('change');
+                        }
+                        else
+                            ddlBrands.append('<option value="' + item.brandID + '">' + item.brandName + '</option>');
+                    }
+                },
+                error: function () {
+                }
+            });
+        }
+        function GetModels(e, modelID) {
+            var brandID = $(e).val();
+            $(ddlChooseModel).prop("disabled", false);
+            console.log(brandID);
+            if (brandID != '' || brandID != undefined) {
+                $.ajax({
+                    type: "POST",
+                    url: '/Setting/Model/GetModels',
+                    data: { 'brandID': brandID },
+                    dataType: "json",
+                    contentType: "application/x-www-form-urlencoded",
+                    success: function (result) {
+                        ddlChooseModel.html('');
+                        ddlChooseModel.append('<option></option>')
+                        for (var i = 0; i < result.length; i++) {
+                            var item = result[i];
+
+                            if (modelID != undefined && modelID > 0 && modelID == item.id) {
+                                ddlChooseModel.append('<option selected value="' + item.id + '">' + item.name + '</option>');
+                                ddlChooseModel.val(modelID).trigger('change');
+                            }
+                            else
+                                ddlChooseModel.append('<option value="' + item.id + '">' + item.name + '</option>');
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            }
+        }
+    </script>
+
+}
+
+
+

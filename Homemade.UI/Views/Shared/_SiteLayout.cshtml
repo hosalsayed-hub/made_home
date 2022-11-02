@@ -1,0 +1,1602 @@
+﻿<!DOCTYPE html>
+@{
+    var direction = "";
+    var munemain = "";
+    var langsite = "";
+}
+@if (Context.Request.Cookies["Language"] != null)
+{
+
+
+    if (Context.Request.Cookies["Language"] == "ar")
+    {
+        direction = "rtl";
+        munemain = "شغل بيت";
+        langsite = "ar";
+    }
+    else
+    {
+        direction = "ltr";
+        munemain = "Home Made";
+        langsite = "en";
+    }
+}
+else
+{
+    direction = "rtl";
+    munemain = "شغل بيت";
+    langsite = "ar";
+}
+<html class="no-focus" lang="en" direction="@direction" dir="@direction" style="direction: @direction" xmlns=“http://www.w3.org/1999/xhtml 6” xml:lang=“ar”>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="theme-color" content="#0199B1">
+
+    <title>@munemain</title>
+
+    <link rel="stylesheet" type="text/css" href="~/assets/homeMadeSite/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="~/assets/homeMadeSite/css/all.min.css">
+
+    <link rel='stylesheet' href='~/assets/homeMadeSite/css/fonts/stylesheet.css'>
+
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="~/assets/homeMadeSite/css/slick.css">
+
+    <link rel="stylesheet" type="text/css" href="~/assets/homeMadeSite/css/slick-theme.css">
+
+
+    @RenderSection("Styles", false)
+
+
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2-bootstrap.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="~/assets/homeMadeSite/css/main.css">
+
+    @if (langsite == "en")
+    {
+        <link href="~/assets/homeMadeSite/css/ltr-style.css" rel="stylesheet" />
+    }
+
+    <style>
+        .product-name-width {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            max-width: 230px;
+        }
+        .person-no-width {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            max-width: 115px;
+        }
+
+
+        .product-price-width {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            max-width: 100px;
+        }
+
+        #loading-area {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            background-color: #9a9a9a78;
+            top: 0;
+            right: 0;
+            z-index: 99999;
+        }
+
+        .loader-col .loader {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .loader-col #loader {
+            -webkit-perspective: 120px;
+            -moz-perspective: 120px;
+            -ms-perspective: 120px;
+            perspective: 120px;
+            position: absolute;
+            top: 50%;
+            right: 50%;
+            z-index: 2;
+            -webkit-transform: translate(50%, -50%);
+            -moz-transform: translate(50%, -50%);
+            -ms-transform: translate(50%, -50%);
+            -o-transform: translate(50%, -50%);
+            transform: translate(50%, -50%);
+        }
+
+            .loader-col #loader img {
+                width: 100%;
+                animation: run .1s infinite;
+            }
+    </style>
+
+
+</head>
+<body>
+
+    <!-- ***** header Start ***** -->
+
+    <header class="top-nav" id="header">
+
+        <div class="container h-100">
+
+            <div class="navbar-content">
+
+                <div class="nav-toggler">
+
+                    <svg height="384pt" viewBox="0 -53 384 384" width="384pt" xmlns="http://www.w3.org/2000/svg"><path d="m368 154.667969h-352c-8.832031 0-16-7.167969-16-16s7.167969-16 16-16h352c8.832031 0 16 7.167969 16 16s-7.167969 16-16 16zm0 0"></path><path d="m368 32h-352c-8.832031 0-16-7.167969-16-16s7.167969-16 16-16h352c8.832031 0 16 7.167969 16 16s-7.167969 16-16 16zm0 0"></path><path d="m368 277.332031h-352c-8.832031 0-16-7.167969-16-16s7.167969-16 16-16h352c8.832031 0 16 7.167969 16 16s-7.167969 16-16 16zm0 0"></path></svg>
+
+                </div>
+
+                <div class="nav-logo">
+
+                    <a href="/Site/Home/Index">
+
+                        <img class="img-fluid" src="~/assets/homeMadeSite/img/logo.svg">
+
+                    </a>
+
+                </div>
+
+                <ul class="navbar-menu">
+
+                    <li class="menu-item">
+
+                        <a class="menu-item-link hvr-underline-from-right mainlink " href="/">@Homemade.UI.Resources.Homemade.DashBoard</a>
+
+                    </li>
+
+                    <!-- ***** categories-dropdown Start ***** -->
+                    <li class="menu-item categories_dropdown_li" data-target="categories-dropdown">
+
+                        <a class="menu-item-link hvr-underline-from-right h-menu " href="#">@Homemade.UI.Resources.Homemade.Departments</a>
+                        <div class="dropdown-list categories-dropdown">
+
+                            <ul class="categories_menu">
+                                @foreach (var itemDepartmentData in blDepartments.GetAllDepartments(Homemade.UI.InfraStructure.Utility.CurrentLanguageCode, _configuration["DeptImageView"]).ToList())
+                                {
+                                    <li>
+                                        <a href="/Site/Home/category_items?id=@itemDepartmentData.DepartmentsGuid">@itemDepartmentData.title</a>
+                                    </li>
+                                }
+                                <li>
+                                    <a href="/site/home/Products">@Homemade.UI.Resources.Homemade.View_all</a>
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+                    </li>
+                    <!-- ***** categories-dropdown End ***** -->
+
+                    <li class="menu-item">
+                        <a class="menu-item-link hvr-underline-from-right products" href="/site/home/Products">@Homemade.UI.Resources.Homemade.Products</a>
+                    </li>
+
+                    <li class="menu-item">
+                        <a class="menu-item-link hvr-underline-from-right vendors" href="/site/home/AllVendor">@Homemade.UI.Resources.Homemade.Vendors</a>
+                    </li>
+
+                    <li class="menu-item">
+
+                        <a class="menu-item-link hvr-underline-from-right wizzard" href="/site/home/Wizzard">@Homemade.UI.Resources.Homemade.Be_Provider</a>
+
+                    </li>
+                </ul>
+
+                <div class="nav-additional-menu">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        var Notifications = blCustomer.GetAllNotification(Homemade.UI.InfraStructure.Utility.CurrentLanguageCode, User.GetUserIdInt());
+
+                        <div class="action-box-wrap notifications-wrap" data-target="notifications-dropdown">
+
+                            <a class="action-box-icon notifications-icon h-menu" href="#">
+
+                                <svg id="noun_notification_3187825" xmlns="http://www.w3.org/2000/svg" width="23.831" height="27.911" viewBox="0 0 23.831 27.911">
+                                    <g id="Group_11766" data-name="Group 11766" transform="translate(0 0)">
+                                        <path id="Path_4037" data-name="Path 4037" d="M24.643,18.919l-.355-.363a4.7,4.7,0,0,1-1.32-2.931l-.4-5.377a7.747,7.747,0,0,0-6.729-7.322v-1a.911.911,0,1,0-1.821,0v1a7.737,7.737,0,0,0-6.729,7.3l-.4,5.4a4.7,4.7,0,0,1-1.32,2.931l-.355.363A4.233,4.233,0,0,0,4,21.9v.5a2.762,2.762,0,0,0,2.732,2.791h4.553a3.643,3.643,0,1,0,7.285,0h4.553A2.762,2.762,0,0,0,25.854,22.4v-.5A4.233,4.233,0,0,0,24.643,18.919ZM14.927,27.05a1.841,1.841,0,0,1-1.821-1.861h3.642A1.841,1.841,0,0,1,14.927,27.05ZM24.033,22.4a.921.921,0,0,1-.911.93H6.732a.921.921,0,0,1-.911-.93v-.5A2.371,2.371,0,0,1,6.5,20.23l.355-.363a6.577,6.577,0,0,0,1.821-4.112L9.108,10.3a5.822,5.822,0,0,1,11.637,0l.4,5.4a6.577,6.577,0,0,0,1.821,4.112l.355.363a2.37,2.37,0,0,1,.71,1.721Z" transform="translate(-2.989 -1)" />
+                                        <path id="Path_4038" data-name="Path 4038" d="M4.418,11.568H4.185a1.224,1.224,0,0,1-.991-1.42A14.529,14.529,0,0,1,6.315,3.441,1.226,1.226,0,1,1,8.2,5.008a12.093,12.093,0,0,0-2.583,5.545A1.224,1.224,0,0,1,4.418,11.568Z" transform="translate(-3.174 -0.552)" />
+                                        <path id="Path_4039" data-name="Path 4039" d="M28.552,11.556a1.224,1.224,0,0,1-1.224-1A12.093,12.093,0,0,0,24.733,5a1.224,1.224,0,0,1,1.885-1.554,14.553,14.553,0,0,1,3.109,6.683,1.224,1.224,0,0,1-.942,1.432Z" transform="translate(-5.919 -0.54)" />
+                                    </g>
+                                </svg>
+                                @if (Notifications.Any(x => x.List.Any(y => !y.IsSeen)))
+                                {
+                                    <div class="active-point" id="SeenActivePointNoti"> @Notifications.Sum(x => x.List.Count(y => !y.IsSeen))</div>
+                                }
+
+
+                            </a>
+                            <div class="dropdown-list notifications-dropdown">
+
+                                <div class="dropdown-items">
+
+                                    <div class="dropdown-head">
+
+                                        <div class="dropdown-title">@Homemade.UI.Resources.Homemade.Notifications</div>
+
+                                        <div class="dropdown-head-actions dropdown">
+
+                                            <a class="head-actions-btn" href="#" role="button" id="headActionsmenu" data-bs-toggle="dropdown" aria-expanded="false">
+
+                                                <i class="fas fa-ellipsis-h"></i>
+
+                                            </a>
+
+                                            <ul class="dropdown-menu actions-menu head-actions-menu" aria-labelledby="headActionsmenu">
+                                                <li><a class="dropdown-item" href="#" onclick="SeenAllNotifications()">@Homemade.UI.Resources.Homemade.All_Notifications </a></li>
+
+                                            </ul>
+
+                                        </div>
+
+                                    </div>
+                                    <ul class="notifications-list list-scrollbar">
+                                        @foreach (var item in Notifications)
+                                        {
+                                            <li class="list-item list-sub-title">
+                                                <span class="notifications-list-day">@item.NotificationDate</span>
+                                            </li>
+                                            @foreach (var noti in item.List)
+                                            {
+                                                <li class="list-item">
+
+                                                    <a class="list-item-content" href="#" onclick="OpenNotificationandSeen(@noti.NotificationID, '@noti.RedirectGuid', '@noti.OrderStatusID')">
+
+                                                        <div class="notification-content">
+
+                                                            <p class="notification-msg">
+                                                                @noti.NotificationDesc
+
+                                                            </p>
+                                                            <span class="notification-date">@noti.NotificationTime </span>
+
+
+                                                        </div>
+                                                        <div class="notification-tools">
+                                                            @if (!noti.IsSeen)
+                                                            {
+                                                                <div class="notification-not-reading" id="notificationId_@noti.NotificationID"></div>
+                                                            }
+
+
+
+                                                        </div>
+
+                                                    </a>
+
+                                                </li>
+                                            }
+                                        }
+
+                                    </ul>
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                    }
+
+                    <div class="action-box-wrap nav-cart-wrap" data-target="cart-dropdown">
+
+                        <a class="action-box-icon cart-icon h-menu" href="#">
+                            <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                 width="446.853px" height="446.853px" viewBox="0 0 446.853 446.853" style="enable-background:new 0 0 446.853 446.853;"
+                                 xml:space="preserve">
+                            <g>
+                            <path d="M444.274,93.36c-2.558-3.666-6.674-5.932-11.145-6.123L155.942,75.289c-7.953-0.348-14.599,5.792-14.939,13.708
+                                        c-0.338,7.913,5.792,14.599,13.707,14.939l258.421,11.14L362.32,273.61H136.205L95.354,51.179
+                                        c-0.898-4.875-4.245-8.942-8.861-10.753L19.586,14.141c-7.374-2.887-15.695,0.735-18.591,8.1c-2.891,7.369,0.73,15.695,8.1,18.591
+                                        l59.491,23.371l41.572,226.335c1.253,6.804,7.183,11.746,14.104,11.746h6.896l-15.747,43.74c-1.318,3.664-0.775,7.733,1.468,10.916
+                                        c2.24,3.184,5.883,5.078,9.772,5.078h11.045c-6.844,7.617-11.045,17.646-11.045,28.675c0,23.718,19.299,43.012,43.012,43.012
+                                        s43.012-19.294,43.012-43.012c0-11.028-4.201-21.058-11.044-28.675h93.777c-6.847,7.617-11.047,17.646-11.047,28.675
+                                        c0,23.718,19.294,43.012,43.012,43.012c23.719,0,43.012-19.294,43.012-43.012c0-11.028-4.2-21.058-11.042-28.675h13.432
+                                        c6.6,0,11.948-5.349,11.948-11.947c0-6.6-5.349-11.948-11.948-11.948H143.651l12.902-35.843h216.221
+                                        c6.235,0,11.752-4.028,13.651-9.96l59.739-186.387C447.536,101.679,446.832,97.028,444.274,93.36z M169.664,409.814
+                                        c-10.543,0-19.117-8.573-19.117-19.116s8.574-19.117,19.117-19.117s19.116,8.574,19.116,19.117S180.207,409.814,169.664,409.814z
+                                         M327.373,409.814c-10.543,0-19.116-8.573-19.116-19.116s8.573-19.117,19.116-19.117s19.116,8.574,19.116,19.117
+                                        S337.916,409.814,327.373,409.814z" />
+                                </g>
+                                </svg>
+                            <div class="active-point active-point-cart" style="display:none;"></div>
+                        </a>
+
+                        <div class="dropdown-list cart-dropdown">
+
+                            <div class="cart-dropdown-items">
+
+                                <div class="cart-dropdown-visible d-none">
+
+                                    <span class="close-cart"><i class="fas fa-times"></i></span>
+
+                                    <ul class="cart-items-list list-scrollbar">
+                                    </ul>
+
+                                    <div class="cart-dropdown-btns">
+
+                                        <a class="view-cart" href="/site/home/ViewCart"> @Homemade.UI.Resources.Homemade.View_Cart </a>
+                                        <a class="buy-now" href="javascript:RemoveAllCart();" style="background-color: #f44336;">
+                                            مسح الكل
+                                            <i class="fa-trash-alt fas"></i>
+                                        </a>
+                                    </div>
+
+                                </div>
+
+                                <div class="cart-dropdown-empty ">
+
+                                    <span class="close-cart"><i class="fas fa-times"></i></span>
+                                    <div class="empty-items">
+
+                                        <img src="~/assets/homeMadeSite/img/Group%2012927.svg">
+                                        <p>@Homemade.UI.Resources.Homemade.You_have_no_products_in_the_cart_yet </p>
+
+
+                                    </div>
+                                    <div class="cart-dropdown-btns">
+
+                                        <a class="view-cart" href="/site/home/ViewCart"> @Homemade.UI.Resources.Homemade.View_Cart </a>
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+                        <div class="mobile-cart-overlay"></div>
+
+                    </div>
+
+
+                    @{
+                        var customer = blCustomer.GetSiteCustomersViewModel(User.GetUserIdInt(), Homemade.UI.InfraStructure.Utility.CurrentLanguageCode, _configuration["CustomerImageView"]);
+                        var customerImage = customer != null ? customer.ProfilePic : "/assets/homeMadeSite/img/logo.svg";
+                        var customername = customer != null ? customer.CustomerName : "";
+                    }
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="user-account">
+
+                            <div class="login-btns  d-none">
+
+                                <a class="login-link sign-in" href="#" data-bs-toggle="modal" data-bs-target="#signInmodal">
+                                    @Homemade.UI.Resources.Homemade.Login
+                                </a>
+                                <a class="login-link sign-up hvr-underline-from-right" href="#" data-bs-toggle="modal" data-bs-target="#newUsermodal">@Homemade.UI.Resources.Homemade.New_User</a>
+
+                            </div>
+                            <div class="dropdown user-account-dropdown ">
+
+                                <div class="dropdown-toggle user-account-btn" id="userAccountmenu" data-bs-toggle="dropdown" aria-expanded="false">
+
+                                    <img class="user-img img-fluid" src="@customerImage">
+                                    <span class="user-name"> @customername </span>
+
+                                </div>
+
+                                <ul class="dropdown-menu user-account-menu" aria-labelledby="userAccountmenu">
+                                    <li><a class="dropdown-link" href="/Site/Home/Wallet">@Homemade.UI.Resources.Homemade.MyAccount</a></li>
+                                    <li><a class="dropdown-link" href="/site/home/LogOut"><b>@Homemade.UI.Resources.Homemade.LogOut</b></a></li>
+                                </ul>
+
+                            </div>
+
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="user-account">
+
+                            <div class="login-btns">
+
+                                <a class="login-link sign-in" href="#" data-bs-toggle="modal" data-bs-target="#signInmodal">
+                                    @Homemade.UI.Resources.Homemade.Login
+                                </a>
+                                <a class="login-link sign-up hvr-underline-from-right" href="#" data-bs-toggle="modal" data-bs-target="#newUsermodal">@Homemade.UI.Resources.Homemade.New_User</a>
+
+                            </div>
+
+                        </div>
+                    }
+
+
+
+
+                    <div class="language-wrap">
+
+
+                        @if (langsite == "ar")
+                        {
+                            <a class="language-link" href="/Home/ChangeLang?LangId=en">
+
+                                <span class="country-flag">
+
+                                    <img src="~/assets/homeMadeSite/img/sr.svg">
+                                </span>
+                                English
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="language-link" href="/Home/ChangeLang?LangId=ar">
+                                <span class="country-flag">
+                                    <img src="~/assets/homeMadeSite/img/sr.svg">
+                                </span>
+                                العربية
+                            </a>
+                        }
+                    </div>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a href="#" class="login-mobile" data-bs-toggle="modal" data-bs-target="#signInmodal">
+                            @Homemade.UI.Resources.Homemade.Login
+
+                        </a>
+                    }
+
+                </div>
+
+
+                <div class="mobile-menu-wrapper">
+
+                    <div class="mobile-menu-container">
+
+                        <div class="mobile-menu-head">
+
+                            <span class="welcome-text">@Homemade.UI.Resources.Homemade.Welcome  </span>
+                            <span class="close-menu" id="nav-close">
+
+                                <i class="fas fa-times"></i>
+
+                            </span>
+
+                            <div class="user-img">
+
+                                <img class="img-fluid" src="@customerImage">
+
+                            </div>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <div class="dropdown user-account-dropdown">
+
+                                    <div class="dropdown-toggle user-account-btn" id="userAccountmenu" data-bs-toggle="dropdown" aria-expanded="false">
+
+                                        <span class="user-name">@customername</span>
+                                    </div>
+
+                                    <ul class="dropdown-menu user-account-menu" aria-labelledby="userAccountmenu">
+                                        <li><a class="dropdown-link" href="/Site/Home/Wallet">@Homemade.UI.Resources.Homemade.MyAccount</a></li>
+                                        @*<li><a class="dropdown-link" href="/Site/Home/Wallet">@Homemade.UI.Resources.Homemade.Wallet</a></li>*@
+                                        <li><a class="dropdown-link" href="/site/home/LogOut"><b>@Homemade.UI.Resources.Homemade.LogOut</b></a></li>
+                                    </ul>
+
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="registration">
+
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#signInmodal"> @Homemade.UI.Resources.Homemade.Login_or_register_here </a>
+
+                                </div>
+                            }
+
+
+
+                        </div>
+                        <ul class="mobile-menu">
+
+                            <li class="mobile-menu-item">
+
+                                <a class="mobile-menu-link" href="/Site/Home/Index">@Homemade.UI.Resources.Homemade.DashBoard</a>
+
+
+                            </li>
+
+                            <!-- ***** categories-dropdown Start ***** -->
+                            <li class="mobile-menu-item categories_dropdown_li" data-target="categories-dropdown">
+
+                                <a class="mobile-menu-link h-menu" href="#">@Homemade.UI.Resources.Homemade.Departments</a>
+                                <div class="dropdown-list categories-dropdown">
+
+                                    <ul class="categories_menu">
+                                        @foreach (var item in blDepartments.GetAllDepartments(Homemade.UI.InfraStructure.Utility.CurrentLanguageCode, _configuration["SliderImageView"]).ToList())
+                                        {
+                                            <li>
+                                                <a href="/site/home/category_items?id=@item.DepartmentsGuid">@item.title</a>
+                                            </li>
+                                        }
+                                        <li>
+                                            <a href="/site/home/Products">@Homemade.UI.Resources.Homemade.View_all</a>
+                                        </li>
+                                    </ul>
+
+                                </div>
+
+                            </li>
+                            <!-- ***** categories-dropdown end ***** -->
+
+
+                            <li class="mobile-menu-item">
+
+                                <a class="mobile-menu-link" href="/Site/Home/Products">
+
+                                    @Homemade.UI.Resources.Homemade.Products
+                                </a>
+
+                            </li>
+                            <li class="mobile-menu-item">
+
+                                <a class="mobile-menu-link" href="/Site/Home/AllVendor">
+
+                                    @Homemade.UI.Resources.Homemade.Vendors
+                                </a>
+
+                            </li>
+                            <li class="mobile-menu-item">
+
+                                <a class="mobile-menu-link" href="/Site/Home/Wizzard">@Homemade.UI.Resources.Homemade.Be_Provider </a>
+
+
+                            </li>
+                            <li class="mobile-menu-item">
+
+                                <a class="mobile-menu-link" href="/Site/Home/Help">@Homemade.UI.Resources.Homemade.Support_And_Help </a>
+
+
+                            </li>
+                            <li class="mobile-menu-item">
+
+                                @if (langsite == "ar")
+                                {
+                                    <a class="mobile-menu-link" href="/Home/ChangeLang?LangId=en">
+                                        <span class="country-flag">
+                                            <img src="~/assets/homeMadeSite/img/sr.svg">
+                                        </span>
+                                        <span style="margin: 0 5px">
+                                            English
+                                        </span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="mobile-menu-link" href="/Home/ChangeLang?LangId=ar">
+                                        <span class="country-flag">
+                                            <img src="~/assets/homeMadeSite/img/sr.svg">
+                                        </span>
+                                        <span style="margin: 0 5px">
+                                            العربية
+                                        </span>
+                                    </a>
+                                }
+                            </li>
+
+
+                        </ul>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+        <div class="overlay-panel"></div>
+
+    </header>
+
+    <!-- ***** header Start ***** -->
+    <!-- ***** toolbar Start ***** -->
+
+    <div class="tool-bar">
+
+        <div class="tool">
+
+            <a class="tool-link" href="/Site/Home/Index">
+
+
+                <div class="tool-icon">
+
+                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                         viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                    <g>
+                    <g>
+                    <path d="M506.555,208.064L263.859,30.367c-4.68-3.426-11.038-3.426-15.716,0L5.445,208.064
+                                    c-5.928,4.341-7.216,12.665-2.875,18.593s12.666,7.214,18.593,2.875L256,57.588l234.837,171.943c2.368,1.735,5.12,2.57,7.848,2.57
+                                    c4.096,0,8.138-1.885,10.744-5.445C513.771,220.729,512.483,212.405,506.555,208.064z" />
+                            </g>
+                        </g>
+                    <g>
+                    <g>
+                    <path d="M442.246,232.543c-7.346,0-13.303,5.956-13.303,13.303v211.749H322.521V342.009c0-36.68-29.842-66.52-66.52-66.52
+                                    s-66.52,29.842-66.52,66.52v115.587H83.058V245.847c0-7.347-5.957-13.303-13.303-13.303s-13.303,5.956-13.303,13.303v225.053
+                                    c0,7.347,5.957,13.303,13.303,13.303h133.029c6.996,0,12.721-5.405,13.251-12.267c0.032-0.311,0.052-0.651,0.052-1.036v-128.89
+                                    c0-22.009,17.905-39.914,39.914-39.914s39.914,17.906,39.914,39.914v128.89c0,0.383,0.02,0.717,0.052,1.024
+                                    c0.524,6.867,6.251,12.279,13.251,12.279h133.029c7.347,0,13.303-5.956,13.303-13.303V245.847
+                                    C455.549,238.499,449.593,232.543,442.246,232.543z" />
+                            </g>
+                        </g>
+                        </svg>
+
+
+
+                </div>
+
+                <span>
+
+                    @Homemade.UI.Resources.Homemade.DashBoard
+
+                </span>
+
+            </a>
+
+
+
+        </div>
+
+        <div class="tool">
+
+            <a class="tool-link" href="/Site/home/Wizzard">
+
+
+                <div class="tool-icon">
+
+                    <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                         viewBox="0 0 356 356" style="enable-background:new 0 0 356 356;" xml:space="preserve">
+                    <g>
+                    <g>
+                    <path d="M285.6,176.8h-104c-3.2,0-6.4,2.4-6.4,6.4v104c0.8,4,3.2,6.4,6.4,6.4h104c3.2,0,6.4-2.4,6.4-6.4v-104
+                                                C292,180,289.6,176.8,285.6,176.8z M280,281.6h-92v-92h92V281.6z" />
+                                        </g>
+                                    </g>
+                    <g>
+                    <g>
+                    <path d="M88.8,247.2c-3.2,0-6.4,2.4-6.4,6.4v24c0,3.2,2.4,6.4,6.4,6.4s6.4-2.4,6.4-6.4v-24C95.2,249.6,92.8,247.2,88.8,247.2z" />
+                                        </g>
+                                    </g>
+                    <g>
+                    <g>
+                    <path d="M349.6,336.8h-20V154.4c15.2-8,25.6-24,25.6-42.4c0-0.8,0-2.4-0.8-3.2l-60-99.2c-0.8-1.6-3.2-3.2-4.8-3.2H60
+                                                c-2.4,0-4,1.6-5.6,3.2L0.8,108.8C0,109.6,0,110.4,0,112c0,18.4,10.4,34.4,26.4,43.2v182.4H5.6v-0.8c-3.2,0-5.6,2.4-5.6,6.4
+                                                c0,3.2,2.4,6.4,5.6,6.4h27.2H68h76.8h178.4h26.4c3.2,0,6.4-2.4,6.4-6.4C356,340,353.6,336.8,349.6,336.8z M284.8,18.4l52.8,87.2
+                                                h-68l-30.4-87.2H284.8z M183.2,18.4h43.2l30.4,87.2h-73.6V18.4z M256,117.6c-3.2,17.6-17.6,30.4-36,30.4
+                                                c-18.4,0-32.8-13.6-36-30.4H256z M171.2,18.4v87.2H92.8l30.4-87.2H171.2z M171.2,117.6c-3.2,17.6-17.6,30.4-36,30.4
+                                                c-18.4,0-32.8-13.6-36-30.4H171.2z M63.2,18.4h47.2l-29.6,87.2H16L63.2,18.4z M12.8,117.6h72.8C82.4,135.2,68,148,49.6,148
+                                                S16,134.4,12.8,117.6z M138.4,336.8H73.6V189.6h64.8V336.8z M316.8,337.6H150.4V184c0-3.2-2.4-6.4-6.4-6.4H67.2
+                                                c-3.2,0-6.4,2.4-6.4,6.4v153.6H37.6V159.2h0.8c3.2,0.8,7.2,1.6,11.2,1.6c18.4,0,34.4-10.4,42.4-25.6c8,15.2,24,25.6,42.4,25.6
+                                                c18.4,0,34.4-10.4,42.4-25.6c8,15.2,24,25.6,42.4,25.6c18.4,0,35.2-10.4,43.2-26.4c8,16,24,26.4,43.2,26.4c4,0,7.2-0.8,11.2-1.6
+                                                V337.6z M306.4,148c-18.4,0-32.8-13.6-36-30.4h72C339.2,135.2,324,148,306.4,148z" />
+                                        </g>
+                                    </g>
+
+                    </svg>
+
+                </div>
+
+                <span>
+
+                    @Homemade.UI.Resources.Homemade.Register_Vendor
+
+                </span>
+
+            </a>
+
+
+
+        </div>
+
+        <div class="tool cart-tool" data-target="cart-dropdown">
+
+            <a class="tool-link cart-icon h-menu" href="#">
+
+
+                <div class="tool-icon">
+
+                    <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="446.853px" height="446.853px" viewBox="0 0 446.853 446.853" style="enable-background:new 0 0 446.853 446.853;" xml:space="preserve">
+                    <g>
+                    <path d="M444.274,93.36c-2.558-3.666-6.674-5.932-11.145-6.123L155.942,75.289c-7.953-0.348-14.599,5.792-14.939,13.708
+                                        c-0.338,7.913,5.792,14.599,13.707,14.939l258.421,11.14L362.32,273.61H136.205L95.354,51.179
+                                        c-0.898-4.875-4.245-8.942-8.861-10.753L19.586,14.141c-7.374-2.887-15.695,0.735-18.591,8.1c-2.891,7.369,0.73,15.695,8.1,18.591
+                                        l59.491,23.371l41.572,226.335c1.253,6.804,7.183,11.746,14.104,11.746h6.896l-15.747,43.74c-1.318,3.664-0.775,7.733,1.468,10.916
+                                        c2.24,3.184,5.883,5.078,9.772,5.078h11.045c-6.844,7.617-11.045,17.646-11.045,28.675c0,23.718,19.299,43.012,43.012,43.012
+                                        s43.012-19.294,43.012-43.012c0-11.028-4.201-21.058-11.044-28.675h93.777c-6.847,7.617-11.047,17.646-11.047,28.675
+                                        c0,23.718,19.294,43.012,43.012,43.012c23.719,0,43.012-19.294,43.012-43.012c0-11.028-4.2-21.058-11.042-28.675h13.432
+                                        c6.6,0,11.948-5.349,11.948-11.947c0-6.6-5.349-11.948-11.948-11.948H143.651l12.902-35.843h216.221
+                                        c6.235,0,11.752-4.028,13.651-9.96l59.739-186.387C447.536,101.679,446.832,97.028,444.274,93.36z M169.664,409.814
+                                        c-10.543,0-19.117-8.573-19.117-19.116s8.574-19.117,19.117-19.117s19.116,8.574,19.116,19.117S180.207,409.814,169.664,409.814z
+                                         M327.373,409.814c-10.543,0-19.116-8.573-19.116-19.116s8.573-19.117,19.116-19.117s19.116,8.574,19.116,19.117
+                                        S337.916,409.814,327.373,409.814z"></path>
+                                </g>
+                                </svg>
+                </div>
+
+                <span>
+
+                    @Homemade.UI.Resources.Homemade.Cart
+
+                </span>
+
+                <div class="active-point active-point-cart"></div>
+
+            </a>
+
+
+
+        </div>
+
+        <div class="tool">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a class="tool-link" href="/Site/Home/Wallet">
+
+
+                    <div class="tool-icon">
+
+                        <svg viewBox="-42 0 512 512.001" xmlns="http://www.w3.org/2000/svg"><path d="m210.351562 246.632812c33.882813 0 63.21875-12.152343 87.195313-36.128906 23.96875-23.972656 36.125-53.304687 36.125-87.191406 0-33.875-12.152344-63.210938-36.128906-87.191406-23.976563-23.96875-53.3125-36.121094-87.191407-36.121094-33.886718 0-63.21875 12.152344-87.191406 36.125s-36.128906 53.308594-36.128906 87.1875c0 33.886719 12.15625 63.222656 36.128906 87.195312 23.980469 23.96875 53.316406 36.125 87.191406 36.125zm-65.972656-189.292968c18.394532-18.394532 39.972656-27.335938 65.972656-27.335938 25.996094 0 47.578126 8.941406 65.976563 27.335938 18.394531 18.398437 27.339844 39.980468 27.339844 65.972656 0 26-8.945313 47.578125-27.339844 65.976562-18.398437 18.398438-39.980469 27.339844-65.976563 27.339844-25.992187 0-47.570312-8.945312-65.972656-27.339844-18.398437-18.394531-27.34375-39.976562-27.34375-65.976562 0-25.992188 8.945313-47.574219 27.34375-65.972656zm0 0" /><path d="m426.128906 393.703125c-.691406-9.976563-2.089844-20.859375-4.148437-32.351563-2.078125-11.578124-4.753907-22.523437-7.957031-32.527343-3.3125-10.339844-7.808594-20.550781-13.375-30.335938-5.769532-10.15625-12.550782-19-20.160157-26.277343-7.957031-7.613282-17.699219-13.734376-28.964843-18.199219-11.226563-4.441407-23.667969-6.691407-36.976563-6.691407-5.226563 0-10.28125 2.144532-20.042969 8.5-6.007812 3.917969-13.035156 8.449219-20.878906 13.460938-6.707031 4.273438-15.792969 8.277344-27.015625 11.902344-10.949219 3.542968-22.066406 5.339844-33.042969 5.339844-10.96875 0-22.085937-1.796876-33.042968-5.339844-11.210938-3.621094-20.300782-7.625-26.996094-11.898438-7.769532-4.964844-14.800782-9.496094-20.898438-13.46875-9.753906-6.355468-14.808594-8.5-20.035156-8.5-13.3125 0-25.75 2.253906-36.972656 6.699219-11.257813 4.457031-21.003906 10.578125-28.96875 18.199219-7.609375 7.28125-14.390625 16.121094-20.15625 26.273437-5.558594 9.785157-10.058594 19.992188-13.371094 30.339844-3.199219 10.003906-5.875 20.945313-7.953125 32.523437-2.0625 11.476563-3.457031 22.363282-4.148437 32.363282-.679688 9.777344-1.023438 19.953125-1.023438 30.234375 0 26.726562 8.496094 48.363281 25.25 64.320312 16.546875 15.746094 38.4375 23.730469 65.066406 23.730469h246.53125c26.621094 0 48.511719-7.984375 65.0625-23.730469 16.757813-15.945312 25.253906-37.589843 25.253906-64.324219-.003906-10.316406-.351562-20.492187-1.035156-30.242187zm-44.90625 72.828125c-10.933594 10.40625-25.449218 15.464844-44.378906 15.464844h-246.527344c-18.933594 0-33.449218-5.058594-44.378906-15.460938-10.722656-10.207031-15.933594-24.140625-15.933594-42.585937 0-9.59375.316406-19.066407.949219-28.160157.617187-8.921874 1.878906-18.722656 3.75-29.136718 1.847656-10.285156 4.199219-19.9375 6.996094-28.675782 2.683593-8.378906 6.34375-16.675781 10.882812-24.667968 4.332031-7.617188 9.316407-14.152344 14.816407-19.417969 5.144531-4.925781 11.628906-8.957031 19.269531-11.980469 7.066406-2.796875 15.007812-4.328125 23.628906-4.558594 1.050781.558594 2.921875 1.625 5.953125 3.601563 6.167969 4.019531 13.277344 8.605469 21.136719 13.625 8.859375 5.648437 20.273437 10.75 33.910156 15.152344 13.941406 4.507812 28.160156 6.796875 42.273437 6.796875 14.113282 0 28.335938-2.289063 42.269532-6.792969 13.648437-4.410156 25.058594-9.507813 33.929687-15.164063 8.042969-5.140624 14.953125-9.59375 21.121094-13.617187 3.03125-1.972656 4.902344-3.042969 5.953125-3.601563 8.625.230469 16.566406 1.761719 23.636719 4.558594 7.636719 3.023438 14.121093 7.058594 19.265625 11.980469 5.5 5.261719 10.484375 11.796875 14.816406 19.421875 4.542969 7.988281 8.207031 16.289062 10.886719 24.660156 2.800781 8.75 5.15625 18.398438 7 28.675782 1.867187 10.433593 3.132812 20.238281 3.75 29.144531v.007812c.636719 9.058594.957031 18.527344.960937 28.148438-.003906 18.449219-5.214844 32.378906-15.9375 42.582031zm0 0" /></svg>
+
+
+                    </div>
+
+                    <span>
+
+                        @Homemade.UI.Resources.Homemade.MyAccount
+
+                    </span>
+
+                </a>
+            }
+            else
+            {
+                <a class="tool-link" href="#" data-bs-toggle="modal" data-bs-target="#newUsermodal">
+
+                    <div class="tool-icon">
+
+                        <svg viewBox="-42 0 512 512.001" xmlns="http://www.w3.org/2000/svg"><path d="m210.351562 246.632812c33.882813 0 63.21875-12.152343 87.195313-36.128906 23.96875-23.972656 36.125-53.304687 36.125-87.191406 0-33.875-12.152344-63.210938-36.128906-87.191406-23.976563-23.96875-53.3125-36.121094-87.191407-36.121094-33.886718 0-63.21875 12.152344-87.191406 36.125s-36.128906 53.308594-36.128906 87.1875c0 33.886719 12.15625 63.222656 36.128906 87.195312 23.980469 23.96875 53.316406 36.125 87.191406 36.125zm-65.972656-189.292968c18.394532-18.394532 39.972656-27.335938 65.972656-27.335938 25.996094 0 47.578126 8.941406 65.976563 27.335938 18.394531 18.398437 27.339844 39.980468 27.339844 65.972656 0 26-8.945313 47.578125-27.339844 65.976562-18.398437 18.398438-39.980469 27.339844-65.976563 27.339844-25.992187 0-47.570312-8.945312-65.972656-27.339844-18.398437-18.394531-27.34375-39.976562-27.34375-65.976562 0-25.992188 8.945313-47.574219 27.34375-65.972656zm0 0" /><path d="m426.128906 393.703125c-.691406-9.976563-2.089844-20.859375-4.148437-32.351563-2.078125-11.578124-4.753907-22.523437-7.957031-32.527343-3.3125-10.339844-7.808594-20.550781-13.375-30.335938-5.769532-10.15625-12.550782-19-20.160157-26.277343-7.957031-7.613282-17.699219-13.734376-28.964843-18.199219-11.226563-4.441407-23.667969-6.691407-36.976563-6.691407-5.226563 0-10.28125 2.144532-20.042969 8.5-6.007812 3.917969-13.035156 8.449219-20.878906 13.460938-6.707031 4.273438-15.792969 8.277344-27.015625 11.902344-10.949219 3.542968-22.066406 5.339844-33.042969 5.339844-10.96875 0-22.085937-1.796876-33.042968-5.339844-11.210938-3.621094-20.300782-7.625-26.996094-11.898438-7.769532-4.964844-14.800782-9.496094-20.898438-13.46875-9.753906-6.355468-14.808594-8.5-20.035156-8.5-13.3125 0-25.75 2.253906-36.972656 6.699219-11.257813 4.457031-21.003906 10.578125-28.96875 18.199219-7.609375 7.28125-14.390625 16.121094-20.15625 26.273437-5.558594 9.785157-10.058594 19.992188-13.371094 30.339844-3.199219 10.003906-5.875 20.945313-7.953125 32.523437-2.0625 11.476563-3.457031 22.363282-4.148437 32.363282-.679688 9.777344-1.023438 19.953125-1.023438 30.234375 0 26.726562 8.496094 48.363281 25.25 64.320312 16.546875 15.746094 38.4375 23.730469 65.066406 23.730469h246.53125c26.621094 0 48.511719-7.984375 65.0625-23.730469 16.757813-15.945312 25.253906-37.589843 25.253906-64.324219-.003906-10.316406-.351562-20.492187-1.035156-30.242187zm-44.90625 72.828125c-10.933594 10.40625-25.449218 15.464844-44.378906 15.464844h-246.527344c-18.933594 0-33.449218-5.058594-44.378906-15.460938-10.722656-10.207031-15.933594-24.140625-15.933594-42.585937 0-9.59375.316406-19.066407.949219-28.160157.617187-8.921874 1.878906-18.722656 3.75-29.136718 1.847656-10.285156 4.199219-19.9375 6.996094-28.675782 2.683593-8.378906 6.34375-16.675781 10.882812-24.667968 4.332031-7.617188 9.316407-14.152344 14.816407-19.417969 5.144531-4.925781 11.628906-8.957031 19.269531-11.980469 7.066406-2.796875 15.007812-4.328125 23.628906-4.558594 1.050781.558594 2.921875 1.625 5.953125 3.601563 6.167969 4.019531 13.277344 8.605469 21.136719 13.625 8.859375 5.648437 20.273437 10.75 33.910156 15.152344 13.941406 4.507812 28.160156 6.796875 42.273437 6.796875 14.113282 0 28.335938-2.289063 42.269532-6.792969 13.648437-4.410156 25.058594-9.507813 33.929687-15.164063 8.042969-5.140624 14.953125-9.59375 21.121094-13.617187 3.03125-1.972656 4.902344-3.042969 5.953125-3.601563 8.625.230469 16.566406 1.761719 23.636719 4.558594 7.636719 3.023438 14.121093 7.058594 19.265625 11.980469 5.5 5.261719 10.484375 11.796875 14.816406 19.421875 4.542969 7.988281 8.207031 16.289062 10.886719 24.660156 2.800781 8.75 5.15625 18.398438 7 28.675782 1.867187 10.433593 3.132812 20.238281 3.75 29.144531v.007812c.636719 9.058594.957031 18.527344.960937 28.148438-.003906 18.449219-5.214844 32.378906-15.9375 42.582031zm0 0" /></svg>
+
+                    </div>
+
+                    <span>
+
+                        @Homemade.UI.Resources.Homemade.Register_Customer
+
+                    </span>
+
+                </a>
+            }
+
+
+
+
+        </div>
+
+    </div>
+
+    <!-- ***** toolbar End ***** -->
+    <!-- ***** scrollup-btn Start ***** -->
+
+    <div class="scrollup" id="scrollUp">
+
+        <i class="fas fa-level-up-alt"></i>
+
+    </div>
+
+    <!-- ***** scrollup-btn End ***** -->
+
+
+
+
+    <div class="page-wrapper">
+
+
+        @RenderBody()
+
+
+
+        <footer>
+
+            <div class="container">
+
+                <div class="row">
+
+                    <div class="col-sm">
+
+                        <div class="footer-menu">
+
+                            <h5 class="footer-menu-title"> @Homemade.UI.Resources.Homemade.Terms_and_Conditions</h5>
+
+                            <ul class="footer-menu-ul">
+
+                                <li class="footer-menu-item">
+
+                                    <a class="footer-menu-link" href="/Site/Home/Terms">
+                                        @Homemade.UI.Resources.Homemade.Terms_and_Conditions
+
+                                    </a>
+
+                                </li>
+                                <li class="footer-menu-item">
+
+                                    <a class="footer-menu-link" href="/Site/Home/Privacy">
+
+                                        @Homemade.UI.Resources.Homemade.privacy_policy
+                                    </a>
+
+                                </li>
+                                <li class="footer-menu-item">
+
+                                    <a class="footer-menu-link" href="/Site/Home/CommonQuestions">
+
+                                        @Homemade.UI.Resources.Homemade.Common_Questions
+                                    </a>
+
+                                </li>
+
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+                    <div class="col-sm">
+
+                        <div class="footer-menu">
+
+                            <h5 class="footer-menu-title"> @Homemade.UI.Resources.Homemade.Contact_Us</h5>
+
+                            <ul class="footer-menu-ul">
+
+                                <li class="footer-menu-item">
+
+                                    <a class="footer-menu-link" href="/Site/Home/AboutUs">
+
+                                        @Homemade.UI.Resources.Homemade.AboutUs
+                                    </a>
+
+                                </li>
+                                <li class="footer-menu-item">
+
+                                    <a class="footer-menu-link" href="/Site/Home/Help">
+
+                                        @Homemade.UI.Resources.Homemade.Contact_Us
+                                    </a>
+
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+                    <div class="col-sm">
+
+                        <div class="footer-menu">
+
+                            <h5 class="footer-menu-title">@Homemade.UI.Resources.Homemade.Departments</h5>
+
+                            <ul class="footer-menu-ul">
+
+                                <li class="footer-menu-item">
+
+                                    <a class="footer-menu-link" href="/Site/Home/Products">
+
+                                        @Homemade.UI.Resources.Homemade.Products
+                                    </a>
+
+                                </li>
+                                <li class="footer-menu-item">
+
+                                    <a class="footer-menu-link" href="/Site/Home/categories">
+                                        @Homemade.UI.Resources.Homemade.Departments
+                                    </a>
+
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+                    <div class="col-12 col-lg-4 order-first order-lg-0 ">
+
+                        <div class="footer-menu">
+
+                            <h5 class="footer-menu-title"> @Homemade.UI.Resources.Homemade.Subscribe_to_Us</h5>
+                            <div class="row" id="divMsgParentSubscribe" style="display:none">
+                                <div class="form-group">
+                                    <div class="col-xs-12">
+                                        <div id="divMsgClassSubscribe" class="alert alert-danger" role="alert">
+                                            <strong id="lblMsgSubscribe"></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="footer-subscribe" id="Dev_Subscribe">
+                                <form class="subscribe-form" asp-action="Subscribe" asp-controller="Home" asp-area="Site" data-ajax="true"
+                                      data-ajax-complete="completedSubscribe"
+                                      data-ajax-method="post">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control input-focus" placeholder="@Homemade.UI.Resources.Homemade.Name" id="SubscribeName" name="SubscribeName" data-val="true" data-val-required="@Homemade.BLL.Resources.HomemadeErrorMessages.NameRequierd">
+                                        <span style="color:red" class="field-validation-valid" data-valmsg-for="SubscribeName" data-valmsg-replace="true"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="email" class="form-control input-focus" placeholder="@Homemade.UI.Resources.Homemade.Email" id="SubscribeEmail" name="SubscribeEmail" data-val="true" data-val-required="@Homemade.BLL.Resources.HomemadeErrorMessages.EmailRequierd">
+                                        <span style="color:red" class="field-validation-valid" data-valmsg-for="SubscribeEmail" data-valmsg-replace="true"></span>
+                                    </div>
+                                    <button type="submit" class="confirm-subscribe">@Homemade.UI.Resources.Homemade.Subscribe_Now</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <p class="copy-rights">@Homemade.UI.Resources.Homemade.All_rights_reserved &copy; @DateTime.Now.Year   لـمؤسسة شغل بيت  للتجارة  ، السجل التجاري : 1010636099 ، الرقم الضريبي :  <a href="/Images/Files/Vat.pdf" target="_blank">300281072700003</a></p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- ***** Footer End ***** -->
+    </div>
+
+    <partial name="_NewUserPartial" />
+
+    <!-- ***** sign-in modal  ***** -->
+
+    <div class="custom-bootstrap-modal modal fade registration-modal registration-two-column sign-in-modal " id="signInmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                </div>
+                <div class="modal-body">
+
+
+                    <div class="modal-body-content">
+
+                        <div class="registration-two-column-area">
+
+
+                            <div class="row">
+
+                                <div class="col-lg-5">
+
+                                    <div class="registration-col">
+
+                                        <div class="site-logo" style="height:85%">
+
+                                            <img class="img-fluid" src="~/assets/homeMadeSite/img/logo.svg">
+                                        </div>
+                                        @*<label class="registration-btn underline-link">@Homemade.UI.Resources.Homemade.Do_you_already_have_a_Vendor_account</label>*@
+
+                                        <a class="registration-btn sign-in-btn theme-btn theme-btn-lg" style="margin-top:5px" href="/Identity/Account/loginVendor">@Homemade.UI.Resources.Homemade.LogVendor</a>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-1">
+
+                                    <div class="col-divider">
+
+                                        <div></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5">
+
+                                    <div class="sign-in-modal-area registration-col registration-area">
+
+                                        <div class="col-head">
+
+                                            <div class="col-title title-4">@Homemade.UI.Resources.Homemade.Login</div>
+
+                                        </div>
+                                        <div class="col-body">
+                                            <div class="row" id="divMsgParentLogin" style="display:none">
+                                                <div class="col-xs-12">
+                                                    <div id="divMsgClassLogin" class="alert alert-site" role="alert">
+                                                        <strong id="lblMsgLogin"></strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <form class="sign-in-form" id="form_Login">
+
+                                                <div class="form-group">
+
+                                                    <div class="form-group  tel-field">
+
+                                                        <label class="form-label">@Homemade.UI.Resources.Homemade.Mobile</label>
+                                                        <div class="input_group">
+
+                                                            <input type="number" class="form-control input-focus" inputmode="tel" id="txtmobileNo">
+                                                            <div class="country-code">
+
+                                                                <span>+966</span>
+                                                                <img src="~/assets/homeMadeSite/img/sr.svg">
+
+
+                                                            </div>
+
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                                <div class="form-group">
+
+                                                    <div class="form-group">
+
+                                                        <label class="form-label"> @Homemade.UI.Resources.Homemade.Password</label>
+                                                        <div class="password-field">
+
+                                                            <input type="password" class="form-control password-input input-focus" id="txtpassword">
+                                                            <div class="eye-icon"></div>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="form-group">
+
+                                                    <a class="form-group-link toggle-modal-btn" href="#" data-bs-toggle="modal" data-bs-target="#forgotPasswordmodalStep1">@Homemade.UI.Resources.Homemade.did_yo_forget_your_password </a>
+
+                                                </div>
+                                                <div class="registration-btns">
+
+                                                    <button type="button" class="registration-btn sign-in-btn theme-btn theme-btn-lg" onclick="Submitlogin()">@Homemade.UI.Resources.Homemade.Login</button>
+
+                                                    <a class="registration-btn underline-link h-account toggle-modal-btn" href="#" data-bs-toggle="modal" data-bs-target="#newUsermodal"> @Homemade.UI.Resources.Homemade.New_User </a>
+
+                                                </div>
+
+                                            </form>
+                                            <form class="forgot-password-form" id="form_LoginCode" style="display: none">
+
+                                                <div class="form-group">
+
+                                                    <div class="form-group  tel-field">
+                                                        <input id="UserRegisterID" hidden>
+                                                        <label class="form-label">@Homemade.UI.Resources.Homemade.The_code_sent_to_you </label>
+                                                        <input type="number" class="form-control input-focus code-input" id="LoginCode">
+                                                    </div>
+
+                                                </div>
+                                                <div class="registration-btns small">
+
+                                                    <button type="button" class="registration-btn step-btn theme-btn theme-btn-lg" onclick="SubmitVerfiedLoginCode()">@Homemade.UI.Resources.Homemade.Activation</button>
+
+
+                                                </div>
+
+                                            </form>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ***** sign-in modal  ***** -->
+    <!-- ***** forgot-password step-1 modal  ***** -->
+
+    <div class="custom-bootstrap-modal modal fade registration-modal registration-two-column forgot-password-modal " id="forgotPasswordmodalStep1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                </div>
+                <div class="modal-body">
+
+
+                    <div class="modal-body-content">
+
+                        <div class="registration-two-column-area">
+
+
+                            <div class="row">
+
+                                <div class="col-lg-5">
+
+                                    <div class="registration-col">
+
+                                        <div class="site-logo">
+
+                                            <img class="img-fluid" src="~/assets/homeMadeSite/img/logo.svg">
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-1">
+
+                                    <div class="col-divider">
+
+                                        <div></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5">
+
+                                    <div class="forgot-password-modal-area registration-col registration-area">
+
+                                        <div class="col-head">
+
+                                            <div class="col-title title-4">@Homemade.UI.Resources.Homemade.Forget_Password </div>
+                                        </div>
+                                        <div class="col-body">
+
+                                            <div class="row" id="divMsgParentResetPhoneCode" style="display:none">
+                                                <div class="col-xs-12">
+                                                    <div id="divMsgClassResetPhoneCode" class="alert alert-danger" role="alert">
+                                                        <strong id="lblMsgResetPhoneCode"></strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <form class="forgot-password-form" data-ajax="true" id="formSendCode">
+
+                                                <div class="form-group">
+
+                                                    <div class="form-group  tel-field">
+
+                                                        <label class="form-label">@Homemade.UI.Resources.Homemade.MobileNumber</label>
+                                                        <div class="input_group">
+
+                                                            <input type="number" class="form-control input-focus" inputmode="tel" id="ForgetMobileNo" name="ForgetMobileNo" data-val="true" data-val-required="@Homemade.BLL.Resources.HomemadeErrorMessages.MobileRequierd">
+                                                            <div class="country-code">
+
+                                                                <span>+966</span>
+                                                                <img src="~/assets/homeMadeSite/img/sr.svg">
+
+
+                                                            </div>
+
+
+                                                        </div>
+                                                        <span style="color:red" class="field-validation-valid" data-valmsg-for="ForgetMobileNo" data-valmsg-replace="true"></span>
+
+                                                    </div>
+
+                                                </div>
+                                                <div class="registration-btns">
+
+                                                    <button type="button" onclick="SendCode()" class="registration-btn step-btn theme-btn theme-btn-lg ">@Homemade.UI.Resources.Homemade.Next</button>
+
+
+                                                </div>
+
+                                            </form>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ***** sign-in modal step-1  ***** -->
+    <!-- ***** forgot-password step-2 modal  ***** -->
+
+    <div class="custom-bootstrap-modal modal fade registration-modal registration-two-column forgot-password-modal " id="forgotPasswordmodalStep2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                </div>
+                <div class="modal-body">
+
+
+                    <div class="modal-body-content">
+
+                        <div class="registration-two-column-area">
+
+
+                            <div class="row">
+
+                                <div class="col-lg-5">
+
+                                    <div class="registration-col">
+
+                                        <div class="site-logo">
+
+                                            <img class="img-fluid" src="~/assets/homeMadeSite/img/logo.svg">
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-1">
+
+                                    <div class="col-divider">
+
+                                        <div></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5">
+
+                                    <div class="forgot-password-modal-area registration-col registration-area">
+
+                                        <div class="col-head">
+
+                                            <div class="col-title title-4">@Homemade.UI.Resources.Homemade.Forget_Password </div>
+                                            <p class="col-text">@Homemade.UI.Resources.Homemade.Please_enter_your_phone_number_so_we_can_send_the_code</p>
+                                        </div>
+                                        <div class="col-body">
+
+                                            <div class="row" id="divMsgParentCheckPhoneCode" style="display:none">
+                                                <div class="col-xs-12">
+                                                    <div id="divMsgClassCheckPhoneCode" class="alert alert-danger" role="alert">
+                                                        <strong id="lblMsgCheckPhoneCode"></strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <form class="forgot-password-form" data-ajax="true" id="formCheckCode">
+
+                                                <div class="form-group">
+
+                                                    <div class="form-group  tel-field">
+
+                                                        <label class="form-label">@Homemade.UI.Resources.Homemade.The_code_sent_to_you </label>
+                                                        <input type="number" class="form-control input-focus code-input" maxlength="6" id="ForgetCode" name="ForgetCode" data-val="true" data-val-required="@Homemade.BLL.Resources.HomemadeErrorMessages.CodeRequired">
+                                                    </div>
+                                                    <span style="color:red" class="field-validation-valid" data-valmsg-for="ForgetCode" data-valmsg-replace="true"></span>
+
+                                                </div>
+                                                <div class="registration-btns small">
+
+                                                    <button type="button" onclick="CheckCode()" class="registration-btn step-btn theme-btn theme-btn-lg">@Homemade.UI.Resources.Homemade.Next</button>
+
+
+                                                </div>
+
+                                            </form>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ***** sign-in modal step-2  ***** -->
+    <!-- ***** forgot-password step-3 modal  ***** -->
+
+    <div class="custom-bootstrap-modal modal fade registration-modal registration-two-column forgot-password-modal " id="forgotPasswordmodalStep3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                </div>
+                <div class="modal-body">
+
+
+                    <div class="modal-body-content">
+
+                        <div class="registration-two-column-area">
+
+
+                            <div class="row">
+
+                                <div class="col-lg-5">
+
+                                    <div class="registration-col">
+
+                                        <div class="site-logo">
+
+                                            <img class="img-fluid" src="~/assets/homeMadeSite/img/logo.svg">
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-1">
+
+                                    <div class="col-divider">
+
+                                        <div></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5">
+
+                                    <div class="forgot-password-modal-area registration-col registration-area">
+
+                                        <div class="col-head">
+
+                                            <div class="col-title title-4">@Homemade.UI.Resources.Homemade.Forget_Password</div>
+                                            <p class="col-text">@Homemade.UI.Resources.Homemade.Please_set_anew_password </p>
+                                        </div>
+                                        <div class="col-body">
+
+                                            <div class="row" id="divMsgParentPasswordCode" style="display:none">
+                                                <div class="col-xs-12 form-group">
+                                                    <div id="divMsgClassPasswordCode" class="alert alert-danger" role="alert">
+                                                        <strong id="lblMsgPasswordCode"></strong>
+                                                    </div>
+                                                    <strong id="lblMsgPasswordCodeSuccess" style="color: #0f5132;"></strong>
+                                                </div>
+                                                <div class="registration-btns">
+
+                                                    <button type="button" onclick="LoginReset()" class="registration-btn step-btn final-step-btn theme-btn theme-btn-lg">@Homemade.UI.Resources.Homemade.Login</button>
+
+                                                </div>
+                                            </div>
+                                            <form class="forgot-password-form" id="formForgetPassword">
+
+                                                <div class="form-group">
+
+                                                    <label class="form-label">@Homemade.UI.Resources.Homemade.NewPassword</label>
+                                                    <div class="password-field">
+
+                                                        <input type="password" class="form-control password-input input-focus" id="ForgetNewPassword" name="ForgetNewPassword" data-val="true" data-val-required="@Homemade.BLL.Resources.HomemadeErrorMessages.PasswordRequierd">
+                                                        <div class="eye-icon"></div>
+
+                                                    </div>
+                                                    <span style="color:red" class="field-validation-valid" data-valmsg-for="ForgetNewPassword" data-valmsg-replace="true"></span>
+
+                                                </div>
+                                                <div class="form-group">
+
+                                                    <label class="form-label">@Homemade.UI.Resources.Homemade.ConfirmPassword</label>
+                                                    <div class="password-field">
+
+                                                        <input type="password" class="form-control password-input input-focus" id="ForgetConfirmNewPassword" name="ForgetConfirmNewPassword" data-val="true" data-val-equalto="@Homemade.BLL.Resources.HomemadeErrorMessages.Password_must_match"
+                                                               data-val-equalto-other="*.ForgetNewPassword" data-val-required="@Homemade.BLL.Resources.HomemadeErrorMessages.ConfirmPasswordRequierd">
+                                                        <div class="eye-icon"></div>
+
+                                                    </div>
+                                                    <span style="color:red" class="field-validation-valid" data-valmsg-for="ForgetConfirmNewPassword" data-valmsg-replace="true"></span>
+
+                                                </div>
+                                                <div class="registration-btns">
+
+                                                    <button type="button" onclick="ResetPassword()" class="registration-btn step-btn final-step-btn theme-btn theme-btn-lg">@Homemade.UI.Resources.Homemade.Reset</button>
+
+
+                                                </div>
+
+                                            </form>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="custom-bootstrap-modal modal fade confirm-delate-modal" id="AlertMessagemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="modal-body-content">
+                        <div class="confirm-delate-modal-area">
+                            <div id="divMsgParentAlertMessage" style="display:none">
+                                <div class="form-group row">
+                                    <div class="col-xs-12">
+                                        <div id="divMsgClassAlertMessage" class="alert alert-danger" role="alert">
+                                            <strong id="lblMsgAlertMessage"></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ***** sign-in modal step-3  ***** -->
+    <!-- jquery 3.5.1   -->
+    <script src="~/assets/homeMadeSite/js/jquery-3.5.1.min.js"></script>
+
+    <!-- bootstrap v5   -->
+    <script src="~/assets/homeMadeSite/js/bootstrap.bundle.min.js"></script>
+
+    <!-- matchHeight jquery plugin   -->
+    <script src="~/assets/homeMadeSite/js/jquery.matchHeight-min.js"></script>
+
+    <!-- swiper js -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <!-- slick js -->
+    <script src="~/assets/homeMadeSite/js/slick.min.js"></script>
+
+    <!-- superplaceholder js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/superplaceholder/1.0.0/superplaceholder.min.js" integrity="sha512-r64UYc6As/S1gXAak9Yk6J1vOxVFc0TDy8o1YRsqjTmn/po8CDD+XrL+qcobgq6xVSoNgcyIPDrctc0mIr7a3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- main style js   -->
+    <script src="~/assets/homeMadeSite/js/main.js"></script>
+
+    @if (Context.Request.Cookies["Language"] != null)
+    {
+        if (Context.Request.Cookies["Language"] == "ar")
+        {
+            <script src="~/Site/js/jquery.validationEngine-ar.min.js"></script>
+        }
+        else
+        {
+            <script src="~/Site/js/jquery.validationEngine-en.min.js"></script>
+        }
+    }
+    else
+    {
+        <script src="~/Site/js/jquery.validationEngine-ar.min.js"></script>
+    }
+    <script src="~/Site/js/jquery.validationEngine.min.js"></script>
+    <script charset="utf-8">
+        //$(function () {
+        //    $(document).on({
+        //        ajaxStart: function () {
+        //            $("#loading-area").show();
+        //            //$("#Div_Loading").show();
+        //        },
+        //        ajaxStop: function () {
+        //            $("#loading-area").hide();
+        //            //$("#Div_Loading").hide();
+        //        },
+        //    });
+
+        //    //connection.start().then(function (data) {
+        //    //    debugger;
+        //    //    console.log('wave hub started');
+
+        //    //}).catch(function (err) {
+        //    //    debugger;
+        //    //    return console.log("error ==> " + err.toString());
+        //    //});
+        //});
+    </script>
+    <script>
+
+
+        // active menu
+        $(function () {
+            debugger;
+            var url = window.location.pathname,
+                urlRegExp = new RegExp(url.replace(/\/$/, '') + "$");
+            if (url.toLowerCase() == "/" || url.toLowerCase() == "/Site/Home/Index") {
+                // var dd = urlRegExp.test(this.href.replace(/\/$/, ''));
+                // 'active'
+                $('.mainlink').addClass('active');
+            } else if (url.toLowerCase() == "/site/home/categories") {
+                $('.departlink').addClass('active');
+
+            } else if (url.toLowerCase() == "/site/home/wizzard") {
+
+                $('.wizzard').addClass('active');
+
+            }
+            else if (url.toLowerCase() == "/site/home/products") {
+
+                $('.products').addClass('active');
+
+            }
+            else if (url.toLowerCase() == "/site/home/allvendor") {
+
+                $('.vendors').addClass('active');
+
+            }
+            $('.list-item a').each(function (i) {
+                var $this = $(this);
+                if ($this.attr('href').indexOf(url) !== -1) {
+                    $(this).addClass('active');
+                }
+
+            });
+
+            GetCitiesRegister();
+            GetNationalityRegister();
+            setTimeout(function () { CheckActivePointNoti(); }, 1000);
+
+        });
+
+
+
+    </script>
+    @Html.Partial("_CookieConsentPartial")
+    <script src="~/App/Site/js.cookie.js"></script>
+    <script src="~/App/Site/CookiesScript.js"></script>
+    @RenderSection("Scripts", false)
+    <partial name="_SiteScripts" />
+    <script charset="utf-8" src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script charset="utf-8" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script charset="utf-8" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/App/Site/CartScript.js"></script>
+
+
+    <!-- Select 2 Scripts -->
+    <script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+
+    <script>
+        if ($.isFunction($.fn.select2)) {
+            $('select:not(.normal)').each(function () {
+
+                $(this).select2({
+                    dropdownParent: $(this).parent()
+                });
+
+            });
+        }
+    </script>
+
+
+</body>
+</html>

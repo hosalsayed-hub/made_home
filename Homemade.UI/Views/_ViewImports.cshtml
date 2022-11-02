@@ -1,0 +1,24 @@
+
+@using Microsoft.AspNetCore.Identity
+@using Homemade.UI.Areas.Identity
+@using Homemade.UI.Areas.Identity.Pages
+@using Homemade.UI
+@using Homemade.BLL
+@using Homemade.UI.ViewComponents
+
+@using Microsoft.AspNetCore.Mvc.Localization
+@namespace Homemade.UI.Pages
+
+@inject Homemade.BLL.Setting.BlSlider blSlider
+@inject Homemade.BLL.Setting.BlDepartments blDepartments
+@inject Homemade.BLL.Setting.BlMainCategory blMainCategory
+@inject Homemade.BLL.Vendor.BlVendor blVendor
+@inject Homemade.BLL.Vendor.BlProduct blProduct
+@inject Microsoft.Extensions.Configuration.IConfiguration _configuration
+@inject Homemade.BLL.Customer.BlCustomer blCustomer
+
+@inherits Homemade.UI.AppRazorPage<TModel>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Homemade.UI
+@*@addTagHelper *, LazZiya.TagHelpers
+    @addTagHelper *, LazZiya.ExpressLocalization*@

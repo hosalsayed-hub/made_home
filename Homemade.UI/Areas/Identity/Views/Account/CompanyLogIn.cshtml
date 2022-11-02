@@ -1,0 +1,195 @@
+﻿@model CompanyLoginModel
+@{
+    Layout = "~/Views/Shared/_LogInLayout.cshtml";
+}
+<div class="animated fadeIn bg-white login_wrap" style=" background-image: url(/assets/img/bread-bg.png); background-size: cover; background-position: bottom;">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="left_side">
+                <img src="~/assets/img/logo-s.svg" width="120" height="122" class="log_logo" />
+            <a href="https://made-home.com/" class="btn btn-sm btn-custom bg-orange push-15-t" style="color: #202020;">@Homemade.UI.Resources.Homemade.Back_to_Website</a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="right_side">
+                @if (Context.Request.Cookies["Language"] == "ar")
+                {
+                    <a href="/Home/ChangeLang?LangId=en" class="log-lang">English</a>
+                }
+                else
+                {
+            <a href="/Home/ChangeLang?LangId=ar" class="log-lang">العربية</a>
+                }
+                <form method="post" id="frmLogIn" class="form-horizontal push-30-t" onsubmit="return false"
+                      data-ajax="true"
+                      data-ajax-complete="completed"
+                      data-ajax-method="post">
+                    <div style="margin-bottom: 10px;">
+                        @Html.ValidationMessage("Error", htmlAttributes: new {style = "color:red;"})
+                    </div>
+                    @Html.AntiForgeryToken()
+                    <div id="divMsgParent" style="display: none">
+                        <div id="divMsgClass" class="alert alert-danger" role="alert">
+                            <span id="lblMsg"></span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <i class="ion-close text-black" style="font-size: 14px; top: -10px; display: block;" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="divLogin">
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <input asp-for="Type" class="AddData" type="hidden" value="3"/>
+                                <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbClient">
+                                    <input id="rdbClient" type="radio" checked class="AddData" name="ClientCompany" value="3" onclick="ChangeLabel()"><span></span> @Homemade.UI.Resources.Homemade.Client
+                                </label>
+                                <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbCompany">
+                                    <input id="rdbCompany" type="radio" class="AddData" name="ClientCompany" value="4" onclick="ChangeLabel()"><span></span> @Homemade.UI.Resources.Homemade.Company
+                                </label>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <div class="form-material form-material-primary floating">
+                                    <input class="form-control" asp-for="UserName"/>
+                                    <label for="material-text2" id="lbl_UserName">@Homemade.UI.Resources.Homemade.Mobile <span style="color: red">*</span></label>
+                                    <span style="color: red" asp-validation-for="UserName"> </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <div class="form-material form-material-primary floating">
+                                    <input class="form-control" type="password" asp-for="Password"/>
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Password <span style="color: red">*</span></label>
+                                    <span style="color: red" asp-validation-for="Password"> </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label class="css-input switch switch-sm switch-primary">
+                                    <input type="checkbox" id="login-remember-me" name="login-remember-me"><span></span> Remember Me?
+                                </label>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="font-s13 push-5-t text-right">
+                                    <a href="@Url.Action("ForgetPassword")">@Homemade.UI.Resources.Homemade.ResetPassword ?</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group push-30-t">
+                            <div class="col-xs-12">
+                                <button class="btn btn-sm btn-block btn-custom bg-orange" type="submit">@Homemade.UI.Resources.Homemade.Login</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="divVerification" style="display: none">
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <div class="form-material form-material-primary floating">
+                                    <input placeholder="@Homemade.UI.Resources.Homemade.Code" maxlength="4" onkeypress="return isNumberKey(event)" id="txtCode" class="form-control"/>
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Code <span style="color: red">*</span></label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group push-30-t">
+                            <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+                                <button class="btn btn-sm btn-block btn-primary" onclick="Verify();" type="button">@Homemade.UI.Resources.Homemade.Verify</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+   
+    function ChangeLabel() {
+        $('#Type').val($("input[type='radio'][name='ClientCompany']:checked").val());
+        if ($("input[type='radio'][name='ClientCompany']:checked").val() === "3") {
+            $("#lbl_UserName").html("@Homemade.UI.Resources.Homemade.Mobile <span style='color:red'>*</span>");
+        } else {
+            $("#lbl_UserName").html("@Homemade.UI.Resources.Homemade.Email <span style='color:red'>*</span>");
+        }
+    }
+    function completed(xhr) {
+
+        var result = JSON.parse(xhr.responseText);
+
+        var msg = result.message;
+        if (result.resultType == 'success') {
+            swal({
+                title: msg,
+                text: '',
+                type: 'success',
+                timer: 2000,
+                showCancelButton: false,
+                showConfirmButton: false
+            });
+            if ($('#Type').val() === "3") {
+                window.location.href = '/ClientUser/Request/NewRequest';
+            } else {
+                $('#divLogin').hide();
+
+                $('#divVerification').show();
+            }
+           
+        }
+        else {
+            swal({
+                title: msg,
+                text: '',
+                type: 'error',
+                timer: 2000,
+                showCancelButton: false,
+                showConfirmButton: false
+            });
+
+
+        }
+    }
+    function Verify() {
+        var code = $('#txtCode').val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("VerifyCode")',
+            data: {
+                'code': code
+            },
+            dataType: "json",
+            async: false,
+            success: function (result) {
+                var msg = result.message;
+                if (result.resultType === 'success') {
+                    swal({
+                        title: msg,
+                        text: '',
+                        type: 'success',
+                        timer: 2000,
+                        showCancelButton: false,
+                        showConfirmButton: false
+                    });
+                   window.location.href = '/Home/Index';
+
+                }
+                else {
+                    swal({
+                        title: msg,
+                        text: '',
+                        type: 'error',
+                        timer: 2000,
+                        showCancelButton: false,
+                        showConfirmButton: false
+                    });
+                }
+            }
+        });
+
+    }
+</script>

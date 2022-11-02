@@ -1,0 +1,126 @@
+﻿@model IEnumerable<Homemade.BLL.ViewModel.Site.SiteProductViewModel>
+@if (Model != null)
+{
+    @Html.Hidden("ProductCount", Model.Count())
+    @foreach (var item in Model)
+    {
+        <div class="product-wrap">
+
+            <div class="product-item">
+
+                <div class="product-img">
+
+                    <a href="/Site/Home/produc_default/@item.ProductGuid">
+                        @if (!string.IsNullOrEmpty(item.ProductLogo))
+                        {
+                            <img class="img-fluid" src="@item.ProductLogo">
+                            @*@if (!blVendor.IsVendorWorking(item.VendorsDaysWork, item.VendorsWorkFrom, item.VendorsWorkTo, item.VendorsDaysVac, item.VendorsVacWorkFrom, item.VendorsVacWorkTo))
+                            {
+                                <img class="img-fluid" src="https://cdn.made-home.com/Home/Product/close.png" style="position: absolute;top: 0;opacity: 0.4;">
+                            }*@
+                            @*else if (item.IsLimited && item.Quantity == 0)
+                                {
+                                <img class="img-fluid" src="https://cdn.made-home.com/Home/Product/sold.png" style="position: absolute;top: 0;opacity: 0.4;">
+                                }*@
+                        }
+                        else
+                        {
+                            <img class="img-fluid" src="~/assets/homeMadeSite/img/43.png">
+                            @*@if (!blVendor.IsVendorWorking(item.VendorsDaysWork, item.VendorsWorkFrom, item.VendorsWorkTo, item.VendorsDaysVac, item.VendorsVacWorkFrom, item.VendorsVacWorkTo))
+                            {
+                                <img class="img-fluid" src="https://cdn.made-home.com/Home/Product/close.png" style="position: absolute;top: 0;opacity: 0.4;">
+                            }*@
+                            @*else if (item.IsLimited && item.Quantity == 0)
+                {
+                <img class="img-fluid" src="https://cdn.made-home.com/Home/Product/sold.png" style="position: absolute;top: 0;opacity: 0.4;">
+                }*@
+                        }
+
+                    </a>
+
+                </div>
+
+                <div class="product-details">
+
+                    <div class="product-vendor">
+
+                        <a class="vendor-details" href="/Site/home/vendor?id=@item.VendorsGuid">
+
+                            <img class="img-fluid vendor-img" src="@item.VendorsLogo">
+                            <span class="vendor-name">@item.VendorsName</span>
+
+                            @if (!blVendor.IsVendorWorking(item.VendorsDaysWork, item.VendorsWorkFrom, item.VendorsWorkTo, item.VendorsDaysVac, item.VendorsVacWorkFrom, item.VendorsVacWorkTo))
+                            {
+                              <span class="vendor-name" style="color: red">(مغلق الآن)</span>    
+                            }
+                        </a>
+
+                    </div>
+                    <div class="product-name">
+
+                        <a class="product-name-width" href="/Site/home/produc_default?id=@item.ProductGuid">@item.ProductName</a>
+
+                    </div>
+                    <div class="product-info">
+
+                        <div class="product-price product-price-width">
+
+                            <span class="price-val">@item.ProductPrice</span>
+                            <span class="price-currency">@Homemade.UI.Resources.Homemade.SR</span>
+                        </div>
+                        <div class="product-volume">
+
+                            @*<div class="food-icon">
+
+                    <img src="~/assets/homeMadeSite/img/Icon%20map-food.svg">
+
+                    </div>*@
+                            <div class="person-no  person-no-width" style="max-width: 85px;">
+
+                                <span id="personNo">@item.Pieces</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="wishlist-action">
+
+                    <a class="btn-wishlist " href="#">
+
+                        <div class="flip-icon">
+                            <span class="front-icon"><i class="far fa-heart"></i></span>
+                            <span class="back-icon"><i class="fas fa-heart"></i></span>
+                        </div>
+                    </a>
+
+
+                </div>
+                @if (blVendor.IsVendorWorking(item.VendorsDaysWork, item.VendorsWorkFrom, item.VendorsWorkTo, item.VendorsDaysVac, item.VendorsVacWorkFrom, item.VendorsVacWorkTo))
+                {
+                    <div class="cart-action">
+                        <a class="btn-cart-wrap" id="btn_actionCart_@item.ProductID" href="javascript:AddToCart_jq_Ex(@item.ProductID, 1, 'p');">
+                            <span class="add-to-cart">@Homemade.UI.Resources.Homemade.Add_to_cart</span>
+                            <span class="added">@Homemade.UI.Resources.Homemade.In_Cart</span>
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    @*<div class="cart-action alert alert-site" style="padding: 0.5rem 0.5rem;text-align: center;">
+        <strong>@Homemade.UI.Resources.Homemade.Closed</strong>
+        </div>*@
+                    <div class="cart-action">
+                        <a class="btn-cart-wrap added" style="background-color: gray;">
+                            <span class="add-to-cart">@Homemade.UI.Resources.Homemade.Add_to_cart</span>
+                        </a>
+                    </div>
+                }
+
+            </div>
+
+
+        </div>
+    }
+
+}

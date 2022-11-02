@@ -1,0 +1,70 @@
+﻿@model Homemade.BLL.ViewModel.Setting.DeliverySettingViewModel
+<div class="content">
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>
+                        <span class="header-title">@Homemade.UI.Resources.HomemadeMenu.Delivery_Setting</span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="block-content">
+            <form method="post"
+                  data-ajax="true"
+                  data-ajax-method="post"
+                  data-ajax-success="formSuccessUpdate">
+                @Html.AntiForgeryToken()
+                <div class="row" id="divMsgParent" style="display:none">
+                    <div class="form-group row">
+                        <div class="col-xs-12">
+                            <div id="divMsgClass" class="alert alert-danger" role="alert">
+                                <strong id="lblMsg"></strong>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <input asp-for="DeliverySettingID" hidden />
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Driver_Commision</label>
+                            @Html.TextBoxFor(x => x.DriverCommision, new { @class = "form-control", @placeholder = @Homemade.UI.Resources.Homemade.Driver_Commision, @maxlength = "10", onkeypress = "return isNumberKey(event)" })
+
+
+                            <span style="color:red"> @Html.ValidationMessageFor(x => x.DriverCommision)</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Min_KM</label>
+                            @Html.TextBoxFor(x => x.MinKM, new { @class = "form-control", @placeholder = @Homemade.UI.Resources.Homemade.Min_KM, @maxlength = "10", onkeypress = "return isNumberKey(event)" })
+
+
+                            <span style="color:red"> @Html.ValidationMessageFor(x => x.MinKM)</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Over_Km_Fare</label>
+                            @Html.TextBoxFor(x => x.OverKmFare, new { @class = "form-control", @placeholder = @Homemade.UI.Resources.Homemade.Over_Km_Fare, @maxlength = "10", onkeypress = "return isNumberKey(event)" })
+
+
+                            <span style="color:red"> @Html.ValidationMessageFor(x => x.OverKmFare)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-custom bg-orange" id="btnSave" type="submit"><i class="ion-checkmark push-5-r"></i> @Homemade.UI.Resources.Homemade.save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <partial name="_Scripts" />
+}

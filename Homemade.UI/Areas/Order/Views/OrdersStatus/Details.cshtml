@@ -1,0 +1,265 @@
+﻿@model Homemade.BLL.ViewModel.Order.OrdersViewModel
+@inject Homemade.BLL.Order.BlOrders blOrders
+@{
+    var AllOrdersVendor = blOrders.GetAllOrdersVendorViewModelByOrderID(Model.OrdersID, Homemade.UI.InfraStructure.Utility.CurrentLanguageCode);
+}
+<div class="content">
+    <div class="block">
+        <div class="block-content">
+            <h3 class="form-group">
+                <span class="header-title">  بيانات الطلب  </span>
+            </h3>
+            <div class="row">
+                @Html.AntiForgeryToken()
+                <div class="col-md-3 form-group">
+                    <div class="form-material">
+                        @Html.DisplayFor(x => x.OrdersID)
+                        <label for="material-text2">@Homemade.UI.Resources.Homemade.Order_Number</label>
+                    </div>
+                </div>
+                <div class="col-md-3 form-group">
+                    <div class="form-material">
+                        @Html.DisplayFor(x => x.OrderStatusName)
+                        <label for="material-text2">@Homemade.UI.Resources.Homemade.Order_Status</label>
+                    </div>
+                </div>
+                <div class="col-md-3 form-group">
+                    <div class="form-material">
+                        @Html.DisplayFor(x => x.CustomersName)
+                        <label for="material-text2">@Homemade.UI.Resources.Homemade.Customer</label>
+                    </div>
+                </div>
+                <div class="col-md-3 form-group">
+                    <div class="form-material">
+                        @Model.CreateDate.ToString("yyyy-MM-dd")
+                        <label for="material-text2">@Homemade.UI.Resources.Homemade.Date</label>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-12 form-group">
+                    <hr />
+                </div>
+                <div class="col-md-3 form-group">
+                    <div class="form-material">
+                        @Html.DisplayFor(x => x.Price)
+                        <label for="material-text2">@Homemade.UI.Resources.Homemade.Price</label>
+                    </div>
+                </div>
+                <div class="col-md-2 form-group">
+                    <div class="form-material">
+                        @Html.DisplayFor(x => x.Discount)
+                        <label for="material-text2">@Homemade.UI.Resources.Homemade.Discount</label>
+                    </div>
+                </div>
+                <div class="col-md-2 form-group">
+                    <div class="form-material">
+                        @Html.DisplayFor(x => x.Vat)
+                        <label for="material-text2">@Homemade.UI.Resources.Homemade.Vat</label>
+                    </div>
+                </div>
+                <div class="col-md-2 form-group">
+                    <div class="form-material">
+                        @Html.DisplayFor(x => x.DeliveryPrice)
+                        <label for="material-text2">@Homemade.UI.Resources.Homemade.DeliveryPrice</label>
+                    </div>
+                </div>
+                <div class="col-md-3 form-group">
+                    <div class="form-material">
+                        @Html.DisplayFor(x => x.Total)
+                        <label for="material-text2">@Homemade.UI.Resources.Homemade.Total</label>
+                    </div>
+                </div>
+                <div class="col-md-12 form-group">
+                    <hr />
+                </div>
+                <div class="col-md-12 form-group">
+                    <div class="form-material">
+                        @Html.DisplayFor(x => x.CustomerLocationAddress)
+                        <label for="material-text2">@Homemade.UI.Resources.Homemade.Address</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <div class="block">
+        <div class="block-content h_scroll">
+            <h3 class="form-group">
+                <span class="header-title">@Homemade.UI.Resources.HomemadeMenu.Vendors</span>
+            </h3>
+        </div>
+        <div class="block-content">
+            @foreach (var item in AllOrdersVendor)
+            {
+                <div class="block">
+                    <div class="block-header bg-gray-lighter">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div data-toggle="collapse" data-target="#collapseProd_@item.OrderVendorID" aria-expanded="false" aria-controls="collapseProd_@item.OrderVendorID">
+
+                                    <div class="row">
+                                        <div class="block-title col-md-3 form-group">
+                                            <i class="ion-plus push-5-r"></i> <span style="font-weight:bold">@item.VendorsName - @item.OrderStatusName</span>
+                                        </div>
+                                        <div class="col-md-7 form-group">
+                                            <div class="row">
+                                                <div class="col-md-3 form-group">
+                                                     <span style="font-weight:bold">@Homemade.UI.Resources.Homemade.Products_Count : @item.ProductsCount</span>
+                                                </div>
+                                                <div class="col-md-3 form-group">
+                                                    <span style="font-weight:bold">@Homemade.UI.Resources.Homemade.Price : @item.Price</span>
+                                                </div>
+                                                <div class="col-md-3 form-group">
+                                                     <span style="font-weight:bold">@Homemade.UI.Resources.Homemade.Discount : @item.Discount</span>
+                                                </div>
+                                                <div class="col-md-3 form-group">
+                                                     <span style="font-weight:bold">@Homemade.UI.Resources.Homemade.DeliveryPrice : @item.DeliveryPrice</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 form-group">
+                                            <span style="font-weight:bold">@Homemade.UI.Resources.Homemade.Total : @item.Total</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="collapse" id="collapseProd_@item.OrderVendorID">
+                        <div class="block-content block-content-full">
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <table id="tbl_OrderItems_@item.OrderVendorID" class="table table-custom js-dataTable-buttons" style="width:100%">
+
+                                        <thead>
+                                            <tr>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@section Styles{
+
+    <!-- Data_Table Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" />
+
+
+    <style>
+        thead {
+            display: none;
+        }
+        .dataTables_filter {
+            display: none;
+        }
+    </style>
+}
+
+@section Scripts{
+
+    <!-- Data_table Plugins -->
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+
+    <script>
+
+                $(document).ready(function () {
+                    $.getJSON('/Order/Orders/GetAllListOrdersVendor?ordersID='+@Model.OrdersID, '', function (data) {
+                        for (var i = 0; i < data.length; i++) {
+                            $('#tbl_OrderItems_' + data[i]).DataTable({
+                pageLength: 1000,
+                pagijngType: "full_numbers",
+                serverSide: true,
+                processing: true,
+                lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+                sAjaxSource: '@Url.Action("LoadTableOrderItems")?orderVendorID=' + data[i],
+                                sServerMethod: "POST",
+                                bPaginate: false,
+                                paging: false,
+                columns: [
+                    {
+                        "data": null,
+                        "sortable": false,
+                        render: function (data, type, row, meta) {
+                            return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                        }
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) {
+                            return '<label><img src=' + data.prodImage + ' class="img" width="100" height="100" /></label>';
+                        }
+
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) {
+                            return '<input type="hidden" value="' + data.orderItemsID + '"/><label class="arName">' + data.prodName + '</label>';
+                        }
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) {
+                            return '<label>' +"X"+ data.price + '</label>';
+                        }
+                    },
+                    {
+                        data: null,
+                        bSortable: true,
+                        render: function (data, type, row) {
+                            return '<label>' + data.quantity + '</label>';
+                        }
+                    }
+
+                ],
+                drawCallback: function (s) {
+                    $('[data-toggle="tooltip"]').tooltip();
+                },
+           buttons: [
+                @*{
+                    extend: "copy",
+                    className: "btn btn-info btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.Copy'
+                },*@ {
+                    extend: "excelHtml5",
+                    autoFilter: true,
+                    sheetName: 'Exported data',
+                    className: "btn btn-success btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.Excel'
+                },{
+                    extend: "pdfHtml5",
+                    download: 'open',
+                    className: "btn btn-info btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.PDF'
+                }],
+            "language": {
+                "search": "_INPUT_",
+                "searchPlaceholder": "Search",
+                "lengthMenu": "_MENU_",
+                }, dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+
+                }).buttons().container().appendTo('.dt_buttons_wrap');
+            }
+                    });
+
+
+        });
+    </script>
+}

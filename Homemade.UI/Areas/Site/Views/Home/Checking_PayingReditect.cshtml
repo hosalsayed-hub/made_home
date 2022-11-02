@@ -1,0 +1,24 @@
+﻿@Html.Hidden("paymentId", (string)ViewBag.paymentId)
+@Html.Hidden("UserName", (int)ViewBag.UserName)
+
+<section class="section-style complete-order-section">
+    <div class="container">
+        <div id="LogStatus" style="
+    text-align: center;
+    font-size: xx-large;
+">
+            <span id="LogStatusMessage"></span>
+            <img src="~/assets/homeMadeSite/css/ajax-loader.gif" />
+        </div>
+    </div>
+</section>
+
+
+@section Scripts {
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/App/Site/Checking_PayingHubRedirectScript.js"></script>
+
+    <script>
+
+    </script>
+}

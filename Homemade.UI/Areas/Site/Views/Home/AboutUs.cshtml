@@ -1,0 +1,299 @@
+﻿@model Homemade.BLL.ViewModel.Setting.MainPageDetailsViewModel
+@inject Homemade.BLL.Setting.BlConfiguration blConfiguration
+<!-- ***** breadcrumb-section Start ***** -->
+
+<section class="breadcrumb-section">
+
+    <div class="container">
+
+
+        <div class="row">
+
+            <div class="col-12">
+
+                <nav class="breadcrumb-nav" aria-label="breadcrumb">
+
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/Site/Home/Index">@Homemade.UI.Resources.Homemade.DashBoard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">@Homemade.UI.Resources.Homemade.AboutUs </li>
+
+
+                    </ol>
+                </nav>
+
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+<!-- ***** breadcrumb-section End ***** -->
+<!-- ***** about-us-section Start ***** -->
+
+<section class="section-style about-us-section">
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-12">
+
+                <div class="about-us-banner-area">
+
+                    <div class="about-us-banner-title about-us-main-title">@Model.HomeTitle</div>
+                    <div class="about-us-banner" style="background-image: url(@Model.Image)">
+                        <div class="about-us-banner-text">
+
+                            <h3>@Model.MainPageDetailsTitle</h3>
+                            <p>
+                                @Model.Desc
+
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="about-us-info">
+
+                    <div class="about-us-details">
+
+                        <h3 class="details-title about-us-main-title">@Model.IdeaTitle </h3>
+                        <p class="details-text">
+                            @Model.IdeaDesc
+                        </p>
+                    </div>
+
+
+                </div>
+
+                <div class="about-us-desc">
+
+                    <div class="row">
+
+
+                        <div class="col-md-6 mb-4 mb-md-0">
+
+                            <div class="about-us-desc-text">
+
+                                <div class="about-us-details">
+
+                                    <h3 class="details-title about-us-main-title">@Model.HomeTitle</h3>
+
+                                    <p class="details-text">
+                                        @Model.HomeDesc
+                                    </p>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="about-us-desc-img">
+                                <img class="img-fluid" src="@Model.Image" />
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ***** about-us-section End ***** -->
+<!-- ***** our-achievements-banner Start ***** -->
+@*<section class="section-style our-achievements-banner">
+
+
+    <div class="container position-relative">
+
+        <div class="our-achievements-area">
+
+            <div class="row align-items-center">
+
+                <div class="col-lg-3">
+
+                    <div class="achievement-banner-title">
+
+                        <span>@Homemade.UI.Resources.Homemade.Our_chievements_Throughout </span>
+                        <span>@Homemade.UI.Resources.Homemade.past_years </span>
+                    </div>
+
+                </div>
+                <div class="col-lg-3 col-sm-4 mb-4 mb-sm-0">
+
+                    <div class="achievement-item">
+
+                        <div class="achievement-num-wrap">
+
+                            <span class="achievement-num-text"><bdi>K+</bdi></span>
+                            <span class="achievement-num counter">250</span>
+
+                        </div>
+                        <div class="achievement-title">@Homemade.UI.Resources.Homemade.User مستخدم </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-3 col-sm-4 mb-4 mb-sm-0">
+
+                    <div class="achievement-item">
+
+                        <div class="achievement-num-wrap">
+
+                            <span class="achievement-num-text"><bdi>K+</bdi></span>
+                            <span class="achievement-num counter">260</span>
+
+                        </div>
+                        <div class="achievement-title">@Homemade.UI.Resources.Homemade.successful_order </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-3 col-sm-4">
+
+                    <div class="achievement-item">
+
+                        <div class="achievement-num-wrap">
+
+                            <span class="achievement-num-text"><bdi>+</bdi></span>
+                            <span class="achievement-num counter">7</span>
+
+                        </div>
+                        <div class="achievement-title">@Homemade.UI.Resources.Homemade.Provinces </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+</section>*@
+
+<!-- ***** our-achievements-banner End ***** -->
+<!-- ***** contact-ways-section Start ***** -->
+@{
+    var Contacts = blConfiguration.GetConfigurations();
+}
+<section class="section-style contact-ways-section">
+
+    <div class="container">
+
+        <div class="contact-ways-area">
+
+            <div class="row mb-4">
+
+                <div class="col-12">
+
+                    <h3 class="contact-ways about-us-main-title">@Homemade.UI.Resources.Homemade.You_can_contact_us_via </h3>
+
+                </div>
+                <div class="col-md-6">
+
+                    <div class="contact-way-area">
+                        @foreach (var item in Contacts)
+                        {
+                            <div class="contact-way-item">
+
+                                <div class="contact-way-icon"><i class="fas fa-phone-alt"></i></div>
+
+                                <div class="contact-way-wrap">
+
+                                    <span class="contact-way-content">@item.MobileNumber</span>
+                                    <span class="contact-way-content comma">-</span>
+                                    <span class="contact-way-content">@item.PhoneNumber</span>
+
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+
+                    <div class="contact-way-area">
+                        @foreach (var item in Contacts)
+                        {
+                            <div class="contact-way-item">
+
+                                <div class="contact-way-icon"><i class="fas fa-envelope"></i></div>
+                                <div class="contact-way-wrap">
+
+                                    <a class="contact-way-content" href="#">@item.Email</a>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="row">
+
+                <div class="col-12">
+
+                    <h3 class="contact-ways about-us-main-title">@Homemade.UI.Resources.Homemade.or_through_our_branches_in </h3>
+
+                </div>
+                <div class="col-md-12">
+
+                    <div class="contact-way-area">
+                        @foreach (var item in Contacts)
+                        {
+                            <div class="contact-way-item">
+
+                                <div class="contact-way-icon">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="31.667" viewBox="0 0 30 31.667">
+                                        <path id="Icon_material-location-city" data-name="Icon material-location-city" d="M24.5,18V8l-5-5-5,5v3.333H4.5V34.667h30V18ZM11.167,31.333H7.833V28h3.333Zm0-6.667H7.833V21.333h3.333Zm0-6.667H7.833V14.667h3.333Zm10,13.333H17.833V28h3.333Zm0-6.667H17.833V21.333h3.333Zm0-6.667H17.833V14.667h3.333Zm0-6.667H17.833V8h3.333Zm10,20H27.833V28h3.333Zm0-6.667H27.833V21.333h3.333Z" transform="translate(-4.5 -3)" fill="#a1835c" />
+                                    </svg>
+
+
+                                </div>
+                                <div class="contact-way-wrap full-line">
+
+                                    <span class="contact-way-content">
+                                        @item.Address
+
+                                    </span>
+                                    <span class="contact-way-content">
+
+                                        <i class="fas fa-phone-alt"></i>
+                                        @item.MobileNumber
+                                    </span>
+
+                                </div>
+                            </div>
+                        }
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</section>
+
+<!-- ***** contact-ways-section End ***** -->

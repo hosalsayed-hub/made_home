@@ -1,0 +1,1403 @@
+﻿@using System.Globalization
+@using Homemade.UI.ViewComponents
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor IhttpContextAccessor
+@inherits Homemade.UI.AppRazorPage<TModel>
+@inject Homemade.BLL.Emp.BlEmployee _BlEmployee
+@inject Homemade.BLL.General.BLUser bLUser
+@{
+    var cookieLingua = "ar";
+
+    if (Context.Request.Cookies["Language"] != null)
+    {
+        cookieLingua = Context.Request.Cookies["Language"];
+    }
+
+    var userdata = bLUser.GetUserInfo(User.GetUserIdInt());
+}
+<!DOCTYPE html>
+@{
+    var direction = "";
+    var munemain = "";
+    var Dashborad = "";
+}
+@if (Context.Request.Cookies["Language"] != null)
+{
+
+
+    if (Context.Request.Cookies["Language"] == "ar")
+    {
+        direction = "rtl";
+        munemain = "شغل بيت";
+        Dashborad = "الرئيسية";
+    }
+    else
+    {
+        direction = "ltr";
+        munemain = "Homemade";
+        Dashborad = "Dashboard";
+
+
+    }
+}
+else
+{
+    direction = "rtl";
+    munemain = "شغل بيت";
+    Dashborad = "الرئيسية";
+
+}
+
+<!--[if IE 9]> <html class="ie9 no-focus" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!-->
+<html class="no-focus" lang="en" direction="@direction" dir="@direction" style="direction: @direction" xmlns=“http://www.w3.org/1999/xhtml 6” xml:lang=“ar”>
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    <title>@munemain</title>
+
+    <meta name="description" content="@munemain - @Dashborad " />
+    <meta name="author" content="@munemain">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0">
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+    <meta http-equiv="content-type" content="text/plain" charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+
+    <!-- Icons -->
+    <!-- fave icon -->
+    <link rel="apple-touch-icon" sizes="152x152" href="~/Images/logo.jpeg">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Images/logo.jpeg">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/Images/logo.jpeg">
+    <link rel="mask-icon" href="~/Images/logo.jpeg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="~/assets/css/bootstrap-@direction-.min.css" />
+    <link rel="stylesheet" href="~/assets/css/oneui-@direction-.css" />
+    <link rel="stylesheet" href="~/assets/css/ionicons/css/ionicons.min.css" />
+
+    <!-- Plugins Styles -->
+    <!-- Data_Table Styles -->
+    <!--<link rel="stylesheet" href="~/assets/js/plugins/datatables/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" />-->
+    <!-- Date_Picker Styles -->
+    <!--<link rel="stylesheet" href="~/assets/js/plugins/Hijiri-Plugin/css/bootstrap-datetimepicker.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">-->
+    <!-- Sweat_alert Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/sweetalert.min.css" />
+
+    <link rel="stylesheet" href="~/assets/js/plugins/flatpickr/flatpickr.min.css" />
+
+    <!-- Select 2 Styles -->
+    <!--<link rel="stylesheet" href="~/assets/js/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2-bootstrap.min.css" />-->
+    <!-- auto_complete Styles -->
+    <link href="~/assets/js/plugins/jquery-auto-complete/jquery.auto-complete.min.css" rel="stylesheet" />
+
+    @RenderSection("Styles", false)
+
+    <link rel="stylesheet" href="~/assets/css/StyleSheet-@direction-.css" />
+
+
+    <link href="~/Content/Layout/Toster/toastr.css" rel="stylesheet" />
+    <link href="~/assets/css/Google_Material_Linear_Progress_Bar.css" rel="stylesheet" />
+
+    <style>
+        .addbtnInSetting {
+            float: unset;
+        }
+
+        table.dataTable, th {
+            text-align: center;
+        }
+
+        .bootstrap-datetimepicker-widget {
+            width: 300px !important
+        }
+
+        #loading-area {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            background-color: #9a9a9a78;
+            top: 0;
+            right: 0;
+            z-index: 99999;
+        }
+
+        .loader-col .loader {
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .loader-col #loader {
+            -webkit-perspective: 120px;
+            -moz-perspective: 120px;
+            -ms-perspective: 120px;
+            perspective: 120px;
+            position: absolute;
+            top: 50%;
+            right: 50%;
+            z-index: 2;
+            -webkit-transform: translate(50%, -50%);
+            -moz-transform: translate(50%, -50%);
+            -ms-transform: translate(50%, -50%);
+            -o-transform: translate(50%, -50%);
+            transform: translate(50%, -50%);
+        }
+
+            .loader-col #loader img {
+                width: 100%;
+                animation: run .1s infinite;
+            }
+
+        @@keyframes run {
+            0% {
+                transform: rotate(0);
+            }
+
+            50% {
+                transform: rotate(1deg);
+            }
+
+            100% {
+                transform: rotate(-1deg);
+            }
+        }
+
+        .cap-info h5 a,
+        .trip-wrap p a {
+            background-color: #f0b224;
+            display: inline-block;
+            padding: 1px 5px;
+            border-radius: 5px;
+        }
+
+        #toast-container > .toast-success {
+            background-image: url(../../../Images/iconfinder_wlan-connect-wifi-signal-wireless-internet_2931144.png) !important;
+            background-repeat: no-repeat;
+            background-size: 9%;
+        }
+
+        #toast-container > .toast-warning {
+            background-image: url(../../../Images/iconfinder_wifi-off_2561213.png) !important;
+            background-repeat: no-repeat;
+            background-size: 9%;
+        }
+    </style>
+
+    @if (direction == "rtl")
+    {
+        <style>
+            .bg-body-light {
+                position: relative;
+            }
+
+                .bg-body-light .dt-buttons > button:first-child {
+                    /*position:absolute;
+                */ left: 0;
+                }
+
+            .datepicker-dropdown {
+                max-width: 300px;
+            }
+
+            .datepicker {
+                float: right
+            }
+
+                .datepicker.dropdown-menu {
+                    right: auto
+                }
+        </style>
+    }
+    else
+    {
+        <style>
+            .bg-body-light {
+                position: relative;
+            }
+
+                .bg-body-light .dt-buttons > button:first-child {
+                    /*                    position: absolute;
+                */ left: 0;
+                }
+        </style>
+    }
+
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <style>
+            @@media screen and (min-width: 992px) {
+                .header-navbar-fixed.sidebar-l.sidebar-o #header-navbar {
+                    right: 0;
+                }
+
+                #page-container.sidebar-l.sidebar-o {
+                    padding-right: 0;
+                }
+            }
+        </style>
+    }
+
+    <style>
+        .sidebar-content .nav-main {
+            overflow: auto;
+            height: calc(100vh - 183px);
+            margin-top: 45px;
+            padding-top: 0;
+        }
+    </style>
+    @*<style>
+            .popup {
+                min-height: 150px;
+                width: 340px;
+                border: 1px solid gray;
+                bottom: -190px;
+                right: 0;
+                position: sticky;
+                transition: all 0.8s;
+                padding-top: 20px;
+                border-radius: 10px;
+                vertical-align: top;
+                margin: 0% 1% 1% 0%;
+                z-index: 10000000000;
+                background-color: white;
+            }
+
+            .open {
+                bottom: 1px;
+                display: block !important
+            }
+
+
+            .band {
+                position: absolute;
+                top: 0;
+                width: 100%;
+                height: 25px;
+                background: rgba(0, 0, 0, 0.2);
+                text-align: right;
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+                transition: all 0.8s;
+            }
+
+            .popup:hover {
+                box-shadow: inset 0 0 2px black;
+            }
+
+            /*.band:hover {
+                background: white;
+            }*/
+
+        </style>*@
+    <style>
+        #popup {
+            position: absolute;
+            z-index: 9;
+            background-color: #f1f1f1;
+            text-align: center;
+            border: 1px solid #d3d3d3;
+            min-height: 150px;
+            width: 410px;
+            border-radius: 10px;
+        }
+
+        #popupheader {
+            padding: 10px;
+            cursor: move;
+            z-index: 10;
+            background-color: #2196F3;
+            color: #fff;
+            border-top-right-radius: 10px;
+            border-top-left-radius: 10px;
+        }
+
+        hr {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+    </style>
+    <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
+    <!-- <link rel="stylesheet" id="css-theme" href="~/assets/css/themes/flat.min.css"> -->
+    <!-- END Stylesheets -->
+</head>
+<body>
+
+
+    <!-- page preloader -->
+    <div id="loading-area">
+        <div class="loader-col">
+            <div class="loader" id="loader">
+                @*<img src="~/assets/img/load-car.svg" />*@
+                @*<img src="/Site/images/loader.gif" />*@
+                <img src="/Images/logo.jpeg" />
+            </div>
+        </div>
+    </div>
+    <!-- end loading -->
+    <!-- Start Page Container -->
+    <div id="page-container" class="sidebar-l sidebar-o side-scroll header-navbar-fixed">
+
+        <!-- Sidebar -->
+        @if (User.Identity.IsAuthenticated)
+        {
+
+            <nav id="sidebar">
+                <!-- Sidebar Scroll Container -->
+                <div>
+                    <!-- Sidebar Content -->
+                    <!-- Adding .sidebar-mini-hide to an element will hide it when the sidebar is in mini mode -->
+                    <div class="sidebar-content">
+                        <!-- Side Header -->
+                        <div class="side-header side-content">
+                            <button class="close_sidebar" data-toggle="layout" data-action="sidebar_close" type="button">
+                                <i class="fa fa-times"></i>
+                            </button>
+                            <a class="h5 side_logo" href="/Home/Index">
+                                @*<img src="~/Images/logo.jpeg" />*@
+                                <img src="~/Images/homemade-logo.svg" />
+                                @*<span class="h4 font-w600 sidebar-mini-hide text-white">@munemain</span>*@
+                            </a>
+                        </div>
+                        <!-- END Side Header -->
+                        <!-- Side Content -->
+                        <div class="side-content side-content-full">
+                            <ul class="nav-main">
+                                <vc:app-links></vc:app-links>
+                            </ul>
+                        </div>
+                        <!-- END Side Content -->
+                    </div>
+                    <!-- Sidebar Content -->
+                </div>
+                <!-- END Sidebar Scroll Container -->
+            </nav>
+        }
+
+        <!-- END Sidebar -->
+        <!-- Header -->
+        <header id="header-navbar" style="min-height: 75px !important;">
+            <div class="header_inner">
+
+
+                <!-- Header Buttons -->
+                <ul class="nav-header pull-right">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (userdata.UserType == (int)UserTypeEnum.Vendor)
+                        {
+                            var VendorsAlerts = blCustomer.GetAllNotificationByVendor(Homemade.UI.InfraStructure.Utility.CurrentLanguageCode, User.GetUserIdInt());
+                            <li>
+                                <div class="btn-group">
+                                    <button class="btn dropdown-toggle" data-toggle="dropdown" type="button" aria-expanded="false">
+                                        <i class="si si-calendar"></i>
+
+                                        <span id="NotiCount" class="count count-Vendors">@VendorsAlerts.Count()</span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right box-noti box-noti-Vendors">
+                                        <li class="dropdown-header">@Homemade.UI.Resources.Homemade.Notifications <a href="#" onclick="SeenAllNotificationsVendors()" class="pull-right">@Homemade.UI.Resources.Homemade.Seen_all</a> </li>
+
+                                        @if (VendorsAlerts.Count() > 0)
+                                        {
+                                            foreach (var itemVendorsAlerts in VendorsAlerts)
+                                            {
+                                                <li class="isseenoperation">
+                                                    <a tabindex="-1" href="#" onclick="OpenVendorsNotificationandSeen('@itemVendorsAlerts.NotificationID', '@itemVendorsAlerts.RedirectGuid', '@itemVendorsAlerts.NotificationTypeID', '@itemVendorsAlerts.OrderStatusID')">
+                                                        <h6>@itemVendorsAlerts.NotificationTitle</h6>
+                                                        <p class="remove-margin">
+                                                            @itemVendorsAlerts.NotificationDesc
+                                                        </p>
+                                                    </a>
+                                                </li>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <li class="isseenoperation noti-nodata-Vendors">
+                                                <p class="remove-margin" style="padding: 5%;text-align: center;">
+                                                    @Homemade.UI.Resources.Homemade.No_Notifications
+                                                </p>
+
+                                            </li>
+                                        }
+
+
+                                    </ul>
+                                </div>
+                            </li>
+                        }
+                    }
+                    @*@if (User.IsOperation(ViewContext.HttpContext))
+                        {
+                            var Alerts = blNotification.GetAllNotificationNotSeenOperation(cookieLingua, User.GetUserIdInt());
+                            var AlertsNotFound = blNotification.GetAllNotificationNotSeenOperationNotFound(cookieLingua, User.GetUserIdInt());
+                            var AlertsCansel = blNotification.GetAllNotificationNotSeenOperationCancel(cookieLingua, User.GetUserIdInt());
+                            var TripScheduleAlerts = blNotification.GetAllNotificationTripSchedule(cookieLingua, User.GetUserIdInt());
+                            var Voucher = blVoucher.GetNotValidVoucherCodes();
+                            <li>
+                                <div class="btn-group">
+                                    <button class="btn dropdown-toggle" data-toggle="dropdown" type="button" aria-expanded="false">
+                                        <i class="si si-calendar"></i>
+
+                                        <span id="NotiCount" class="count count-schedule">@TripScheduleAlerts.Count()</span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right box-noti box-noti-schedule">
+                                        <li class="dropdown-header">@Homemade.UI.Resources.Homemade.Notifications <a href="#" onclick="SeenAllNotificationsschedule()" class="pull-right">@Homemade.UI.Resources.Homemade.Seen_all</a> </li>
+
+                                        @if (TripScheduleAlerts.Count() > 0)
+                                        {
+                                            foreach (var itemTripScheduleAlerts in TripScheduleAlerts)
+                                            {
+                                                <li class="isseenoperation">
+                                                    <a tabindex="-1" href="#" onclick="OpenScheduleNotificationandSeen('@itemTripScheduleAlerts.notificationID', '@itemTripScheduleAlerts.TripMasterGuid')">
+                                                        <h6>@itemTripScheduleAlerts.notificationTitle</h6>
+                                                        <p class="remove-margin">
+                                                            @itemTripScheduleAlerts.notificationDesc
+                                                        </p>
+                                                    </a>
+                                                </li>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <li class="isseenoperation noti-nodata-schedule">
+                                                <p class="remove-margin" style="padding: 5%;text-align: center;">
+                                                    @Homemade.UI.Resources.Homemade.No_Notifications
+                                                </p>
+
+                                            </li>
+                                        }
+
+
+                                    </ul>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="btn-group">
+                                    <button class="btn dropdown-toggle" data-toggle="dropdown" type="button" aria-expanded="false">
+                                        <i class="si si-bell"></i>
+
+                                        <span id="NotiCount" class="count count-general">@Alerts.Count()</span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right box-noti box-noti-general">
+                                        <li class="dropdown-header">@Homemade.UI.Resources.Homemade.Notifications <a href="#" onclick="SeenAllNotifications()" class="pull-right">@Homemade.UI.Resources.Homemade.Seen_all</a> </li>
+
+                                        @if (Alerts.Count() > 0)
+                                        {
+                                            foreach (var itemAlerts in Alerts)
+                                            {
+                                                <li class="isseenoperation">
+                                                    <a tabindex="-1" href="#" onclick="OpenNotificationandSeen('@itemAlerts.notificationID', '@itemAlerts.TripMasterGuid', '@itemAlerts.NotificationTypeID', '@itemAlerts.StatusID')">
+                                                        <h6>@itemAlerts.notificationTitle</h6>
+                                                        <p class="remove-margin">
+                                                            @itemAlerts.notificationDesc
+                                                        </p>
+                                                    </a>
+                                                </li>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <li class="isseenoperation noti-nodata-general">
+                                                <p class="remove-margin" style="padding: 5%;text-align: center;">
+                                                    @Homemade.UI.Resources.Homemade.No_Notifications
+                                                </p>
+
+                                            </li>
+                                        }
+
+
+                                    </ul>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="btn-group">
+                                    <button class="btn dropdown-toggle" data-toggle="dropdown" type="button" aria-expanded="false">
+                                        <i class="si si-info"></i>
+
+                                        <span id="NotiCount" class="count count-notfound">@AlertsNotFound.Count()</span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right box-noti box-noti-notfound">
+                                        <li class="dropdown-header">@Homemade.UI.Resources.Homemade.Notifications <a href="#" onclick="SeenAllNotificationsNotFound()" class="pull-right">@Homemade.UI.Resources.Homemade.Seen_all</a> </li>
+
+                                        @if (AlertsNotFound.Count() > 0)
+                                        {
+                                            foreach (var itemAlerts in AlertsNotFound)
+                                            {
+                                                <li class="isseenoperation">
+                                                    <a tabindex="-1" href="#" onclick="OpenNotificationandSeen('@itemAlerts.notificationID', '@itemAlerts.TripMasterGuid', '@itemAlerts.NotificationTypeID', '@itemAlerts.StatusID')">
+                                                        <h6>@itemAlerts.notificationTitle</h6>
+                                                        <p class="remove-margin">
+                                                            @itemAlerts.notificationDesc
+                                                        </p>
+                                                    </a>
+                                                </li>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <li class="isseenoperation noti-nodata-notfound">
+                                                <p class="remove-margin" style="padding: 5%;text-align: center;">
+                                                    @Homemade.UI.Resources.Homemade.No_Notifications
+                                                </p>
+
+                                            </li>
+                                        }
+
+
+                                    </ul>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="btn-group">
+                                    <button class="btn dropdown-toggle" data-toggle="dropdown" type="button" aria-expanded="false">
+                                        <i class="si si-close"></i>
+
+                                        <span id="NotiCount" class="count count-cancel">@AlertsCansel.Count()</span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right box-noti box-noti-cancel">
+                                        <li class="dropdown-header">@Homemade.UI.Resources.Homemade.Notifications <a href="#" onclick="SeenAllNotificationsCancel()" class="pull-right">@Homemade.UI.Resources.Homemade.Seen_all</a> </li>
+
+                                        @if (AlertsCansel.Count() > 0)
+                                        {
+                                            foreach (var itemAlerts in AlertsCansel)
+                                            {
+                                                <li class="isseenoperation">
+                                                    <a tabindex="-1" href="#" onclick="OpenNotificationandSeen('@itemAlerts.notificationID', '@itemAlerts.TripMasterGuid', '@itemAlerts.NotificationTypeID', '@itemAlerts.StatusID')">
+                                                        <h6>@itemAlerts.notificationTitle</h6>
+                                                        <p class="remove-margin">
+                                                            @itemAlerts.notificationDesc
+                                                        </p>
+                                                    </a>
+                                                </li>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <li class="isseenoperation noti-nodata-cancel">
+                                                <p class="remove-margin" style="padding: 5%;text-align: center;">
+                                                    @Homemade.UI.Resources.Homemade.No_Notifications
+                                                </p>
+
+                                            </li>
+                                        }
+
+
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li>
+                                <div class="btn-group">
+                                    <button class="btn dropdown-toggle" data-toggle="dropdown" type="button" aria-expanded="false">
+                                        <i class="si si-badge"></i>
+                                        <span class="count">@(Voucher.Count())</span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li class="dropdown-header">@Homemade.UI.Resources.Homemade.Notifications <a href="#" class="pull-right">@Homemade.UI.Resources.Homemade.Seen_all</a> </li>
+
+                                        @if (Voucher.Count() > 0)
+                                        {
+                                            foreach (var itemVoucher in Voucher)
+                                            {
+                                                <li>
+                                                    <a tabindex="-1" href="/Fare/Voucher/VoucherDetails/@itemVoucher.VoucherGuid">
+                                                        <h6><strong style="color:red">@Homemade.UI.Resources.Homemade.Voucher ( @itemVoucher.VoucherCode ) @Homemade.UI.Resources.Homemade.Expired </strong></h6>
+                                                        <p class="remove-margin">
+                                                            @if (itemVoucher.ExpiredDate < DateTime.Now)
+                                                            {
+                                                                <span>@Homemade.UI.Resources.Homemade.Time_Expired</span>
+                                                            }
+
+                                                            @if (itemVoucher.UsedCount >= itemVoucher.LimitCount)
+                                                            {
+                                                                <span>@Homemade.UI.Resources.Homemade.Out_Of_Limit ( @itemVoucher.UsedCount @Homemade.UI.Resources.Homemade.Of @itemVoucher.LimitCount )</span>
+                                                            }
+
+                                                        </p>
+                                                    </a>
+                                                </li>
+
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            <p class="push-5 push-5-t text-center"> No Notices Found </p>
+
+                                        }
+                                    </ul>
+                                </div>
+                            </li>
+                        }*@
+                    @*<li>
+                        <div class="btn-group">
+                            <button class="btn dropdown-toggle" data-toggle="dropdown" type="button" aria-expanded="false">
+                                <i class="si si-drawer"></i>
+                                <span class="count">2</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li class="dropdown-header">Messages <a href="#" class="pull-right">Seen all</a></li>
+                                <li>
+                                    <a tabindex="-1" href="">
+                                        <h6>Message Title</h6>
+                                        <p class="remove-margin">Message Body</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a tabindex="-1" href="">
+                                        <h6>Message Title</h6>
+                                        <p class="remove-margin">Message Body</p>
+                                    </a>
+                                </li>
+
+                                    </ul>
+                                </div>
+                            </li>*@
+                    <li>
+                        <div class="btn-group">
+                            @if (Homemade.UI.Resources.Homemade.Profile == "Profile")
+                            {
+                                @*<a class="kt-nav__link araboc-lang"> </a>*@
+                                <a href="/Home/ChangeLang?LangId=ar" class="btn btn-default font-w400">
+                                    @*<img src="~/Images/008-saudi-arabia.svg">*@
+                                    <i class="si si-globe"></i>
+                                    <span class="push-5-l">العربية</span>
+                                </a>
+                            }
+                            else
+                            {
+                                @*<a class="kt-nav__link"</a>*@
+                                <a href="/Home/ChangeLang?LangId=en" class="btn btn-default font-w400">
+                                    @*<img src="~/Images/020-flag.svg">*@
+                                    <i class="si si-globe"></i>
+                                    <span class="push-5-l">English</span>
+                                </a>
+                            }
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn-group">
+                            <a asp-action="Profile" asp-controller="Account" asp-area="Identity" tabindex="-1" class="btn btn-default btn-image font-w400">
+                                <img src="~/Images/logo.jpeg" alt="Avatar" style="border-radius: 5px;">
+                                @if (User.Identity.IsAuthenticated)
+                                {
+
+                                    <span class="nav_name"> @Homemade.UI.Resources.Homemade.Hello  @_BlEmployee.GetProfileViewModelByUser(User.GetUserIdInt(), Homemade.UI.InfraStructure.Utility.CurrentLanguageCode).FullName</span>
+                                }
+
+                            </a>
+                        </div>
+                    </li>
+                    @*<li class="border-l">
+                            <div class="btn-group">
+                                <span> @Homemade.UI.Resources.Homemade.Hello  @_BlEmployee.GetProfileViewModelByUser(User.GetUserIdInt(), Homemade.UI.InfraStructure.Utility.CurrentLanguageCode).FullName</span>
+                            </div>
+                        </li>*@
+                    @*@if (User.IsOperation(ViewContext.HttpContext))
+                        {
+                            <li id="Monitoringlink" style="display:none">
+                                <a href="/Monitoring/Index" tabindex="-1" class="btn btn-default font-w400">
+                                    <i class="si si-speedometer"></i>
+                                    <span class="push-5-l">@Homemade.UI.Resources.Homemade.Monitoring</span>
+                                </a>
+                            </li>
+
+                        }*@
+                    <li>
+                        <div class="btn-group">
+                            <a href="@Url.Action("LogOut" , "Account" , new { Area = "Identity" })" class="btn btn-default font-w400">
+                                <i class="si si-power"></i>
+                                @*<span class="push-5-l">@Homemade.UI.Resources.Homemade.LogOut</span>*@
+                            </a>
+                        </div>
+                    </li>
+
+                    @*<li>
+                            <vc:user-drop-menu></vc:user-drop-menu>
+                        </li>*@
+                </ul>
+                <!-- END Buttons -->
+                <!-- Header Search -->
+                <ul class="nav-header pull-left">
+                    <li class="">
+                        <button class="btn" data-toggle="layout" data-action="sidebar_toggle" type="button">
+                            <i class="fa fa-navicon"></i>
+                        </button>
+                    </li>
+                    <li class="hidden-xs hidden-sm">
+                        <h3 class="text-black">@munemain</h3>
+                    </li>
+
+                </ul>
+                <!-- END Search -->
+            </div>
+
+
+        </header>
+        <!-- END Header -->
+        <!-- Main Container -->
+        <partial name="_CookieConsentPartial" />
+
+        <main id="main-container" style="padding-top: 75px !important;">
+            @RenderBody()
+        </main>
+        <!-- END Main Container -->
+        <footer id="page-footer" class="content-mini content-mini-full font-s14 bg-gray-light border-t">
+            <p class="remove-margin">© 2021 @munemain.</p>
+        </footer>
+        <div id="popup" style="display:none">
+            <div id="popupheader">
+                @Homemade.UI.Resources.Homemade.NewOrderWithoutDriver
+                <a style="margin-left: 3%;font-size: large;cursor: pointer;float: left;" class="" onclick="$('.div_noti_message').html('');$('#popup').hide()">×</a>
+
+            </div>
+            <div class="div_noti_message" style="padding:3%">
+            </div>
+        </div>
+        @*<div class="popup " style="display:none" id="popup">
+
+                <div class="band">
+                    <div style="float: right;margin-right: 2%;" class="spn_time_noti"> طلبات جديده بدون سائق</div>
+                    <a style="margin-left: 3%;font-size: large;cursor: pointer;float: left;" class="" onclick="$('.popup').toggleClass('open')">×</a>
+                </div>
+                <div class="div_noti_message" style="padding:3%">
+                </div>
+            </div>*@
+    </div>
+    <!-- END Page Container -->
+    <!-- Apps Modal -->
+    <!-- Opens from the button in the header -->
+    <div class="modal fade" id="apps-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-sm modal-dialog modal-dialog-top">
+            <div class="modal-content">
+                <!-- Apps Block -->
+                <div class="block block-themed block-transparent">
+                    <div class="block-header bg-primary-dark">
+                        <ul class="block-options">
+                            <li>
+                                <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                            </li>
+                        </ul>
+                        <h3 class="block-title">Apps</h3>
+                    </div>
+                    <div class="block-content">
+                        <div class="row text-center">
+                            <div class="col-xs-6">
+                                <a class="block block-rounded" href="base_pages_dashboard.html">
+                                    <div class="block-content text-white bg-default">
+                                        <i class="si si-speedometer fa-2x"></i>
+                                        <div class="font-w600 push-15-t push-15">Backend</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-xs-6">
+                                <a class="block block-rounded" href="bd_dashboard.html">
+                                    <div class="block-content text-white bg-modern">
+                                        <i class="si si-rocket fa-2x"></i>
+                                        <div class="font-w600 push-15-t push-15">Boxed</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END Apps Block -->
+            </div>
+        </div>
+    </div>
+    <input class="fcccccc" type="text" style="display:none" placeholder="@Homemade.UI.Resources.Homemade.Search" />
+    <!-- END Apps Modal -->
+    <!-- OneUI Core JS: jQuery, Bootstrap, slimScroll, scrollLock, Appear, CountTo, Placeholder, Cookie and App.js -->
+    <script>
+        let tblBtnNext = '@Homemade.UI.Resources.Homemade.Next';
+        let tblBtnPrevious = '@Homemade.UI.Resources.Homemade.Previous';
+        let tblShowing = '@Homemade.UI.Resources.Homemade.Showing';
+        let tblOf ='@Homemade.UI.Resources.Homemade.Of';
+        let tblTo = '@Homemade.UI.Resources.Homemade.To';
+        let tblFrom = '@Homemade.UI.Resources.Homemade.From';
+
+        let tblEntries ='@Homemade.UI.Resources.Homemade.Entries';
+        let tblNoData = '@Homemade.UI.Resources.Homemade.NoDataFound'
+        let tblSearch='@Homemade.UI.Resources.Homemade.Search'
+
+    </script>
+    <!-- Main Scripts -->
+    @*<script charset="utf-8" src="~/Scripts/jquery-1.9.0.min.js"></script>*@
+    <script src="~/lib/aspnet/signalr/dist/browser/signalr.js"></script>
+
+    <script charset="utf-8" src="~/assets/js/core/jquery.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/core/bootstrap.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/core/jquery.slimscroll.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/core/jquery.scrollLock.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/core/jquery.placeholder.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/app.js"></script>
+
+
+
+    <script charset="utf-8" src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script charset="utf-8" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script charset="utf-8" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+    <!-- Data_table Plugins -->
+    <!--<script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>-->
+    @*<script charset="utf-8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>*@
+    @*<script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.colVis.min.js"></script>*@
+
+    <!--<!-- Date_picker Plugins -->
+    <!--<script src="~/assets/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-colorpicker/bootstrap-colorpicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/Hijiri-Plugin/js/bootstrap-hijri-datetimepicker.js"></script>-->
+    <!-- Sweat_alert Plugin -->
+    <script charset="utf-8" src="~/assets/js/plugins/sweetalert.min.js"></script>
+
+    @RenderSection("Scripts", false)
+    <partial name="_Scripts" />
+
+
+    @*<script charset="utf-8" src="~/assets/js/plugins/fullcalendar/moment.min.js"></script>*@
+
+
+    @*<script charset="utf-8" src="~/assets/js/plugins/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>*@
+
+    <!-- Select 2 Scripts -->
+    @*<script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>*@
+
+    <script charset="utf-8" src="~/assets/js/plugins/masked-inputs/jquery.maskedinput.min.js"></script>
+
+    @*<script charset="utf-8" src="~/assets/js/plugins/ion-rangeslider/js/ion.rangeSlider.min.js"></script>*@
+
+    <script charset="utf-8" src="~/assets/js/plugins/dropzonejs/dropzone.min.js"></script>
+
+    <script charset="utf-8" src="~/assets/js/plugins/jquery-tags-input/jquery.tagsinput.min.js"></script>
+
+    @*<script charset="utf-8" src="~/assets/js/plugins/autonumeric/autoNumeric.min.js"></script>*@
+
+    @*<script charset="utf-8" src="~/assets/js/pages/base_forms_pickers_more.js"></script>*@
+
+    <!-- auto_complete Scripts -->
+    <script src="~/assets/js/plugins/jquery-auto-complete/jquery.auto-complete.min.js"></script>
+    <script src="~/Content/Layout/Toster/toastr.min.js"></script>
+
+    <script charset="utf-8">
+        jQuery(function () {
+            // Init page helpers (BS Datepicker + BS Datetimepicker + BS Colorpicker + BS Maxlength + Select2 + Masked Input + Range Sliders + Tags Inputs + AutoNumeric plugins)
+            App.initHelpers(['datepicker', 'datetimepicker', 'colorpicker', 'maxlength', 'select2', 'masked-inputs', 'rangeslider', 'tags-inputs', 'autonumeric']);
+        });
+    </script>
+    <script charset="utf-8">
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : evt.keyCode
+            if (charCode > 31 && (charCode < 46 || charCode > 57 || charCode == 47))
+                return false;
+            return true;
+        }
+        function Round(num) {
+            if (num == null) return 0;
+            return Math.round(num * 100) / 100
+        }
+
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+    </script>
+    <script charset="utf-8">
+        $(document).ready(function () {
+
+            var loc = location.href.split("/")[location.href.split("/").length - 2]
+            if (loc !== "Monitoring") {
+                $("#Monitoringlink").show();
+            }
+            $("#ViewTitle").html($('.header-title').html())
+            $("#loading-area").delay('500').fadeOut(1000);
+
+            $(".addbtnInSetting").on("click", function () {
+                $("#title").html('@Homemade.UI.Resources.Homemade.New');
+                let frmCreate = $("#frmCreate");
+                frmCreate.trigger('reset');
+                let fields = $('#frmCreate span');
+                fields.each(function () {
+                    if ($(this).attr('data-valmsg-for') != null) {
+                        $($(this).children()[0]).text('');
+                    }
+                });
+            });
+
+            //$(".sidebar-content a").each(function () {
+            //    $(this).on('click', function () {
+            //        $(".sidebar-content a").removeClass("active");
+            //        $(this).addClass("active");
+            //    });
+            //});
+            $(".dataTables_filter input").prop("placeholder", $(".fcccccc").prop("placeholder"));
+            $("#Trip_Search").keydown(function (e) {
+                var key = (e.keyCode ? e.keyCode : e.which);
+                if (key === 13) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/Trip/TripDetails/CheckTripIsExist',
+                        data: { 'tripId': $("#Trip_Search").val() },
+                        dataType: "json",
+                        contentType: "application/x-www-form-urlencoded",
+                        success: function (result) {
+                            debugger;
+                            if (result.resultType == 'success') {
+                                if (iscompany === 'True') {
+                                    if (result.message !== '') {
+                                        window.location.href = "/CompanyUser/Trip/OrderDetails/" + result.message;
+                                    }
+                                    else {
+                                        window.location.href = "/CompanyUser/Trip/Orders?Code=" + $("#Trip_Search").val();
+                                    }
+                                }
+                                else {
+                                    if (result.message !== '') {
+                                        window.location.href = "/Trip/TripHistory/NotFoundOrder/" + result.message;
+                                    }
+                                    else {
+                                        window.location.href = "/Trip/TripHistory/Orders?Code=" + $("#Trip_Search").val();
+                                    }
+                                }
+                            }
+                            else {
+                                 @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false)
+                { Title = "result.message" })
+                            }
+                        },
+                        error: function () {
+
+                        }
+                    });
+                }
+            });
+            $("#Trip_Search").autoComplete({
+                minChars: 1,
+                source: function (term, response) {
+                    $.getJSON('/Trip/TripDetails/GetTripIdAutoComplete', { 'tripId': term }, function (data) { response(data);});
+                }
+            });
+        });
+
+        $(function () {
+            $('.Hijiri').removeAttr('disabled');
+            //$('select').select2();
+
+        });
+        $(".Hijiri").keypress(function (e) {
+            e.preventDefault();
+        });
+        @{
+            var areaName = ViewContext.RouteData.Values["area"];
+        }
+        function OpenNotificationandSeen(notId, tripguid, type, status) {
+            debugger
+             $.ajax({
+                        type: "POST",
+                 url: '/Home/SeenNotifictions',
+                 data: { 'notId': notId },
+                        dataType: "json",
+                        contentType: "application/x-www-form-urlencoded",
+                 success: function (result) {
+                            // Trip = 1,
+       // Driver_Balance = 2,
+       // Voucher = 5,
+       // Register = 6,
+                            if (result.resultType == 'success') {
+                                if (type === '6') {
+                                    window.location.href = "/Pickup/AssignDriver/Details/"+tripguid;
+                                } else if (type =='11') {
+                                    if (status === '2') {
+                                        window.location.href = "/Trip/TripHistory/NotFoundOrder/" + tripguid;
+                                    }
+                                    else {
+                                        window.location.href = "/Trip/TripDetails/Index/" + tripguid;
+                                    }
+                                } else if (type == '2') {
+                                    window.location.href = "/Financial/DriverBlance/Index";
+                                } else if (type == '5') {
+                                    window.location.href = "/Fare/Voucher/VoucherDetails/" + tripguid;
+                                } else {
+                                    if (status === '2') {
+                                        window.location.href = "/Trip/TripHistory/NotFoundOrder/" + tripguid;
+                                    }
+                                    else {
+                                        window.location.href = "/Trip/TripDetails/Index/" + tripguid;
+                                    }
+                                }
+                            }
+                        },
+                        error: function () {
+
+                        }
+                    });
+        }
+        function OpenScheduleNotificationandSeen(notId, tripguid) {
+            $.ajax({
+                type: "POST",
+                url: '/Home/SeenNotifictions',
+                data: { 'notId': notId },
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function (result) {
+                    if (result.resultType == 'success') {
+                        window.location.href = "/Trip/TripHistory/ScheduleOrder/" + tripguid;
+                        }
+                },
+                error: function () {
+
+                }
+            });
+        }
+        function SeenAllNotifications() {
+            $.ajax({
+                type: "POST",
+                url: '/Home/SeenAllNotifictions',
+                data: {},
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function (result) {
+                    if (result.resultType == 'success') {
+
+                        $('.box-noti-general').html(" <li class='isseenoperation noti-nodata-general'><p class='remove-margin' style='padding: 5%;text-align: center;'> @Homemade.UI.Resources.Homemade.No_Notifications </p></li>")
+                        $(".count-general").html(0);
+                    }
+                },
+                error: function () {
+                }
+            });
+        }
+        function SeenAllNotificationsCancel() {
+            $.ajax({
+                type: "POST",
+                url: '/Home/SeenAllNotifictionsnew',
+                data: {type:"1"},
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function (result) {
+                    if (result.resultType == 'success') {
+
+                        $('.box-noti-cancel').html(" <li class='isseenoperation noti-nodata-cancel'><p class='remove-margin' style='padding: 5%;text-align: center;'> @Homemade.UI.Resources.Homemade.No_Notifications </p></li>")
+                        $(".count-cancel").html(0);
+                    }
+                },
+                error: function () {
+                }
+            });
+        }
+        function SeenAllNotificationsNotFound() {
+            $.ajax({
+                type: "POST",
+                url: '/Home/SeenAllNotifictionsnew',
+                data: { type: "2" },
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function (result) {
+                    if (result.resultType == 'success') {
+
+                        $('.box-noti-notfound').html(" <li class='isseenoperation noti-nodata-notfound'><p class='remove-margin' style='padding: 5%;text-align: center;'> @Homemade.UI.Resources.Homemade.No_Notifications </p></li>")
+                        $(".count-notfound").html(0);
+                    }
+                },
+                error: function () {
+                }
+            });
+        }
+        function SeenAllNotificationsschedule() {
+            $.ajax({
+                type: "POST",
+                url: '/Home/SeenAllNotifictionsnew',
+                data: { type: "3" },
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function (result) {
+                    if (result.resultType == 'success') {
+
+                        $('.box-noti-schedule').html(" <li class='isseenoperation noti-nodata-schedule'><p class='remove-margin' style='padding: 5%;text-align: center;'> @Homemade.UI.Resources.Homemade.No_Notifications </p></li>")
+                        $(".count-schedule").html(0);
+                    }
+                },
+                error: function () {
+                }
+            });
+        }
+        function OpenVendorsNotificationandSeen(notId, guid, type, status) {
+            $.ajax({
+                type: "POST",
+                url: '/Home/SeenNotifictions',
+                data: { 'notId': notId },
+                dataType: "json",
+                async: false,
+                contentType: "application/x-www-form-urlencoded",
+                success: function (result) {
+                    debugger;
+                    if (result.resultType == 'success') {
+                        if (guid != "") {
+                            if (type === '1') {
+                                if (status === '10') {
+                                    window.location.href = "/Order/Orders/DetailsPendingOrdersVendor?orderVendorGuid=" + guid;
+                                } else {
+                                    window.location.href = "/Order/Orders/DetailsVendor/" + guid;
+                                }
+                            }
+                        }
+                    }
+                },
+                error: function () {
+
+                }
+            });
+        }
+        function SeenAllNotificationsVendors() {
+            $.ajax({
+                type: "POST",
+                url: '/Home/SeenAllNotifictionsVendors',
+                data: { type: "3" },
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function (result) {
+                    if (result.resultType == 'success') {
+
+                        $('.box-noti-Vendors').html(" <li class='isseenoperation noti-nodata-Vendors'><p class='remove-margin' style='padding: 5%;text-align: center;'> @Homemade.UI.Resources.Homemade.No_Notifications </p></li>")
+                        $(".count-Vendors").html(0);
+                    }
+                },
+                error: function () {
+                }
+            });
+        }
+        function PlaceHolderInSettingsArea() {
+            var inputs = $('.modal').find('input[type=text][class=form-control]');
+            inputs.each(function () {
+                var input = $(this);
+                var id = input.attr('id').trim().toLowerCase();
+                var parent = $(input.parent());
+
+
+                var typeLabel = $('<label>' + '@Homemade.UI.Resources.Homemade.Type' + '</label>');
+                var label = typeLabel.text() + ' ' + parent.find('label').text().replace("*", "");
+
+                if (id.includes('ar')) {
+                    typeLabel = $('<label>' + '@Homemade.UI.Resources.Homemade.TypeNameInArabic' + '</label>');
+                    label = typeLabel.text();
+                }
+                if (id.includes('en')) {
+                    typeLabel = $('<label>' + '@Homemade.UI.Resources.Homemade.TypeNameInEnglish' + '</label>');
+                    label = typeLabel.text();
+                }
+                 if (id.slice(-2) == 'ar') {
+                    typeLabel = $('<label>' + '@Homemade.UI.Resources.Homemade.TypeNameInArabic' + '</label>');
+                    label = typeLabel.text();
+                }
+                if (id.slice(-2) =='en') {
+                    typeLabel = $('<label>' + '@Homemade.UI.Resources.Homemade.TypeNameInEnglish' + '</label>');
+                    label = typeLabel.text();
+                }
+
+                input.attr('placeholder', label);
+            })
+
+        }
+
+        @if (areaName != null && areaName.ToString().Trim().ToLower() == "setting")
+        {
+            @: $(PlaceHolderInSettingsArea());
+        }
+
+    </script>
+
+    <script src="~/Scripts/App/signalRScript.js"></script>
+    <script charset="utf-8">
+        $(function () {
+            $(document).on({
+                ajaxStart: function () {
+                    $("#loading-area").show();
+                    //$("#Div_Loading").show();
+                },
+                ajaxStop: function () {
+                    $("#loading-area").hide();
+                    //$("#Div_Loading").hide();
+                },
+            });
+
+            //connection.start().then(function (data) {
+            //    debugger;
+            //    console.log('wave hub started');
+
+            //}).catch(function (err) {
+            //    debugger;
+            //    return console.log("error ==> " + err.toString());
+            //});
+        });
+    </script>
+    <script>
+        var offlineBefore = false;
+        setInterval(IsUserOnline, 5000)
+        function IsUserOnline() {
+
+
+
+            if (navigator.onLine) {
+                if (offlineBefore) {
+                    $('.toast-close-button').click();
+                    toastr.options = {
+                        "closeButton": true,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-bottom-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "0",
+                        "hideDuration": "0",
+                        "timeOut": "0",
+                        "extendedTimeOut": "0",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    };
+
+                    toastr["success"]("  Back To online");
+
+                    offlineBefore = false;
+                    SearchthisArea();
+                }
+
+            } else {
+                if (!offlineBefore) {
+                    offlineBefore = true;
+                    toastr.options = {
+                        "closeButton": true,
+                        "debug": false,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-bottom-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "0",
+                        "hideDuration": "0",
+                        "timeOut": "0",
+                        "extendedTimeOut": "0",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    };
+
+                    toastr["warning"]("You Are Offline",);
+
+                }
+            }
+        }
+    </script>
+    <script>
+        // active menu
+        $(function () {
+
+            var url = location.pathname,
+                Home_link = $('.nav-main a').attr('href').indexOf('/Home/Index');
+            $('.nav-main a').each(function () {
+                var $this = $(this);
+                if ($this.attr('href').indexOf(url + '?jobtype=2') !== -1 && window.location.href.includes(url + '?jobtype=2')) {
+                    $(this).addClass('active');
+                    $(this).parents('li').addClass('open');
+                }
+                else if ($this.attr('href').indexOf(url + '?jobtype=3') !== -1 && window.location.href.includes(url + '?jobtype=3')) {
+                    $(this).addClass('active');
+                    $(this).parents('li').addClass('open');
+                }
+                else if ($this.attr('href').indexOf(url + '?jobtype=1') !== -1 && window.location.href.includes(url + '?jobtype=1')) {
+                    $(this).addClass('active');
+                    $(this).parents('li').addClass('open');
+                }
+                else if ($this.attr('href').indexOf(url) !== -1 && !window.location.href.includes(url + '?jobtype')) {
+                    $(this).addClass('active');
+                    $(this).addClass('active');
+                    $(this).parents('li').addClass('open');
+                }
+                if (url == '/') {
+                    Home_link.addClass('active');
+                    Home_link.parents('li').addClass('open');
+                }
+            });
+        });
+    </script>
+
+    <script>
+        //Make the DIV element draggagle:
+        dragElement(document.getElementById("popup"), "69%", "unset");
+
+        function dragElement(elmnt, top, left) {
+            debugger;
+            var cHeight = window.screen.height;
+            var c1 = cHeight / 3;
+
+            if (top != undefined) {
+                elmnt.style.top = ((cHeight - c1) - 70) + "px";
+                elmnt.style.left = left;
+            }
+
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            if (document.getElementById(elmnt.id + "header")) {
+                /* if present, the header is where you move the DIV from:*/
+                document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+            } else {
+                /* otherwise, move the DIV from anywhere inside the DIV:*/
+                elmnt.onmousedown = dragMouseDown;
+            }
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // get the mouse cursor position at startup:
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                // call a function whenever the cursor moves:
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // calculate the new cursor position:
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                // set the element's new position:
+
+                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+
+
+            }
+
+            function closeDragElement() {
+                /* stop moving when mouse button is released:*/
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+    </script>
+
+</body>
+</html>
+

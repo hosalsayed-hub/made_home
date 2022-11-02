@@ -1,0 +1,89 @@
+﻿@model IEnumerable<Homemade.BLL.ViewModel.Driver.DriverBlanceViewModel>
+@{
+    var d = ViewData["DriverBalanceList"];
+    List<int> lstDriverID = Model.GroupBy(x => x.DriverID).Select(m => m.Key).ToList();
+    List<int> lstDriverIDExist = new List<int>();
+    Layout = null;
+    int count = 1;
+}
+@if (Model.Count() > 0)
+{
+    @foreach (var DriverID in lstDriverID)
+    {
+        int Counter = 1;
+        var driver = Model.Where(x => x.DriverID == DriverID);
+        <table class="table table-custom" style="table-layout:fixed; @(lstDriverID.Count() != count ? "page-break-after: always;" : "")
+       @(Homemade.UI.InfraStructure.Utility.CurrentLanguageCode == "ar" ? "direction:rtl" : "direction:ltr;") ">
+            <tr>
+                <th class="tg-0pky" colspan="4" rowspan="2">
+                    <img src="/assets/homeMadeSite/img/logo.svg" style="width:200px">
+                </th>
+                <th class="tg-0pky" colspan="4" rowspan="2">
+                    <div class="bc-container">
+                        <p style="font-size:20px;text-align: center;color: black;width: 100%;"> @(Model.Any(x => x.DriverID == DriverID) ? Model.Where(x => x.DriverID == DriverID).FirstOrDefault().DriverName : Model.FirstOrDefault().DriverName)</p>
+                    </div>
+                </th>
+            </tr>
+            <tr></tr>
+            <tr style="background-color:lightgray">
+                <th class="tg-0pky"><b>#</b></th>
+                <th class="tg-0pky">@Homemade.UI.Resources.Homemade.Driver</th>
+                <th class="tg-0pky">@Homemade.UI.Resources.Homemade.OperationType</th>
+                <th class="tg-0pky">@Homemade.UI.Resources.Homemade.Transaction</th>
+                <th class="tg-0pky">@Homemade.UI.Resources.Homemade.Amount</th>
+                <th class="tg-0pky">@Homemade.UI.Resources.Homemade.Before</th>
+                <th class="tg-0pky">@Homemade.UI.Resources.Homemade.After</th>
+                <th class="tg-0pky">@Homemade.UI.Resources.Homemade.Date</th>
+
+            </tr>
+            @foreach (var item in driver)
+            {
+                <tr>
+                    <td class="tg-lboi">@Counter</td>
+                    <td class="tg-lboi">@item.DriverName</td>
+                    @if (item.TypeOperationID == (int)Homemade.BLL.TypeOperationEnum.CR)
+                    {
+                        <td class="tg-lboi">
+                            @Homemade.UI.Resources.Homemade.CR
+                        </td>
+                    }
+                    else if (item.TypeOperationID == (int)Homemade.BLL.TypeOperationEnum.DR)
+                    {
+                        <td class="tg-lboi">
+                            @Homemade.UI.Resources.Homemade.DR
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="tg-lboi">
+                        </td>
+                    }
+                    <td class="tg-lboi">@item.TransactionTypeName</td>
+
+
+                    <td class="tg-lboi">@String.Format("{0:0.00}", item.Amount)</td>
+                    <td class="tg-lboi">@String.Format("{0:0.00}", item.Before)</td>
+                    <td class="tg-lboi">@String.Format("{0:0.00}", item.After)</td>
+                    <td class="tg-lboi">@item.DateOperation.ToString("dd/MM/yyyy hh:mm tt")</td>
+                </tr>
+                Counter++;
+            }
+
+        </table>
+        count++;
+    }
+}
+@if (Homemade.UI.InfraStructure.Utility.CurrentLanguageCode == "ar")
+{
+    <link href="~/Content/SlipCSS/Slipar.css" rel="stylesheet" />
+}
+else
+{
+    <link href="~/Content/SlipCSS/Slipen.css" rel="stylesheet" />
+}
+
+
+@section Scripts
+{
+    <script src="~/Scripts/App/Print.js"></script>
+}

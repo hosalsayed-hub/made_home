@@ -1,0 +1,399 @@
+﻿<script>
+    var deletedId = "";
+    function GetCountry(countryID) {
+        $.ajax({
+            type: "POST",
+            url: '/Setting/City/GetAllCountries',
+            data: {},
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $("#CountryID").html('');
+                $("#CountryID").append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (countryID != undefined && countryID > 0 && countryID == item.countryID) {
+                        $("#CountryID").append('<option selected value="' + item.countryID + '">' + item.countryName + '</option>');
+                        $("#CountryID").val(countryID).trigger('change');
+                    }
+                    else
+                        $("#CountryID").append('<option value="' + item.countryID + '">' + item.countryName + '</option>');
+                }
+            },
+            error: function() {
+
+            }
+        });
+    }
+    function GetCity(cityID) {
+        $.ajax({
+            type: "POST",
+            url: '/Setting/City/GetAllCities',
+            data: {},
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $("#CityID").html('');
+                $("#CityID").append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (cityID != undefined && cityID > 0 && cityID == item.cityID) {
+                        $("#CityID").append('<option selected value="' + item.cityID + '">' + item.cityName + '</option>');
+                        $("#CityID").val(cityID).trigger('change');
+                    }
+                    else
+                        $("#CityID").append('<option value="' + item.cityID + '">' + item.cityName + '</option>');
+                }
+                //   $($("#CityID")).select2();
+            },
+            error: function() {
+
+            }
+        });
+    }
+    function GetNationality(nationalityID) {
+        $.ajax({
+            type: "POST",
+            url: '/Setting/Nationality/GetAllNationality',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $('#NationalityID').html('');
+                $('#NationalityID').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (nationalityID != undefined && nationalityID > 0 && nationalityID == item.nationalityID) {
+                        $('#NationalityID').append('<option selected value="' + item.nationalityID + '">' + item.nationalityName + '</option>');
+                        $('#NationalityID').val(nationalityID).trigger('change');
+                    }
+                    else {
+                        $('#NationalityID').append('<option value="' + item.nationalityID + '">' + item.nationalityName + '</option>');
+                    }
+
+                }
+                //  $($("#NationalityID")).select2();
+            },
+            error: function() {
+
+            }
+        });
+    }
+    function GetGender(genderID) {
+        $.ajax({
+            type: "POST",
+            url: '/Vendor/Vendors/GetAllGender',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $('#GenderID').html('');
+                $('#GenderID').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (genderID != undefined && genderID == item.genderID) {
+                        $('#GenderID').append('<option selected value="' + item.genderID + '">' + item.genderName + '</option>');
+                        $('#GenderID').val(genderID).trigger('change');
+                    }
+                    else {
+                        $('#GenderID').append('<option value="' + item.genderID + '">' + item.genderName + '</option>');
+                    }
+
+                }
+                //  $($("#GenderID")).select2();
+            },
+            error: function() {
+
+            }
+        });
+    }
+    function GetRegions(regionID) {
+        $.ajax({
+            type: "POST",
+            url: '/Setting/Region/GetAllRegionBySACountry',
+            data: {},
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $("#RegionID").html('');
+                $("#RegionID").append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (regionID != undefined && regionID > 0 && regionID == item.regionID) {
+                        $("#RegionID").append('<option selected value="' + item.regionID + '">' + item.regionName + '</option>');
+                        $("#RegionID").val(regionID).trigger('change');
+                    }
+                    else
+                        $("#RegionID").append('<option value="' + item.regionID + '">' + item.regionName + '</option>');
+                }
+                // $($("#RegionID")).select2();
+            },
+            error: function() {
+
+            }
+        });
+    }
+    function GetCitys(e, cityID) {
+        var regionID = '';
+        if (e > 0) {
+            regionID = e;
+        }
+        else {
+            regionID = $(e).val();
+        }
+        $($("#CityID")).prop("disabled", false);
+        if (regionID != '' || regionID != undefined) {
+            $.ajax({
+                type: "POST",
+                url: '/Setting/City/GetAllCityByRegion',
+                data: { 'regionID': regionID },
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function(result) {
+                    $("#CityID").html('');
+                    $("#CityID").append('<option></option>');
+                    for (var i = 0; i < result.length; i++) {
+                        var item = result[i];
+                        if (cityID != undefined && cityID > 0 && cityID == item.cityID) {
+                            $("#CityID").append('<option selected value="' + item.cityID + '">' + item.cityName + '</option>');
+                            $("#CityID").val(cityID).trigger('change');
+                        }
+                        else
+                            $("#CityID").append('<option value="' + item.cityID + '">' + item.cityName + '</option>');
+
+                    }
+                    //   $($("#CityID")).select2();
+                },
+                error: function() {
+
+                }
+            });
+        }
+    }
+    function GetBlocks(e, blockID) {
+        var cityID = '';
+        if (e > 0) {
+            cityID = e;
+        }
+        else {
+            cityID = $(e).val();
+        }
+        if (cityID != '' || cityID != undefined) {
+            $($("#BlockID")).prop("disabled", false);
+            $.ajax({
+                type: "POST",
+                url: '/Vendor/Vendors/GetAllBlockByCity',
+                data: { 'cityID': cityID },
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function(result) {
+                    $("#BlockID").html('');
+                    $("#BlockID").append('<option></option>');
+                    for (var i = 0; i < result.length; i++) {
+                        var item = result[i];
+                        if (blockID != undefined && blockID > 0 && blockID == item.blockID) {
+                            $("#BlockID").append('<option value="' + item.blockID + '">' + item.blockName + '</option>');
+                            $("#BlockID").val(blockID).trigger('change');
+                        }
+                        else
+                            $("#BlockID").append('<option value="' + item.blockID + '">' + item.blockName + '</option>');
+
+                    }
+                    // $($("#BlockID")).select2();
+                },
+                error: function() {
+
+                }
+            });
+        }
+    }
+    function GetAddressTypes(addressTypesID) {
+        $.ajax({
+            type: "POST",
+            url: '/Setting/AddressTypes/GetAddressTypes',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $('#AddressTypesID').html('');
+                $('#AddressTypesID').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (addressTypesID != undefined && addressTypesID > 0 && addressTypesID == item.addressTypesID) {
+                        $('#AddressTypesID').append('<option selected value="' + item.addressTypesID + '">' + item.addressTypesName + '</option>');
+                        $('#AddressTypesID').val(addressTypesID).trigger('change');
+                    }
+                    else {
+                        $('#AddressTypesID').append('<option value="' + item.addressTypesID + '">' + item.addressTypesName + '</option>');
+                    }
+
+                }
+                //  $($("#AddressTypesID")).select2();
+            },
+            error: function() {
+
+            }
+        });
+    }
+    function ShowDeliveryAddressModal(id, type) {
+        if (type == 1) {
+            $('#title').html('@Homemade.UI.Resources.Homemade.Add_Location');
+            $("#Lat").val("");
+            $("#Lng").val("");
+            setTimeout(function() {
+                getLocation();
+                $("#BlockID").val(0);
+                $("#CityID").val(0);
+                $("#RegionID").val(0);
+                $("#Address").val("");
+                $("#Region_Name").html("");
+                $("#City_Name").html("");
+                $("#Block_Name").html("");
+                $("#Address_Name").html("");
+                $("#Name").val("");
+                $("#MobileNo").val("");
+                $("#StreetNo").val("");
+                $("#BuildingNumer").val("");
+                $("#UniqueSign").val("");
+                $("#CustomerLocationID").val(0);
+            }, 2000);
+        }
+        else {
+            $('#title').html('@Homemade.UI.Resources.Homemade.Update_Location');
+        }
+        let fields = $('#new-address-form span');
+        fields.each(function() {
+            if ($(this).attr('data-valmsg-for') != null) {
+                $($(this).children()[0]).text('');
+            }
+        });
+        if (type = 2) {
+            $.ajax({
+                type: "POST",
+                url: '/Site/Home/GetCustomerLocation',
+                data: { 'customerLocationID': id },
+                dataType: "json",
+                async: false,
+                contentType: "application/x-www-form-urlencoded",
+                success: function(data) {
+                    if (data != null) {
+                        $("#CustomerLocationID").val(data.customerLocationID);
+                        //GetRegions(data.regionID);
+                        GetAddressTypes(data.addressTypesID);
+                        $("#Name").val(data.name);
+                        $("#MobileNo").val(data.mobileNo);
+                        //window.setTimeout(() => {
+                        //    GetCitys(data.regionID, data.cityID);
+                        //}, 1000);
+                        //$("#Address").val(data.address);
+                        $("#StreetNo").val(data.streetNo);
+                        $("#BuildingNumer").val(data.buildingNumer);
+                        $("#UniqueSign").val(data.uniqueSign);
+                        $("#Lat").val(data.lat);
+                        $("#Lng").val(data.lng);
+                        window.setTimeout(() => {
+                            //GetBlocks(data.regionID, data.blockID);
+                            initMap(null, data.lat, data.lng);
+                        }, 2000);
+                        $("#BlockID").val(data.blockId);
+                        $("#CityID").val(data.cityID);
+                        $("#RegionID").val(data.regionID);
+                        $("#Address").val(data.address);
+                        $("#Region_Name").html(data.regionName);
+                        $("#City_Name").html(data.cityName);
+                        $("#Block_Name").html(data.blockName);
+                        $("#Address_Name").html(data.address);
+                    }
+                    else {
+                        GetRegions();
+                        $('#RegionID').trigger('change');
+                        GetAddressTypes();
+                    }
+                    $('#modifyAddressModal').modal('show');
+                },
+                error: function() {
+
+                }
+            });
+        }
+        else {
+            $("#new-address-form").trigger('reset');
+            GetRegions();
+            GetAddressTypes();
+            $("#Name").val('');
+            $("#MobileNo").val('');
+            $("#Address").val('');
+            $("#StreetNo").val('');
+            $("#BuildingNumer").val('');
+            $("#UniqueSign").val('');
+            $("#CustomerLocationID").val(0);
+            $('#modifyAddressModal').modal('show');
+        }
+    }
+    function DeleteLocationConfirm(id) {
+        deletedId = id;
+        $('#confirmDelatemodal').modal('show');
+    }
+    function DeleteLocation() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DeleteLocation")',
+            data: {
+                'id': deletedId
+            },
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                var msg = result.message;
+                $("#divMsgParent").slideUp();
+                $("#divMsgParent").show();
+                if (result.resultType == 'success') {
+                    $('#confirmDelatemodal').modal('hide');
+                    $("#divMsgClass").attr("class", "alert alert-success");
+                    $("#lblMsg").html(msg);
+                    GetDeliveryAddressesPartial()
+                }
+                else {
+                    $("#divMsgClass").attr("class", "alert alert-site");
+                    $("#lblMsg").html(msg);
+                }
+            }
+        });
+    }
+    $("#btnSaveAddress").click(function(e) {
+        e.preventDefault();
+        let frmCreate = $("#new-address-form");
+        if (frmCreate.valid()) {
+            frmCreate.submit();
+        }
+    });
+    function completedAddress(xhr) {
+        $("#divMsgClass_Er").hide();
+        var obj = JSON.parse(xhr.responseText);
+        console.log(obj);
+        var result = obj._result;
+        var msg = result.message;
+        $("#divMsgParent").slideUp();
+        $("#divMsgParent").show();
+        if (result.resultType == 'success') {
+            $("#modifyAddressModal").modal('hide');
+            $("#new-address-form").trigger('reset');
+            $("#divMsgClass").attr("class", "alert alert-success");
+            $("#lblMsg").html(msg);
+            GetDeliveryAddressesPartial()
+        }
+        else {
+            $("#divMsgClass").attr("class", "alert alert-site");
+            $("#lblMsg").html(msg);
+            $("#divMsgClass_Er").show();
+            $("#lblMsg_Er").html(msg);
+        }
+    };
+    function GetDeliveryAddressesPartial() {
+        $("#DevDeliveryAddressesPartial").load("/Site/Home/GetDeliveryAddressesPartial");
+    }
+</script>

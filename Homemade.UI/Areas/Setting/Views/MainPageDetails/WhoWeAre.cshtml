@@ -1,0 +1,215 @@
+﻿@model Homemade.BLL.ViewModel.Setting.MainPageDetailsViewModel
+<style>
+    .controls {
+        width: 250px !important;
+    }
+</style>
+
+<div class="content">
+    <form enctype="multipart/form-data" method="post" id="frmCreate" onsubmit="return false"
+          data-ajax="true"
+          data-ajax-complete="WhoWeAreFormCompleted"
+          data-ajax-method="post">
+        <div class="block ">
+            <div class="block-header">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>
+                            <span class="header-title">@(Model.MainPageName)</span>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="block-content tab-content">
+                @Html.HiddenFor(m => m.MainPageID)
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input asp-for="MainPageDetailsID" type="hidden" />
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.TitleAr <span style="color:red">*</span></label>
+                            @Html.TextBoxFor(x => x.TitleAr, new { @class = "form-control" })
+
+                            <span style="color:red"> @Html.ValidationMessageFor(x => x.TitleAr)</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.TitleEn, <span style="color:red">*</span></label>
+                            @Html.TextBoxFor(x => x.TitleEn, new { @class = "form-control" })
+
+                            <span style="color:red"> @Html.ValidationMessageFor(x => x.TitleEn)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input asp-for="MainPageDetailsID" type="hidden" />
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Description_Ar <span style="color:red">*</span></label>
+                            @Html.TextAreaFor(x => x.DescAr, new { @class = "form-control", @style = "margin: 0px;height: 208px;width: 784px;" })
+
+                            <span style="color:red"> @Html.ValidationMessageFor(x => x.DescAr)</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Description_En, <span style="color:red">*</span></label>
+                            @Html.TextAreaFor(x => x.DescEn, new { @class = "form-control",@style= "margin: 0px;height: 208px;width: 784px;" })
+                            <span style="color:red"> @Html.ValidationMessageFor(x => x.DescEn)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.VideoLink <span style="color:red">*</span></label>
+                            @Html.TextBoxFor(x => x.VedioLink, new { @class = "form-control" })
+
+                            <span style="color:red"> @Html.ValidationMessageFor(x => x.VedioLink)</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.Image</label>
+                            @if (!string.IsNullOrEmpty(Model.Image))
+                            {
+                                <img src="@Model.Image" class="img" width="100" height="100" style="display:block;margin-bottom:7px;" />
+                            }
+                            <input type="file" class="form-control-file " accept="image/*" id="fupImage" onchange="ConvertToBase64Image(this)">
+                            @Html.HiddenFor(m => m.Image)
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.IdeaTitleAr <span style="color:red">*</span></label>
+                            @Html.TextBoxFor(x => x.IdeaTitleAr, new { @class = "form-control" })
+
+                            <span style="color:red"> @Html.ValidationMessageFor(x => x.IdeaTitleAr)</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.IdeaTitleEn <span style="color:red">*</span></label>
+                            @Html.TextBoxFor(x => x.IdeaTitleEn, new { @class = "form-control" })
+
+                            <span style="color:red"> @Html.ValidationMessageFor(x => x.IdeaTitleEn)</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.IdeaDescAr <span style="color:red">*</span></label>
+                            @Html.TextAreaFor(x => x.IdeaDescAr, new { @class = "form-control", @style = "margin: 0px;height: 208px;width: 784px;" })
+
+                            <span style="color:red"> @Html.ValidationMessageFor(x => x.IdeaDescAr)</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.IdeaDescEn <span style="color:red">*</span></label>
+                            @Html.TextAreaFor(x => x.IdeaDescEn, new { @class = "form-control", @style = "margin: 0px;height: 208px;width: 784px;" })
+
+                            <span style="color:red"> @Html.ValidationMessageFor(x => x.IdeaDescEn)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.HomeTitleAr <span style="color:red">*</span></label>
+                            @Html.TextBoxFor(x => x.HomeTitleAr, new { @class = "form-control" })
+
+                            <span style="color:red"> @Html.ValidationMessageFor(x => x.HomeTitleAr)</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.HomeTitleEn <span style="color:red">*</span></label>
+                            @Html.TextBoxFor(x => x.HomeTitleEn, new { @class = "form-control" })
+
+                            <span style="color:red"> @Html.ValidationMessageFor(x => x.HomeTitleEn)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.HomeDescAr <span style="color:red">*</span></label>
+                            @Html.TextAreaFor(x => x.HomeDescAr, new { @class = "form-control", @style = "margin: 0px;height: 208px;width: 784px;" })
+
+                            <span style="color:red"> @Html.ValidationMessageFor(x => x.HomeDescAr)</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.HomeDescEn <span style="color:red">*</span></label>
+                            @Html.TextAreaFor(x => x.HomeDescEn, new { @class = "form-control", @style = "margin: 0px;height: 208px;width: 784px;" })
+
+                            <span style="color:red"> @Html.ValidationMessageFor(x => x.HomeDescEn)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-custom bg-orange" id="btnSave" type="button"><i class="ion-checkmark push-5-r"></i> @Homemade.UI.Resources.Homemade.save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+@section Styles {
+    <!-- Data_Table Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" />
+    <!-- Select 2 Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2-bootstrap.min.css" />
+
+    <style>
+        .dataTables_filter {
+            display: none;
+        }
+    </style>
+}
+
+
+    @section Scripts {
+    <!-- Data_table Plugins -->
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+
+    <!-- Select 2 Scripts -->
+    <script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+
+    <!-- Date_picker Plugins -->
+    <script src="~/assets/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/Hijiri-Plugin/js/bootstrap-hijri-datetimepicker.js"></script>
+    <!-- Select 2 Scripts -->
+    <script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+    <partial name="_Scripts" />
+}

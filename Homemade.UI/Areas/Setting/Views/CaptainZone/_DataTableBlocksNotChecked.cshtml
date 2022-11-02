@@ -1,0 +1,75 @@
+﻿<script>
+    var tableBlocksNotChecked;
+    $(document).ready(function() {
+        tableBlocksNotChecked = $('#tbl_BlocksNotChecked').DataTable({
+            pageLength: 10,
+            pagijngType: "full_numbers",
+            serverSide: true,
+            processing: true,
+            lengthMenu: [[5, 10, 10, 20, 50, 100], [5, 10, 10, 20, 50, 100]],
+            sAjaxSource: '@Url.Action("LoadTableNotCheckBlocksByCaptain")',
+            sServerMethod: "POST",
+            bPaginate: true,
+            paging: true,
+            bFilter: true,
+            bLengthChange: false,
+            columns: [
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="cityName">' + data.blockName + '</label>';
+                    }
+                },
+                {
+
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        var databutton = '';
+                        databutton += '<a class="btn btn-xs btn-success" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Add" style="margin:4px"' +
+                            ' onclick="AddBlock(this)" data-id="' + data.blockID + '"><i class="fa fa-plus"></i></a>';
+                        return databutton;
+                    }
+                }
+            ],
+            drawCallback: function(s) {
+                $('[data-toggle="tooltip"]').tooltip();
+            },
+            buttons: [
+    @*{
+                extend: "copy",
+                className: "btn btn-info btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Copy'
+                },*@
+                {
+                    extend: "excelHtml5",
+                    autoFilter: true,
+                    sheetName: 'Exported data',
+                    className: "btn btn-success btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.Excel'
+                }, @*{
+                extend: "print",
+                className: "btn btn-warning btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Print'
+                },*@{
+                    extend: "pdfHtml5",
+                    download: 'open',
+                    className: "btn btn-info btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.PDF'
+                }],
+            "language": {
+                "search": "_INPUT_",
+                "searchPlaceholder": "Search",
+                "lengthMenu": "_MENU_",
+            }, dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+
+        });
+        tableBlocksNotChecked.buttons().container().appendTo('.dt_buttons_wrap');
+    });
+    function readBlockNotCheckTable() {
+        tableBlocksNotChecked.ajax.url('/Setting/CaptainZone/LoadTableNotCheckBlocksByCaptain?DriversID=' + $("#DriversID").val());
+        tableBlocksNotChecked.ajax.reload();
+    }
+</script>

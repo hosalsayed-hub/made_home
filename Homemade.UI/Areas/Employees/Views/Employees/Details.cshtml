@@ -1,0 +1,245 @@
+﻿@model Homemade.BLL.ViewModel.Employees.EmployeesViewModel
+@inject Homemade.BLL.General.BLUser blUser
+@{
+    @Html.Hidden("UserID", Model.UserId)
+}
+@if (Model.JobTypeId == (int)JobTypeEnum.Employees)
+{
+    <span style="display:none" class="header-title">@Homemade.UI.Resources.HomemadeMenu.Employees</span>
+}
+else
+{
+    <span style="display:none" class="header-title">@Homemade.UI.Resources.HomemadeMenu.System_Admin</span>
+}
+<div class="content">
+    @Html.AntiForgeryToken()
+    <div class="block">
+        <div class="block-content h_scroll">
+            <h3 class="form-group">
+                <span>@(ViewContext.HttpContext.Request.Cookies.IsArabic() ? Model.FirstNameAR + " " + Model.LastNameAR : Model.FirstNameEN + " " + Model.LastNameEN)</span>
+            </h3>
+            <ul class="nav nav-tabs" data-toggle="tabs">
+                <li class="active">
+                    <a href="#Basic_Data"><i class="fa fa-user push-5-r"></i> @Homemade.UI.Resources.Homemade.Basic_Data</a>
+                </li>
+                <li>
+                    <a href="#Permission"><i class="fa fa-file push-5-r"></i> @Homemade.UI.Resources.Homemade.Permission</a>
+                </li>
+            </ul>
+            <div class="block-content tab-content">
+                <div class="tab-pane active" id="Basic_Data">
+                    <div class="row" id="divMsgParent" style="display:none">
+                        <div class="form-group row">
+                            <div class="col-xs-12">
+                                <div id="divMsgClass" class="alert alert-danger" role="alert">
+                                    <strong id="lblMsg"></strong>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <input type="hidden" name="EntityEmpID" id="EntityEmpID" value="@Model.EntityEmpID" />
+                        <input type="hidden" name="JobTypeId" id="JobTypeId" value="@Model.JobTypeId" />
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @(!string.IsNullOrEmpty(Model.FirstNameAR) ? Html.DisplayFor(x => x.FirstNameAR) :"----")
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Name_Ar </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @(!string.IsNullOrEmpty(Model.FirstNameAR) ? Html.DisplayFor(x => x.FirstNameEN) : "----")
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Name_En </label>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-4 form-group">
+                            <div class="form-material">
+                                @(Model.Gender ==(int)Gender.Male ? @Homemade.UI.Resources.Homemade.Male : @Homemade.UI.Resources.Homemade.Female)
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Gender </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <div class="form-material">
+                                @(!string.IsNullOrEmpty(Model.FileNo) ? Html.DisplayFor(x => x.FileNo) : "----")
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.FileNumber </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <div class="form-material">
+                                @(!string.IsNullOrEmpty(Model.IDNo) ? Html.DisplayFor(x => x.IDNo):"----")
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.IdNo </label>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-4 form-group">
+                            <div class="form-material">
+                                @(Model.BirthDateMilady?.ToString("yyyy-MM-dd"))
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.BirthDateMilady </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <div class="form-material">
+                                @(!string.IsNullOrEmpty(Model.BirthDateHijri) ? Html.DisplayFor(x => x.BirthDateHijri):"----")
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.BirthDateHijri </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <div class="form-material">
+                                @(!string.IsNullOrEmpty(Model.NationalityName) ? Html.DisplayFor(x => x.NationalityName) :"----")
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Nationality </label>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-4 form-group">
+                            <div class="form-material">
+                                @(!string.IsNullOrEmpty(Model.MobileNo) ? Html.DisplayFor(x => x.MobileNo):"----")
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Mobile </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <div class="form-material">
+                                @(!string.IsNullOrEmpty(Model.PhoneNumber) ? Html.DisplayFor(x => x.PhoneNumber):"----")
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.PhoneNumber </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <div class="form-material">
+                                @(!string.IsNullOrEmpty(Model.Email) ? Html.DisplayFor(x => x.Email):"----")
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Email </label>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-4 form-group">
+                            <div class="form-material">
+                                @(!string.IsNullOrEmpty(Model.BloodTypeName) ? Html.DisplayFor(x => x.BloodTypeName) :"----")
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Blood_Type </label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 form-group">
+                            <div class="form-material">
+                                @(!string.IsNullOrEmpty(Model.JobsName) ? Html.DisplayFor(x => x.JobsName) :"----")
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Job </label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 form-group">
+                            <div class="form-material">
+                                @(!string.IsNullOrEmpty(Model.RegionName) ? Html.DisplayFor(x => x.RegionName):"----")
+                                <label for="material-select2">@Homemade.UI.Resources.Homemade.Region </label>
+
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-4 form-group">
+                            <div class="form-material">
+                                @(!string.IsNullOrEmpty(Model.CityName) ? Html.DisplayFor(x => x.CityName):"----")
+                                <label for="material-select2">@Homemade.UI.Resources.Homemade.City </label>
+
+                            </div>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <div class="form-material">
+                                @(!string.IsNullOrEmpty(Model.Notes) ? Html.DisplayFor(x => x.Notes):"----")
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Notes </label>
+                            </div>
+                        </div>
+
+                        <div class="clearfix"></div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @(!string.IsNullOrEmpty(Model.AddressAR) ? Html.DisplayFor(x => x.AddressAR):"----")
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Address_Ar </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <div class="form-material">
+                                @(!string.IsNullOrEmpty(Model.AddressEN) ? Html.DisplayFor(x => x.AddressEN):"----")
+                                <label for="material-text2">@Homemade.UI.Resources.Homemade.Address_En </label>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-md-12 form-group">
+                            <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.Photo</label>
+                            @if (!string.IsNullOrEmpty(Model.Photo))
+                            {
+                                <img src="@Model.Photo" class="img" width="100" height="100" style="display:block;margin-bottom:7px;" />
+                            }
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="tab-pane" id="Permission">
+                    <div class="row">
+                        @if (Model.JobTypeId == (int)JobTypeEnum.Employees)
+                        {
+                            <input type="hidden" name="Roles" id="Roles" value="4" />
+                        }
+                        else
+                        {
+                            <input type="hidden" name="Roles" id="Roles" value="1" />
+                        }
+
+                        <div class="col-md-12">
+                            @Html.HiddenFor(m => m.CheckedItems)
+                            <table id="tbl" class="table table-custom js-dataTable-buttons" style="width:100% !important;">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <label class="css-input css-checkbox css-checkbox-warning">
+                                                <input type='checkbox' id='chkSelectAll' onclick='checkAll(this)' /><span></span> @Homemade.UI.Resources.Homemade.All
+                                            </label>
+                                        </th>
+                                        <th>@Homemade.UI.Resources.Homemade.SNumber</th>
+                                        <th>@Homemade.UI.Resources.Homemade.Permission</th>
+                                        <th>@Homemade.UI.Resources.Homemade.View</th>
+                                        <th>@Homemade.UI.Resources.Homemade.Insert</th>
+                                        <th>@Homemade.UI.Resources.Homemade.Update</th>
+                                        <th>@Homemade.UI.Resources.Homemade.Delete</th>
+                                    </tr>
+                                </thead>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Styles{
+    <!-- Data_Table Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" />
+
+}
+
+@section Scripts{
+    <!-- Data_table Plugins -->
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+
+    <partial name="_RoleTable" />
+                                    <script>
+                                        $(document).ready(function () {
+                                            readtable();
+
+                                            setTimeout(function () {
+                                                $('.checkbox').prop('disabled', true);
+                                            },
+                                                3000);
+                                        });
+                                    </script>
+                                    }

@@ -1,0 +1,12 @@
+﻿@using Homemade.UI
+@*@if (User.IsPassnger(ViewContext.HttpContext))
+{
+    <vc:Client-links></vc:Client-links>
+}
+else if (User.IsCompany(ViewContext.HttpContext))
+{
+<vc:Company-links></vc:Company-links>
+}
+else
+{*@
+<vc:operation-links></vc:operation-links>

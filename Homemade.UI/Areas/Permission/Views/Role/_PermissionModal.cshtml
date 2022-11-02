@@ -1,0 +1,88 @@
+﻿<div class="modal" id="PermissionModal" tabindex="-1" role="dialog" aria-labelledby="modal-block-large" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-popout modal-dialog-scrollable" role="document">
+
+        <div class="modal-content">
+            <div class="block block-rounded block-themed block-transparent mb-0">
+                <div class="block-header bg-primary-dark">
+                    <h3 class="block-title" id="title">
+                        @Homemade.UI.Resources.Homemade.Permission
+                    </h3>
+                    <div class="block-options">
+                        <button type="button" class="close btn-block-option" data-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-fw fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content font-size-sm">
+                    <form method="post" id="frmPermissionInsert" onsubmit="return false"
+                          data-ajax="true"
+                          data-ajax-complete="completed"
+                          data-ajax-method="post">
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                @Html.Hidden("RoleID")
+                                @Html.Hidden("CheckedItems")
+                                <label>@Homemade.UI.Resources.Homemade.Name : </label>  <label style="font-size:large;color:red" id="RoleName"></label>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <button class="btn  btn-info" id="btnSave" onclick="UpdatePermission()" type="button"> @Homemade.UI.Resources.Homemade.save</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <table id="tblPermission" class="table table-custom js-dataTable-buttons">
+                                <thead>
+                                    <tr>
+                                        <th><label class="css-input css-checkbox css-checkbox-warning"><input type='checkbox' id='chkSelectAll' onclick='checkAll(this)' /><span></span> @Homemade.UI.Resources.Homemade.All </label></th>
+                                        <th>@Homemade.UI.Resources.Homemade.SNumber</th>
+                                        <th>@Homemade.UI.Resources.Homemade.Permission</th>
+                                        <th>@Homemade.UI.Resources.Homemade.View</th>
+                                        <th>@Homemade.UI.Resources.Homemade.Insert</th>
+                                        <th>@Homemade.UI.Resources.Homemade.Update</th>
+                                        <th>@Homemade.UI.Resources.Homemade.Delete</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function UpdatePermission() {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Add , "ConfirmUpdatePermission();"))
+        }
+
+    function ConfirmUpdatePermission() {
+        $.ajax({
+            type: "POST",
+            url: '/Permission/Role/InsertTempPermissions',
+            data: {
+                'RoleID': $("#RoleID").val(),
+                'CheckedItems': $("#CheckedItems").val()
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                var msg = result.message;
+
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false)
+                        { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\"" })
+                        $('#PermissionModal').modal('hide');
+                    $('#tblPermission').DataTable().ajax.reload();
+                    $('#tbl').DataTable().ajax.reload();
+                    $("#CheckedItems").val("");
+
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false){ Title = "msg" })
+                    }
+            }
+        });
+    }
+</script>

@@ -1,0 +1,237 @@
+﻿@model Homemade.BLL.ViewModel.Order.PromoCodeMasterViewModel
+@using Homemade.UI
+@inject Homemade.BLL.General.BLGeneral bLGeneral
+<div class="content">
+    <form method="post" id="frmCreate" onsubmit="return false" data-action="CreatePromo"
+          data-ajax="true"
+          data-ajax-method="post"
+          data-ajax-success="formSuccess">
+        @Html.AntiForgeryToken()
+        <div class="block block-themed">
+            <div class="block-header">
+                <h3 class="">
+                    <span class="header-title">@Homemade.UI.Resources.HomemadeMenu.Promo_Code</span>
+                    <span class="sub-page-name">@Homemade.UI.Resources.Homemade.New</span>
+                </h3>
+            </div>
+            <div class="block-content" style="overflow: hidden;">
+                <div class="row" id="divMsgParent" style="display:none">
+                    <div class="form-group row">
+                        <div class="col-xs-12">
+                            <div id="divMsgClass" class="alert alert-danger" role="alert">
+                                <strong id="lblMsg"></strong>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-md-4 form-group">
+                        <div class="form-material ">
+                            <input asp-for="StartDate" class="js-datepicker form-control AddData" type="text" value="" data-date-format="yyyy-mm-dd">
+                            @Html.HiddenFor(m => m.StartDateString)
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.StartDate <span style="color:red"></span></label>
+                            <span asp-validation-for="StartDate" style="color:red;"></span>
+                        </div>
+                    </div>
+                    <div class=" col-md-4 form-group">
+                        <div class="form-material ">
+                            <input asp-for="ExpiryDate" class="js-datepicker form-control AddData" type="text" value="" data-date-format="yyyy-mm-dd">
+                            @Html.HiddenFor(m => m.ExpiryDateString)
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.ExpiryDate <span style="color:red"></span></label>
+                            <span asp-validation-for="ExpiryDate" style="color:red;"></span>
+                        </div>
+                    </div>
+
+                    <div class=" col-md-4 form-group">
+                        <div class="form-material">
+                            <input asp-for="LimitCount" type="number" class="form-control" maxlength="6" value="" onkeypress="return isNumberKey(event)" />
+                            <span style="color:red" asp-validation-for="LimitCount"> </span>
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.LimitCount <span style="color:red">*</span></label>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class=" col-md-3 form-group">
+                        <div class="form-material">
+                            <input asp-for="DiscountValue" type="number" class="form-control" maxlength="6" value="" onkeypress="return isNumberKey(event)" />
+                            <span style="color:red" asp-validation-for="DiscountValue"> </span>
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Discount <span style="color:red">*</span></label>
+                        </div>
+                    </div>
+                    <div class=" col-md-3 form-group">
+                        <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbDiscountTypeAmount">
+                            <input type="radio" checked asp-for="DiscountType" id="rdbDiscountTypeAmount" value="1">
+                            <span></span>
+                            @Homemade.UI.Resources.Homemade.Amount
+                        </label>
+                        <label class="css-input css-radio css-radio-sm css-radio-warning" for="rdbDiscountTypePrecent">
+                            <input type="radio" asp-for="DiscountType" id="rdbDiscountTypePrecent" value="2">
+                            <span></span>
+                            @Homemade.UI.Resources.Homemade.Percent
+                        </label>
+                    </div>
+                    <div class=" col-md-2 form-group">
+                        <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdPromoTypehome">
+                            <input type="radio" checked onchange="vendordivfn(this)" asp-for="PromoType" id="rdPromoTypehome" value="1">
+                            <span></span>
+                            @Homemade.UI.Resources.Homemade.On_HomeMade
+                        </label>
+                        <label class="css-input css-radio css-radio-sm css-radio-warning" for="rdPromoTypestore">
+                            <input type="radio" onchange="vendordivfn(this)" asp-for="PromoType" id="rdPromoTypestore" value="2">
+                            <span></span>
+                            @Homemade.UI.Resources.Homemade.On_Store
+                        </label>
+                    </div>
+                    <div class=" col-md-4 form-group" style="display:none;" id="vendor_div">
+                        <label class="">@Homemade.UI.Resources.Homemade.Choose_Vendor</label>
+                        <div class="">
+                            @{
+                                var lst = Model.Cities.Select(x => new SelectListItem(ViewContext.HttpContext.Request.Cookies.IsArabic() ? x.StoreNameAr : x.StoreNameEn, x.VendorsID.ToString()));
+                            }
+                            <select class="js-select2 form-control" data-val="true" data-val-required="@Homemade.UI.Resources.Homemade.Choose_Vendor" id="lstCityID" name="lstCityID" size="5"
+                                    asp-items="lst" multiple="">
+                            </select>
+                        </div>
+                        <span style="color:red" asp-validation-for="lstCityID"> </span>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class=" col-md-6 form-group">
+                        <div class="form-material">
+
+                            <textarea asp-for="Subject" class="form-control"></textarea>
+
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Subject <span style="color:red">*</span></label>
+                            <span style="color:red" asp-validation-for="Subject"> </span>
+                        </div>
+                    </div>
+                    <div class=" col-md-6 form-group">
+                        <div class="form-material">
+                            <textarea asp-for="Content" class="form-control"></textarea>
+                            <span style="color:red" asp-validation-for="Content"> </span>
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Content <span style="color:red">*</span></label>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-custom bg-orange" id="btnSave" type="submit"><i class="ion-checkmark push-5-r"></i> @Homemade.UI.Resources.Homemade.save</button>
+        </div>
+    </form>
+</div>
+
+@section Styles{
+    <!-- Select 2 Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2-bootstrap.min.css" />
+
+    <!-- Date_Picker Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/Hijiri-Plugin/css/bootstrap-datetimepicker.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+}
+    <style>
+        .select2-container {
+            box-sizing: border-box;
+            display: inline-block;
+            margin: 0;
+            position: relative;
+            width: 100% !important;
+            vertical-align: middle;
+        }
+    </style>
+    @section Scripts{
+    <!-- Select 2 Scripts -->
+    <script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+
+    <!-- Date_picker Plugins -->
+    <script src="~/assets/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/Hijiri-Plugin/js/bootstrap-hijri-datetimepicker.js"></script>
+    <script>
+        var divMsgClass = $("#divMsgClass");
+        var lblMsg = $("#lblMsg");
+        var divMsgParent = $("#divMsgParent");
+        function zeroPadded(val) {
+            if (val >= 10)
+                return val;
+            else
+                return '0' + val;
+        }
+        $("#btnSave").click(function(e) {
+            e.preventDefault();
+            let frmCreate = $("#frmCreate");
+            if (frmCreate.valid()) {
+                $('#StartDateString').val($('#StartDate').val());
+                $('#ExpiryDateString').val($('#ExpiryDate').val());
+                if ($('#StartDate').val() > $('#ExpiryDate').val()) {
+                    var errordate = getCookie('Language').includes('ar') ? "الرجاء تحديد نطاق تاريخ صالح" : 'Please select a valid date range';
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false)
+                    { Title = "errordate" })
+
+                            return;
+                }
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Add , "frmCreate.submit();"))
+                    }
+        });
+
+        function vendordivfn(e) {
+            debugger;
+            var ss = document.getElementById('rdPromoTypehome').checked;
+            if (ss === true) {
+                $("#vendor_div").hide();
+            } else {
+                $("#vendor_div").show();
+            }
+        }
+        function formSuccess(data) {
+            divMsgParent.slideUp();
+            divMsgParent.show();
+            if (data.status) {
+                divMsgClass.attr("class", "alert alert-success");
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false)
+                { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\"" })
+                    lblMsg.html(data.message);
+
+                let frm = $("frmCreate");
+
+                if (frm.attr('data-action') == "Create")
+                    frm.trigger("reset");
+            }
+            else {
+                divMsgClass.attr("class", "alert alert-danger");
+
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false)
+                { Title = "data.message" })
+                    lblMsg.html(data.message);
+            }
+        }
+
+        function GetCities() {
+
+            var obj = {};
+            $.ajax({
+                type: "POST",
+                url: '/Order/Orders/GetVendors',
+                data: '{obj: ' + JSON.stringify(obj) + '}',
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function(result) {
+                    for (var i = 0; i < result.length; i++) {
+                        var item = result[i];
+                        $('#lstCityID').append('<option value="' + item.id + '">' + item.name + '</option>');
+
+                    }
+                },
+                error: function() {
+
+                }
+            });
+        }
+    </script>
+}

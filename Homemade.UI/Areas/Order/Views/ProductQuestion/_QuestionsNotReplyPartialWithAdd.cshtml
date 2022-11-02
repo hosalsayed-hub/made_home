@@ -1,0 +1,36 @@
+﻿@model IQueryable<Homemade.BLL.ViewModel.Order.ProdQuestionViewModel>
+@if (Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <div class="col-md-6 col-sm-12 form-group text-left">
+            <a href="/Vendor/Product/Details/@item.ProductGuid">
+                <img class="img" style="width: 100px; height: 100px; border-radius: 100%;" src="@item.ProductImage">
+            </a>
+            <label class="form-material">
+                @item.CustomerName
+                <br />
+                @item.QuestionDate
+            </label>
+            <br />
+            <label class="form-material">@item.ProductName</label>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="material-text2">@item.Question</label>
+
+                <textarea class="form-control" id="AnswerQuestions_@item.ProdQuestionID" style="display:none" name="AnswerQuestions_@item.ProdQuestionID" rows="5"></textarea>
+                <label class="css-input css-checkbox css-checkbox-warning" style="display:none" id="Chk_IsPublish_@item.ProdQuestionID">
+                    <input type='checkbox' id="IsPublish_@item.ProdQuestionID" name="IsPublish_@item.ProdQuestionID" value="true" /><span></span> @Homemade.UI.Resources.Homemade.IsPublish
+                </label>
+            </div>
+        </div>
+        <div class="col-md-12 form-group">
+            <button class="btn btn-custom bg-info" id="AddQuestionsReply_@item.ProdQuestionID" onclick="ShowAddQuestionsReply(@item.ProdQuestionID)">@Homemade.UI.Resources.Homemade.AddReply</button>
+            <button class="btn btn-custom bg-orange" style="display:none" id="SaveQuestionsReply_@item.ProdQuestionID" onclick="SaveQuestionsReply(@item.ProdQuestionID)"><i class="ion-checkmark push-5-r"></i> @Homemade.UI.Resources.Homemade.save</button>
+        </div>
+        <div class="col-md-12 form-group">
+            <hr style="border: 1px solid #000;" />
+        </div>
+    }
+}

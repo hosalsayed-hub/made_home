@@ -1,0 +1,200 @@
+﻿@inject Homemade.BLL.BLPermission blPermission
+@inject Homemade.BLL.Setting.BlCountry _blCountry
+@inject Homemade.BLL.Driver.BlDriver _blDriver
+@{
+
+}
+@Html.Hidden("TripMasterCheck")
+
+<!-- Page Header -->
+<!-- END Page Header -->
+<!-- Page Content -->
+<div class="content">
+    <!-- Dynamic Table Full -->
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="block-title collapsed" data-toggle="collapse" data-target="#collapseProd" aria-expanded="false" aria-controls="collapseProd">
+                        <i class="ion-code-working push-5-r"></i>
+                        <span class="header-title">@Homemade.UI.Resources.HomemadeMenu.Rejected_Requests</span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="collapse" id="collapseProd">
+            <div class="block-content block-content-full">
+                <div class="row">
+                    
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.City  </label>
+                            <select multiple="" disabled="" id="ListCityID" class="js-select2 form-control AddData" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="col-md-4">
+                        <div class="form-group ">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Mobile </label>
+                            <input id="TaxiNumber" class="form-control " type="text" value="">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group ">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.FromDate </label>
+                            <input id="FromDate" class="js-datepicker form-control AddData " type="text" value="" name="FromDate" data-date-format="mm/dd/yyyy" placeholder="mm/dd/yyyy">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group ">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.ToDate </label>
+                            <input id="ToDate" class="js-datepicker form-control AddData" type="text" value="" name="ToDate" data-date-format="mm/dd/yyyy" placeholder="mm/dd/yyyy">
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-4 form-group">
+                        <button id="btnRest" onclick="Rest();" type="button" style="margin:12px 0px" class="btn btn-custom btn-info">
+                            <i class="ion-refresh push-5-r"></i>
+                            @Homemade.UI.Resources.Homemade.Reset
+                        </button>
+                        <button onclick="GetValue()" type="button" style="margin:12px 5px" class="btn btn-custom bg-orange">
+                            <i class="ion-search push-5-r" aria-hidden="true"></i>
+                            @Homemade.UI.Resources.Homemade.Search
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="block-title" data-toggle="collapse" data-target="#collapseOrder" aria-expanded="false" aria-controls="collapseOrder"><i class="ion-code-working push-5-r"></i> @Homemade.UI.Resources.Homemade.Result</h3>
+                </div>
+                <div class="col-md-6 text-right">
+                    <div class="dt_buttons_wrap text-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="collapse in" id="collapseOrder">
+            <div class="block-content h_scroll">
+                <div class="row" style="margin-bottom: 2%;display:none;" id="btnSend">
+                    <div class="col-lg-1" style=" ">
+                        <button class="btn btn-success btn-bold" onclick="AcceptAll()"><i class="fa fa-check"></i> @Homemade.UI.Resources.Homemade.Accept  </button>
+                    </div>
+                    <div class="col-lg-1" style=" ">
+                        <button class="btn btn-danger btn-bold" onclick="DeleteDataAll()"><i class="fa fa-trash"></i> @Homemade.UI.Resources.Homemade.Delete  </button>
+                    </div>
+
+                </div>
+                <table id="tbl" class="table table-custom js-dataTable-buttons">
+                    <thead>
+                        <tr>
+                            <th>
+                                <label class="css-input css-checkbox css-checkbox-warning">
+                                    <input type='checkbox' id='chkSelectAll' onclick='checkAll(this)' /><span></span> @Homemade.UI.Resources.Homemade.All
+                                </label>
+                            </th>
+                            <th>@Homemade.UI.Resources.Homemade.SNumber</th>
+                            <th>@Homemade.UI.Resources.Homemade.Driver</th>
+                            <th>@Homemade.UI.Resources.Homemade.Image</th>
+                            <th>@Homemade.UI.Resources.Homemade.Nationality</th>
+                            <th>@Homemade.UI.Resources.Homemade.Region</th>
+                            <th>@Homemade.UI.Resources.Homemade.City</th>
+                            <th>@Homemade.UI.Resources.Homemade.IdNo</th>
+                            <th>@Homemade.UI.Resources.Homemade.Mobile</th>
+                            <th>@Homemade.UI.Resources.Homemade.Actions</th>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- END Dynamic Table Full -->
+</div>
+@section Styles {
+    <!-- Data_table Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" />
+
+    <!-- Date_Picker Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/Hijiri-Plugin/css/bootstrap-datetimepicker.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+
+    <!-- Select 2 Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2-bootstrap.min.css" />
+}
+<!-- END Page Content -->
+@section Scripts {
+    <!-- Data_table Plugins -->
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+
+    <!-- Date_picker Plugins -->
+    <script src="~/assets/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/Hijiri-Plugin/js/bootstrap-hijri-datetimepicker.js"></script>
+    <script>
+        $(".js-datepicker").keypress(function (e) {
+            e.preventDefault();
+        });
+        $('.js-datepicker').datepicker({
+            dateFormat: 'yyyy-mm-dd'
+        }).on('changeDate', function (ev) {
+            $(this).datepicker('hide');
+        });
+    </script>
+
+    <!-- Select 2 Scripts -->
+    <script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+
+
+    <partial name="_Scripts" />
+    <partial name="_TableRejectRequests" />
+    <script>
+        function GetValue() {
+            readtable();
+        }
+        var isPaused = false;
+        function Rest() {
+            isPaused = true;
+            $('#FromDate').val('');
+            $('#ToDate').val('');
+            $('#TaxiNumber').val('');
+            $('#DriverID').val('');
+            $('#DriverID').trigger('change');
+            $('#ModelID').val('');
+            $('#ModelID').trigger('change');
+            $('#BrandID').val('');
+            $('#BrandID').trigger('change');
+            waitForIt();
+            isPaused = false;
+        }
+        $(document).ready(function () {
+            GetValue();
+        });
+        function waitForIt() {
+            if (isPaused) {
+                setTimeout(function () { waitForIt() }, 10);
+            } else {
+                GetValue();
+            };
+        }
+    </script>
+}
+

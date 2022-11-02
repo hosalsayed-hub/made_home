@@ -1,0 +1,113 @@
+﻿@model IEnumerable<Homemade.BLL.ViewModel.Site.SiteProductViewModel>
+@if (Model != null)
+{
+    <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-xs-2 row-cols-1">
+        @foreach (var itemProduct in Model)
+        {
+
+            <div class="product-wrap">
+
+                <div class="product-item">
+
+                    <div class="product-img">
+
+                        <a href="/Site/home/produc_default?id=@itemProduct.ProductGuid">
+                            <img class="img-fluid" src="@itemProduct.ProductLogo">
+                            @if (!blVendor.IsVendorWorking(itemProduct.VendorsDaysWork, itemProduct.VendorsWorkFrom, itemProduct.VendorsWorkTo, itemProduct.VendorsDaysVac, itemProduct.VendorsVacWorkFrom, itemProduct.VendorsVacWorkTo))
+                            {
+                                <img class="img-fluid" src="https://cdn.made-home.com/Home/Product/close.png" style="position: absolute;top: 0;opacity: 0.4;">
+                            }
+                            @*else if (itemProduct.IsLimited && itemProduct.Quantity == 0)
+                                {
+                                    <img class="img-fluid" src="https://cdn.made-home.com/Home/Product/sold.png" style="position: absolute;top: 0;opacity: 0.4;">
+                                }*@
+                        </a>
+
+                    </div>
+
+                    <div class="product-details">
+
+                        <div class="product-vendor">
+
+                            <a class="vendor-details" href="/Site/home/vendor?id=@itemProduct.VendorsGuid">
+
+                                <img class="img-fluid vendor-img" src="@itemProduct.VendorsLogo">
+                                <span class="vendor-name">@itemProduct.VendorsName</span>
+                            </a>
+
+
+                        </div>
+                        <div class="product-name ">
+
+                            <a class="product-name-width" href="/Site/home/produc_default?id=@itemProduct.ProductGuid">@itemProduct.ProductName </a>
+
+                        </div>
+                        <div class="product-info">
+
+                            <div class="product-price product-price-width">
+
+                                <span class="price-val">@itemProduct.ProductPrice</span>
+                                <span class="price-currency">@Homemade.UI.Resources.Homemade.SR</span>
+                            </div>
+                            <div class="product-volume">
+
+                                @*<div class="food-icon">
+
+                                        <img src="~/assets/homeMadeSite/img/Icon%20map-food.svg">
+
+                                    </div>*@
+                                <div class="person-no  person-no-width">
+
+                                    <span id="personNo">@itemProduct.Pieces</span>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="wishlist-action">
+
+                        <a class="btn-wishlist " href="#">
+
+                            <div class="flip-icon">
+                                <span class="front-icon"><i class="far fa-heart"></i></span>
+                                <span class="back-icon"><i class="fas fa-heart"></i></span>
+                            </div>
+                        </a>
+
+
+                    </div>
+                    @if (blVendor.IsVendorWorking(itemProduct.VendorsDaysWork, itemProduct.VendorsWorkFrom, itemProduct.VendorsWorkTo, itemProduct.VendorsDaysVac, itemProduct.VendorsVacWorkFrom, itemProduct.VendorsVacWorkTo))
+                    {
+                <div class="cart-action">
+                    <a class="btn-cart-wrap" id="btn_actionCart_@itemProduct.ProductID" href="javascript:AddToCart_jq_Ex(@itemProduct.ProductID, 1, 'p');">
+                            <span class="add-to-cart">@Homemade.UI.Resources.Homemade.Add_to_cart</span>
+                            <span class="added">@Homemade.UI.Resources.Homemade.In_Cart</span>
+                        </a>
+                </div>
+                    }
+                    else
+                    {
+                        @*<div class="cart-action alert alert-site" style="padding: 0.5rem 0.5rem;text-align: center;">
+                                <strong>@Homemade.UI.Resources.Homemade.Closed</strong>
+                            </div>*@
+                        <div class="cart-action">
+                            <a class="btn-cart-wrap added" style="background-color: gray;">
+                                <span class="add-to-cart">@Homemade.UI.Resources.Homemade.Add_to_cart</span>
+                            </a>
+                        </div>
+                    }
+
+
+                </div>
+
+
+            </div>
+
+        }
+
+
+
+    </div>
+}

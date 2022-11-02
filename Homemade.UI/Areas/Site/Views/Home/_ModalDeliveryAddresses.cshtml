@@ -1,0 +1,157 @@
+﻿@model Homemade.BLL.ViewModel.Site.SiteCustomerLocationViewModel
+<!-- ***** modify-address modal  ***** -->
+
+<div class="custom-bootstrap-modal modal fade add-new-address-modal modify-address-modal" id="modifyAddressModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="modal-body-title title-4" id="title">
+                    @Homemade.UI.Resources.Homemade.Add_Location
+                </div>
+                <div class="modal-body-content">
+
+                    <div class="add-new-address-area">
+
+                        <form id="new-address-form" onsubmit="return false" asp-action="DeliveryAddresses"
+                              data-ajax="true"
+                              data-ajax-complete="completedAddress"
+                              data-ajax-method="post">
+                            <div class="row">
+
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="form-label">
+                                            @Homemade.UI.Resources.Homemade.Location
+
+                                        </label>
+
+                                        <input id="pac-input"
+                                               class="controls"
+                                               type="text"
+                                               placeholder="Enter a location" />
+                                        <label class="form-label" style="color:red">
+                                            @Homemade.UI.Resources.Homemade.ChooseLocationOnMapNote
+                                        </label>
+                                        <br />
+                                        <div id="divMsgClass_Er" class="alert alert-danger" role="alert" style="display:none;">
+                                            <strong id="lblMsg_Er"></strong>
+                                        </div>
+                                        <div id="map" style="width: 100%; height: 307px;overflow:initial"></div>
+                                        <div id="infowindow-content">
+                                            <span id="place-name" style="display:none" class="title"></span><br />
+                                            <strong style="display:none;">Place ID:</strong> <span id="place-id"></span><br />
+                                            <span id="place-address"></span>
+                                        </div>
+                                        <div class="latlngxop" style="opacity:0">
+                                            <input type="hidden" required asp-for="Lat" name="Lat" data-val="true" data-val-required="@Homemade.UI.Resources.Homemade.ChooseLocationOnMap" />
+                                            <input type="hidden" required asp-for="Lng" name="Lng" />
+
+                                            <input type="hidden" asp-for="LatStr" name="LatStr" />
+                                            <input type="hidden" asp-for="LngStr" name="LngStr" />
+
+
+                                        </div>
+                                        <label class="text-center" style="margin-bottom:10px;">
+                                            <span style="color:red" class="field-validation-valid" data-valmsg-for="lat" data-valmsg-replace="true"> </span>
+                                        </label>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-lg-6">
+
+                                    <div class="form-group">
+
+                                        <input asp-for="CustomerLocationID" hidden />
+                                        <label class="form-label">@Homemade.UI.Resources.Homemade.Region</label>
+                                        @*<select required="" class="form-select input-focus js-select2 " disabled="" onchange="GetCitys(this)" asp-for="RegionID" name="RegionID" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1"><option value=""></option></select>*@
+                                        <input asp-for="RegionID" hidden />
+                                        <br /><label style="font-weight: bold;color: brown;" id="Region_Name"></label>
+
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-6">
+
+                                    <div class="form-group">
+
+
+                                        <label class="form-label">@Homemade.UI.Resources.Homemade.City</label>
+                                        @*<select required="" class="form-select input-focus js-select2" disabled="" onchange="GetBlocks(this)"x asp-for="CityID" name="CityID" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1"><option value=""></option></select>*@
+                                        <input asp-for="CityID" hidden />
+                                        <br /><label style="font-weight: bold;color: brown;" id="City_Name"></label>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-6">
+
+                                    <div class="form-group">
+
+
+                                        <label class="form-label">@Homemade.UI.Resources.Homemade.Block</label>
+                                        @*<select required="" class="form-select input-focus js-select2" disabled="" asp-for="BlockID" name="BlockID" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1"><option value=""></option></select>*@
+                                        <input asp-for="BlockID" hidden />
+                                        <br /><label style="font-weight: bold;color: brown;" id="Block_Name"></label>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-6">
+
+                                    <div class="form-group">
+
+                                        <label class="form-label">@Homemade.UI.Resources.Homemade.Address</label>
+                                        <input asp-for="Address" type="text" class="form-control input-focus" style="display:none;" placeholder="@Homemade.UI.Resources.Homemade.Address">
+                                        @*<span style="color:red" asp-validation-for="Address"> </span>*@
+                                        <br /><label style="font-weight: bold;color: brown;" id="Address_Name"></label>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-12">
+
+                                    <div class="form-group">
+
+                                        <label class="form-label">@Homemade.UI.Resources.Homemade.AddressTypes</label>
+                                        <select required="" class="form-select input-focus js-select2" asp-for="AddressTypesID" name="AddressTypesID" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select" size="1">
+                                            <option value=""></option>
+                                        </select>
+
+                                        <span style="color:red" asp-validation-for="AddressTypesID"> </span>
+
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-12">
+
+                                    <div class="form-group">
+
+
+                                        <label class="form-label">@Homemade.UI.Resources.Homemade.Description</label>
+                                        <textarea asp-for="Name" cols="6" type="text" class="form-control input-focus" placeholder="@Homemade.UI.Resources.Homemade.Description"> </textarea>
+                                        <span style="color:red" asp-validation-for="Name"> </span>
+                                    </div>
+
+                                </div>
+                                <div class="col-12">
+
+                                    <button type="button" id="btnSaveAddress" class="add-btn theme-btn theme-btn-lg theme-btn-7 ">
+                                        @Homemade.UI.Resources.Homemade.Save_Changes
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

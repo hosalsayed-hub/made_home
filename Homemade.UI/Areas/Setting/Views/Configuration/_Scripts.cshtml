@@ -1,0 +1,259 @@
+﻿<script>
+
+    $(document).ready(function() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("LoadTable")',
+            dataType: 'json',
+            data: { id: '' },
+            success: function(data) {
+                debugger;
+                $("#ConfigurationID").val(data.aaData.id);
+                $("#CompanNameEn").val(data.aaData.nameEn);
+                $("#CompanNameAr").val(data.aaData.nameAr);
+                $("#Address").val(data.aaData.address);
+                $("#StreetNo").val(data.aaData.streetNo);
+                $("#Fax").val(data.aaData.fax);
+                $("#PhoneNumber").val(data.aaData.phoneNumber);
+                $("#MobileNumber").val(data.aaData.mobileNumber);
+                $("#SeconedEmail").val(data.aaData.seconedEmail);
+                $("#Email").val(data.aaData.email);
+                $("#DeliveryPrice").val(data.aaData.deliveryPrice);
+                $("#MinDeliveryPrice").val(data.aaData.minDeliveryPrice);
+                $("#MaxDeliveryPrice").val(data.aaData.maxDeliveryPrice);
+                $("#MinKM").val(data.aaData.minKM);
+                $("#OverKmFare").val(data.aaData.overKmFare);
+                if (data.aaData.banner !== "") {
+                    $("#baner_img").html("<img src='" + data.aaData.banner + "' class='img' width='100' height='100' style='display:block;margin-bottom:7px;' />");
+                }
+                if (data.aaData.logo !== "") {
+                    $("#logo_img").html("<img src='" + data.aaData.logo + "' class='img' width='100' height='100' style='display:block;margin-bottom:7px;' />");
+                }
+                if (data.aaData.crImage !== "") {
+                    $("#cr_img").html("<img src='" + data.aaData.crImage + "' class='img' width='100' height='100' style='display:block;margin-bottom:7px;' />");
+                }
+                $("#vatpers").html(" ( " + data.aaData.deliveryPriceVatPercent + " %) ");
+                $("#DeliveryPriceWithoutVat").val(data.aaData.deliveryPriceWithoutVat);
+                $("#DeliveryPriceVatPercent").val(data.aaData.deliveryPriceVatPercent);
+                $("#WhatsappLink").val(data.aaData.whatsappLink);
+                $("#TwitterLink").val(data.aaData.twitterLink);
+                $("#InstagramLink").val(data.aaData.instagramLink);
+                $("#SnapchatLink").val(data.aaData.snapchatLink);
+
+            },
+            error: function(ex) {
+
+            }
+        });
+    });
+
+    var divMsgClass = $("#divMsgClass");
+    var lblMsg = $("#lblMsg");
+    var divMsgParent = $("#divMsgParent"),
+        txtLatHidden = $("#txtLatHidden"),
+        txtLngHidden = $("#txtLngHidden");
+
+    $(function() {
+        try {
+            initMap();
+        } catch (e) {
+
+        }
+    });
+
+    $("#btnSave").click(function() {
+        let frmCreate = $("#frmCreate");
+        if (frmCreate.valid()) {
+            debugger;
+            $("#DeliveryPriceVatPercentstring").val($("#DeliveryPriceWithoutVat").val());
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Add , "frmCreate.submit();"))
+            }
+    });
+
+
+
+    function completed(xhr) {
+        var obj = JSON.parse(xhr.responseText);
+        var result = obj;
+        var msg = result.message;
+        if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\"" })
+            }
+        else {
+            debugger;
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+                lblMsg.html(msg);
+        }
+    };
+
+
+    function Delete(e) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Delete , "ConfirmDelete(e)"))
+        }
+
+    function ConvertToBase64Banner(e) {
+        var fileUpload = $(e);
+        var pID = '#' + fileUpload.attr('id').replace('fup', '');
+        var FR = new FileReader();
+        FR.addEventListener("load", function(e) {
+            $("#Banner").val(e.target.result.replace(/^data:.+;base64,/, ''));
+        }, false);
+
+        FR.readAsDataURL($(fileUpload)[0].files[0]);
+
+    }
+    function ConvertToBase64Logo(e) {
+        var fileUpload = $(e);
+        var pID = '#' + fileUpload.attr('id').replace('fup', '');
+        var FR = new FileReader();
+        FR.addEventListener("load", function(e) {
+            $("#Logo").val(e.target.result.replace(/^data:.+;base64,/, ''));
+        }, false);
+        FR.readAsDataURL($(fileUpload)[0].files[0]);
+    }
+    function ConvertToBase64CRImage(e) {
+        var fileUpload = $(e);
+        var pID = '#' + fileUpload.attr('id').replace('fup', '');
+        var FR = new FileReader();
+        FR.addEventListener("load", function(e) {
+            $("#CRImage").val(e.target.result.replace(/^data:.+;base64,/, ''));
+        }, false);
+        FR.readAsDataURL($(fileUpload)[0].files[0]);
+    }
+    function ConfirmDelete(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete")',
+            data: {
+                'id': id
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                var msg = result.message;
+
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                        Title = "\"" + Homemade.UI.Resources.Homemade.SuccessDeleteMessage + "\""})
+                        $('#tbl').DataTable().ajax.reload();
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+                    }
+            }
+        });
+    }
+    function ShowModal(e) {
+        if (e == undefined) {
+            $('#title').html('@Homemade.UI.Resources.Homemade.Add')
+        }
+        else
+            $('#title').html('@Homemade.UI.Resources.Homemade.Update');
+
+        let fields = $('#frmCreate span');
+        fields.each(function() {
+            if ($(this).attr('data-valmsg-for') != null) {
+                $($(this).children()[0]).text('');
+            }
+        });
+        var button = $(e);
+        var tr = $(button.closest('tr'));
+
+        var id = button.attr("data-id");
+        $("#ConfigurationID").val(id);
+        $("#CompanNameEn").val(button.attr("data-nameEn"));
+        $("#CompanNameAr").val(button.attr("data-nameAr"));
+        $("#Address").val(button.attr("data-address"));
+        $("#StreetNo").val(button.attr("data-streetNo"));
+        $("#Fax").val(button.attr("data-fax"));
+        $("#PhoneNumber").val(button.attr("data-phoneNumber"));
+        $("#MobileNumber").val(button.attr("data-mobileNumber"));
+        $("#SeconedEmail").val(button.attr("data-seconedEmail"));
+        $("#DeliveryPrice").val(button.attr("data-deliveryPrice"));
+        $("#MinDeliveryPrice").val(button.attr("data-minDeliveryPrice"));
+        $("#MaxDeliveryPrice").val(button.attr("data-maxDeliveryPrice"));
+        $('#modal').modal('show');
+    }
+
+    function GetRegions(country) {
+
+        var countryID = country;
+        $($("#RegionID")).prop("disabled", false);
+        if (countryID != '' || countryID != undefined) {
+            $.ajax({
+                type: "POST",
+                url: '/Setting/Region/GetAllRegionByCountry',
+                data: { 'countryID': countryID },
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function(result) {
+                    $("#RegionID").html('');
+                    for (var i = 0; i < result.length; i++) {
+                        var item = result[i];
+                        $("#RegionID").append('<option ' + (i == 0 ? 'selected' : "") + ' value="' + item.regionID + '">' + item.regionName + '</option>');
+                    }
+                    $($("#RegionID")).select2();
+                },
+                error: function() {
+
+                }
+            });
+        }
+    }
+    function ChangeStatue(e) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.ChangeStaute , "ConfirmStatue(e)"))
+        }
+    function ConfirmStatue(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeStatue")',
+            data: {
+                'id': id
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                        Title = "result.message"})
+                        $('#tbl').DataTable().ajax.reload();
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "result.message" })
+                    }
+
+
+            }
+        });
+    }
+
+
+
+
+    $("#DeliveryPriceWithoutVat").keyup(function() {
+        debugger;
+        var deliveryval = $(this).val(); // 17
+
+        var vatvalue = parseFloat(parseFloat($("#DeliveryPriceVatPercent").val()) * parseFloat(deliveryval) / 100).toFixed(2); // 22.5
+        $("#DeliveryPrice").val(parseFloat(parseFloat(deliveryval) + parseFloat(vatvalue)).toFixed(2));
+    });
+    $("#DeliveryPriceVatPercent").keyup(function() {
+        var Vatval = $(this).val();
+
+        var vatvalue = parseFloat(parseFloat(Vatval) * parseFloat($("#DeliveryPriceWithoutVat").val()) / 100).toFixed(2);
+        $("#DeliveryPrice").val(parseFloat(parseFloat($("#DeliveryPriceWithoutVat").val()) + parseFloat(vatvalue)).toFixed(2));
+
+        $("#vatpers").html(" ( " + $("#DeliveryPriceVatPercent").val() + " %) ");
+    });
+
+</script>
+

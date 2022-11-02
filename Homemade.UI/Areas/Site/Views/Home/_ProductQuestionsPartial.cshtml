@@ -1,0 +1,21 @@
+﻿@model Homemade.BLL.ViewModel.Site.SiteProductDetailsViewModel
+@foreach (var item in Model.ProdQuestion)
+{
+    <div class="panel-items">
+
+        <div class="panel-header">
+
+            <div class="question-text">@item.Question</div>
+            <div class="question-date">@item.CreateDate.ToString("dd yyyy MMMM") </div>
+
+        </div>
+        <div class="panel-body">
+
+            <div class="question-ans">@item.Answer </div>
+
+        </div>
+    </div>
+}
+<script>
+    $("#QuestionCount").html("(@Model.ProdQuestion.Count())");
+</script>

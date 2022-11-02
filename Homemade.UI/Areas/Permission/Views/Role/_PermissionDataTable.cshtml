@@ -1,0 +1,127 @@
+﻿<script>
+    var permissiontable = $('#tblPermission').DataTable({
+        pageLength: 10,
+        pagijngType: "full_numbers",
+        serverSide: false,
+        processing: true,
+        lengthMenu: [[5, 10, 20, 25, -1], [5, 10, 20, 50, 100]],
+        sAjaxSource: '@Url.Action("LoadTableRolePermissions")',
+        sServerMethod: "POST",
+        bPaginate: true,
+        paging: false,
+        bFilter: false,
+        bLengthChange: false,
+        columns: [
+
+
+            {
+                data: null,
+                bSortable: false,
+                render: function(data, type, row) {
+                    let checked = (data.isView == 1 && data.isInsert == 1 && data.isUpdate == 1 && data.isDelete == 1) ? "checked" : '';
+                    return `<label class="css-input css-checkbox css-checkbox-warning"><input type="checkbox" class="checkbox" onclick="checkController(this)" ${checked} value=""${data.controllerID}" /><span></span></label>`
+                }
+
+            },
+            {
+                "data": null,
+                "sortable": false,
+                render: function(data, type, row, meta) {
+                    return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                }
+            },
+
+            {
+                data: null,
+                bSortable: true,
+                render: function(data, type, row) {
+                    return '<label class="arName">' + data.controllerName + '</label>'
+                }
+
+            },
+            {
+                data: null,
+                bSortable: true,
+                render: function(data, type, row) {
+                    let checked = data.isView == 1 ? "checked" : '';
+                    return `<label class="css-input css-checkbox css-checkbox-warning"><input type="checkbox" class="checkbox" name="insertcheck" onclick="check(this)" ${checked} value="${data.permissionControllerActionViewID}" /><span></span></label>`
+                }
+
+            },
+            {
+                data: null,
+                bSortable: true,
+                render: function(data, type, row) {
+                    let checked = data.isInsert == 1 ? "checked" : '';
+                    return `<label class="css-input css-checkbox css-checkbox-warning"><input type="checkbox" class="checkbox" name="insertcheck" onclick="check(this)" ${checked} value="${data.permissionControllerActionInsertID}" /><span></span></label>`
+                }
+
+            },
+            {
+                data: null,
+                bSortable: true,
+                render: function(data, type, row) {
+                    let checked = data.isUpdate == 1 ? "checked" : '';
+                    return `<label class="css-input css-checkbox css-checkbox-warning"><input type="checkbox" class="checkbox" name="insertcheck" onclick="check(this)" ${checked} value="${data.permissionControllerActionUpdateID}" /><span></span></label>`
+                }
+
+            },
+            {
+                data: null,
+                bSortable: true,
+                render: function(data, type, row) {
+                    let checked = data.isDelete == 1 ? "checked" : '';
+                    return `<label class="css-input css-checkbox css-checkbox-warning"><input type="checkbox" class="checkbox" name="insertcheck" onclick="check(this)" ${checked} value="${data.permissionControllerActionDeleteID}" /><span></span></label>`
+                }
+
+            }
+        ],
+        drawCallback: function(s) {
+            $('[data-toggle="tooltip"]').tooltip();
+        },
+        'select': 'multi',
+        'order': [[1, 'asc']]
+
+
+    });
+
+    function GetSelectedItems() {
+        ActionCheck = "";
+        $('input[name="insertcheck"]:checked').each(function() {
+            ActionCheck = ActionCheck + this.value + ',';
+        });
+        $("#CheckedItems").val(ActionCheck);
+    }
+    function check(e) {
+        var state = $(e).is(':checked');
+        if (state === true) {
+            $(e).prop('checked', true);
+        }
+        else {
+            $(e).not(":disabled").prop('checked', false);
+        }
+        GetSelectedItems();
+    }
+    function checkAll(ele) {
+        var state = $(ele).is(':checked');
+        if (state === true) {
+            $('.checkbox').not(":disabled").prop('checked', true);
+        }
+        else {
+            $('.checkbox').not(":disabled").prop('checked', false);
+        }
+        GetSelectedItems();
+    }
+    function checkController(ele) {
+
+        var state = $(ele).is(':checked');
+        if (state === true) {
+            $(ele).not(":disabled").closest("tr").find('.checkbox').prop('checked', true);
+        }
+        else {
+            $(ele).not(":disabled").closest("tr").find('.checkbox').prop('checked', false);
+        }
+        GetSelectedItems();
+    }
+
+</script>

@@ -1,0 +1,179 @@
+﻿<script>
+    var table = $('#tbl').DataTable({
+        pageLength: 1000,
+        pagijngType: "full_numbers",
+        serverSide: true,
+        processing: true,
+        lengthMenu: [[5, 10, 20, 25, -1], [5, 10, 20, 50, 100]],
+        sAjaxSource: '@Url.Action("LoadTableRolePermissions")',
+        sServerMethod: "POST",
+        bPaginate: false,
+        paging: false,
+        columns: [
+
+
+            {
+                data: null,
+                bSortable: false,
+                render: function(data, type, row) {
+                    let checked = (data.isView == 1 && data.isInsert == 1 && data.isUpdate == 1 && data.isDelete == 1) ? "checked" : '';
+                    return `<label class="css-input css-checkbox css-checkbox-warning"><input type="checkbox" class="checkbox" onclick="checkController(this)" id="hfID" ${checked} value=""${data.controllerID}" /> <span></span></label>`
+                }
+
+            },
+            {
+                "data": null,
+                "sortable": false,
+                render: function(data, type, row, meta) {
+                    return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                }
+            },
+
+            {
+                data: null,
+                bSortable: true,
+                render: function(data, type, row) {
+                    return '<label class="arName">' + data.controllerName + '</label>'
+                }
+
+            },
+            {
+                data: null,
+                bSortable: true,
+                render: function(data, type, row) {
+                    let checked = data.isView == 1 ? "checked" : '';
+                    return `<label class="css-input css-checkbox css-checkbox-warning"><input type="checkbox" class="checkbox" onclick="check(this)" id="ViewID" ${checked} value="${data.permissionControllerActionViewID}" style="zoom:1.5;margin-left:auto; margin-right:auto;" /><span></span></label>`
+                }
+
+            },
+            {
+                data: null,
+                bSortable: true,
+                render: function(data, type, row) {
+                    let checked = data.isInsert == 1 ? "checked" : '';
+                    return `<label class="css-input css-checkbox css-checkbox-warning"><input type="checkbox" class="checkbox" onclick="check(this)" id="InsertID" ${checked} value="${data.permissionControllerActionInsertID}" style="zoom:1.5;margin-left:auto; margin-right:auto;" /><span></span></label>`
+                }
+
+            },
+            {
+                data: null,
+                bSortable: true,
+                render: function(data, type, row) {
+                    let checked = data.isUpdate == 1 ? "checked" : '';
+                    return `<label class="css-input css-checkbox css-checkbox-warning"><input type="checkbox" class="checkbox" onclick="check(this)" id="UpdateID" ${checked} value="${data.permissionControllerActionUpdateID}" style="zoom:1.5;margin-left:auto; margin-right:auto;" /><span></span></label>`
+                }
+
+            },
+            {
+                data: null,
+                bSortable: true,
+                render: function(data, type, row) {
+                    let checked = data.isDelete == 1 ? "checked" : '';
+                    return `<label class="css-input css-checkbox css-checkbox-warning"><input type="checkbox" class="checkbox" onclick="check(this)" id="DeleteID" ${checked} value="${data.permissionControllerActionDeleteID}" style="zoom:1.5;margin-left:auto; margin-right:auto;" /><span></span></label>`
+                }
+
+            }
+        ],
+        drawCallback: function(s) {
+            $('[data-toggle="tooltip"]').tooltip();
+        },
+        buttons: [
+            {
+                extend: "copy",
+                className: "btn btn-info btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Copy'
+            }, {
+                extend: "excelHtml5",
+                autoFilter: true,
+                sheetName: 'Exported data',
+                className: "btn btn-success btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Excel'
+            }, @*{
+            extend: "print",
+            className: "btn btn-warning btn-xs",
+            text: '@Homemade.UI.Resources.Homemade.Print'
+            },*@{
+                extend: "pdfHtml5",
+                download: 'open',
+                className: "btn btn-info btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.PDF'
+            }],
+        'select': 'multi',
+        'order': [[1, 'asc']]
+
+
+    });
+    $(document).ready(function() { table.buttons().container().appendTo('.dt_buttons_wrap'); });
+    function readtable(userId, roleId) {
+        table.ajax.url('/Permission/Permissions/LoadTableRolePermissions?userId=' + userId + '&roleId=' + roleId);
+        table.ajax.reload();
+    }
+
+    function GetSelectedItems() {
+        ActionCheck = "";
+        var i = 0;
+        var check;
+        $("#tbl tbody").find('tr').each(
+            function() {
+                var Viewid = $(this).find('#ViewID').val();
+                var Insertid = $(this).find('#InsertID').val();
+                var Updateid = $(this).find('#UpdateID').val();
+                var Deleteid = $(this).find('#DeleteID').val();
+
+                var IsView = $(this).find('#ViewID').is(':checked');
+                if (IsView === true) {
+                    ActionCheck = ActionCheck + Viewid + ',';
+                    i++;
+                }
+                var IsInsert = $(this).find('#InsertID').is(':checked');
+                if (IsInsert === true) {
+                    ActionCheck = ActionCheck + Insertid + ',';
+                    i++;
+                }
+                var IsUpdate = $(this).find('#UpdateID').is(':checked');
+                if (IsUpdate === true) {
+                    ActionCheck = ActionCheck + Updateid + ',';
+                    i++;
+                }
+                var IsDelete = $(this).find('#DeleteID').is(':checked');
+                if (IsDelete === true) {
+                    ActionCheck = ActionCheck + Deleteid + ',';
+                    i++;
+                }
+            }
+        );
+        $("#CheckedItems").val(ActionCheck);
+    }
+    function check(e) {
+        var state = $(e).is(':checked');
+        if (state === true) {
+            $(e).prop('checked', true);
+        }
+        else {
+            $(e).not(":disabled").prop('checked', false);
+        }
+        GetSelectedItems();
+    }
+    function checkAll(ele) {
+        var state = $(ele).is(':checked');
+        if (state === true) {
+            $('.checkbox').not(":disabled").prop('checked', true);
+        }
+        else {
+            $('.checkbox').not(":disabled").prop('checked', false);
+        }
+        GetSelectedItems();
+    }
+    function checkController(ele) {
+
+        var state = $(ele).is(':checked');
+        if (state === true) {
+            $(ele).not(":disabled").closest("tr").find('.checkbox').prop('checked', true);
+        }
+        else {
+            $(ele).not(":disabled").closest("tr").find('.checkbox').prop('checked', false);
+        }
+        GetSelectedItems();
+    }
+
+</script>

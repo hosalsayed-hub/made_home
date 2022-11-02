@@ -1,0 +1,15 @@
+﻿@Html.Hidden("Lat")
+@Html.Hidden("Lng")
+<script>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(showPosition);
+        }
+    }
+    function showPosition(position) {
+        $("#Lat").val(42.256321);
+        $("#Lng").val(42.675658);
+        window.open("https://maps.google.com/maps?saddr=" + position.coords.latitude + "," + position.coords.longitude + "&daddr=" + $("#Lat").val() + "," + $("#Lng").val() + "&mode=driving", "_blank");
+    }
+    getLocation();
+</script>

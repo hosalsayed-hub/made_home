@@ -1,0 +1,72 @@
+﻿ .page {
+     width: 20cm;
+     min-height: 29.7cm;
+     /*padding: 2cm;*/
+     margin: 1cm auto;
+     /*border: 1px #ccc solid;*/
+     border-radius: 5px;
+     /*background: white;*/
+     /*box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);*/
+ }
+ .subpage {
+     padding: 0.5cm;
+     /*border: 1px #ccc solid;*/
+     height: 256mm;
+     /*outline: 2cm #FFF solid;*/
+ }
+ .light.page-head.portlet {
+     display: none;
+ }
+ @page {
+     size: A4;
+     margin: 0;
+ }
+ @media print {
+    .page {
+        margin: 0;
+        border: initial;
+        border-radius: initial;
+        width: initial;
+        min-height: initial;
+        box-shadow: initial;
+        background: initial;
+        page-break-after: always;
+    }
+    .block-header-actions{
+        display:none;
+    }
+    .col-sm-6 {
+        width: 50%;
+    }
+    .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9 {
+        float: left;
+    }
+    .col-sm-offset-6 {
+        margin-left: 50%;
+    }
+    .col-sm-3 {
+        width: 25%;
+    }
+    .col-sm-12 {
+        width: 100%;
+    }
+    .block-header {
+        display: none;
+    }
+    .Dev-Print {
+        display: none;
+    }
+ }
+
+ .width-30 {
+     width: 20% !important;
+ }
+
+.width-70 {
+    width: 30% !important;
+}
+.footer {
+    /*position: absolute;*/
+    bottom: 135px;
+    width: 19cm;
+}

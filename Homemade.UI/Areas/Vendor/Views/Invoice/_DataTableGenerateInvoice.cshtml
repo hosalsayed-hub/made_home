@@ -1,0 +1,223 @@
+﻿<script>
+    var table;
+    $(document).ready(function() {
+        table = $('#tbl_Invoice').DataTable({
+            pageLength: 10,
+            pagijngType: "full_numbers",
+            serverSide: true,
+            processing: true,
+            lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+            sAjaxSource: '@Url.Action("LoadTableTripForInvoiceGenerate")',
+            sServerMethod: "POST",
+            bPaginate: true,
+            paging: true,
+            columns: [
+                {
+                    "data": null,
+                    "sortable": false,
+                    render: function(data, type, row, meta) {
+                        return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<input type="hidden" value="' + data.orderVendorID + '"/><label class="arName">' + data.orderVendorID + '</label>';
+                    }
+
+                },
+                //{
+                //    data: null,
+                //    bSortable: true,
+                //    render: function (data, type, row) {
+                //        return '<label class="enName">' + data.driverName + '</label>';
+                //    }
+
+                //},
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="enName">' + data.orderStatusName + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="enName">' + data.createDate + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="enName">' + data.vendorName + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="enName">' + data.perHome + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="enName">' + data.deliveryPrice + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="enName">' + data.perHome + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="enName">' + data.perStore + '</label>';
+                    }
+
+                },
+
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="enName">' + data.catainType + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="receiver">' + data.customerName + ',' + data.customerMobileNo + '</label>';
+                    }
+
+                },
+                {
+
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row, meta) {
+                        var databutton = '';
+                        databutton += ` <a class="btn btn-xs btn-info" href="/Order/Orders/Details?orderVendorGuid=${data.orderVendorGuid}" type="button" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Details">
+                                            <i class="fa fa-search"></i>
+                                        </a>`;
+
+    @*databutton += '<a class="btn btn-xs btn-info" style="margin:4px" href="/ClientUser/Trip/TripDetails/' +
+                            data.tripMasterGuid + '" type="button" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Details"><i class="fa fa-search"/></a>';*@
+
+                                return databutton;
+                    }
+                }
+            ],
+            buttons: [
+                {
+                    text: '@Homemade.UI.Resources.Homemade.Excel',
+                    className: "btn btn-success btn-xs",
+                    action: function(e, dt, node, config) {
+                        DownloadExcel();
+                    }
+                },
+                {
+                    text: '@Homemade.UI.Resources.Homemade.Print',
+                    className: "btn btn-warning btn-xs",
+                    action: function(e, dt, node, config) {
+                        Print();
+                    }
+                },
+                {
+                    extend: "pdfHtml5",
+                    download: 'open',
+                    className: "btn btn-info btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.PDF'
+                }
+            ],
+            drawCallback: function(s) {
+                $('[data-toggle="tooltip"]').tooltip();
+            }
+            , dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+
+        });
+        table.buttons().container().appendTo('.dt_buttons_wrap');
+    });
+    function readtable() {
+        table.ajax.url('/Vendor/Invoice/LoadTableTripForInvoiceGenerate?clientID=' + $("#ClientID").val() + '&fromDate=' + $("#FromDate").val() + '&toDate=' + $("#ToDate").val());
+        table.ajax.reload();
+        debugger;
+        setTimeout(function() {
+            var sx = table.data().count();
+            if (sx > 0) {
+                $("#Dev_Generate").show();
+            } else {
+                $("#Dev_Generate").hide();
+            }
+        }, 1000);
+
+    }
+    function Generate() {
+        if ($("#Discount").val() != null) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , true)
+                { Title = "\"" + Homemade.UI.Resources.Homemade.InsertValidDataMessage + "\"" })
+                }
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Add , "ConfirmGenerate();"))
+        }
+    function ConfirmGenerate() {
+        $.ajax({
+            type: "POST",
+            url: '/Vendor/Invoice/Generate?clientID=' + $("#ClientId").val() + '&fromDate=' + $("#From").val() + '&toDate=' + $("#To").val() + '&discount=' + $("#Discount").val(),
+            data: {},
+            success: function(response) {
+                if (response.status == true) {
+                    readtable();
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                        Title = "response.message"})
+                    }
+                else {
+                    swal(response.message, "", "error");
+                }
+            }
+        });
+    }
+    function GetListTripID() {
+        $.ajax({
+            url: '/Order/Invoice/GetListTripMasterID',
+            data: {},
+            success: function(response) {
+                alert(response);
+                $("#ListTripMasterID").val(response);
+            }
+        });
+    }
+    function DownloadExcel() {
+        if ($("#tbl_Invoice tbody tr").length > 0 && ($("#tbl_Invoice tbody tr td").hasClass("dataTables_empty") == false)) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.ExportExcel , "ConfirmExcel();"))
+                }
+        else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false)
+                { Title = "\"" + Homemade.UI.Resources.Homemade.NoDataFound + "\"" })
+                }
+    }
+
+    function ConfirmExcel() {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+            Title = "\"" + Homemade.UI.Resources.Homemade.Excel + "\""})
+            window.open('/Vendor/Invoice/ExcelTripForInvoiceGenerate?clientID=' + $("#ClientID").val() + '&fromDate=' + $("#FromDate").val() + '&toDate=' + $("#ToDate").val(), "_blank");
+    }
+
+</script>

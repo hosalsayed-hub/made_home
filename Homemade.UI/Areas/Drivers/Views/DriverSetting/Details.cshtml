@@ -1,0 +1,382 @@
+﻿@model Homemade.BLL.ViewModel.Driver.AssignDriverVewModel
+<!-- Page Header -->
+<!-- END Page Header -->
+<!-- Page Content -->
+<div class="content">
+    <div class="row">
+        <div class="col-md-12 form-group">
+            <div class="block">
+                <div class="block-header bg-gray-lighter">
+                    <h3 class="block-title" data-toggle="collapse" data-target="#collapseDriver" aria-expanded="false" aria-controls="collapseDriver">
+                        <i class="ion-code-working push-5-r"></i>
+                        <span class="header-title">@Homemade.UI.Resources.Homemade.Basic_Data</span>
+                    </h3>
+                </div>
+                <div class="collapse in" id="collapseDriver">
+                    <div class="block-content">
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Name_Ar </label>
+                                    @Html.DisplayFor(x => x.NameAr)
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Name_En </label>
+                                    @Html.DisplayFor(x => x.NameEn)
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    <label for="material-select2">@Homemade.UI.Resources.Homemade.IdNo </label>
+                                    @Html.DisplayFor(x => x.IDNo)
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.PhoneNumberStc</label>
+                                    @Html.DisplayFor(x => x.PhoneNumberStc)
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Nationality</label>
+                                    @Html.DisplayFor(x => x.NationalityName)
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.CarNumber</label>
+                                    @Html.DisplayFor(x => x.CarNumber)
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.GenderType</label>
+                                    @if (Model.Gender == 0)
+                                    {
+                                        @Homemade.UI.Resources.Homemade.Male
+                                    }
+                                    else
+                                    {
+                                        @Homemade.UI.Resources.Homemade.Female
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Stc_Verfiy</label>
+                                    @if (Model.VerifyStc == (int)VerifyStcEnum.Cash)
+                                    {
+                                        @Homemade.UI.Resources.Homemade.Cash
+                                    }
+                                    else if (Model.VerifyStc == (int)VerifyStcEnum.Not_Verified)
+                                    {
+                                        @Homemade.UI.Resources.Homemade.Not_Verfied_STCPAY
+                                    }
+                                    else
+                                    {
+                                        @Homemade.UI.Resources.Homemade.Verfied_STCPAY
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.City</label>
+                                    @Html.DisplayFor(x => x.CityName)
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.RegionCity</label>
+                                    @Html.DisplayFor(x => x.RegionCityName)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <h3 class="block-title" data-toggle="collapse" data-target="#collapseOption" aria-expanded="false" aria-controls="collapseOption">
+                <i class="ion-code-working push-5-r"></i>
+                @Homemade.UI.Resources.Homemade.OptionalData
+            </h3>
+        </div>
+        <div class="block-content collapse" id="collapseOption">
+            <div class="block">
+                <ul class="nav nav-tabs" data-toggle="tabs">
+                    <li class="active">
+                        <a href="#taxi"><i class="ion-android-car push-5-r"></i> @Homemade.UI.Resources.Homemade.TaxiTab</a>
+                    </li>
+                    <li class="">
+                        <a href="#driver"><i class="fa fa-male push-5-r"></i> @Homemade.UI.Resources.Homemade.DriverTab</a>
+                    </li>
+                </ul>
+                <div class="block-content tab-content">
+                    <div class="tab-pane active" id="taxi">
+                        <div class="row">
+                            @{
+                                string InsuranceEndDateType = Model.InsuranceEndDateType == 0 ? Homemade.UI.Resources.Homemade.HijiriDate : Homemade.UI.Resources.Homemade.NormalDate;
+                                string InsuranceEndDate = Model.InsuranceEndDateType == 0 ? Model.HijiriInsuranceEndDate ?? string.Empty : Model.InsuranceEndDate ?? string.Empty;
+                            }
+
+
+
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    <label for="material-select2">@Homemade.UI.Resources.Homemade.InsuranceNumber </label>
+                                    @Html.DisplayFor(x => x.InsuranceNumber)
+                                </div>
+                            </div>
+                           
+                            <div class="col-xs-6 form-group">
+
+                                <div class="form-material datetype">
+                                    <label for="material-select2">@Homemade.UI.Resources.Homemade.InsuranceEndDate </label>
+                                    @InsuranceEndDate
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+
+                                    <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.CarPicture</label>
+                                    <div>
+
+                                        @if (string.IsNullOrEmpty(Model.CarPictrue))
+                                        {
+                                            <img src="~/Images/noImage.png" style="width:35%" />
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.CarPictrue))
+                                        {
+                                            <img style="width: 80px; height: 80px" src="@Model.CarPictrue" />
+                                            <br />
+                                            <a class="btn" target="_blank" href="@Model.CarPictrue">@Homemade.UI.Resources.Homemade.View</a>
+                                            <p style="display:none" class="AddData" id="IDPicture"></p>
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.CarLicensePicture</label>
+                                    <div>
+                                        @if (string.IsNullOrEmpty(Model.CarLicensePicture))
+                                        {
+                                            <img src="~/Images/noImage.png" style="width:35%" />
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.CarLicensePicture))
+                                        {
+                                            <img style="width: 80px; height: 80px " src="@Model.CarLicensePicture" />
+                                            <br />
+                                            <a class="btn" target="_blank" href="@Model.CarLicensePicture">@Homemade.UI.Resources.Homemade.View</a>
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                          
+
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="driver">
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Nick_Name </label>
+                                    @Html.DisplayFor(x => x.NickName)
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    <label for="material-text2">@Homemade.UI.Resources.Homemade.Email </label>
+                                    @Html.DisplayFor(x => x.Email)
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            @{
+                                string BirthDateType = Model.BirthDateType == 0 ? Homemade.UI.Resources.Homemade.HijiriDate : Homemade.UI.Resources.Homemade.NormalDate;
+                                string BirthDate = Model.BirthDateType == 0 ? Model.HijriBirthDate != null ? Model.HijriBirthDate : string.Empty : Model.BirthDate ?? string.Empty;
+                            }
+                            <div class="col-md-6 form-group">
+                                <div class="form-material datetype">
+                                    <label for="material-select2">@Homemade.UI.Resources.Homemade.BirthDate </label>
+                                    @BirthDate
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    <label for="material-textarea-large2">@Homemade.UI.Resources.Homemade.Address </label>
+                                    @Html.DisplayFor(x => x.Address)
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    <label>@Homemade.UI.Resources.Homemade.GenderType</label>
+                                    @{
+                                        string Gender = Model.Gender == 0 ? Homemade.UI.Resources.Homemade.Male : Homemade.UI.Resources.Homemade.Female;
+                                    }
+                                    @Gender
+
+                                </div>
+                            </div>
+                            @{
+                                string PrivateLicenseEndDateType = Model.PrivateLicenseTypeEndDate == 0 ? Homemade.UI.Resources.Homemade.HijiriDate : Homemade.UI.Resources.Homemade.NormalDate;
+                                string PrivateLicenseEndDate = Model.PrivateLicenseTypeEndDate == 0 ? Model.PrivateHijriLicenseEndDate ?? string.Empty : Model.PrivateLicenseEndDate ?? string.Empty;
+                            }
+                            <div class="col-md-3 form-group">
+                                <div class="form-material">
+                                    <label for="material-select2">@Homemade.UI.Resources.Homemade.PrivateLicenseNumber </label>
+                                    @Html.DisplayFor(x => x.PrivateLicenseNumber)
+                                </div>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <div class="form-material">
+                                    <label for="material-select2">@Homemade.UI.Resources.Homemade.PrivateLicenseEndDate </label>
+                                    @PrivateLicenseEndDate
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+                                    <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.PersonalFileUpload</label>
+                                    <div>
+                                        @if (string.IsNullOrEmpty(Model.PersonalPicture))
+                                        {
+                                            <img src="~/Images/noImage.png" style="width:35%" />
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.PersonalPicture))
+                                        {
+                                            <img style="width: 80px; height: 80px" src="@Model.PersonalPicture" />
+                                            <br />
+                                            <a class="btn" target="_blank" href="@Model.PersonalPicture">@Homemade.UI.Resources.Homemade.View</a>
+                                            <p style="display:none" class="AddData" id="IDPicture"></p>
+                                        }
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+
+                                    <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.IDFileUpload</label>
+                                    <div>
+
+                                        @if (string.IsNullOrEmpty(Model.IDPicture))
+                                        {
+                                            <img src="~/Images/noImage.png" style="width:35%" />
+                                        }
+
+                                        @if (!string.IsNullOrEmpty(Model.IDPicture))
+                                        {
+                                            <img style="width: 80px; height: 80px" src="@Model.IDPicture" />
+                                            <p style="display:none" class="AddData" id="IDPicture"></p>
+                                            <br />
+                                            <a class="btn" target="_blank" href="@Model.IDPicture">@Homemade.UI.Resources.Homemade.View</a>
+                                        }
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+
+                                    <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.LicensePicture</label>
+                                    <div>
+                                        @if (string.IsNullOrEmpty(Model.LicensePicture))
+                                        {
+                                            <img src="~/Images/noImage.png" style="width:35%" />
+                                        }
+
+                                        @if (!string.IsNullOrEmpty(Model.LicensePicture))
+                                        {
+                                            <img style="width: 80px; height: 80px" src="@Model.LicensePicture" />
+                                            <p style="display:none" class="AddData" id="IDPicture"></p>
+                                            <br />
+                                            <a class="btn" target="_blank" href="@Model.LicensePicture">@Homemade.UI.Resources.Homemade.View</a>
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <div class="form-material">
+
+                                    <label for="exampleFormControlFile1">@Homemade.UI.Resources.Homemade.BankAccountPicture</label>
+                                    <div>
+
+                                        @if (string.IsNullOrEmpty(Model.BankAccountPicture))
+                                        {
+                                            <img src="~/Images/noImage.png" style="width:35%" />
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.BankAccountPicture))
+                                        {
+
+                                            <img style="width: 80px; height: 80px" src="@Model.BankAccountPicture" />
+                                            <p style="display:none" class="AddData" id="IDPicture"></p>
+                                            <br />
+                                            <a class="btn" target="_blank" href="@Model.BankAccountPicture">@Homemade.UI.Resources.Homemade.View</a>
+                                            <a class="btn" href="@Model.BankAccountPicture" download>@Homemade.UI.Resources.Homemade.DownLoad</a>
+                                        }
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        $(".btn-xopbloxkc").on("click", function () {
+            if ($(this).siblings(".xopbloxkc").hasClass("open")) {
+                $(this).siblings(".xopbloxkc").slideUp();
+                $(this).siblings(this).siblings(".xopbloxkc").addClass("close");
+                $(this).siblings(".xopbloxkc").removeClass("open");
+            } else {
+                $(this).siblings(".xopbloxkc").slideDown();
+                $(this).siblings(".xopbloxkc").addClass("open");
+                $(this).siblings(".xopbloxkc").removeClass("close");
+
+            }
+        })
+    </script>
+    <partial name="_ScriptsEditDriver" />
+
+}

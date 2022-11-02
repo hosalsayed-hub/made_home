@@ -1,0 +1,180 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    var deptdata = blDepartments.GetAllDepartments(Homemade.UI.InfraStructure.Utility.CurrentLanguageCode, _configuration["SliderImageView"]);
+}
+<!-- ***** products-categories-section Start ***** -->
+
+<section class="section-style products-categories-section products-slider-section">
+
+    <div class="container">
+
+        <div class="products-categories-sliders">
+            @foreach (var itemdeptdata in deptdata)
+            {
+                <div class="products-category-slider">
+
+                    <div class="row">
+
+                        <div class="col-12">
+
+                            <div class="main-section-title">
+
+                                <div class="section-title">
+
+                                    <h3 class="title">@itemdeptdata.title</h3>
+
+                                </div>
+                                <a class="show-all-link hvr-underline-from-right" href="/site/home/category_items?id=@itemdeptdata.DepartmentsGuid">@Homemade.UI.Resources.Homemade.View_all</a>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-12">
+
+                            <div class="products-slider-container">
+
+                                <div class="swiper products-slider">
+
+                                    <div class="swiper-wrapper">
+                                        @foreach (var itemProduct in blProduct.GetTopSiteProductViewModelByDepartmentsID(itemdeptdata.departmentID, Homemade.UI.InfraStructure.Utility.CurrentLanguageCode, _configuration["VendorImageView"], _configuration["ProductImageView"]))
+                                        {
+
+                                            <div class="swiper-slide">
+
+                                                <div class="product-item">
+
+                                                    <div class="product-img">
+
+                                                        <a href="/Site/home/produc_default?id=@itemProduct.ProductGuid">
+
+                                                            <img class="img-fluid" src="@itemProduct.ProductLogo">
+                                                            @*if (!blVendor.IsVendorWorking(itemProduct.VendorsDaysWork, itemProduct.VendorsWorkFrom, itemProduct.VendorsWorkTo, itemProduct.VendorsDaysVac, itemProduct.VendorsVacWorkFrom, itemProduct.VendorsVacWorkTo))
+                                                            {
+                                                                <!-- <img class="img-fluid" src="https://cdn.made-home.com/Home/Product/close.png" style="position: absolute;top: 0;opacity: 0.4;">-->
+                                                                <img class="vendor-circle" src="https://cdn.made-home.com/Home/Product/closed.png" style="margin-top: -360px; margin-right:12px; opacity: 0.8; height: 57px; width:57px; border-radius: 0px;">}
+                                                            }*@
+                                                            @*else if (itemProduct.IsLimited && itemProduct.Quantity == 0)
+        {
+        <img class="img-fluid" src="https://cdn.made-home.com/Home/Product/sold.png" style="position: absolute;top: 0;opacity: 0.4;">
+        }*@
+                                                        </a>
+
+                                                    </div>
+
+                                                    <div class="product-details">
+
+                                                        <div class="product-vendor">
+
+                                                            <a class="vendor-details" href="/Site/home/vendor?id=@itemProduct.VendorsGuid">
+
+                                                                <img class="img-fluid vendor-img" src="@itemProduct.VendorsLogo">
+                                                                <span class="vendor-name"> @itemProduct.VendorsName</span>
+                                                                @if (!blVendor.IsVendorWorking(itemProduct.VendorsDaysWork, itemProduct.VendorsWorkFrom, itemProduct.VendorsWorkTo, itemProduct.VendorsDaysVac, itemProduct.VendorsVacWorkFrom, itemProduct.VendorsVacWorkTo))
+                                                                {
+                                                                    <span class="vendor-name" style="color: red">(مغلق الآن)</span>
+                                                                }
+                                                            </a>
+
+                                                        </div>
+                                                        <div class="product-name">
+
+                                                            <a class="product-name-width" href="/Site/home/produc_default?id=@itemProduct.ProductGuid">@itemProduct.ProductName</a>
+
+                                                        </div>
+                                                        <div class="product-info">
+
+                                                            <div class="product-price product-price-width">
+
+                                                                <span class="price-val">@itemProduct.ProductPrice</span>
+                                                                <span class="price-currency">@Homemade.UI.Resources.Homemade.SR</span>
+                                                            </div>
+                                                            <div class="product-volume">
+
+                                                                @*<div class="food-icon">
+
+                                                        <img src="~/assets/homeMadeSite/img/Icon%20map-food.svg">
+
+                                                        </div>*@
+                                                                <div class="person-no person-no-width">
+
+                                                                    <span id="personNo">@itemProduct.Pieces</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    @{
+                                                        var productPaycount = blProduct.GetRateProductByMax(itemProduct.ProductID);
+                                                    }
+                                                    <div class="product-rating">
+                                                        @for (int i = 1; i < 6; i++)
+                                                        {
+                                                            if (i <= productPaycount)
+                                                            {
+                                                                <span><i class="fas fa-star"></i></span>
+                                                            }
+                                                        }
+                                                    </div>
+                                                    @if (blVendor.IsVendorWorking(itemProduct.VendorsDaysWork, itemProduct.VendorsWorkFrom, itemProduct.VendorsWorkTo, itemProduct.VendorsDaysVac, itemProduct.VendorsVacWorkFrom, itemProduct.VendorsVacWorkTo))
+                                                    {
+                                                        <div class="cart-action">
+                                                            <a class="btn-cart-wrap" href="javascript:AddToCart(@itemProduct.ProductID, 1, 'p');">
+                                                                <span class="add-to-cart">@Homemade.UI.Resources.Homemade.Add_to_cart</span>
+                                                                <span class="added">@Homemade.UI.Resources.Homemade.In_Cart</span>
+                                                            </a>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        @*<div class="cart-action alert alert-site" style="padding: 0.5rem 0.5rem;text-align: center;">
+                                            <strong>@Homemade.UI.Resources.Homemade.Closed</strong>
+                                            </div>*@
+                                                        <div class="cart-action">
+                                                            <a class="btn-cart-wrap added" style="background-color: gray;">
+                                                                <span class="add-to-cart">@Homemade.UI.Resources.Homemade.Add_to_cart</span>
+                                                            </a>
+                                                        </div>
+                                                    }
+
+                                                </div>
+
+                                            </div>
+
+                                        }
+
+
+                                    </div>
+                                    <div class="swiper-scrollbar"></div>
+                                </div>
+                                <div class="products-slider-arrow prev-btn swiper-btn-prev">
+
+                                    <i class="fas fa-chevron-right "></i>
+
+                                </div>
+                                <div class="products-slider-arrow next-btn swiper-btn-next">
+
+
+                                    <i class="fas fa-chevron-left "></i>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+            }
+
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ***** products-categories-section End ***** -->

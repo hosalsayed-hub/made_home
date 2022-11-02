@@ -1,0 +1,166 @@
+﻿@model Homemade.BLL.ViewModel.Order.OrdersVendorViewModel
+@inject Homemade.BLL.Order.BlOrders blOrders
+@{
+    var AllOrdersVendor = blOrders.GetAllOrdersVendorViewModelByOrderID(Model.OrdersID, Homemade.UI.InfraStructure.Utility.CurrentLanguageCode);
+    var HistoryOrders = blOrders.GetOrderHistory(Model.OrderVendorID, Homemade.UI.InfraStructure.Utility.CurrentLanguageCode);
+}
+@Html.HiddenFor(m => m.OrderVendorID)
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block">
+                <div class="block-content block-content-full dep_b_wrap">
+                    <h4>@Homemade.UI.Resources.Homemade.Customer_Data </h4>
+                    <div class="dep_b">
+                        <div class="log_wrap">
+                            <span>
+                                @{
+                                    var CustomerLogoString = "";
+                                    int WordsCounter = 0;
+                                }
+                                @foreach (var part in Model.CustomersName.Split(' '))
+                                {
+                                    if (WordsCounter == 2) break;
+                                    CustomerLogoString += !string.IsNullOrWhiteSpace(part) ? part.Substring(0, 1) : "";
+                                    WordsCounter++;
+
+                                }
+                                @CustomerLogoString
+                            </span>
+                        </div>
+                        <div class="det_wrap">
+                            <a href="#" class="name"> @Model.CustomersName </a>
+                            <!--<a href="#"><i class="ion-android-call push-5-r"></i> @Model.CustomersMobileNo  </a>-->
+                            <!--<a href="#"><i class="ion-android-mail push-5-r"></i> @Model.CustomersEmail </a>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block" id="DevIncreaseOrdersPartail">
+                <partial name="_IncreaseOrdersPartail" model="@Model">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles{
+    <!-- Data_Table Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" />
+    <style>
+        thead {
+            display: none;
+        }
+
+        .dataTables_filter {
+            display: none;
+        }
+    </style>
+}
+
+    @section Scripts{
+
+    <!-- Data_table Plugins -->
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+    <script>
+        var idselected = 0;
+        function ApproveOrder() {
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.ChangeStaute , "ConfirmApproveOrder()"))
+                }
+        function RejectOrder() {
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.ChangeStaute , "ConfirmRejectOrder()"))
+                }
+        function SaveQuantity() {
+        @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Edit , "ConfirmSaveQuantity()"))
+            }
+        function ConfirmSaveQuantity() {
+            var listOrderItemsID = [];
+            var listQuantity = [];
+            $("input[name^='Quantity_']").each(function() {
+                listOrderItemsID.push($(this).data('id'));
+                listQuantity.push($(this).val());
+            });
+            $.ajax({
+                url: "/Order/Orders/UpdateOrderItems",
+                data: {
+                    orderVendorID: $("#OrderVendorID").val(),
+                    listOrderItemsID: listOrderItemsID,
+                    listQuantity: listQuantity,
+                },
+                type: 'POST',
+                success: function(data) {
+                    if (data.status) {
+        @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+                        { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessChangeMessage + "\"" });
+                        setTimeout(function() {
+                            location.href = "/Order/Orders/PendingOrdersVendor";
+                        }, 2000);
+                    }
+                }
+            });
+        }
+        function ConfirmApproveOrder() {
+            $.ajax({
+                url: "/Order/Orders/ApproveOrder",
+                data: {
+                    orderVendorID: $("#OrderVendorID").val(),
+                },
+                type: 'POST',
+                success: function(data) {
+                    if (data.status) {
+        @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+                        { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessChangeMessage + "\"" });
+                        setTimeout(function() {
+                            location.href = "/Order/Orders/PendingOrdersVendor";
+                        }, 2000);
+                    }
+                    else {
+                        var msg = data.message;
+        @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+                        { Title = "msg" });
+                    }
+                }
+            });
+        }
+        function ConfirmRejectOrder() {
+            $.ajax({
+                url: "/Order/Orders/RejectOrder",
+                data: {
+                    orderVendorID: $("#OrderVendorID").val(),
+                },
+                type: 'POST',
+                success: function(data) {
+                    if (data.status) {
+        @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+                        { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessChangeMessage + "\"" });
+                        setTimeout(function() {
+                            location.href = "/Order/Orders/PendingOrdersVendor";
+                        }, 2000);
+                    }
+                    else {
+                        var msg = data.message;
+        @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+                        { Title = "msg" });
+                    }
+                }
+            });
+        }
+        function ShowSaveQuantity() {
+            $("#DevIncreaseOrdersPartail").load("/Order/Orders/GetIncreaseOrdersPartail?OrderVendorID=" + $("#OrderVendorID").val() + "&IsEdit=" + true);
+        }
+        function CancelEdit() {
+            $("#DevIncreaseOrdersPartail").load("/Order/Orders/GetIncreaseOrdersPartail?OrderVendorID=" + $("#OrderVendorID").val() + "&IsEdit=" + false);
+
+        }
+    </script>
+}

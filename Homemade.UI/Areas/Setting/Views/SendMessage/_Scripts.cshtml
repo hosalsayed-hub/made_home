@@ -1,0 +1,42 @@
+﻿<script>
+    function GetType(id) {
+        $("#SendTypeId").val(id);
+        $("#SendMessageModal").modal('show');
+    }
+    function SendMessage() {
+        var selected = [];
+        $("input[type='checkbox'][name='MessageTypeId']:checked").each(function() {
+            selected.push($(this).val());
+        });
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SendMessageToVendor")',
+            data: {
+                'checkedItems': $("#CheckedItems").val(),
+                'sendTypeId': $("#SendTypeId").val(),
+                'messageTypeId': selected,
+                'message': $("#SendMessage").val(),
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                var msg = result.message;
+
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+                        {
+                        Title = "msg"
+                        });
+                    $("#SendMessageModal").modal('hide');
+                    $('#tbl_Vendor').DataTable().ajax.reload();
+
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Error, "", false, false, false) { Title = "msg" });
+                }
+            }
+        });
+    }
+</script>

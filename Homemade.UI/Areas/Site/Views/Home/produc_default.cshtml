@@ -1,0 +1,640 @@
+﻿@model Homemade.BLL.ViewModel.Site.SiteProductDetailsViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<!-- ***** breadcrumb-section Start ***** -->
+
+<section class="breadcrumb-section">
+
+    <div class="container">
+
+
+        <div class="row">
+
+            <div class="col-12">
+
+                <nav class="breadcrumb-nav" aria-label="breadcrumb">
+
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/Site/Home/Index">@Homemade.UI.Resources.Homemade.DashBoard</a></li>
+                        <li class="breadcrumb-item"><a href="/Site/Home/categories">@Homemade.UI.Resources.Homemade.Departments</a></li>
+                        <li class="breadcrumb-item"><a href="/Site/Home/category_items?id=@Model.DepartmentsGuid">@Model.DepartmentName</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">@Model.ProductName</li>
+
+
+                    </ol>
+                </nav>
+
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+<!-- ***** breadcrumb-section End ***** -->
+<!-- ***** product-description-section Start ***** -->
+
+<section class="section-style product-description-section">
+
+    <div class="container">
+
+        <div class="row ">
+
+            <div class="col-md-5">
+
+                <div class="product-description-images">
+
+                    <div class="swiper product-description-slider">
+                        <div class="swiper-wrapper">
+                            @if (Model.ProductImages.Any())
+                            {
+                                @foreach (var item in Model.ProductImages)
+                                {
+                                    <div class="swiper-slide">
+
+                                        <div class="product-description-img">
+
+                                            <img class="img-fluid" src="@item.Image">
+                                            @if (!blVendor.IsVendorWorking(Model.VendorsDaysWork, Model.VendorsWorkFrom, Model.VendorsWorkTo, Model.VendorsDaysVac, Model.VendorsVacWorkFrom, Model.VendorsVacWorkTo))
+                                            {
+                                                <img class="img-fluid" src="https://cdn.made-home.com/Home/Product/close.png" style="position: absolute;top: 0;opacity: 0.4;">
+                                            }
+                                        </div>
+
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="swiper-slide">
+
+                                    <div class="product-description-img">
+
+                                        <img class="img-fluid" src="@Model.ProductLogo">
+                                        @if (!blVendor.IsVendorWorking(Model.VendorsDaysWork, Model.VendorsWorkFrom, Model.VendorsWorkTo, Model.VendorsDaysVac, Model.VendorsVacWorkFrom, Model.VendorsVacWorkTo))
+                                        {
+                                            <img class="img-fluid" src="https://cdn.made-home.com/Home/Product/close.png" style="position: absolute;top: 0;opacity: 0.4;">
+                                        }
+                                    </div>
+
+                                </div>
+                            }
+
+                        </div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-md-7">
+
+                <div class="product-description-details">
+
+                    <div class="product-head">
+
+                        <div class="product-vendor">
+
+                            <a class="vendor-details" href="/Site/home/vendor?id=@Model.VendorsGuid">
+
+                                <img class="img-fluid vendor-img" src="@Model.VendorsLogo">
+                                <span class="vendor-name">@Model.VendorsName</span>
+                            </a>
+
+                        </div>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="wishlist-action">
+
+                                <a class="btn-wishlist h-model @(Model.IsFavorites == true ? Html.Raw("active") : Html.Raw(""))" href="#" onclick="AddToFavorites()" data-bs-toggle="modal-2" data-bs-target="#wishlistAddedmodal">
+
+                                    <div class="flip-icon">
+                                        <span class="front-icon"><i class="far fa-heart"></i></span>
+                                        <span class="back-icon"><i class="fas fa-heart"></i></span>
+                                    </div>
+                                    <span class="wishlist-text">@Homemade.UI.Resources.Homemade.Add_to_Favorites </span>
+                                </a>
+
+
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="wishlist-action">
+
+                                <a class="btn-wishlist not-wish h-model @(Model.IsFavorites == true ? Html.Raw("active") : Html.Raw(""))" href="#" data-bs-toggle="modal" data-bs-target="#signInmodal">
+
+                                    <div class="flip-icon">
+                                        <span class="front-icon"><i class="far fa-heart"></i></span>
+                                        <span class="back-icon"><i class="fas fa-heart"></i></span>
+                                    </div>
+                                    <span class="wishlist-text">@Homemade.UI.Resources.Homemade.Add_to_Favorites </span>
+                                </a>
+
+
+                            </div>
+                        }
+
+
+                    </div>
+
+
+                    <div class="product-name"> @Model.ProductName </div>
+                    <div class="product-description-text">
+
+                        @Model.ProductDesc
+
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.ProductPieces))
+                    {
+                        <div class="product-description-text">
+                            @Homemade.UI.Resources.Homemade.Product_Quantity: @Model.ProductPieces
+                        </div>
+                    }
+                    @if (Model.Weight > 0)
+                    {
+                        <div class="product-description-text">
+                            @Homemade.UI.Resources.Homemade.Weight: @Model.Weight @Model.MeasurementName
+                        </div>
+                    }
+                    @if (Model.TimeTakenProcessHours > 0)
+                    {
+                        <div class="product-description-text">
+                            @Homemade.UI.Resources.Homemade.TimeProcess:  @Model.TimeTakenProcess
+                        </div>
+                    }
+                    @if (Model.IsLimited)
+                    {
+                        <div class="product-description-text">
+                            @Homemade.UI.Resources.Homemade.Quantity_Available:  @Model.Quantity
+                        </div>
+                    }
+
+
+                    @{
+                        var productPaycount = blProduct.GetRateProductByMax(Model.ProductID);
+                    }
+                    <div class="product-rating">
+                        @for (int i = 1; i < 6; i++)
+                        {
+                            if (i <= productPaycount)
+                            {
+                                <span><i class="fas fa-star"></i></span>
+                            }
+                            else
+                            {
+                                <span><i class="far fa-star"></i></span>
+                            }
+                        }
+                    </div>
+
+                    <div class="product-info-area">
+
+                        <div class="product-price">
+
+                            <span>@Model.ProductPrice</span>
+                            @Homemade.UI.Resources.Homemade.SR
+                        </div>
+
+                        <div class="wrap-count">
+
+
+                            <button type="button" class="count-btn count-add" data-type="plus" data-field="quant">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            @{
+                                int? quantity = null;
+                                if (Model.IsLimited)
+                                {
+                                    quantity = Convert.ToInt32(Model.Quantity);
+                                }
+                            }
+                            <input type="text" name="quant" id="prodquant" class="count-num form-control " value="1" step="1" inputmode="tel" min="1" max="10000" data-quantity="@quantity">
+                            <button type="button" class="count-btn count-sub" data-type="minus" data-field="quant">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                    @if (quantity == 0)
+                    {
+                        <div class="alert alert-site count-quantity" name="quant">
+                            <strong>@Homemade.UI.Resources.Homemade.Sorry_number_is_available @quantity @Homemade.UI.Resources.Homemade.Only_this_item_If_this_quantity_continues</strong>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-site count-quantity" name="quant" style="display:none">
+                            <strong>@Homemade.UI.Resources.Homemade.Sorry_number_is_available @quantity @Homemade.UI.Resources.Homemade.Only_this_item_If_this_quantity_continues</strong>
+                        </div>
+                    }
+                    @if (blVendor.IsVendorWorking(Model.VendorsDaysWork, Model.VendorsWorkFrom, Model.VendorsWorkTo, Model.VendorsDaysVac, Model.VendorsVacWorkFrom, Model.VendorsVacWorkTo))
+                    {
+                        <div class="product-actions-area">
+
+                            <a class="add-to-cart loading-btn h-model with-delay" onclick='AddToCart(@Model.ProductID, $("#prodquant").val(), "c");' data-bs-toggle="modal-2" data-bs-target="#productDescriptioncartAlertModal">@Homemade.UI.Resources.Homemade.Add_to_cart</a>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="product-actions-area">
+                            <a class="add-to-cart loading-btn h-model with-delay" style="background-color: gray; color: white;">@Homemade.UI.Resources.Homemade.Add_to_cart</a>
+
+                        </div>
+                    }
+
+                </div>
+
+
+            </div>
+            <div class="col-12">
+
+                <div class="product-tags">
+                    @if (Model.ListKeyWordsString != null)
+                    {
+                        foreach (var item in Model.ListKeyWordsString)
+                        {
+                            <a class="tag-item" href="#"># @item </a>
+                        }
+                    }
+
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+</section>
+
+<!-- ***** product-description-section End ***** -->
+<!-- ***** product-questions-section Start ***** -->
+
+<section class="section-style product-questions-section">
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-12">
+
+                <div class="product-questions-area">
+
+                    <div class="product-questions-head">
+
+                        <div class="product-questions-title">@Homemade.UI.Resources.Homemade.Questions_about_the_product </div>
+                        <div class="questions-toolbox">
+
+                            <div class="questions-num-wrap tab-btn active" data-target="questions-panels">
+
+                                <div class="question-icon">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20.637" height="20.637" viewBox="0 0 20.637 20.637">
+                                        <path id="Icon_material-question-answer" data-name="Icon material-question-answer" d="M22.6,7.127H20.541v9.287H7.127v2.064a1.035,1.035,0,0,0,1.032,1.032h11.35l4.127,4.127V8.159A1.035,1.035,0,0,0,22.6,7.127Zm-4.127,6.191V4.032A1.035,1.035,0,0,0,17.446,3H4.032A1.035,1.035,0,0,0,3,4.032V18.478L7.127,14.35H17.446A1.035,1.035,0,0,0,18.478,13.318Z" transform="translate(-3 -3)" fill="#a1835c" />
+                                    </svg>
+
+
+                                </div>
+                                <div class="questions-num">
+                                    @Homemade.UI.Resources.Homemade.Visitor_Questions
+                                    <span id="QuestionCount">(@Model.ProdQuestion.Count())</span>
+                                </div>
+
+
+                            </div>
+                            <div class="questions-num-wrap tab-btn" data-target="vendor-questions-panels">
+
+                                <div class="question-icon">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20.637" height="20.637" viewBox="0 0 20.637 20.637">
+                                        <path id="Icon_material-question-answer" data-name="Icon material-question-answer" d="M22.6,7.127H20.541v9.287H7.127v2.064a1.035,1.035,0,0,0,1.032,1.032h11.35l4.127,4.127V8.159A1.035,1.035,0,0,0,22.6,7.127Zm-4.127,6.191V4.032A1.035,1.035,0,0,0,17.446,3H4.032A1.035,1.035,0,0,0,3,4.032V18.478L7.127,14.35H17.446A1.035,1.035,0,0,0,18.478,13.318Z" transform="translate(-3 -3)" fill="#a1835c" />
+                                    </svg>
+
+
+                                </div>
+                                <div class="questions-num">
+                                    @Homemade.UI.Resources.Homemade.Vendor_Questions
+                                    <span>(@Model.ProductQuestions.Count())</span>
+                                </div>
+
+
+                            </div>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <a class="add-question-btn hvr-underline-from-right tab-btn" href="#"
+                               data-target="add-question-area">
+                                    @Homemade.UI.Resources.Homemade.Have_a_question
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="hvr-underline-from-right tab-btn" href="#" data-bs-toggle="modal" data-bs-target="#signInmodal">
+                                    @Homemade.UI.Resources.Homemade.Have_a_question
+                                </a>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="tabs-content-area">
+
+                        <div class="questions-panels tab-content active" id="DevProductQuestion">
+                            @foreach (var item in Model.ProdQuestion)
+                            {
+                                <div class="panel-items">
+
+                                    <div class="panel-header">
+
+                                        <div class="question-text">@item.Question</div>
+                                        <div class="question-date">@item.CreateDate.ToString("dd yyyy MMMM") </div>
+
+                                    </div>
+                                    <div class="panel-body">
+
+                                        <div class="question-ans">@item.Answer </div>
+
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                        <div class="vendor-questions-panels tab-content">
+                            @foreach (var item in Model.ProductQuestions)
+                            {
+                                <div class="panel-items">
+
+                                    <div class="panel-header">
+
+                                        <div class="question-text">@item.Question</div>
+
+                                    </div>
+                                    <div class="panel-body">
+
+                                        <div class="question-ans">@item.Answer </div>
+
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                        <div class="add-question-area tab-content">
+
+                            <form class="add-question-form" asp-action="AddQuestionProduct" asp-controller="Home" asp-area="Site" data-ajax="true"
+                                  data-ajax-complete="completedAddQuestion"
+                                  data-ajax-method="post">
+
+                                <label class="form-label">@Homemade.UI.Resources.Homemade.Write_your_question_or_inquiry </label>
+
+                                <textarea class="form-control input-focus" placeholder="@Homemade.UI.Resources.Homemade.Write_your_question_here" id="ProductQuesion" name="ProductQuesion" data-val="true" data-val-required="@Homemade.BLL.Resources.HomemadeErrorMessages.QuestionRequierd"></textarea>
+                                <span style="color:red" class="field-validation-valid" data-valmsg-for="ProductQuesion" data-valmsg-replace="true"></span>
+                                <input id="ProductID" name="ProductID" value="@Model.ProductID" hidden />
+                                <button type="submit" class="send-btn loading-btn h-model with-delay" data-bs-toggle="modal-1" @*data-bs-target="#addQuestionmodal"*@>@Homemade.UI.Resources.Homemade.Send</button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ***** product-questions-section End ***** -->
+<!-- ***** related-products-section Start ***** -->
+
+<section class="section-style related-products-section">
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-12">
+
+
+                <div class="divider-title">
+
+                    <div class="divider-text">
+
+                        <h3>@Homemade.UI.Resources.Homemade.Related_Products </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-12">
+
+                <div class="products-slider-container">
+
+                    <div class="swiper products-slider">
+
+                        <div class="swiper-wrapper">
+                            @foreach (var item in Model.AllOtherProduct)
+                            {
+                                <div class="swiper-slide">
+
+                                    <div class="product-item">
+
+                                        <div class="product-img">
+
+                                            <a href="/Site/Home/produc_default/@item.ProductGuid">
+
+                                                <img class="img-fluid" src="@item.ProductLogo">
+                                                @if (!blVendor.IsVendorWorking(item.VendorsDaysWork, item.VendorsWorkFrom, item.VendorsWorkTo, item.VendorsDaysVac, item.VendorsVacWorkFrom, item.VendorsVacWorkTo))
+                                                {
+                                                    <img class="img-fluid" src="https://cdn.made-home.com/Home/Product/close.png" style="position: absolute;top: 0;opacity: 0.4;">
+                                                }
+                                            </a>
+
+                                        </div>
+
+                                        <div class="product-details">
+
+                                            <div class="product-vendor">
+
+                                                <a class="vendor-details" href="/Site/home/vendor?id=@item.VendorsGuid">
+
+                                                    <img class="img-fluid vendor-img" src="@item.VendorsLogo">
+                                                    <span class="vendor-name">@item.VendorsName</span>
+                                                </a>
+
+                                            </div>
+                                            <div class="product-name">
+
+                                                <a class="product-name-width" href="/Site/home/produc_default?id=@item.ProductGuid">@item.ProductName</a>
+
+                                            </div>
+                                            <div class="product-info">
+
+                                                <div class="product-price product-price-width">
+
+                                                    <span class="price-val">@item.ProductPrice</span>
+                                                    <span class="price-currency">@Homemade.UI.Resources.Homemade.SR</span>
+                                                </div>
+                                                <div class="product-volume">
+
+                                                    @*<div class="food-icon">
+
+                                                <img src="~/assets/homeMadeSite/img/Icon%20map-food.svg">
+
+                                                </div*@
+                                                    <div class="person-no  person-no-width">
+
+                                                        <span id="personNo">@item.Pieces</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="wishlist-action">
+
+                                            <a class="btn-wishlist " href="#">
+
+                                                <div class="flip-icon">
+                                                    <span class="front-icon"><i class="far fa-heart"></i></span>
+                                                    <span class="back-icon"><i class="fas fa-heart"></i></span>
+                                                </div>
+                                            </a>
+
+
+                                        </div>
+
+                                        @if (blVendor.IsVendorWorking(item.VendorsDaysWork, item.VendorsWorkFrom, item.VendorsWorkTo, item.VendorsDaysVac, item.VendorsVacWorkFrom, item.VendorsVacWorkTo))
+                                        {
+                                            <div class="cart-action">
+                                                <a class="btn-cart-wrap" href="javascript:AddToCart(@item.ProductID, 1, 'p');">
+                                                    <span class="add-to-cart">@Homemade.UI.Resources.Homemade.Add_to_cart</span>
+                                                    <span class="added">@Homemade.UI.Resources.Homemade.In_Cart</span>
+                                                </a>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            @*<div class="cart-action alert alert-site" style="padding: 0.5rem 0.5rem;text-align: center;">
+                                    <strong>@Homemade.UI.Resources.Homemade.Closed</strong>
+                                    </div>*@
+                                            <div class="cart-action">
+                                                <a class="btn-cart-wrap added" style="background-color: gray;">
+                                                    <span class="add-to-cart">@Homemade.UI.Resources.Homemade.Add_to_cart</span>
+                                                </a>
+                                            </div>
+                                        }
+
+                                    </div>
+
+
+                                </div>
+                            }
+
+                        </div>
+
+                        <div class="swiper-scrollbar"></div>
+                    </div>
+                    <div class="products-slider-arrow prev-btn swiper-btn-prev">
+
+                        <i class="fas fa-chevron-right "></i>
+
+                    </div>
+                    <div class="products-slider-arrow next-btn swiper-btn-next">
+
+
+                        <i class="fas fa-chevron-left "></i>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+<!-- custom-modal product-description-cart-modal -->
+
+<div class="main-modal custom-modal  product-description-cart-modal " id="productDescriptioncartAlertModal">
+
+    <div class="modal-container">
+
+        <div class="modal-content">
+            <div class="modal-body">
+
+                <div class="body-wrap">
+
+                    <div class="add-cart-status status-wrap">
+
+                        <h3 class="status-title">
+                            @Homemade.UI.Resources.Homemade.Product_added_to_cart_successfully
+                        </h3>
+                        <span class="status-icon"><i class="fas fa-check"></i></span>
+                    </div>
+                    <a class="cart-link" href="/site/home/ViewCart">@Homemade.UI.Resources.Homemade.Go_to_Cart_now </a>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-overlay "></div>
+
+</div>
+
+<!-- custom-modal product-description-cart-modal  -->
+<!-- ***** related-products-section End ***** -->
+@section Scripts{
+    <script>
+        $(document).ready(function() {
+            $('.loading-btn').click(function() {
+                setTimeout(function() {
+                    $('#productDescriptioncartAlertModal').removeClass('show');
+                },
+                    2000);
+            });
+        });
+        function completedAddQuestion(xhr) {
+            var result = JSON.parse(xhr.responseText);
+            var msg = result.message;
+            if (result.status) {
+                LoadProductQuestions();
+                $("#addQuestionmodal").modal('show');
+                $("#ProductQuesion").val('');
+
+            }
+        }
+        function AddToFavorites() {
+            $.ajax({
+                type: "POST",
+                url: '/Site/Home/AddToFavorites',
+                data: { ProductID: $("#ProductID").val() },
+                dataType: "json",
+                async: false,
+                contentType: "application/x-www-form-urlencoded",
+                success: function(result) {
+
+                },
+                error: function() {
+
+                }
+            });
+        }
+        function LoadProductQuestions() {
+            $("#DevProductQuestion").load("/Site/Home/GetProductQuestionsPartial?productID=" + @Model.ProductID);
+        }
+    </script>
+}
+

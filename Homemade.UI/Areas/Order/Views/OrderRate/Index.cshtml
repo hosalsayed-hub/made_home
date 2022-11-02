@@ -1,0 +1,69 @@
+﻿<div class="content">
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="block-title">
+                        <span class="header-title">@Homemade.UI.Resources.HomemadeMenu.Ratings</span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="block-content collapse in">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="material-select2">@Homemade.UI.Resources.Homemade.Vendor</label>
+                        <select multiple="" id="ListVendorID" class="js-select2 form-control AddData" onchange="SearchByVendor()" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                            <option></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="block">
+                <ul class="nav nav-tabs" data-toggle="tabs">
+                    <li class="active">
+                        <a href="#reply"><i class="fa fa-question push-5-r"></i> @Homemade.UI.Resources.Homemade.Reply (<label id="lblReplyCount"></label>)</a>
+                    </li>
+                    <li class="">
+                        <a href="#notReply"><i class="fa fa-reply push-5-r"></i> @Homemade.UI.Resources.Homemade.Not_Reply (<label id="lblNotReplyCount"></label>)</a>
+                    </li>
+                </ul>
+                <div class="block-content tab-content">
+                    <div class="tab-pane active" id="reply">
+                        <div class="row" id="DevReplayPartial">
+
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="notReply">
+                        <div class="row" id="DevNotReplayPartial">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <!-- Select 2 Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2-bootstrap.min.css" />
+}
+@section Scripts {
+    <!-- Select 2 Scripts -->
+    <script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+
+    <partial name="_Scripts" />
+    <script>
+        $(document).ready(function () {
+            LoadRateReply();
+            LoadRateNotReply();
+            GetVendorList();
+            GetRateCount(false, $("#ListVendorID").val());
+        });
+    </script>
+
+}
+

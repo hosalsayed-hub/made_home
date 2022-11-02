@@ -1,0 +1,372 @@
+﻿<script>
+    var divMsgClass = $("#divMsgClass");
+    var lblMsg = $("#lblMsg");
+    var divMsgParent = $("#divMsgParent");
+    function Delete(e) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Delete , "ConfirmDelete(e)"))
+        }
+
+
+    function ConfirmDelete(e) {
+        var button = $(e);
+        var id = button.attr("data-id");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Delete")',
+            data: {
+                'id': id
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                var msg = result.message;
+
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                        Title = "\"" + Homemade.UI.Resources.Homemade.SuccessDeleteMessage + "\""})
+                        $('#tbl_Vendor').DataTable().ajax.reload();
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+                    }
+            }
+        });
+    }
+    function ChangeStatue(e, type) {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.ChangeStaute , "ConfirmStatue(e,type)"))
+        }
+    function ConfirmStatue(e) {
+
+        var button = $(e);
+        var id = button.attr("data-id");
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ChangeStatue")',
+            data: {
+                'id': id,
+
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                        Title = "result.message"})
+                        $('#tbl_Vendor').DataTable().ajax.reload();
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "result.message" })
+                    }
+
+
+            }
+        });
+    }
+
+    function GetCitys(cityID) {
+        $($("#CityID")).prop("disabled", false);
+        $.ajax({
+            type: "POST",
+            url: '/Setting/City/GetAllCities',
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $("#CityID").html('');
+                $("#CityID").append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (cityID != undefined && cityID > 0 && cityID == item.cityID) {
+                        $("#CityID").append('<option selected value="' + item.cityID + '">' + item.cityName + '</option>');
+                        $("#CityID").val(cityID).trigger('change');
+                    }
+                    else
+                        $("#CityID").append('<option value="' + item.cityID + '">' + item.cityName + '</option>');
+
+                }
+                $($("#CityID")).select2();
+            },
+            error: function() {
+
+            }
+        });
+    }
+    $("#btnSave").click(function(e) {
+        e.preventDefault();
+        let frmCreate = $("#frmCreate");
+        if (frmCreate.valid()) {
+            $('#Gender').val($("input[type='radio'][name='Gender']:checked").val());
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Add , "frmCreate.submit();"))
+            }
+    });
+    function formSuccess(data) {
+        divMsgParent.slideUp();
+        divMsgParent.show();
+        if (data.status == true) {
+            divMsgClass.attr("class", "alert alert-success");
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success, "" , false , false , false)
+                { Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\"" })
+                lblMsg.html(data.message);
+
+            $('#VendorsID').val(data.id);
+            $('#VendorTabs li').removeClass('disabled');
+            $('#VendorTabs li').find('a').attr("data-toggle", "tab")
+            $("#frmCreate").trigger('reset');
+        }
+        else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false)
+                { Title = "data.message" })
+                divMsgClass.attr("class", "alert alert-danger");
+            lblMsg.html(data.message);
+        }
+    }
+
+    function formSuccessUpdate(data) {
+        divMsgParent.slideUp();
+        divMsgParent.show();
+        if (data.status == true) {
+            divMsgClass.attr("class", "alert alert-success");
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+                {Title = "\"" + Homemade.UI.Resources.Homemade.SuccessSaveMessage + "\""})
+                lblMsg.html(data.message);
+        } else {
+    @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Error, "", false, false, false)
+                {Title = "data.message"})
+                divMsgClass.attr("class", "alert alert-danger");
+            lblMsg.html(data.message);
+        }
+    }
+
+
+    function GetPackage(packageID) {
+        $.ajax({
+            type: "POST",
+            url: '/Vendor/Vendors/GetAllPackage',
+            data: {},
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $("#PackageID").html('');
+                $("#PackageID").append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (packageID != undefined && packageID > 0 && packageID == item.packageID) {
+                        $("#PackageID").append('<option selected value="' + item.packageID + '">' + item.packageName + '</option>');
+                        $("#PackageID").val(packageID).trigger('change');
+                    }
+                    else
+                        $("#PackageID").append('<option value="' + item.packageID + '">' + item.packageName + '</option>');
+                }
+                $($("#PackageID")).select2();
+            },
+            error: function() {
+
+            }
+        });
+        $("#PackageID").trigger('change');
+    }
+
+    function GoToTab(hash) {
+        $('.nav-tabs a[href="#' + hash + '"]').tab('show');
+    }
+    function AddStoreData() {
+        var fdata = new FormData();
+
+        fdata.append("VendorsID", $("#VendorsID").val());
+        fdata.append("StoreNameEn", $("#StoreNameEn").val());
+        fdata.append("StoreNameAr", $("#StoreNameAr").val());
+        fdata.append("AboutStoreEn", $("#AboutStoreEn").val());
+        fdata.append("AboutStoreAr", $("#AboutStoreAr").val());
+        fdata.append("CRnumber", $("#CRnumber").val());
+        fdata.append("AboutStoreEn", $("#AboutStoreEn").val());
+        fdata.append("LogoFile", $('#LogoFile')[0].files[0]);
+        fdata.append("BannerFile", $('#BannerFile')[0].files[0]);
+        fdata.append("CRPicFile", $('#CRPicFile')[0].files[0]);
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("AddStoreData")',
+            data: fdata,
+            dataType: "json",
+            async: false,
+            processData: false,
+            contentType: false,
+            success: function(result) {
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                        Title = "result.message"})
+                        $('.nav-tabs a[href="#Account_Data"]').tab('show');
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "result.message" })
+                    }
+
+
+            }
+        });
+    }
+    function AddVendorAccount() {
+        var fdata = new FormData();
+
+        fdata.append("VendorsID", $("#VendorsID").val());
+        fdata.append("TaxNumber", $("#TaxNumber").val());
+        fdata.append("AccountNumber", $("#AccountNumber").val());
+        fdata.append("IBANNumber", $("#IBANNumber").val());
+        fdata.append("SwiftCode", $("#SwiftCode").val());
+        fdata.append("BanksID", $("#BanksID").val());
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("AddVendorAccount")',
+            data: fdata,
+            dataType: "json",
+            async: false,
+            processData: false,
+            contentType: false,
+            success: function(result) {
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                        Title = "result.message"})
+                        $('.nav-tabs a[href="#Location"]').tab('show');
+                }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "result.message" })
+                    }
+
+
+            }
+        });
+    }
+    function AddVendorLocation() {
+        var fdata = new FormData();
+        fdata.append("VendorsID", $("#VendorsID").val());
+        fdata.append("Address", $("#Address").val());
+        fdata.append("Lat", $("#txtLatHidden").val());
+        fdata.append("Lng", $("#txtLngHidden").val());
+        fdata.append("PackageID", $("#PackageID").val());
+        fdata.append("BlockID", $("#BlockID").val());
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("AddVendorLocation")',
+            data: fdata,
+            dataType: "json",
+            async: false,
+            processData: false,
+            contentType: false,
+            success: function(result) {
+                if (result.resultType == 'success') {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Success , "" , false , false , false) {
+                        Title = "result.message"})
+                    }
+                else {
+    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "result.message" })
+                    }
+
+
+            }
+        });
+    }
+    function GetCountriesList(e, countryID) {
+        $($("#ListCountryID")).prop("disabled", false);
+        $.ajax({
+            type: "POST",
+            url: '/Setting/City/GetAllCountries',
+            data: {},
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $("#ListCountryID").html('');
+                $("#ListCountryID").append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (countryID != undefined && countryID > 0 && countryID == item.countryID) {
+                        $("#ListCountryID").append('<option selected value="' + item.countryID + '">' + item.countryName + '</option>');
+                        $("#ListCountryID").val(cityID).trigger('change');
+                    }
+                    else
+                        $("#ListCountryID").append('<option value="' + item.countryID + '">' + item.countryName + '</option>');
+                }
+                $($("#ListCountryID")).select2();
+            },
+            error: function() {
+            }
+        });
+    }
+    function GetCityList(e, cityID) {
+        var ListCountryID = $(e).val();
+        $('#ListCityID').prop("disabled", false);
+        if (ListCountryID != '' || ListCountryID != undefined) {
+            $.ajax({
+                type: "POST",
+                url: '/Setting/City/GetCitiesByCountryList',
+                data: { listCountryD: ListCountryID },
+                dataType: "json",
+                async: false,
+                contentType: "application/x-www-form-urlencoded",
+                success: function(result) {
+                    $('#ListCityID').html('');
+                    $('#ListCityID').append('<option></option>');
+                    for (var i = 0; i < result.length; i++) {
+                        var item = result[i];
+                        if (cityID != undefined && cityID > 0 && cityID == item.cityID) {
+                            $('#ListCityID').append('<option value="' + item.cityID + '">' + item.cityName + '</option>');
+                            $('#ListCityID').val(cityID).trigger('change');
+                        }
+                        else {
+                            $('#ListCityID').append('<option value="' + item.cityID + '">' + item.cityName + '</option>');
+                        }
+
+                    }
+                    isPaused = false;
+                },
+                error: function() {
+                    isPaused = false;
+                }
+            });
+        }
+    }
+    function GetShippingCompaniesList(e, shippingCompanyID) {
+        $($("#ListShippingCompanyID")).prop("disabled", false);
+        $.ajax({
+            type: "POST",
+            url: '/Setting/ShippingCompany/GetAllShippingCompanies',
+            data: {},
+            dataType: "json",
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                $("#ListShippingCompanyID").html('');
+                $("#ListShippingCompanyID").append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (shippingCompanyID != undefined && shippingCompanyID > 0 && shippingCompanyID == item.countryID) {
+                        $("#ListShippingCompanyID").append('<option selected value="' + item.shippingCompanyID + '">' + item.shippingCompanyName + '</option>');
+                        $("#ListShippingCompanyID").val(shippingCompanyID).trigger('change');
+                    }
+                    else
+                        $("#ListShippingCompanyID").append('<option value="' + item.shippingCompanyID + '">' + item.shippingCompanyName + '</option>');
+                }
+                $($("#ListShippingCompanyID")).select2();
+            },
+            error: function() {
+            }
+        });
+    }
+
+    function ConvertToBase64Image(e) {
+        var fileUpload = $(e);
+        var pID = '#' + fileUpload.attr('id').replace('fup', '');
+        var FR = new FileReader();
+
+        FR.addEventListener("load", function(e) {
+            $("#Logo").val(e.target.result.replace(/^data:.+;base64,/, ''));
+        }, false);
+
+        FR.readAsDataURL($(fileUpload)[0].files[0]);
+
+    }
+</script>

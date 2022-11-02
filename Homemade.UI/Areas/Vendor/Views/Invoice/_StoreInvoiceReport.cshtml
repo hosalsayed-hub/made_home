@@ -1,0 +1,119 @@
+﻿<script>
+    var table;
+    $(document).ready(function() {
+        table = $('#tbl_Branch').DataTable({
+
+            pageLength: 10,
+            pagijngType: "full_numbers",
+            serverSide: true,
+            processing: true,
+            lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+            sAjaxSource: '@Url.Action("StoreInvoiceMasterForInvoiceReport")',
+            sServerMethod: "POST",
+            bPaginate: true,
+            paging: true,
+            columns: [
+                {
+                    "data": null,
+                    "sortable": false,
+                    render: function(data, type, row, meta) {
+                        return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                    }
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<input type="hidden" value="' +
+                            data.invoiceMasterID +
+                            '"/><label class="arName">' +
+                            data.invoiceNo +
+                            '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="enName">' + data.debitAmount + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="enName">' + data.discount + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="enName">' + data.vat + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="enName">' + data.total + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label class="enName">' + data.invoiceTypeName + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return `<div class="btn-group"> <a class="btn btn-xs btn-info" href="/Vendor/Invoice/StoreDetails/${data.invoiceMasterGuid}" type="button" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Details">
+                                            <i class="fa fa-search"></i>
+                                        </a>`;
+                    }
+                }
+            ],
+            buttons: [
+                {
+                    extend: "excelHtml5",
+                    autoFilter: true,
+                    sheetName: 'Exported data',
+                    className: "btn btn-success btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.Excel'
+                },
+                {
+                    text: '@Homemade.UI.Resources.Homemade.Print',
+                    className: "btn btn-warning btn-xs",
+                    extend: "print",
+                },
+                {
+                    extend: "pdfHtml5",
+                    download: 'open',
+                    className: "btn btn-info btn-xs",
+                    text: '@Homemade.UI.Resources.Homemade.PDF'
+                }
+            ],
+            drawCallback: function(s) {
+                $('[data-toggle="tooltip"]').tooltip();
+            }
+            , dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+
+        });
+        table.buttons().container().appendTo('.dt_buttons_wrap');
+    });
+    function readtable() {
+        table.ajax.url('/Vendor/Invoice/StoreInvoiceMasterForInvoiceReport?fromDate=' + $("#FromDate").val() + '&toDate=' + $("#ToDate").val() + '&StatusId=' + $("#InvoiceStatus").val());
+        table.ajax.reload();
+    }
+
+</script>

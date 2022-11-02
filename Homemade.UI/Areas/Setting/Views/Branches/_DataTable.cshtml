@@ -1,0 +1,146 @@
+﻿@inject Homemade.BLL.BLPermission blPermission
+@{
+    var IsPermissionView = @blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Vendors, (int)Homemade.BLL.ActionEnum.View) ? 1 : 0;
+    var IsPermissionUpdate = @blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Vendors, (int)Homemade.BLL.ActionEnum.Update) ? 1 : 0;
+    var IsPermissionDelete = @blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Vendors, (int)Homemade.BLL.ActionEnum.Delete) ? 1 : 0;
+}
+<script>
+    var table;
+    $(document).ready(function() {
+        table = $('#tbl_Vendor').DataTable({
+            pageLength: 10,
+            pagijngType: "full_numbers",
+            serverSide: true,
+            processing: true,
+            lengthMenu: [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+            sAjaxSource: '@Url.Action("LoadTable")',
+            sServerMethod: "POST",
+            bPaginate: true,
+            paging: true,
+            bFilter: true,
+            bLengthChange: false,
+            columns: [
+                {
+                    "data": null,
+                    "sortable": false,
+                    render: function(data, type, row, meta) {
+                        return '<label>' + (meta.row + meta.settings._iDisplayStart + 1) + '</label>';
+                    }
+                },
+
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<input type="hidden" value="' + data.id + '"/><label class="arName">' + data.name + '</label>';
+                    }
+
+                },
+
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label >' + data.phoneNo + '</label>';
+                    }
+
+                },
+
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label >' + data.address + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label >' + data.email + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        return '<label >' + data.cityNameEN + '</label>';
+                    }
+
+                },
+                {
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        var IsEnable = data.isEnable == 1 ? "<span style='background: #ddf7e8;color: #3c763d;padding:8px;'>@Homemade.UI.Resources.Homemade.Enabled</span>"
+                            : "<span style='background: #f9eae8;color:#c54736;padding:8px;'>@Homemade.UI.Resources.Homemade.Disabled</span>";
+
+                        return '<label>' + IsEnable + '</label>';
+                    }
+                },
+                {
+
+                    data: null,
+                    bSortable: true,
+                    render: function(data, type, row) {
+                        var databutton = '';
+                        var xtitle = data.isEnable ? "@Homemade.UI.Resources.Homemade.Disable" : "@Homemade.UI.Resources.Homemade.Enable";
+                        var icon = data.isEnable ? "fa fa-ban" : "fa fa-check";
+                        if (@IsPermissionView == 1) {
+                            databutton += ` <a class="btn btn-xs btn-info" href="@Url.Action("Details")/${data.branchesGuid}" type="button" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Details">
+                                            <i class="fa fa-search"></i>
+                                        </a>`;
+                        }
+                        if (@IsPermissionUpdate == 1) {
+                            databutton += '<button class="btn btn-xs btn-warning" style="margin:4px" type="button" data-toggle="tooltip" onclick="ChangeStatue(this);" data-id="' + data.id + '" title="' + xtitle + '"><i class="' + icon + '"></i></button>';
+
+                            databutton += ` <a class="btn btn-xs btn-success" style="margin:0 5px" href="@Url.Action("Edit")/${data.branchesGuid}" type="button" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Update">
+                                            <i class="fa fa-edit"></i>
+                                        </a>`;
+                        }
+
+                        if (@IsPermissionDelete == 1) {
+                            databutton += '<a class="btn btn-xs btn-danger" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Delete" style="margin:4px"' +
+                                ' onclick="Delete(this)" data-id="' + data.id + '" data-toggle="tooltip" title="@Homemade.UI.Resources.Homemade.Delete"><i class="fa fa-trash"></i></a>';
+                        }
+                        return databutton;
+                    }
+                }
+            ],
+            drawCallback: function(s) {
+                $('[data-toggle="tooltip"]').tooltip();
+            },
+            buttons: [{
+                extend: "excelHtml5",
+                autoFilter: true,
+                sheetName: 'Exported data',
+                className: "btn btn-success btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.Excel'
+            }, {
+                extend: "pdfHtml5",
+                download: 'open',
+                className: "btn btn-info btn-xs",
+                text: '@Homemade.UI.Resources.Homemade.PDF'
+            }],
+            "language": {
+                "search": "_INPUT_",
+                "searchPlaceholder": "Search",
+                "lengthMenu": "_MENU_",
+            }, dom: "<'row'<'col-sm-12'<'text-center bg-body-light py-2 mb-2'B>>><'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+
+
+        });
+        table.buttons().container().appendTo('.dt_buttons_wrap');
+    });
+    function ReloadTable() {
+        debugger;
+        table.ajax.url('/Setting/Branches/LoadTable/LoadTable?listCountryID=' + $("#ListCountryID").val() + '&listCityID=' + $("#ListCityID").val()
+            + '&email=' + $("#Email").val()
+            + '&mobile=' + $("#Mobile").val()
+            + '&listBranchesID=' + $("#ListBranchesID").val()
+        );
+        table.ajax.reload();
+    }
+</script>

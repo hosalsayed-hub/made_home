@@ -1,0 +1,90 @@
+﻿@model Homemade.BLL.ViewModel.Site.SiteDepartmentsViewModel
+@inject Homemade.BLL.Setting.BlDepartments _blDepartments
+@{
+    ViewData["Title"] = "Index";
+}
+@Html.HiddenFor(m => m.DepartmentsID)
+
+<!-- ***** shop-content-section Start ***** -->
+@Html.Hidden("PageID", 1)
+<section class="section-style shop-content-section">
+
+    <div class="shop-search-area">
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-12">
+
+                    <div class="shop-search">
+
+                        <div class="form-group">
+                            <input type="search" class="form-control shop-search-input input-focus" id="Txt_SearchProducts" placeholder="@Homemade.UI.Resources.Homemade.What_do_you_want_to_order_today">
+                        </div>
+                        <button type="button" class="shop-search-btn" onclick="SearchProducts()">@Homemade.UI.Resources.Homemade.Search</button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-lg-12" id="DevProductItemsPartial">
+            </div>
+            <div class="col-lg-12 me-auto" id="Dev_PagingPartial">
+            </div>
+
+        </div>
+
+    </div>
+</section>
+<!-- ***** shop-content-section End ***** -->
+@section Scripts{
+    <script>
+        $(document).ready(function() {
+            $("#DevProductItemsPartial").load("/Site/Home/GetProductItemsCategoryPartial?departmentsId=" + $("#DepartmentsID").val() + "&page=" + $("#PageID").val());
+            $("#Dev_PagingPartial").load("/Site/Home/GetProductItemsCategoryPagingPartial?departmentsId=" + $("#DepartmentsID").val()
+                + "&page=" + $("#PageID").val());
+            $("#Txt_SearchProducts").keyup(function() {
+                if ($("#Txt_SearchProducts").val() == "") {
+                    SearchProducts();
+                }
+            });
+
+        });
+        function SearchProducts() {
+            $("#DevProductItemsPartial").load("/Site/Home/GetProductItemsCategoryPartial?departmentsId=" + $("#DepartmentsID").val() + "&searchProducts=" + $("#Txt_SearchProducts").val() + "&page=" + $("#PageID").val());
+            $("#Dev_PagingPartial").load("/Site/Home/GetProductItemsCategoryPagingPartial?departmentsId=" + $("#DepartmentsID").val() + "&searchProducts=" + $("#Txt_SearchProducts").val()
+                + "&page=" + $("#PageID").val());
+        }
+        function GoToPage(page) {
+            if (page == 0) {
+                $("#PageID").val(1);
+            }
+            else if (page > $("#PageCount").val()) {
+                $("#PageID").val($("#PageCount").val());
+            }
+            else {
+                $("#PageID").val(page);
+            }
+            SearchProducts();
+        }
+        function AddToCart_jq_Ex(ProductID, c, t) {
+            //  btn-cart-wrap loading-overlay added
+            //  btn-cart-wrap added active
+            $("#btn_actionCart_" + ProductID + "").addClass('loading-overlay added');
+            AddToCart(ProductID, c, t);
+            setTimeout(function() {
+                $("#btn_actionCart_" + ProductID + "").removeClass('loading-overlay added');
+                $("#btn_actionCart_" + ProductID + "").addClass('added active');
+            }, 2000);
+        }
+    </script>
+}

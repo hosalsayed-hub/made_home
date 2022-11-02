@@ -1,0 +1,36 @@
+﻿@model IQueryable<Homemade.BLL.ViewModel.Order.OrderRateViewModel>
+@if (Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <div class="col-md-6 col-sm-12 form-group text-left">
+            <a href="/Customer/Customer/Details/@item.CustomersGuid">
+                <img class="img" style="width: 100px; height: 100px; border-radius: 100%;" src="@item.CustomerImage">
+            </a>
+            <label class="form-material">
+                @item.CustomerName
+                <br />
+                @item.RateDate
+            </label>
+        </div>
+        <div class="col-md-6 col-sm-12 row text-right">
+            <div class="text-center pull-right">
+                <a href="/Vendor/Vendors/Details/@item.VendorsGuid">
+                    <img class="img" style="width: 100px; height: 100px; border-radius: 100%;" src="@item.VendorImage">
+                </a>
+                <br />
+                <label class="form-material">@item.VendorName</label>
+                <br />
+                <button class="btn btn-danger" onclick="DeleteRate(@item.OrderRateID)"><i class="fa fa-trash"></i> @Homemade.UI.Resources.Homemade.Delete</button>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="material-text2">@item.RateTitle</label>
+            </div>
+        </div>
+        <div class="col-md-12 form-group">
+            <hr style="border: 2px solid #000;" />
+        </div>
+    }
+}

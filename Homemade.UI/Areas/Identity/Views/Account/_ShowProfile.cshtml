@@ -1,0 +1,75 @@
+﻿@model Homemade.BLL.ViewModel.Employees.ProfileViewModel
+@using Homemade.BLL
+@inject Homemade.BLL.Emp.BlEmployee BlEmployee
+@inject Homemade.BLL.General.BLUser blUser
+@{
+    bool IsAr = Homemade.UI.InfraStructure.Utility.CurrentLanguageCode == "ar";
+}
+
+<form class="row" action="base_pages_contact.html" method="post">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="profile-firstname">@Homemade.UI.Resources.Homemade.First_Name_AR</label>
+            <input class="form-control input-lg" type="text" asp-for="FirstNameAR" data-val="true" data-val-required="@Homemade.BLL.Resources.HomemadeErrorMessages.Required"
+                   data-val-length="@Homemade.BLL.Resources.HomemadeErrorMessages.NameMax75" data-val-length-max="75" maxlength="75"
+                   data-val-regex="@Homemade.BLL.Resources.HomemadeErrorMessages.ArabicOnly" data-val-regex-pattern="^[\u0621-\u064A\u0660-\u0669\0-9]+$">
+            <span asp-validation-for="FirstNameAR" style="color:red;"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="profile-firstname">@Homemade.UI.Resources.Homemade.Last_Name_AR</label>
+            <input class="form-control input-lg" type="text" asp-for="LastNameAR" data-val="true" data-val-required="@Homemade.BLL.Resources.HomemadeErrorMessages.Required"
+                   data-val-length="@Homemade.BLL.Resources.HomemadeErrorMessages.NameMax75" data-val-length-max="75" maxlength="75"
+                   data-val-regex="@Homemade.BLL.Resources.HomemadeErrorMessages.ArabicOnly" data-val-regex-pattern="^[\u0621-\u064A\u0660-\u0669\0-9]+$">
+            <span asp-validation-for="LastNameAR" style="color:red;"></span>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="profile-lastname">@Homemade.UI.Resources.Homemade.First_Name_EN</label>
+            <input class="form-control input-lg" type="text" asp-for="FirstNameEN"
+                   data-val-length="@Homemade.BLL.Resources.HomemadeErrorMessages.NameMax75" data-val-length-max="75" maxlength="75"
+                   data-val-regex="@Homemade.BLL.Resources.HomemadeErrorMessages.EnglishOnly" data-val-regex-pattern="^[a-zA-Z\0-9]+$">
+            <span asp-validation-for="FirstNameEN" style="color:red;"></span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="profile-lastname">@Homemade.UI.Resources.Homemade.Last_Name_EN</label>
+            <input class="form-control input-lg" type="text" asp-for="LastNameEN"
+                   data-val-length="@Homemade.BLL.Resources.HomemadeErrorMessages.NameMax75" data-val-length-max="75" maxlength="75"
+                   data-val-regex="@Homemade.BLL.Resources.HomemadeErrorMessages.EnglishOnly" data-val-regex-pattern="^[a-zA-Z\0-9]+$">
+            <span asp-validation-for="LastNameEN" style="color:red;"></span>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="profile-email">@Homemade.UI.Resources.Homemade.Email</label><br />
+            <input class="form-control input-lg" type="email" asp-for="Email" data-val="true" data-val-required="@Homemade.BLL.Resources.HomemadeErrorMessages.Required"
+                   data-val-length="@Homemade.BLL.Resources.HomemadeErrorMessages.NameMax100" data-val-length-max="100" data-val-regex="@Homemade.BLL.Resources.HomemadeErrorMessages.Email"
+                   data-val-regex-pattern="^[._a-z0-9-]+(.[a-z0-9-]+)@@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$" id="Email" maxlength="100">
+            <span asp-validation-for="Email" style="color:red;"></span>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="profile-password">
+                @Homemade.UI.Resources.Homemade.Mobile  <span style="color:red"> @Homemade.UI.Resources.Homemade.Mobile_Validation </span>
+            </label>
+            @*(<label class="" style="color:red;">@Homemade.UI.Resources.Homemade.UsedForLogin</label>)*@
+            <input class="form-control input-lg" asp-for="MobileNo" data-val="true" data-val-required="@Homemade.BLL.Resources.HomemadeErrorMessages.Required"
+                   data-val-length="@Homemade.BLL.Resources.HomemadeErrorMessages.NameMax10" data-val-length-max="10" maxlength="10"
+                   data-val-regex="@Homemade.BLL.Resources.HomemadeErrorMessages.MobileValid" data-val-regex-pattern="^(5)[0-9]{8}$" placeholder = "@Homemade.UI.Resources.Homemade.MobileValidation">
+            <span asp-validation-for="MobileNo" style="color:red;"></span>
+        </div>
+    </div>
+    <div class="form-group" id="btnSaveMainData">
+        <div class="col-xs-12 text-right">
+            <button class="btn btn-custom bg-orange" type="submit"><i class="fa fa-check pull-left"></i> @Homemade.UI.Resources.Homemade.save</button>
+        </div>
+    </div>
+</form>

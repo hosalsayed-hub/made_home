@@ -1,0 +1,132 @@
+﻿<script charset="utf-8" type="text/javascript">
+    function LoadRateReply() {
+        $("#DevReplayPartial").load("/Order/OrderRate/GetRateReplyPartial?listVendorID=" + $("#ListVendorID").val());
+    }
+    function LoadRateReplyVendor() {
+        $("#DevReplayPartial").load("/Order/OrderRate/GetRateReplyPartialVendor");
+    }
+    function LoadRateNotReply() {
+        $("#DevNotReplayPartial").load("/Order/OrderRate/GetRateNotReplyPartial?listVendorID=" + $("#ListVendorID").val());
+    }
+    function LoadRateNotReplyVendor() {
+        $("#DevNotReplayPartial").load("/Order/OrderRate/GetRateNotReplyPartialVendor");
+    }
+    function ShowAddRateReply(orderRateID) {
+        $("#AnswerRate_" + orderRateID).show();
+        $("#AddRateReply_" + orderRateID).hide();
+        $("#SaveRateReply_" + orderRateID).show();
+    }
+    function SaveRateReply(orderRateID) {
+        if ($("#AnswerRate_" + orderRateID).val() != "") {
+      @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Add , "ConfirmUpdateAnswer(orderRateID)"))
+        }
+        else {
+            var msg = "@Homemade.UI.Resources.Homemade.Please_Insert_Answer";
+           @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+        }
+    }
+
+    function ConfirmUpdateAnswer(orderRateID) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateAnswer")',
+            data: {
+                Answer: $("#AnswerRate_" + orderRateID).val(),
+                OrderRateID: orderRateID
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                var msg = result.message;
+
+                if (result.resultType == 'success') {
+                   @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+              {
+                  Title = "msg"
+              });
+                    LoadRateReplyVendor();
+                    LoadRateNotReplyVendor();
+
+                }
+                else {
+                    @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+                }
+            }
+        });
+    }
+    function GetVendorList(vendorsID) {
+        $.ajax({
+            type: "POST",
+            url: '/Vendor/Vendors/GetAllVendors',
+            data: {},
+            dataType: "json",
+            async: false,
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                $('#ListVendorID').html('');
+                $('#ListVendorID').append('<option></option>');
+                for (var i = 0; i < result.length; i++) {
+                    var item = result[i];
+                    if (vendorsID != undefined && vendorsID > 0 && vendorsID == item.vendorsID) {
+                        $('#ListVendorID').append('<option selected value="' + item.vendorsID + '">' + item.vendorsName + '</option>');
+                        $('#ListVendorID').val(vendorsID).trigger('change');
+                    }
+                    else {
+                        $('#ListVendorID').append('<option value="' + item.vendorsID + '">' + item.vendorsName + '</option>');
+                    }
+
+                }
+                isPaused = false;
+            },
+            error: function () {
+                isPaused = false;
+            }
+        });
+    }
+    function SearchByVendor() {
+        LoadRateReply();
+        LoadRateNotReply();
+        GetRateCount(false, $("#ListVendorID").val());
+    }
+    function GetRateCount(IsVendor, listVendorID) {
+        $.getJSON('/Order/OrderRate/GetRateCount?IsVendor=' + IsVendor + '&IsReply=' + true + '&listVendorID=' + listVendorID, '', function (data) {
+            $('#lblReplyCount').html(data);
+        });
+        $.getJSON('/Order/OrderRate/GetRateCount?IsVendor=' + IsVendor + '&IsReply=' + false + '&listVendorID=' + listVendorID, '', function (data) {
+            $('#lblNotReplyCount').html(data);
+        });
+    }
+    function DeleteRate(id) {
+       @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Delete , "ConfirmDeleteRate(id)"))
+    }
+    function ConfirmDeleteRate(id) {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DeleteOrderRate")',
+            data: {
+                'id': id
+            },
+            dataType: "json",
+            async: false,
+
+            contentType: "application/x-www-form-urlencoded",
+            success: function (result) {
+                var msg = result.message;
+
+                if (result.resultType == 'success') {
+                     @await Component.InvokeAsync(typeof(SwalActionScript), new Swal(SwalActions.Success, "", false, false, false)
+                {
+                    Title = "\"" + Homemade.UI.Resources.Homemade.SuccessDeleteMessage + "\""
+                });
+                    SearchByVendor();
+                }
+                else {
+                     @await Component.InvokeAsync(typeof(SwalActionScript) , new Swal(SwalActions.Error , "" , false , false , false) { Title = "msg" })
+                }
+            }
+        });
+    }
+</script>
+

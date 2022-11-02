@@ -1,0 +1,451 @@
+﻿@inject Homemade.BLL.Setting.BlRegion blRegion
+@inject Homemade.BLL.BLPermission blPermission
+@inject Homemade.BLL.Vendor.BlVendor blVendor
+@inject Homemade.BLL.General.BLUser bLUser
+
+
+
+@{
+    var user = bLUser.GetUserInfo(User.GetUserIdInt());
+    int UserTypeId = user.UserType;
+    bool IsVendor = false;
+    int VendorsID = 0;
+    if (UserTypeId == (int)UserTypeEnum.Vendor)
+    {
+        var vednor = blVendor.GetVendorByUserId(User.GetUserIdInt());
+        if (vednor != null)
+        {
+            IsVendor = true;
+            VendorsID = vednor.VendorsID;
+        }
+    }
+}
+@Html.Hidden("IsVendor", IsVendor)
+<div class="content">
+
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <div class="row">
+                <div class="col-md-9">
+                    <h3 class="block-title" data-toggle="collapse" data-target="#collapseProd" aria-expanded="false" aria-controls="collapseProd">
+                        <i class="ion-code-working push-5-r"></i>
+                        <span>@Homemade.UI.Resources.Homemade.Search_Filter</span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="collapse" id="collapseProd">
+            <div class="block-content block-content-full">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Region <span style="color:red"></span></label>
+                            <select multiple="" id="ListRegionID" onchange="GetCityList(this)"
+                                    asp-items="@(new MultiSelectList(blRegion.GetRegionsByCountryID((int)CountryEnum.SA).Select(x=>new {
+                                                    x.RegionID,Name = Homemade.UI.InfraStructure.Utility.CurrentLanguageCode == "ar" ? x.RegionNameAR : x.RegionNameEN
+                                                    }),"RegionID","Name",blRegion.GetRegionsByCountryID((int)CountryEnum.SA).Select(x => x.RegionID.ToString()).ToList()))"
+                                    class="js-select2 form-control AddData" name="material-select2" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.City <span style="color:red"></span></label>
+                            <select multiple="" disabled="" id="ListCityID" onchange="GetBlockList(this)" class="js-select2 form-control AddData" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Block <span style="color:red"></span></label>
+                            <select multiple="" disabled="" id="ListBlockID" class="js-select2 form-control AddData" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    @if (VendorsID == 0)
+                    {
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="material-select2">@Homemade.UI.Resources.Homemade.Vendor <span style="color:red"></span></label>
+                                <select multiple="" id="ListVendorID" class="js-select2 form-control AddData" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                                    <option></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    }
+                    else
+                    {
+                        <input id="ListVendorID" value="@VendorsID" hidden />
+                    }
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Name</label>
+                            @Html.TextBox("Name", "", new { @class = "form-control", @placeholder = @Homemade.UI.Resources.Homemade.Name })
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Status</label>
+                            <select multiple="" id="ListOrdersStatusId" class="js-select2 form-control AddData" style="width: 100%;" data-placeholder="@Homemade.UI.Resources.Homemade.Select">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-xs-12">@Homemade.UI.Resources.Homemade.OrderType</label>
+                            <div class="col-xs-12">
+                                <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbNow">
+                                    <input type="radio" id="rdbNow" name="OrderType" onchange="ChangeOrderType()" value="0">
+                                    <span></span>
+                                    @Homemade.UI.Resources.Homemade.Order_Now
+                                </label>
+                                <label class="css-input css-radio css-radio-sm css-radio-warning push-10-r" for="rdbSchedule">
+                                    <input type="radio" id="rdbSchedule" name="OrderType" onchange="ChangeOrderType()" value="1">
+                                    <span></span>
+                                    @Homemade.UI.Resources.Homemade.Schedule
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4" id="DevFrom" style="display:none">
+                        <div class="form-group ">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.FromDate </label>
+                            <input id="FromDateTime" name="FromDateTime" class="js-datetimepicker form-control AddData" type="text" value="">
+                        </div>
+                    </div>
+                    <div class="col-md-4" id="DevTo" style="display:none">
+                        <div class="form-group ">
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.ToDate </label>
+                            <input id="ToDateTime" name="ToDateTime" class="js-datetimepicker form-control AddData" type="text" value="">
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-right pull-right" style="margin: 13px 0px">
+                        <button id="btnRest" onclick="Rest();" type="button" style="margin:12px 0px" class="btn btn-custom btn-info">
+                            <i class="ion-refresh push-5-r"></i>
+                            @Homemade.UI.Resources.Homemade.Reset
+                        </button>
+                        <button onclick="GetValue()" type="button" style="margin:12px 5px" class="btn btn-custom bg-orange">
+                            <i class="ion-search push-5-r" aria-hidden="true"></i>
+                            @Homemade.UI.Resources.Homemade.Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="block">
+        <div class="block-header bg-gray-lighter">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3 class="block-title">
+
+                        <span class="header-title">@Homemade.UI.Resources.HomemadeMenu.Orders_History</span>
+
+                    </h3>
+                </div>
+                <div class="col-md-6">
+                    <div class="text-right row">
+                        <div class="col-md-12 paddingleft-0">
+                            <div class="form-group block-search push-5-r pull-right">
+                                <div class="input-group">
+                                    <div class="input-group-addon"><i class="ion-search"></i></div>
+                                    <input type="text" class="form-control" id="DT_search" placeholder="@Homemade.UI.Resources.Homemade.EnterSearchKeywords">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dt_buttons_wrap text-right"></div>
+                </div>
+                <div class="col-md-6 text-right">
+                    <div class="dt_buttons_wrap text-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="collapse in" id="collapseOrder">
+            <div class="block-content h_scroll">
+
+
+                <table id="tbl_Order" class="table table-custom js-dataTable-buttons" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.SNumber</th>
+                            <th class="text-center">#</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.Integration_Number</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.Customer</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.Vendor</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.Status</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.Create_Date</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.Type</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.Received_Date</th>
+                            <th class="text-center">@Homemade.UI.Resources.Homemade.Received_Time</th>
+                            <th>@Homemade.UI.Resources.Homemade.Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_popout" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-popout order_det_modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="ion-close"></i></button>
+                <h4 class="modal-title">تفاصيل الطلب</h4>
+            </div>
+            <div class="modal-body">
+
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="block">
+                            <div class="block-content block-content-full dep_b_wrap">
+                                <h4>بيانات البائع</h4>
+                                <div class="dep_b">
+                                    <div class="log_wrap">
+                                    </div>
+                                    <div class="det_wrap">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="block">
+                            <div class="block-content block-content-full dep_b_wrap">
+                                <h4>بيانات العميل</h4>
+                                <div class="dep_b">
+                                    <div class="log_wrap">
+                                        <span>
+                                        </span>
+                                    </div>
+                                    <div class="det_wrap">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="block">
+                            <div class="block-content block-content-full dep_b_wrap">
+                                <h4>حالة الطلب</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="block">
+                            <div class="block-content block-content-full dep_b_wrap">
+                                <h4>بيانات الطلب </h4>
+                            </div>
+                        </div>
+                        <div class="block">
+                            <div class="block-content block-content-full dep_b_wrap">
+                                <h4>حركة الطلب </h4>
+                                <table class="table prod_history">
+                                    <tr>
+                                        <th>تاريخ الحركة</th>
+                                        <th>الحالة</th>
+                                        <th>القائم بالحركة</th>
+                                        <th>نوع القائم بالحركة</th>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="block">
+                            <div class="block-content block-content-full dep_b_wrap">
+                                <h4>ملاحظات الطلب </h4>
+                            </div>
+                        </div>
+                        <div class="block">
+                            <div class="block-content block-content-full dep_b_wrap">
+                                <h4>تقييم الطلب </h4>
+                            </div>
+                        </div>
+                        <div class="block">
+                            <div class="block-content block-content-full dep_b_wrap">
+                                <h4>بيانات الشحن </h4>
+                                <table class="table">
+                                    <tr>
+                                        <td class="text-black">شركة الشحن</td>
+                                        <td class="text-right">اسم شركة الشحن</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-black">حالة الشحن</td>
+                                        <td class="text-right">في انتظار الموافقة</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-black">رقم الطلب</td>
+                                        <td class="text-right">١٢٣٤٥</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-black">كود التتبع</td>
+                                        <td class="text-right">٢٠٤٣٧٨٩٦</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-black">رابط التتبع</td>
+                                        <td class="text-right">
+                                            <a href="#" class=""><i class="ion-share push-5-r"></i> تتبع</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">إغلاق</button>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Hidden("OrderVendorID")
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal-block-large" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-popout modal-dialog-scrollable" role="document">
+
+        <div class="modal-content">
+            <div class="block-transparent remove-margin-b">
+                <div class="block-header bg-gray-lighter">
+                    <ul class="block-options">
+                        <li>
+                            <button data-dismiss="modal" type="button"><i class="si si-close"></i></button>
+                        </li>
+                    </ul>
+                    <h3 class="block-title" id="title">
+                        @Homemade.UI.Resources.Homemade.Cancel
+                    </h3>
+                </div>
+                <div class="block-content modal-body">
+                    <div class="row">
+                        <div class="form-group">
+                            <h3>@Homemade.UI.Resources.Homemade.AreYouSureToCancelTrip?</h3>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer border-white-op-t">
+                <button class="btn btn-sm btn-default" type="button" data-dismiss="modal"> @Homemade.UI.Resources.Homemade.No </button>
+                <button class="btn btn-sm bg-orange" onclick="CancelTrip()" type="button"> @Homemade.UI.Resources.Homemade.Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Styles {
+    <!-- Data_Table Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/dataTables.bootstrap4.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css" />
+
+    <!-- Select 2 Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/select2/select2-bootstrap.min.css" />
+    <style>
+        .dataTables_filter {
+            display: none;
+        }
+    </style>
+
+    <!-- Date_Picker Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/Hijiri-Plugin/css/bootstrap-datetimepicker.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+}
+
+    @section Scripts{
+    <!-- Data_table Plugins -->
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/dataTables.buttons.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.print.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.html5.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/datatables/buttons/buttons.flash.min.js"></script>
+
+    <!-- Select 2 Scripts -->
+    <script charset="utf-8" src="~/assets/js/plugins/select2/select2.full.min.js"></script>
+
+    <!-- Date_picker Plugins -->
+    <script src="~/assets/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/Hijiri-Plugin/js/bootstrap-hijri-datetimepicker.js"></script>
+    <script>
+        $(function() {
+            $('.js-datetimepicker').datetimepicker({
+            });
+        });
+    </script>
+
+    <partial name="_DataTableVendor" />
+
+
+    <script>
+        function GetValue(t) {
+            readtable(t);
+        }
+        var isPaused = false;
+        function Rest() {
+            isPaused = true;
+            $.getJSON('/Setting/Region/GetAllListRegionIDBySACountry', '', function(data) {
+                $('#ListRegionID').val(data);
+                $('#ListRegionID').trigger('change');
+            });
+            $('#ListCityID').val('');
+            $('#ListCityID').trigger('change');
+            $('#ListBlockID').val('');
+            $('#ListBlockID').trigger('change');
+            $('#ListVendorID').val('');
+            $('#ListVendorID').trigger('change');
+            $('#FromDateTime').val('');
+            $('#ToDateTime').val('');
+            $('#Name').val('');
+            $('#ListOrdersStatusId').val('');
+            $('#ListOrdersStatusId').trigger('change');
+            $("input[type='radio'][name='OrderType']:checked").prop('checked', false);
+            ChangeOrderType();
+            waitForIt();
+            isPaused = false;
+        }
+        $(document).ready(function() {
+            $('#ListRegionID').trigger('change');
+            $('#ListCityID').trigger('change');
+            GetVendorList();
+            GetValue();
+            GetCancelReason();
+            GetAllOrdersStatusList();
+        });
+        function waitForIt() {
+            if (isPaused) {
+                setTimeout(function() { waitForIt() }, 10);
+            } else {
+                GetValue();
+            };
+        }
+        function ChangeOrderType() {
+            if ($("input[type='radio'][name='OrderType']:checked").val() == 1) {
+                $("#DevFrom").show();
+                $("#DevTo").show();
+            }
+            else {
+                $("#DevFrom").hide();
+                $("#DevTo").hide();
+            }
+        }
+    </script>
+}

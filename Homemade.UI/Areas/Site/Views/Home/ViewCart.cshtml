@@ -1,0 +1,653 @@
+﻿@inject Homemade.BLL.Site.BLSite _BLSite
+@inject Homemade.BLL.Customer.BlCustomer _blCustomer
+@inject Homemade.BLL.Setting.BlCompanyWorkingHours _blCompanyWorkingHours
+
+@{
+    ViewData["Title"] = "ViewCart";
+    int masterid = 0;
+
+    if (Context.Request.Cookies["sessionID"] != null)
+    {
+        var value = Context.Request.Cookies["sessionID"].ToString();
+        masterid = int.Parse(value);
+    }
+
+    var listofdata = _BLSite.GeCartDetails(masterid);
+    decimal Total = 0;
+    bool IsCompleteOrder = false;
+    bool IsOpen = true;
+    bool IsCompanyWorking = _blCompanyWorkingHours.IsCompanyWorking();
+}
+@Html.Hidden("UserId", User.GetUserIdInt())
+@Html.Hidden("IsAuthenticated", (bool)User.Identity.IsAuthenticated)
+
+<!-- ***** cart-section Start ***** -->
+
+<section class="section-style cart-section">
+
+    <div class="container">
+
+        <div class="cart-area">
+
+            <div class="row">
+
+                <div class="col-12">
+
+                    <div class="cart-title title-2">@Homemade.UI.Resources.Homemade.Shopping_Basket </div>
+
+                </div>
+                @if (!IsCompanyWorking)
+                {
+                    <div id="divMsgParent">
+                        <div class="form-group row">
+                            <div class="col-xs-12">
+                                <div id="divMsgClass" class="alert alert-site" role="alert">
+                                    <strong id="lblMsg">@Homemade.UI.Resources.Homemade.Sorry_we_are_out_of_order_now</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div id="divMsgParent" style="display:none">
+                        <div class="form-group row">
+                            <div class="col-xs-12">
+                                <div id="divMsgClass" class="alert alert-site" role="alert">
+                                    <strong id="lblMsg"></strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (listofdata.Count() <= 0)
+                {
+
+
+                    <div class="col-12">
+
+                        <div class="cart-empty-area">
+
+                            <div class="cart-empty-img w-100">
+
+                                <img class="img-fluid" src="~/assets/homeMadeSite/img/Group 12927.svg" />
+
+                            </div>
+                            <p class="cart-empty-text">لا يوجد لديك منتجات فالسله حتي الآن</p>
+                            <a class="continue-shopping theme-btn theme-btn-7" href="/">تسوق الان</a>
+                        </div>
+
+                    </div>
+                }
+                else
+                {
+
+
+                    <div class="col-lg-8 mb-5 mb-lg-0" id="Dev_ProductItems">
+
+                        <div class="cart-items-area">
+
+                            @foreach (var itemData in listofdata)
+                            {
+                                bool IsIncreaseOrder = false;
+                                int? quantity = null;
+                                if (itemData.Product.IsLimited)
+                                {
+                                    quantity = Convert.ToInt32(itemData.Product.DailyQuantity);
+                                }
+                                int qu = decimal.ToInt32(itemData.ProductQuantity);
+                                Total = Total + (decimal.Parse(itemData.ProductPrice.ToString())) * qu;
+
+                                <div class="cart-item" id="cart_item_@itemData.ProductID">
+
+                                    <div class="cart-item-wrap" style="flex-wrap: wrap;">
+
+                                        <div class="cart-item-info">
+
+                                            <a class="cart-item-img" href="/Site/home/produc_default?id=@itemData.Product.ProductGuid">
+
+                                                <img class="img-fluid" src="https://cdn.made-home.com/Home/Product/@itemData.ProductImage">
+
+                                            </a>
+                                            <div class="cart-item-details">
+
+                                                <a class="vendor-link" href="/Site/home/vendor?id=@itemData.Product.Vendors.VendorsGuid">البائع @itemData.Product.Vendors.StoreNameAr</a>
+                                                <div class="product-name product-name-width" onclick="location.href = '/Site/home/produc_default?id=@itemData.Product.ProductGuid'">@itemData.ProductNameAr</div>
+                                                <div class="product-contents">
+
+
+                                                    @itemData.Product.DescAr
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-style product-quantity">
+
+                                            <span class="sub-title product-quantity-title ">@Homemade.UI.Resources.Homemade.Count</span>
+                                            <div class="wrap-count">
+                                                <input id="productPrice_@itemData.ProductID" name="productPrice_@itemData.ProductID" value="@((decimal)(itemData.ProductPrice))" hidden />
+                                                <input type="text" name="quant_@itemData.ProductID" id="quant_@itemData.ProductID" onchange='AddToCartInCart(@itemData.ProductID, $("#quant_"+@itemData.ProductID+"").val(), "c");' class="count-num form-control " value="@qu" step="1" inputmode="tel" min="1" max="10000" data-quantity="@quantity" data-isshowbtn="@(qu > quantity ? 1 : 0)">
+                                                <div class="count-btns">
+
+                                                    <button type="button" class="count-btn count-add" data-type="plus" data-field="quant_@itemData.ProductID">
+
+                                                        <i class="fas fa-chevron-up"></i>
+
+                                                    </button>
+
+                                                    <button type="button" class="count-btn count-sub" data-type="minus" data-field="quant_@itemData.ProductID">
+
+                                                        <i class="fas fa-chevron-down"></i>
+
+                                                    </button>
+
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-style product-price">
+
+                                            <span class="sub-title product-price-title ">@Homemade.UI.Resources.Homemade.Price</span>
+                                            <div class="product-price-val product-price-width">
+
+                                                <span id="priceVal_@itemData.ProductID">@((decimal.Parse(itemData.ProductPrice.ToString())) * qu)</span>
+                                                @Homemade.UI.Resources.Homemade.SAR
+
+                                            </div>
+                                        </div>
+                                        @if (!blVendor.IsVendorWorking(itemData.Product.VendorsID))
+                                        {
+                                            IsOpen = false;
+                                            <div class="alert alert-site" style="margin-top: 5px; margin-bottom: 0px;">
+                                                <strong>@Homemade.UI.Resources.Homemade.Vendor_Closed</strong>
+                                            </div>
+                                        }
+                                        @if (qu > quantity)
+                                        {
+                                            IsCompleteOrder = true;
+                                            <div class="alert alert-site count-quantity" name="quant_@itemData.ProductID" style="margin-top: 5px; margin-bottom: 0px;">
+                                                <strong>@Homemade.UI.Resources.Homemade.Sorry_number_is_available @quantity @Homemade.UI.Resources.Homemade.Only_this_item_If_this_quantity_continues</strong>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="alert alert-site count-quantity" name="quant_@itemData.ProductID" style="display: none; margin-top: 5px; margin-bottom: 0px;">
+                                                <strong>@Homemade.UI.Resources.Homemade.Sorry_number_is_available @quantity @Homemade.UI.Resources.Homemade.Only_this_item_If_this_quantity_continues</strong>
+                                            </div>
+                                        }
+
+                                    </div>
+                                    <div class="delete-item" data-bs-toggle="modal" data-bs-target="#confirmDelatemodal">
+
+                                        <button type="button" class="delete-btn" onclick="RemoveFromCart_Cart(@itemData.ProductID)">
+
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="19.479" height="25.044" viewBox="0 0 19.479 25.044">
+                                                <path id="Icon_material-delete-forever" data-name="Icon material-delete-forever" d="M8.891,26.761a2.791,2.791,0,0,0,2.783,2.783H22.8a2.791,2.791,0,0,0,2.783-2.783v-16.7H8.891Zm3.423-9.906,1.962-1.962,2.964,2.95,2.95-2.95,1.962,1.962L19.2,19.8l2.95,2.95-1.962,1.962-2.95-2.95-2.95,2.95-1.962-1.962,2.95-2.95ZM22.109,5.891,20.718,4.5H13.761L12.37,5.891H7.5V8.674H26.979V5.891Z" transform="translate(-7.5 -4.5)" />
+                                            </svg>
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            }
+
+                        </div>
+
+                    </div>
+                    <div class="col-lg-4" id="Dev_ProductItemsTotal">
+
+                        <div class="cart-summary-area">
+
+                            <div class="cart-summary-box">
+
+                                <div class="box-body">
+
+                                    <div class="box-details">
+                                        @foreach (var itemData in listofdata)
+                                        {
+                                            int qu = decimal.ToInt32(itemData.ProductQuantity);
+
+                                            <div class="order-details" id="order_details_@itemData.ProductID">
+
+                                                <p class="details-text"><span id="productX_@itemData.ProductID">@qu</span> X @itemData.ProductNameAr</p>
+                                                <p class="details-val">
+                                                    <span id="orderPrice_@itemData.ProductID" class="tot">@((decimal.Parse(itemData.ProductPrice.ToString())) * qu)</span>
+                                                    @Homemade.UI.Resources.Homemade.SAR
+                                                </p>
+
+                                            </div>
+
+                                        }
+                                        <div class="order-details delivery-details d-none">
+
+                                            <p class="details-text">@Homemade.UI.Resources.Homemade.lbl_Delivery_Price</p>
+                                            <p class="details-val">
+
+                                                <span id="orderPrice">0</span>
+                                                @Homemade.UI.Resources.Homemade.SAR
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="box-footer">
+
+                                    <div class="cart-total">
+
+                                        <p class="total-text title-5 ">@Homemade.UI.Resources.Homemade.Total_Including_Tax</p>
+                                        <p class="total-value title-4">
+
+                                            <span id="orderTotal">@Total</span>
+                                            @Homemade.UI.Resources.Homemade.SAR
+                                        </p>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="coupon-input d-none">
+
+                                <input type="text" id="Txt_Promocode" class="form-control input-focus" placeholder="ادخل كود الخصم">
+                                <button class="coupon-btn" id="btncoupon" type="button" onclick="CheckPromocode()">تفعيل</button>
+                                <div id="btncouponmessage" style="color:red"></div>
+
+                            </div>
+
+                            <div class="cart-summary-btns">
+                                @if (IsOpen && IsCompanyWorking)
+                                {
+                                    @if (!IsCompleteOrder)
+                                    {
+                                        <button type="button" class="increase_order add-note-btn theme-btn theme-btn-lg" onclick="increaseOrder()" style="display:none;background-color: red; color: white;">
+                                            @Homemade.UI.Resources.Homemade.Quantity_Increase_Order
+                                        </button>
+                                        <a class="complete-purchase" id="btn_CompleteOrder" href="javascript:completeOrder();" style="margin-top: 5px;">@Homemade.UI.Resources.Homemade.Complete_your_purchase</a>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="increase_order add-note-btn theme-btn theme-btn-lg" onclick="increaseOrder()" style="background-color: red; color: white;">
+                                            @Homemade.UI.Resources.Homemade.Quantity_Increase_Order
+                                        </button>
+                                        <a class="complete-purchase" id="btn_CompleteOrder" style="display:none;margin-top: 5px;" href="javascript:completeOrder();">@Homemade.UI.Resources.Homemade.Complete_your_purchase</a>
+                                    }
+                                }
+                                <a class="scheduled-request d-none" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
+
+                                    <span><i class="far fa-clock"></i></span>
+                                    @Homemade.UI.Resources.Homemade.Scheduled_Order
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+                <div class="col-12" style="display:none;" id="Dev_DoneCart">
+
+                    <div class="cart-empty-area">
+
+                        <div class="cart-empty-img w-100">
+
+                            <img class="img-fluid" src="~/assets/homeMadeSite/img/done.svg" />
+
+                        </div>
+                        <p class="cart-empty-text">@Homemade.UI.Resources.Homemade.The_request_to_increase_the_product_has_been_sent_successfully</p>
+                        <a class="continue-shopping theme-btn theme-btn-7" id="CartRedirect" href="/Site/Home/Index">@Homemade.UI.Resources.Homemade.Track_Your_Order</a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</section>
+
+
+<!-- ***** scheduled-request modal  ***** -->
+
+<div class="custom-bootstrap-modal modal fade scheduled-request-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+
+
+                <div class="modal-body-title title-4">طلب مجدول</div>
+                <div class="modal-body-content">
+
+                    <div class="scheduled-request-area">
+
+                        <p class="scheduled-request-title">من فضلك قم بتحديد التاريخ و الوقت الذي تريد فية توصيل طلبك</p>
+                        <form class="scheduled-request-form" action="#">
+
+                            <div class="row">
+
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+
+                                        <label class="form-label">تاريخ الطلب</label>
+                                        <input type="date" class="form-control input-focus">
+
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+
+                                        <label class="form-label">وقت الطلب</label>
+                                        <input type="time" class="form-control input-focus">
+
+                                    </div>
+
+                                </div>
+                                <div class="col-12">
+
+                                    <button type="button" class="save-btn theme-btn theme-btn-lg theme-btn-7 custom-submit-btn">
+                                        حفظ و إكمال الطلب
+                                    </button>
+
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<!-- ***** scheduled-request modal  ***** -->
+<!-- ***** confirm-delate modal  ***** -->
+
+<div class="custom-bootstrap-modal modal fade confirm-delate-modal" id="confirmDelatemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+
+            <div class="modal-body">
+
+
+                <div class="modal-body-content">
+
+                    <div class="confirm-delate-modal-area">
+
+                        <h4 class="confirm-delate-title mb-4 text-center title-4">   هل تريد حذف هذا المنتج بالفعل ؟؟</h4>
+                        <div class="confirm-delate-btns">
+
+                            <button type="button" class="btn btn-secondary" id="cancelpopUp" data-bs-dismiss="modal">إلغاء</button>
+                            <button type="button" class="btn btn-outline-danger" id="confirmDelete">حذف</button>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<partial name="_ModalDeliveryAddresses" />
+
+<!-- ***** confirm-delate modal  ***** -->
+<!-- ***** cart-section End ***** -->
+@section Styles {
+    <!-- Data_table Styles -->
+    <style>
+        .disabled {
+            cursor: not-allowed !important;
+            background-color: #E2E6EB !important;
+            border-radius: 14px !important;
+            border: 1px solid #CBCBCB;
+            color: #AAB0BB !important;
+            font-weight: bold !important;
+            font-size: 16px;
+            padding: .375rem .75rem;
+            outline: none;
+            transition: all .3s ease !important;
+        }
+    </style>
+}
+    <!-- END Page Content -->
+    @section Scripts {
+
+    <script>
+
+
+
+        function AddToCartInCart(ProductID, quant) {
+            debugger;
+            var productTotal = (parseFloat($("#productPrice_" + ProductID + "").val().replace('٫', '.')) * parseInt(quant)).toFixed(2);
+            $("#priceVal_" + ProductID + "").html(productTotal);
+            $("#productX_" + ProductID + "").html(quant);
+            $("#orderPrice_" + ProductID + "").html(productTotal);
+            calcTotal()
+
+            AddToCart(ProductID, quant, "c");
+        }
+        function calcTotal() {
+            var totvalue = 0;
+            $('.tot').each(function(index, value) {
+                totvalue += parseFloat(value.innerHTML.replace('٫', '.'));
+            });
+            if (totvalue == 0) {
+                location.reload();
+            }
+            $("#orderTotal").html(totvalue.toFixed(2));
+
+        }
+        function RemoveFromCart_Cart(productId) {
+
+            $("#confirmDelete").attr("onclick", "ConfirmDelete(" + productId + ")");
+
+        }
+        function ConfirmDelete(productId) {
+            $("#cart_item_" + productId + "").fadeOut();
+            $("#order_details_" + productId + "").fadeOut();
+
+            setTimeout(function() {
+                $("#cart_item_" + productId + "").remove();
+                $("#order_details_" + productId + "").remove();
+                if ($('.count-num[data-isshowbtn="1"]')[0] !== undefined) {
+                    $(".increase_order").show();
+                    $(".complete-purchase").hide();
+                }
+                else {
+                    $(".increase_order").hide();
+                    $(".complete-purchase").show();
+                }
+                setTimeout(function() {
+                    calcTotal();
+                }, 500);
+            }, 2000);
+
+            RemoveFromCart(productId)
+        }
+        function increaseOrder() {
+            if ($("#IsAuthenticated").val() == "True") {
+                $.ajax({
+                    tryp: "GET",
+                    url: "/site/home/executeOrderPending",
+                    data: {
+                        _sessionID: getsessionID()
+                    }
+                }).done(function(result) {
+                    if (result.status) {
+                        RemoveAllCart(true);
+                        $("#divMsgParent").hide();
+                        $("#Dev_ProductItems").hide();
+                        $("#Dev_ProductItemsTotal").hide();
+                        if (result.ordersGuid != "") {
+                            $("#CartRedirect").attr("href", "/Site/Home/completePendingOrder?id=" + result.ordersGuid);
+                        }
+                        $("#Dev_DoneCart").show();
+                    } else {
+                        console.log(result.objResult);
+                        if (result.objResult != "" && result.objResult != "null" && result.objResult != null) {
+                            $("#lblMsg").html(result.message +
+                                '<button type="button" class="add-new-address-btn theme-btn theme-btn-7" data-toggle="tooltip" onclick="ShowDeliveryAddressModal(0,1)">@Homemade.UI.Resources.Homemade.Add_New_Address</button>');
+                        }
+                        else {
+                            $("#lblMsg").html(result.message);
+                        }
+                        $("#divMsgParent").show();
+                    }
+                });
+            } else {
+                $("#lblMsgLogin").html("يجب تسجيل الدخول اولا لإستكمال الطلب")
+                $("#divMsgParentLogin").show();
+                $('.login-link')[0].click();
+            }
+        }
+        function completeOrder() {
+            if ($("#IsAuthenticated").val() == "True") {
+                $.getJSON('/Site/Home/IsQuantityAvilable?masterid=' + getsessionID(), '', function(data) {
+                    if (data) {
+                        $("#divMsgParentAlertMessage").hide();
+                        $("#divMsgParentAlertMessage").show();
+                        $("#divMsgClassAlertMessage").attr("class", "alert alert-site");
+                        $("#lblMsgAlertMessage").html("@Homemade.UI.Resources.Homemade.increase_the_quantity_Validation");
+                        $("#AlertMessagemodal").modal('show');
+                        setTimeout(function() {
+                            $("#AlertMessagemodal").modal('hide');
+                        }, 3000);
+                    }
+                    else {
+                        location.href = "/site/home/completeOrder";
+                    }
+                });
+
+            } else {
+                $("#lblMsgLogin").html("يجب تسجيل الدخول اولا لإستكمال الطلب")
+                $("#divMsgParentLogin").show()
+                $('.login-link')[0].click();
+            }
+        }
+        function CheckPromocode() {
+            $.ajax({
+                type: "GET",
+                url: "/site/home/checkPromocode",
+                data: {
+                    _sessionID: getsessionID(),
+                    _code: $("#Txt_Promocode").val()
+                }
+            }).done(function(result) {
+                debugger;
+                if (result.status) {
+                    $("#btncoupon").attr("disabled", true);
+                    $("#btncoupon").addClass("disabled");
+                    $("#btncoupon").html("تم التفعيل");
+
+                    $("#Txt_Promocode").attr("disabled", true);
+                    $("#Txt_Promocode").addClass("disabled");
+
+
+                } else {
+                    $("#btncouponmessage").html(result.message);
+                }
+            })
+        }
+        function ShowDeliveryAddressModal(id, type) {
+            $('#title').html('@Homemade.UI.Resources.Homemade.Add_Location');
+            getLocation();
+            let fields = $('#new-address-form span');
+            fields.each(function() {
+                if ($(this).attr('data-valmsg-for') != null) {
+                    $($(this).children()[0]).text('');
+                }
+            });
+            $("#new-address-form").trigger('reset');
+            //GetRegions();
+            GetAddressTypes();
+            $("#Name").val('');
+            $("#MobileNo").val('');
+            $("#Address").val('');
+            $("#StreetNo").val('');
+            $("#BuildingNumer").val('');
+            $("#UniqueSign").val('');
+            $('#modifyAddressModal').modal('show');
+
+        }
+        function GetAddressTypes(addressTypesID) {
+            $.ajax({
+                type: "POST",
+                url: '/Setting/AddressTypes/GetAddressTypes',
+                data: {},
+                dataType: "json",
+                async: false,
+                contentType: "application/x-www-form-urlencoded",
+                success: function(result) {
+                    $('#AddressTypesID').html('');
+                    $('#AddressTypesID').append('<option></option>');
+                    for (var i = 0; i < result.length; i++) {
+                        var item = result[i];
+                        if (addressTypesID != undefined && addressTypesID > 0 && addressTypesID == item.addressTypesID) {
+                            $('#AddressTypesID').append('<option selected value="' + item.addressTypesID + '">' + item.addressTypesName + '</option>');
+                            $('#AddressTypesID').val(addressTypesID).trigger('change');
+                        }
+                        else {
+                            $('#AddressTypesID').append('<option value="' + item.addressTypesID + '">' + item.addressTypesName + '</option>');
+                        }
+
+                    }
+                },
+                error: function() {
+
+                }
+            });
+        }
+        $("#btnSaveAddress").click(function(e) {
+            e.preventDefault();
+            let frmCreate = $("#new-address-form");
+            if (frmCreate.valid()) {
+                frmCreate.submit();
+            }
+        });
+        function completedAddress(xhr) {
+            $("#divMsgClass_Er").hide();
+
+            var obj = JSON.parse(xhr.responseText);
+            var result = obj._result;
+
+            var msg = result.message;
+            if (result.resultType == 'success') {
+
+                $("#modifyAddressModal").modal('hide');
+                $("#divMsgParent").hide();
+            }
+            else {
+                $("#divMsgClass_Er").show();
+                $("#lblMsg_Er").html(msg);
+            }
+        };
+    </script>
+    <script src="~/Scripts/App/Google/AddressMapScript.js"></script>
+
+}

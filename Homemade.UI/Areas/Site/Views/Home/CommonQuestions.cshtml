@@ -1,0 +1,92 @@
+﻿    <!-- ***** common-questions-section Start ***** -->
+@inject Homemade.BLL.Setting.BlMainPageDetails blMainPageDetails
+<section class="section-style common-questions-section">
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-12">
+
+                <div class="terms-arae">
+
+                    <div class="accordions-title common-questions-title title-2">@Homemade.UI.Resources.Homemade.Frequently_Asked_Questions </div>
+                    <div class="accordion-area">
+
+                        <div class="accordion-panels">
+                            @{
+                                var i = 0;
+                            }
+                            @foreach (var item in blMainPageDetails.GetMainPageDetailstaghelper(Utility.CurrentLanguageCode, 5))
+                            {
+                                if (i == 0)
+                                {
+                                    <div class="panel-items active active-panel">
+
+                                        <div class="panel-header">
+
+                                            <div class="accordion-title">@item.MainPageDetailsTitle </div>
+                                            <span class="accordion-icon">
+
+                                                <i class="fas fa-chevron-down"></i>
+
+                                            </span>
+
+                                        </div>
+                                        <div class="panel-body">
+
+                                            <p class="accordion-content">
+                                                @item.Desc
+
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="panel-items">
+
+                                        <div class="panel-header">
+
+                                            <div class="accordion-title">@item.MainPageDetailsTitle </div>
+                                            <span class="accordion-icon">
+
+                                                <i class="fas fa-chevron-down"></i>
+
+                                            </span>
+
+                                        </div>
+                                        <div class="panel-body">
+
+                                            <p class="accordion-content">
+                                                @item.Desc
+
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+                                }
+                                i++;
+
+                            }
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+</section>
+
+<!-- ***** common-questions-section End ***** -->

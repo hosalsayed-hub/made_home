@@ -1,0 +1,72 @@
+﻿@model Homemade.BLL.ViewModel.Driver.DriverSupportViewModel
+@inject Homemade.BLL.General.BLGeneral bLGeneral
+<div class="content">
+    <div class="block">
+        <div class="block-content h_scroll">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="block-title">
+                        <span class="header-title"> @Homemade.UI.Resources.Homemade.DriverSupportDetails  </span>
+                    </h3>
+                </div>
+            </div>
+
+            <div class="block-content tab-content">
+                <div class="row">
+                    <input type="hidden" asp-for="DriverSupportID" />
+                    @Html.AntiForgeryToken()
+                    <div class="col-md-6 form-group">
+                        <div class="form-material">
+                            @Html.DisplayFor(x => x.DriverName)
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Driver</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <div class="form-material">
+                            @Html.DisplayFor(x => x.DriverIDNo)
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.IdNo</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <div class="form-material">
+                            @Html.DisplayFor(x => x.DriverMobileNo)
+                            <label for="material-text2">@Homemade.UI.Resources.Homemade.Mobile </label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <div class="form-material">
+                            @Html.DisplayFor(x => x.HelpQuestionsName)
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.help_Questions </label>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <div class="form-material">
+                            @Html.DisplayFor(x => x.Descripe)
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Descripe</label>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <div class="form-material">
+                            @Html.DisplayFor(x => x.CreateDate)
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Date</label>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <div class="form-material">
+
+                            <img src="@Model.Image" class="img" width="100" height="100" style="display:block;margin-bottom:7px;" />
+                            <label for="material-select2">@Homemade.UI.Resources.Homemade.Image</label>
+                            <br />
+                            <a class="btn" target="_blank" href="@Model.Image">@Homemade.UI.Resources.Homemade.View</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

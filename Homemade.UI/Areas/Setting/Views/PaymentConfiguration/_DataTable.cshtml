@@ -1,0 +1,26 @@
+﻿@inject Homemade.BLL.BLPermission blPermission
+@{
+    var IsPermissionUpdate = @blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Configuration, (int)Homemade.BLL.ActionEnum.Update) ? 1 : 0;
+    var IsPermissionDelete = @blPermission.GetPermissionByUserAndController(User.Identity.Name, (int)Homemade.BLL.ControllerEnum.Configuration, (int)Homemade.BLL.ActionEnum.Delete) ? 1 : 0;
+}
+<script>
+    $(document).ready(function() {
+
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("LoadTable")',
+            dataType: 'json',
+            data: { id: '' },
+            success: function(data) {
+                var items = '';
+
+            },
+            error: function(ex) {
+
+            }
+        });
+
+    });
+
+</script>

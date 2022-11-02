@@ -1,0 +1,344 @@
+﻿@model Homemade.BLL.ViewModel.Site.SiteOrdersDetailsViewModel
+@inject Homemade.BLL.Setting.BlConfiguration _blConfiguration
+<!-- ***** order-details modal  ***** -->
+
+
+
+
+<div class="modal-body-title title-4">@Homemade.UI.Resources.Homemade.Order_Details</div>
+<div class="modal-body-content">
+
+
+    <div class="order-details-modal-area">
+
+        <div class="order-details-head">
+
+            <a href="/Site/Home/vendor?id=@Model.VendorsGuid" class="order-vendor">
+
+                @if (!string.IsNullOrEmpty(Model.VendorsLogo))
+                {
+                    <img class="img-fluid" src="@Model.VendorsLogo">
+                }
+                else
+                {
+                    <img class="img-fluid" src="~/assets/homeMadeSite/img/Group%208.svg">
+                }
+                <span class="vendor-name">@Model.VendorsName</span>
+
+            </a>
+            <p class="order-date">
+
+                <span>@Model.CreateDate.ToString("dd yyyy MMMM")</span>
+                <span>@Model.CreateDate.ToString("hh:mm:ss tt")</span>
+
+            </p>
+        </div>
+
+        <div class="order-tracking-area">
+
+            <div class="tracking-status @(Model.OrderStatusID >= (int)OrderStatusEnum.Create ? Html.Raw("active") : Html.Raw(""))">
+
+                <div class="status-icon">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14.986" height="22.056" viewBox="0 0 14.986 22.056">
+                        <path id="_-e-Shape_958" data-name="-e-Shape 958" d="M136.014,492.164H127.84a.689.689,0,0,0,0,1.378h8.174a.689.689,0,0,0,0-1.378Zm.681-13.785V477h-1.362v1.378h-2.725V477h-1.362v1.378h-2.725V477h-1.362v1.378a2.741,2.741,0,0,0-2.725,2.757V496.3a2.741,2.741,0,0,0,2.725,2.757H136.7a2.741,2.741,0,0,0,2.725-2.757V481.136A2.741,2.741,0,0,0,136.7,478.379Zm1.362,17.92a1.371,1.371,0,0,1-1.362,1.379h-9.537A1.371,1.371,0,0,1,125.8,496.3V481.136a1.371,1.371,0,0,1,1.362-1.378H136.7a1.37,1.37,0,0,1,1.362,1.378Zm-2.044-8.271H127.84a.689.689,0,0,0,0,1.379h8.174a.689.689,0,0,0,0-1.379Zm0-4.135H127.84a.689.689,0,0,0,0,1.378h8.174a.689.689,0,0,0,0-1.378Z" transform="translate(-124.434 -477)" fill="#a1835c" />
+                    </svg>
+
+
+                </div>
+                <span class="status status-text">@Homemade.UI.Resources.Homemade.OrderCreate</span>
+                <span class="status-date">@Model.OrderCreate</span>
+
+            </div>
+            <div class="tracking-status @(Model.OrderStatusID >= (int)OrderStatusEnum.Accept ? Html.Raw("active") : Html.Raw(""))">
+
+                <div class="status-icon">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14.986" height="22.056" viewBox="0 0 14.986 22.056">
+                        <path id="_-e-Shape_958" data-name="-e-Shape 958" d="M136.014,492.164H127.84a.689.689,0,0,0,0,1.378h8.174a.689.689,0,0,0,0-1.378Zm.681-13.785V477h-1.362v1.378h-2.725V477h-1.362v1.378h-2.725V477h-1.362v1.378a2.741,2.741,0,0,0-2.725,2.757V496.3a2.741,2.741,0,0,0,2.725,2.757H136.7a2.741,2.741,0,0,0,2.725-2.757V481.136A2.741,2.741,0,0,0,136.7,478.379Zm1.362,17.92a1.371,1.371,0,0,1-1.362,1.379h-9.537A1.371,1.371,0,0,1,125.8,496.3V481.136a1.371,1.371,0,0,1,1.362-1.378H136.7a1.37,1.37,0,0,1,1.362,1.378Zm-2.044-8.271H127.84a.689.689,0,0,0,0,1.379h8.174a.689.689,0,0,0,0-1.379Zm0-4.135H127.84a.689.689,0,0,0,0,1.378h8.174a.689.689,0,0,0,0-1.378Z" transform="translate(-124.434 -477)" fill="#a1835c" />
+                    </svg>
+
+
+                </div>
+                <span class="status status-text">@Homemade.UI.Resources.Homemade.OrderAccept</span>
+                <span class="status-date">@Model.OrderAccept</span>
+
+            </div>
+            <div class="tracking-status @(Model.OrderStatusID >= (int)OrderStatusEnum.Being_Processed ? Html.Raw("active") : Html.Raw(""))">
+
+                <div class="status-icon">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15.422" height="22.698" viewBox="0 0 15.422 22.698">
+                        <path id="_-e-Shape_959" data-name="-e-Shape 959" d="M419.929,498.28h-1.4v-4.965a4.936,4.936,0,0,0-4.907-4.965,4.936,4.936,0,0,0,4.907-4.965v-4.965h1.4a.709.709,0,0,0,0-1.419h-14.02a.709.709,0,0,0,0,1.419h1.4v4.965a4.936,4.936,0,0,0,4.907,4.965,4.936,4.936,0,0,0-4.907,4.965v4.965h-1.4a.709.709,0,0,0,0,1.419h14.02a.709.709,0,0,0,0-1.419Zm-11.216-14.9v-4.965h8.412v4.965a3.615,3.615,0,0,1-3.68,3.547h-1.052A3.615,3.615,0,0,1,408.712,483.384Zm8.412,14.9h-8.412v-4.965a3.615,3.615,0,0,1,3.68-3.547h1.052a3.615,3.615,0,0,1,3.68,3.547Z" transform="translate(-405.207 -477)" fill="#a1835c" />
+                    </svg>
+
+                </div>
+                <span class="status status-text">@Homemade.UI.Resources.Homemade.BeingProcessed</span>
+                <span class="status-date">@Model.OrderBeingProcessed</span>
+
+            </div>
+            @*<div class="tracking-status @(Model.OrderStatusID == (int)OrderStatusEnum.Shipping ? Html.Raw("active") : Html.Raw(""))">
+            <div class="status-icon">
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="19.962" height="21.958" viewBox="0 0 19.962 21.958">
+            <g id="Icon_feather-shopping-bag" data-name="Icon feather-shopping-bag" transform="translate(1 1)">
+            <path id="Path_1612" data-name="Path 1612" d="M7.494,3,4.5,6.992V20.962a2,2,0,0,0,2,2H20.466a2,2,0,0,0,2-2V6.992L19.469,3Z" transform="translate(-4.5 -3)" fill="none" stroke="#A1835C" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+            <path id="Path_1613" data-name="Path 1613" d="M4.5,9H22.462" transform="translate(-4.5 -5.008)" fill="none" stroke="#A1835C" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+            <path id="Path_1614" data-name="Path 1614" d="M19.983,15A3.992,3.992,0,0,1,12,15" transform="translate(-7.01 -7.017)" fill="none" stroke="#A1835C" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+            </g>
+            </svg>
+
+
+            </div>
+            <span class="status status-text">@Homemade.UI.Resources.Homemade.OrderShipping</span>
+            <span class="status-date">@Model.OrderShipping</span>
+
+            </div>*@
+
+            <div class="tracking-status @(((Model.OrderStatusID >= (int)OrderStatusEnum.Being_Delivery)) ? Html.Raw("active") : Html.Raw(""))">
+
+                <div class="status-icon">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17.805" height="23.24" viewBox="0 0 17.805 23.24">
+                        <path id="Icon_awesome-clipboard-check" data-name="Icon awesome-clipboard-check" d="M14.267,2.717h-3.4a2.717,2.717,0,1,0-5.435,0h-3.4A2.039,2.039,0,0,0,0,4.756V19.7A2.039,2.039,0,0,0,2.038,21.74H14.267A2.039,2.039,0,0,0,16.3,19.7V4.756A2.039,2.039,0,0,0,14.267,2.717ZM8.152,1.7A1.019,1.019,0,1,1,7.133,2.717,1.017,1.017,0,0,1,8.152,1.7ZM13.3,11.541,7.227,17.562a.51.51,0,0,1-.722,0L3,14.021A.51.51,0,0,1,3,13.3l1.206-1.2a.51.51,0,0,1,.722,0l1.953,1.97,4.5-4.467a.51.51,0,0,1,.722,0l1.2,1.206A.51.51,0,0,1,13.3,11.541Z" transform="translate(0.75 0.75)" fill="none" stroke="#a1835c" stroke-width="1.5" />
+                    </svg>
+
+
+                </div>
+                <span class="status status-text">@Homemade.UI.Resources.Homemade.BeingDelivery</span>
+                <span class="status-date">@Model.OrderBeingDelivery</span>
+
+            </div>
+            @if (Model.OrderStatusID == (int)OrderStatusEnum.Cancel)
+            {
+                <div class="tracking-status @(Model.OrderStatusID >= (int)OrderStatusEnum.Cancel ? Html.Raw("active") : Html.Raw(""))">
+
+                    <div class="status-icon">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14.986" height="22.056" viewBox="0 0 14.986 22.056">
+                            <path id="_-e-Shape_958" data-name="-e-Shape 958" d="M136.014,492.164H127.84a.689.689,0,0,0,0,1.378h8.174a.689.689,0,0,0,0-1.378Zm.681-13.785V477h-1.362v1.378h-2.725V477h-1.362v1.378h-2.725V477h-1.362v1.378a2.741,2.741,0,0,0-2.725,2.757V496.3a2.741,2.741,0,0,0,2.725,2.757H136.7a2.741,2.741,0,0,0,2.725-2.757V481.136A2.741,2.741,0,0,0,136.7,478.379Zm1.362,17.92a1.371,1.371,0,0,1-1.362,1.379h-9.537A1.371,1.371,0,0,1,125.8,496.3V481.136a1.371,1.371,0,0,1,1.362-1.378H136.7a1.37,1.37,0,0,1,1.362,1.378Zm-2.044-8.271H127.84a.689.689,0,0,0,0,1.379h8.174a.689.689,0,0,0,0-1.379Zm0-4.135H127.84a.689.689,0,0,0,0,1.378h8.174a.689.689,0,0,0,0-1.378Z" transform="translate(-124.434 -477)" fill="#a1835c" />
+                        </svg>
+
+
+                    </div>
+                    <span class="status status-text">@Homemade.UI.Resources.Homemade.OrderCancel</span>
+                    <span class="status-date">@Model.OrderCancel</span>
+
+                </div>
+            }
+            else
+            {
+                <div class="tracking-status @(Model.OrderStatusID >= (int)OrderStatusEnum.Delivered ? Html.Raw("active") : Html.Raw(""))">
+
+                    <div class="status-icon">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" width="17.805" height="23.24" viewBox="0 0 17.805 23.24">
+                            <path id="Icon_awesome-clipboard-check" data-name="Icon awesome-clipboard-check" d="M14.267,2.717h-3.4a2.717,2.717,0,1,0-5.435,0h-3.4A2.039,2.039,0,0,0,0,4.756V19.7A2.039,2.039,0,0,0,2.038,21.74H14.267A2.039,2.039,0,0,0,16.3,19.7V4.756A2.039,2.039,0,0,0,14.267,2.717ZM8.152,1.7A1.019,1.019,0,1,1,7.133,2.717,1.017,1.017,0,0,1,8.152,1.7ZM13.3,11.541,7.227,17.562a.51.51,0,0,1-.722,0L3,14.021A.51.51,0,0,1,3,13.3l1.206-1.2a.51.51,0,0,1,.722,0l1.953,1.97,4.5-4.467a.51.51,0,0,1,.722,0l1.2,1.206A.51.51,0,0,1,13.3,11.541Z" transform="translate(0.75 0.75)" fill="none" stroke="#a1835c" stroke-width="1.5" />
+                        </svg>
+
+
+                    </div>
+                    <span class="status status-text">@Homemade.UI.Resources.Homemade.OrderDelivery</span>
+                    <span class="status-date">@Model.OrderDelivered</span>
+
+                </div>
+            }
+        </div>
+        <div class="order-details-columns">
+
+            <div class="row">
+
+                <div class="col-lg-7 mb-4 mb-lg-0">
+
+                    <div class="details-wrap">
+
+                        <div class="details-title">@Homemade.UI.Resources.Homemade.Products</div>
+                        <div class="table-responsive order-table">
+
+                            <table class="table table-borderless">
+
+                                <thead>
+
+                                    <tr>
+                                        <th>@Homemade.UI.Resources.Homemade.Image </th>
+                                        <th class="order-name">@Homemade.UI.Resources.Homemade.Name</th>
+                                        <th>@Homemade.UI.Resources.Homemade.Quantity</th>
+                                        <th>@Homemade.UI.Resources.Homemade.Price</th>
+                                    </tr>
+
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.SiteOrderItems)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.ProdImage))
+                                                {
+                                                    <img class="img-fluid order-img" src="@item.ProdImage">
+                                                }
+                                                else
+                                                {
+                                                    <img class="img-fluid order-img" src="~/assets/homeMadeSite/img/43.png">
+                                                }
+                                            </td>
+                                            <td class="order-name">
+
+                                                <p class="order-details-td">
+                                                    @item.ProdName
+
+                                                </p>
+                                            </td>
+                                            <td>
+
+                                                <p class="order-details-td">
+
+                                                    @item.Quantity
+
+                                                </p>
+                                            </td>
+                                            <td>
+
+                                                <p class="order-details-td">
+                                                    @(Math.Round(item.Price * item.Quantity, 2)) @Homemade.UI.Resources.Homemade.SR
+
+
+                                                </p>
+                                            </td>
+
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="order-summary">
+                            <div class="summary-details">
+                                <p class="details-text"> @Homemade.UI.Resources.Homemade.Price_With_Vat</p>
+                                <p class="details-val">@Model.Price @Homemade.UI.Resources.Homemade.SR</p>
+                            </div>
+                            <div class="summary-details">
+
+                                <p class="details-text"> @Homemade.UI.Resources.Homemade.DeliveryPrice</p>
+                                <p class="details-val">@Model.DeliveryPrice @Homemade.UI.Resources.Homemade.SR</p>
+
+                            </div>
+                            @if (Model.Discount > 0)
+                            {
+                                <div class="summary-details">
+
+                                    <p class="details-text"> @Homemade.UI.Resources.Homemade.Discount</p>
+                                    <p class="details-val">@Model.Discount @Homemade.UI.Resources.Homemade.SR</p>
+
+                                </div>
+                            }
+                            <div class="summary-details summary-total ">
+                                <p class="details-text"> @Homemade.UI.Resources.Homemade.Total_With_Vat</p>
+                                <p class="details-val">@Model.Total @Homemade.UI.Resources.Homemade.SR</p>
+                            </div>
+                            <div class="summary-details summary-total ">
+                                <p class="details-text"> @Homemade.UI.Resources.Homemade.Vat (@_blConfiguration.GetDeliveryPriceVatPercent().ToString("0")%)</p>
+                                <p class="details-val">@Model.VatValue.ToString("0.##") @Homemade.UI.Resources.Homemade.SR</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-5">
+
+
+                    <div class="details-wrap">
+
+                        <div class="details-title mb-4">@Homemade.UI.Resources.Homemade.Payment_and_Delivery_Data</div>
+                        <div class="services-info">
+
+                            <div class="info-details">
+
+                                <div class="info-icon">
+
+                                    <img src="~/assets/homeMadeSite/img/Shape.svg">
+
+                                </div>
+                                <div class="info-items">
+
+                                    <p class="info-text">@Homemade.UI.Resources.Homemade.Order_Number</p>
+                                    <p class="info-val">@Model.OrderVendorID</p>
+
+                                </div>
+                            </div>
+                            <div class="info-details">
+
+                                <div class="info-icon">
+
+                                    <img src="~/assets/homeMadeSite/img/Icon%20feather-credit-card.svg">
+
+                                </div>
+                                <div class="info-items">
+
+                                    <p class="info-text">@Homemade.UI.Resources.Homemade.PaymentType</p>
+                                    <p class="info-val">@Model.PaymentTypeName </p>
+
+                                </div>
+                            </div>
+                            <div class="info-details">
+
+                                <div class="info-icon">
+
+                                    <img src="~/assets/homeMadeSite/img/Fill%201100.svg">
+
+                                </div>
+                                <div class="info-items">
+
+                                    <p class="info-text">@Homemade.UI.Resources.Homemade.Delivery_Address</p>
+                                    <p class="info-val">
+
+                                        @Model.CustomerLocationAddress
+
+                                    </p>
+
+                                </div>
+                            </div>
+                            @if (Model.CaptainTypeId == (int)CaptainTypeEnum.Home_Made)
+                            {
+                                <div class="info-details">
+                                    <div class="info-icon">
+                                        <img src="~/assets/homeMadeSite/img/Path%202.svg">
+                                    </div>
+                                    <div class="info-items">
+                                        <p class="info-text">@Homemade.UI.Resources.Homemade.Captain</p>
+                                        <p class="info-val">
+                                            @Model.CaptainName
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="info-details">
+                                    <div class="info-icon">
+                                        <img src="~/assets/homeMadeSite/img/Path%202.svg">
+                                    </div>
+                                    <div class="info-items">
+                                        <p class="info-text">@Homemade.UI.Resources.Homemade.Phone</p>
+                                        <p class="info-val">
+                                            @Model.CaptainPhone
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+
+<!-- ***** order-details modal  ***** -->

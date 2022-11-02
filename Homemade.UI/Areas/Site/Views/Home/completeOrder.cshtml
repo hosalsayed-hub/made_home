@@ -1,0 +1,1246 @@
+﻿@inject Homemade.BLL.Site.BLSite _BLSite
+@inject Homemade.BLL.Customer.BlCustomerAddress _BlCustomerAddress
+@inject Homemade.BLL.Customer.BlCustomer _BlCustomer
+@inject Homemade.BLL.Setting.BlConfiguration _blConfiguration
+
+@{
+    ViewData["Title"] = "ViewCart";
+    int masterid = 0;
+
+    if (Context.Request.Cookies["sessionID"] != null)
+    {
+        var value = Context.Request.Cookies["sessionID"].ToString();
+        masterid = int.Parse(value);
+    }
+
+    var resultsMaster = _BLSite.GeCartMasterByID(masterid);
+    var results = _BLSite.GeCartDetailsVM(masterid, Utility.CurrentLanguageCode, User.GetUserIdInt()).ToList();
+
+    var listofdata = results.GroupBy(
+    p => p.VendorsID,
+    (key, g) => new { VendorsID = key, listitems = g.ToList() });
+
+
+    decimal Total = 0;
+    decimal? TotalDeliveryPrice = 0;
+    int CusId = _BlCustomer.GetCustomerByUser(User.GetUserIdInt()).CustomersID;
+    var cusAddress = _BlCustomerAddress.GetAllCutomerAddress(CusId, Utility.CurrentLanguageCode);
+    var customerBalance = _BlCustomer.GetLastBlance(CusId);
+
+    var totaldelivery = _BlCustomer.CheckPromoCodeValid_Web("", CusId, 0, "", listofdata.Select(e => e.VendorsID).ToList(), 0, masterid);
+    bool IsCompleteOrder = false;
+}
+
+@Html.Hidden("UserName", User.Identity.Name)
+@Html.Hidden("CusId", CusId)
+
+
+<section class="section-style complete-order-section">
+
+
+    <div class="container">
+
+        <div class="complete-order-area">
+
+            <div class="row">
+
+                <div class="col-12">
+
+                    <div class="complete-order-title title-2">@Homemade.UI.Resources.Homemade.Complete_Order</div>
+
+                </div>
+                <div class="col-lg-8 mb-4 mb-lg-0">
+
+                    <div class="complete-order-steps">
+
+                        <div class="step-item bank-transfer d-none">
+
+                            <div class="step-head">
+
+                                <div class="step-no">$</div>
+                                <div class="step-title">@Homemade.UI.Resources.Homemade.Bank_Transfer</div>
+
+
+                            </div>
+                            <div class="step-body">
+
+                                <div class="transfer-details">
+
+                                    <p class="account-num">
+                                        @Homemade.UI.Resources.Homemade.AccountNumber
+                                        <span>125625488978201</span>
+                                    </p>
+                                    <p class="bank-name">
+                                        @Homemade.UI.Resources.Homemade.Saudi_International_Bank
+
+                                    </p>
+
+                                </div>
+                                <button type="button" class="upload-receipt theme-btn theme-btn-lg theme-btn-7">
+
+                                    <span class="ms-2"><i class="fas fa-upload"></i></span>
+                                    @Homemade.UI.Resources.Homemade.Attach_copy_receipt
+
+                                </button>
+                            </div>
+                        </div>
+                        <div class="step-item choose-address">
+
+                            <div class="step-head">
+
+                                <div class="step-no">1</div>
+                                <div class="step-title">@Homemade.UI.Resources.Homemade.Select_address_for_delivery </div>
+
+
+                            </div>
+                            <div class="step-body" id="DevcompleteOrderAddressPartial">
+                                <partial name="_completeOrderAddressPartial" />
+                            </div>
+                        </div>
+                        <div class="step-item choose-paying">
+
+                            <div class="step-head">
+
+                                <div class="step-no">2</div>
+                                <div class="step-title">@Homemade.UI.Resources.Homemade.Payment_Options </div>
+
+
+                            </div>
+                            <div class="step-body">
+
+                                <div class="row">
+
+
+                                    <div class="col-lg-6">
+
+                                        <div class="step-details step-radios paying-options">
+
+                                            <div class="form-check">
+                                                <input class="form-check-input" checked type="radio" name="flexRadioDefault-3" value="Elec" id="radio7">
+                                                <label class="form-check-label" for="radio7">
+                                                    @Homemade.UI.Resources.Homemade.Electronic_Payment
+
+
+                                                </label>
+                                            </div>
+
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col-lg-6">
+
+                                        <div class="step-details step-radios paying-options">
+
+                                            <div class="form-check">
+                                                <input class="form-check-input" disabled type="radio" name="flexRadioDefault-3" value="Wallet" id="radio9">
+                                                <label class="form-check-label" for="radio9">
+                                                    @Homemade.UI.Resources.Homemade.Your_Wallet
+                                                    <small class="me-1">(@Homemade.UI.Resources.Homemade.You_have @customerBalance @Homemade.UI.Resources.Homemade.SR @Homemade.UI.Resources.Homemade.in_the_wallet)</small>
+
+                                                </label>
+                                            </div>
+
+
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="col-lg-4">
+
+                    <div class="order-details-area">
+
+                        <div class="order-total-title title-4">
+                            @Homemade.UI.Resources.Homemade.Total_Orders
+
+
+                        </div>
+
+                        <div class="order-items-area">
+                            @foreach (var itemlistofdata in listofdata)
+                            {
+                                bool IsIncreaseOrder = false;
+                                decimal curentordertotal = 0;
+                                TotalDeliveryPrice = TotalDeliveryPrice + (itemlistofdata.listitems.FirstOrDefault().DeliveryPrice ?? 0);
+
+                                @Html.Hidden("vendor_" + itemlistofdata.listitems.FirstOrDefault().VendorsID + "", itemlistofdata.listitems.FirstOrDefault().Note)
+                                <div class="order-item-wrap">
+
+                                    <a href="/Site/home/vendor?id=@itemlistofdata.listitems.FirstOrDefault().VendorsGuid" class="order-vendor">
+
+                                        <img class="img-fluid vendor-img" src="https://cdn.made-home.com/Home/Vendor/@itemlistofdata.listitems.FirstOrDefault().Logo">
+                                        <span class="vendor-name"> @Homemade.UI.Resources.Homemade.Vendor @itemlistofdata.listitems.FirstOrDefault().StoreName</span>
+
+                                    </a>
+
+                                    <div class="order-item-box">
+                                        @foreach (var itemlistofitems in itemlistofdata.listitems)
+                                        {
+                                            int? quantity = null;
+                                            if (itemlistofitems.IsLimited)
+                                            {
+                                                quantity = Convert.ToInt32(itemlistofitems.Quantity);
+                                            }
+                                            int qu = decimal.ToInt32(itemlistofitems.ProductQuantity);
+                                            curentordertotal = curentordertotal + (decimal.Parse(itemlistofitems.ProductPrice.ToString())) * qu;
+
+                                            <div class="order-details">
+
+                                                <p class="details-text">@qu X @itemlistofitems.ProductName</p>
+                                                <p class="details-val">
+
+                                                    <span>@((decimal.Parse(itemlistofitems.ProductPrice.ToString())) * qu)</span>
+                                                    @Homemade.UI.Resources.Homemade.SR
+                                                </p>
+
+                                            </div>
+
+                                            @if (qu > quantity)
+                                            {
+                                                IsIncreaseOrder = true;
+                                                IsCompleteOrder = true;
+                                                <div class="alert alert-site" style="margin-top: 5px;">
+                                                    <strong>@Homemade.UI.Resources.Homemade.number_available @quantity @Homemade.UI.Resources.Homemade.Only_you_need_approval_from_the_Vendor</strong>
+                                                </div>
+                                            }
+                                        }
+                                        <div class="order-details delivery-details">
+
+                                            <p class="details-text"> @Homemade.UI.Resources.Homemade.DeliveryPrice</p>
+                                            <p class="details-val">
+
+                                                <span id="orderPrice" class="orderPrice orderPrice_@itemlistofdata.VendorsID"> <img src="/assets/homeMadeSite/css/ajax-loader.gif" style="width: 30%;" id="promocodeLoader"> @*@itemlistofdata.listitems.FirstOrDefault().DeliveryPrice*@</span>
+                                                @Homemade.UI.Resources.Homemade.SR
+                                            </p>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="order-total">
+
+                                        <div class="order-details">
+
+                                            <p class="details-text"> @Homemade.UI.Resources.Homemade.Total_Amount_With_Vat </p>
+                                            <p class="details-val">
+                                                <input type="hidden" id="hiddencurentordertotal_@itemlistofdata.VendorsID" value="@(curentordertotal+0)" />
+                                                <span id="curentordertotal_@itemlistofdata.VendorsID">@(curentordertotal+0)</span>
+                                                @Homemade.UI.Resources.Homemade.SR
+                                            </p>
+
+                                        </div>
+
+
+                                    </div>
+                                    <button type="button" class="add-note-btn theme-btn theme-btn-lg " data-bs-toggle="modal" data-bs-target="#addNotesModal" onclick="Changenote(@itemlistofdata.VendorsID)">
+                                        @Homemade.UI.Resources.Homemade.Add_Notes
+
+                                    </button>
+
+
+                                </div>
+                                Total = Total + curentordertotal;
+
+                            }
+
+                        </div>
+
+                        <div class="order-discount-area">
+
+                            <div class="order-coupon-status">
+
+
+                                @if (resultsMaster.PromocodeDiscount != null && resultsMaster.PromocodeDiscount > 0)
+                                {
+                                    <div class="form-group">
+                                        <input type="text" class="form-control input-focus disabled" id="Txt_Promocode" disabled value="@resultsMaster.Promocode">
+                                    </div>
+                                    <button class="coupon-btn" id="btncoupon" type="button" style=" display: none; padding: .5rem 0; background-color: #FEF7E4; border: 1px solid #D5C99B; color: var(--clr-1); transition: all .3s ease; border-radius: 16px; text-align: center; max-width: 80px; width: 100%;" onclick="CheckPromocode()">
+                                        <span id="titlespn"> @Homemade.UI.Resources.Homemade.Activation</span>
+                                        <img src="~/assets/homeMadeSite/css/ajax-loader.gif" style="width: 26%;" id="promocodeLoader" class="d-none" />
+                                    </button>
+                                    <button class="coupon-btn" id="btncancelcoupon" type="button" style=" display: block; padding: .5rem 0; background-color: #FEF7E4; border: 1px solid #D5C99B; color: var(--clr-1); transition: all .3s ease; border-radius: 16px; text-align: center; max-width: 80px; width: 100%;" data-bs-toggle="modal" data-bs-target="#confirmCancelPromomodal">
+                                        <span id="titlespn"> @Homemade.UI.Resources.Homemade.Cancel_Activation</span>
+                                        <img src="~/assets/homeMadeSite/css/ajax-loader.gif" style="width: 26%;" id="promocodeLoader" class="d-none" />
+                                    </button>
+
+                                }
+                                else
+                                {
+                                    <div class="form-group">
+                                        <input type="text" class="form-control input-focus" id="Txt_Promocode" value="">
+                                    </div>
+                                    <button class="coupon-btn" id="btncoupon" type="button" style=" display: block; padding: .5rem 0; background-color: #FEF7E4; border: 1px solid #D5C99B; color: var(--clr-1); transition: all .3s ease; border-radius: 16px; text-align: center; max-width: 80px; width: 100%;" onclick="CheckPromocode()">
+                                        <span id="titlespn"> @Homemade.UI.Resources.Homemade.Activation</span>
+                                        <img src="~/assets/homeMadeSite/css/ajax-loader.gif" style="width: 26%;" id="promocodeLoader" class="d-none" />
+                                    </button>
+                                    <button class="coupon-btn" id="btncancelcoupon" type="button" style=" display: none; padding: .5rem 0; background-color: #FEF7E4; border: 1px solid #D5C99B; color: var(--clr-1); transition: all .3s ease; border-radius: 16px; text-align: center; max-width: 80px; width: 100%;" data-bs-toggle="modal" data-bs-target="#confirmCancelPromomodal">
+                                        <span id="titlespn"> @Homemade.UI.Resources.Homemade.Cancel</span>
+                                        <img src="~/assets/homeMadeSite/css/ajax-loader.gif" style="width: 26%;" id="promocodeLoader" class="d-none" />
+                                    </button>
+                                    <div id="btncouponmessage" style="color:red"></div>
+
+
+                                }
+
+                            </div>
+                            <div class="discount-box">
+
+                                <div class="discount-details">
+
+                                    <p class="details-text">@Homemade.UI.Resources.Homemade.OrderCost_With_Vat </p>
+                                    <p class="details-val">@Total @Homemade.UI.Resources.Homemade.SR</p>
+                                </div>
+
+                                <div class="discount-details">
+
+                                    <p class="details-text">@Homemade.UI.Resources.Homemade.Total_Delivery</p>
+                                    <p class="details-val"><span class="totaldeliveryPrice">@totaldelivery.deliveryPrice</span> @Homemade.UI.Resources.Homemade.SR</p>
+                                </div>
+                                <div class="discount-details d-none">
+
+                                    <p class="details-text">@Homemade.UI.Resources.Homemade.Tax ( @ViewBag.vat %)</p>
+                                    <p class="details-val"><span id="vatValue">@ViewBag.vatValue.ToString("0.##")</span> @Homemade.UI.Resources.Homemade.SR</p>
+                                </div>
+
+
+
+                                <div class="discount-details discount-val">
+
+                                    <p class="details-text">
+                                        @Homemade.UI.Resources.Homemade.Discount_Coupon
+
+                                        <a href="#"><i class="fas fa-info-circle"></i></a>
+
+                                    </p>
+                                    <p class="details-val">-<span id="spn_PromocodeDiscount">@(resultsMaster.PromocodeDiscount??0)</span> @Homemade.UI.Resources.Homemade.SR</p>
+
+                                </div>
+                                <div class="discount-details box-total">
+
+                                    <p class="details-text">
+                                        @Homemade.UI.Resources.Homemade.Total_Amount_With_Vat
+
+                                        @{
+
+                                            var totalDisc = (Total - (resultsMaster.PromocodeDiscount ?? 0));
+                                            var totalWithDelivery = totaldelivery.totalWithDelivery + totalDisc;
+                                        }
+
+                                    </p>
+                                    <p class="details-val ">
+                                        <span id="totalorder">
+                                            @totalWithDelivery.ToString("0.##")
+
+
+                                        </span> <span id="totalorderSR">  @Homemade.UI.Resources.Homemade.SR </span>
+                                    </p>
+                                    <p class="details-text">
+                                        @Homemade.UI.Resources.Homemade.Vat (@_blConfiguration.GetDeliveryPriceVatPercent().ToString("0")%)
+                                    </p>
+                                    <p class="details-val ">
+                                        <span id="totalvatorder">
+
+                                            @((totalWithDelivery - (totalWithDelivery / (1 + (_blConfiguration.GetDeliveryPriceVatPercent() / 100)))).ToString("0.##"))
+                                        </span> <span>  @Homemade.UI.Resources.Homemade.SR </span>
+                                    </p>
+
+                                </div>
+                                <div class="discount-details">
+                                    <p class="details-text" id="p_Schedule" style="text-align: center;font-weight: bold;display:@(resultsMaster.OrderTypeId == (int)OrderTypeEnum.Schedule ? Html.Raw("block") : Html.Raw("none"));">@Homemade.UI.Resources.Homemade.The_Order_will_be_scheduled_for @resultsMaster.ScheduleDate?.ToString("dd-MM-yyyy")  @resultsMaster.ScheduleTime?.ToString("hh:mm tt") </p>
+                                    <button id="btncancelschedule" style="display:@(resultsMaster.OrderTypeId == (int)OrderTypeEnum.Schedule ? Html.Raw("block") : Html.Raw("none"));background-color:#dc3545;" class="complete-purchase theme-btn theme-btn-lg theme-btn-7 mt-2" data-bs-toggle="modal" data-bs-target="#confirmCancelSchedulemodal"><i class="fa fa-times push-5-r"></i> @Homemade.UI.Resources.Homemade.CancelScheduleOrder</button>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        @if (!_blConfiguration.GetIsCloseCompletePurchase())
+                        {
+                            @if (totalWithDelivery > 0)
+                            {
+                                if (!IsCompleteOrder)
+                                {
+                                    <a class="complete-purchase theme-btn theme-btn-lg theme-btn-7 mt-2  " href="javascript:SendOrder()">@Homemade.UI.Resources.Homemade.Complete_your_purchase</a>
+                                }
+                                else
+                                {
+                                    <a class="complete-purchase theme-btn theme-btn-lg theme-btn-7 mt-2" style="display:none;" href="javascript:SendOrder()">@Homemade.UI.Resources.Homemade.Complete_your_purchase</a>
+                                }
+                            }
+                        }
+                        <button type="button" id="btnScheduledOrder" class="add-note-btn theme-btn  theme-btn-lg " style="margin-top: 5px; background-color: white; color: black;display:@(resultsMaster.OrderTypeId == (int)OrderTypeEnum.Schedule ? Html.Raw("none") : Html.Raw("block")); " data-bs-toggle="modal" data-bs-target="#addScheduledModal">
+                            @Homemade.UI.Resources.Homemade.Scheduled_Order
+                        </button>
+                        <p class="details-text" style="text-align: center;font-weight: bold;text-decoration: underline;">جميع الاسعار تشمل @_blConfiguration.GetDeliveryPriceVatPercent().ToString("0")% ضريبة القيمة المضافه</p>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+
+
+
+
+<button type="button" id="PaidBtn" class="add-new-address-btn theme-btn theme-btn-7 d-none" data-bs-toggle="modal" data-bs-target="#payModal"> </button>
+
+<button type="button" id="CompleteMessageBtn" class="add-new-address-btn theme-btn theme-btn-7 d-none" data-bs-toggle="modal" data-bs-target="#completeMessageModal"> </button>
+
+
+<!-- ***** add-new-address modal  ***** -->
+<partial name="_ModalDeliveryAddresses" />
+
+<!-- ***** add-new-address modal  ***** -->
+<!-- ***** add-notes modal  ***** -->
+
+<div class="custom-bootstrap-modal modal fade add-notes-modal" id="addNotesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+
+
+                <div class="modal-body-title title-4">@Homemade.UI.Resources.Homemade.Add_notes_on_order </div>
+                <div class="modal-body-content">
+
+                    <div class="add-notes-modal-area">
+
+                        <form class="add-notes-form">
+
+                            <div class="form-group">
+
+                                <label class="form-label">@Homemade.UI.Resources.Homemade.Do_you_have_any_comments_on_the_order</label>
+                                <textarea class="form-control" id="Txt_Note" placeholder="@Homemade.UI.Resources.Homemade.Write_your_comments_here"></textarea>
+
+                            </div>
+                            <button type="button" id="btn_addnote" class="add-btn theme-btn  theme-btn-lg custom-submit-btn">@Homemade.UI.Resources.Homemade.Add </button>
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<div class="custom-bootstrap-modal modal fade add-notes-modal" id="addScheduledModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+
+
+                <div class="modal-body-title title-4">@Homemade.UI.Resources.Homemade.Scheduled_Order </div>
+                <div class="modal-body-content">
+
+                    <div class="add-notes-modal-area">
+
+                        <form class="add-notes-form">
+                            <div class="row" id="divMsgParent" style="display:none">
+                                <div class="form-group row">
+                                    <div class="col-xs-12">
+                                        <div id="divMsgClass" class="alert alert-danger" role="alert">
+                                            <strong id="lblMsg"></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">@Homemade.UI.Resources.Homemade.Now_please_specify_the_time_and_date_you_want_to_deliver_your_order</label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label">@Homemade.UI.Resources.Homemade.Order_Date</label>
+                                        <input id="ScheduledDate" class="js-datepicker form-control AddData" type="text" value="" name="ScheduledDate" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">@Homemade.UI.Resources.Homemade.Order_Time</label>
+                                        <input id="ScheduledTime" class="js-timepicker form-control AddData" type="text" value="" name="ScheduledTime">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" onclick="AddScheduled()" class="add-btn theme-btn  theme-btn-lg custom-submit-btn">@Homemade.UI.Resources.Homemade.Add </button>
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="custom-bootstrap-modal modal fade add-notes-modal" id="payModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+
+
+                <div class="modal-body-title title-4">@Homemade.UI.Resources.Homemade.Order_Payment</div>
+                <div class="modal-body-content">
+
+                    <div class="add-notes-modal-area">
+
+                        <form class="add-notes-form">
+
+                            <div class="form-group">
+
+
+                                <div id="PaidBlock">
+
+                                    <div id="orderwait_wallet" style="display:none">
+                                        <label class="form-label">جاري معالجة الطلب  </label>
+                                        <img src="~/assets/homeMadeSite/css/ajax-loader.gif" />
+                                        <br />
+                                    </div>
+
+                                    <div id="orderwait" style="display:none">
+                                        <label class="form-label">@Homemade.UI.Resources.Homemade.You_are_being_transferred_to_pay_the_order</label>
+                                        <br />
+                                    </div>
+                                    <div id="ordergenerated" style="display:none">
+                                        <label class="form-label">@Homemade.UI.Resources.Homemade.Waiting_for_payment_confirmation </label>
+                                        <img src="~/assets/homeMadeSite/css/ajax-loader.gif" />
+                                        <br />
+                                        <label class="form-label">@Homemade.UI.Resources.Homemade.Payment_must_be_made_within_two_minutes_from_now</label>
+                                    </div>
+                                </div>
+
+                                <div id="PaidMessage">
+                                </div>
+
+
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<div class="custom-bootstrap-modal modal fade add-notes-modal" id="completeMessageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+
+
+                <div class="modal-body-title title-4 text-center" id="Dev_Complete_Message">@Homemade.UI.Resources.Homemade.Order_Payment</div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<button type="button" class="delete-btn d-none" id="noaddressselectBtn" data-bs-toggle="modal" data-bs-target="#confirmDelatemodal">
+</button>
+
+
+<button type="button" class="delete-btn d-none" id="publicerrorselectBtn" data-bs-toggle="modal" data-bs-target="#confirmPublicErrormodal">
+</button>
+
+<div class="custom-bootstrap-modal modal fade confirm-delate-modal" id="confirmDelatemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+
+            <div class="modal-body">
+
+
+                <div class="modal-body-content">
+
+                    <div class="confirm-delate-modal-area">
+
+                        <h4 class="confirm-delate-title mb-4 text-center title-4"> @Homemade.UI.Resources.Homemade.Should_select_delivery_address  </h4>
+                        <div class="confirm-delate-btns">
+
+                            <button type="button" class="btn btn-secondary" id="cancelpopUp" data-bs-dismiss="modal">@Homemade.UI.Resources.Homemade.OK</button>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<div class="custom-bootstrap-modal modal fade confirm-delate-modal" id="confirmPublicErrormodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+
+            <div class="modal-body">
+
+
+                <div class="modal-body-content">
+
+                    <div class="confirm-delate-modal-area">
+
+                        <h4 class="confirm-delate-title mb-4 text-center title-4"> @Homemade.UI.Resources.Homemade.Public_Error  </h4>
+                        <div class="confirm-delate-btns">
+
+                            <button type="button" class="btn btn-secondary" id="cancelpopUp" data-bs-dismiss="modal">@Homemade.UI.Resources.Homemade.OK</button>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<div class="custom-bootstrap-modal modal fade confirm-delate-modal" id="confirmCancelSchedulemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+
+            <div class="modal-body">
+
+
+                <div class="modal-body-content">
+
+                    <div class="confirm-delate-modal-area">
+
+                        <h4 class="confirm-delate-title mb-4 text-center title-4"> @Homemade.UI.Resources.Homemade.AreYouSureToCancelSchedule  </h4>
+                        <div class="confirm-delate-btns">
+
+                            <button type="button" class="btn btn-secondary" onclick="ConfirmCancelSchedule()" data-bs-dismiss="modal">@Homemade.UI.Resources.Homemade.OK</button>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<div class="custom-bootstrap-modal modal fade confirm-delate-modal" id="confirmCancelPromomodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+        <div class="modal-content">
+
+            <div class="modal-body">
+
+
+                <div class="modal-body-content">
+
+                    <div class="confirm-delate-modal-area">
+
+                        <h4 class="confirm-delate-title mb-4 text-center title-4"> @Homemade.UI.Resources.Homemade.AreYouSureToCancelPromo  </h4>
+                        <div class="confirm-delate-btns">
+
+                            <button type="button" class="btn btn-secondary" onclick="RemovePromocode()" data-bs-dismiss="modal">@Homemade.UI.Resources.Homemade.OK</button>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<!-- ***** add-notes modal  ***** -->
+@section Styles{
+    <!-- Date_Picker Styles -->
+    <link rel="stylesheet" href="~/assets/js/plugins/Hijiri-Plugin/css/bootstrap-datetimepicker.css" />
+    <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+}
+
+    @section Scripts {
+
+    <!-- Date_picker Plugins -->
+    <script src="~/assets/js/plugins/bootstrap-datetimepicker/moment.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script charset="utf-8" src="~/assets/js/plugins/Hijiri-Plugin/js/bootstrap-hijri-datetimepicker.js"></script>
+    <script>
+        $(".js-datepicker").keypress(function(e) {
+            e.preventDefault();
+        });
+        $('.js-datepicker').datepicker({
+            dateFormat: 'yyyy-mm-dd'
+        }).on('changeDate', function(ev) {
+            $(this).datepicker('hide');
+        });
+        $(function() {
+            $('#ScheduledTime').datetimepicker({
+                format: 'LT',
+            });
+        });
+    </script>
+    <style>
+        .disabled {
+            cursor: not-allowed !important;
+            background-color: #E2E6EB !important;
+            border-radius: 14px !important;
+            border: 1px solid #CBCBCB;
+            color: #AAB0BB !important;
+            font-weight: bold !important;
+            font-size: 16px;
+            padding: .375rem .75rem;
+            outline: none;
+            transition: all .3s ease !important;
+        }
+    </style>
+    <script>
+        function SendOrder() {
+            debugger;
+
+            if ($('input[name="flexRadioDefault"]:checked').val() != undefined) {
+                $("#PaidBtn").click();
+                if ($('input[name="flexRadioDefault-3"]:checked').val() == "Elec") {
+                    $("#orderwait").hide();
+                    $("#orderwait_wallet").show();
+                    $("#orderwait_wallet").html(` <label class="form-label">جاري معالجة الطلب  </label>
+                                                <img src="/assets/homeMadeSite/css/ajax-loader.gif">`);
+                    ExecutePayment();
+                } else {
+
+                    $("#orderwait").hide();
+                    $("#orderwait_wallet").show();
+                    $("#orderwait_wallet").html(` <label class="form-label">جاري معالجة الطلب  </label>
+                                                <img src="/assets/homeMadeSite/css/ajax-loader.gif">`);
+
+
+                    ExecutePayment_Wallet();
+                }
+            } else {
+                $("#publicerrorselectBtn").click();
+
+            }
+        }
+        function ExecutePayment() {
+            $.ajax({
+                tryp: "GET",
+                url: "/site/home/executeOrderDraft", //Old :  GeneratePaymentInvoice
+                data: {
+                    _sessionID: getsessionID()
+                }
+            }).done(function(result) {
+                // window open
+                debugger;
+
+                if (result.status) {
+                    $("#orderwait").hide();
+                    $("#orderwait_wallet").hide();
+                    $("#ordergenerated").show();
+                    setTimeout(function() {
+                        location.href = result.message;
+                    }, 1500);
+                } else {
+                    if (result.message == "totalequalzero") {
+                        location.href = "/Site/Home/ViewCart";
+                    }
+                    else {
+                        $("#orderwait_wallet").html(result.message);
+                        $("#orderwait_wallet").show();
+                    }
+                }
+            })
+        }
+        function ExecutePayment_Wallet() {
+            $.ajax({
+                tryp: "get",
+                url: "/site/home/executePaymentWallet",
+                data: {
+                    _sessionID: getsessionID()
+                }
+            }).done(function(result) {
+                // window open
+                debugger;
+
+                if (result.status) {
+                    $("#orderwait_wallet").html("تهانينا ..! تم ارسال طلبك بنجاح");
+                    cart_removeCookie('sessionToken');
+                    cart_removeCookie('sessionID');
+                    setTimeout(function() {
+                        location.href = "/site/home/orderSuccess";
+                    }, 3000);
+                } else {
+                    if (result.message == "totalequalzero") {
+                        location.href = "/Site/Home/ViewCart"
+                    }
+                    else {
+                        $("#orderwait_wallet").html(result.message);
+                    }
+                }
+            })
+        }
+        function ExecuteSendOrder(message) {
+            alert(message)
+        }
+        function AddScheduled() {
+            $("#divMsgParent").hide();
+            if ($("#ScheduledDate").val() != "" && $("#ScheduledTime").val() != "") {
+                $.ajax({
+                    type: "POST",
+                    url: "/site/home/AddScheduled",
+                    data: {
+                        _sessionID: getsessionID(),
+                        ScheduledDate: $("#ScheduledDate").val(),
+                        ScheduledTime: $("#ScheduledTime").val()
+                    },
+                    dataType: "json",
+                    contentType: "application/x-www-form-urlencoded",
+                    success: function(result) {
+                        debugger;
+                        $("#divMsgParent").slideUp();
+                        $("#divMsgParent").show();
+                        console.log(result.objResult);
+                        if (result.status) {
+
+                            $("#divMsgClass").attr("class", "alert alert-success");
+                            $("#lblMsg").html(result.message);
+                            setTimeout(function() {
+                                $('#addScheduledModal').modal('hide');
+                                $("#btncancelschedule").show();
+                                $("#p_Schedule").html("@Homemade.UI.Resources.Homemade.The_Order_will_be_scheduled_for " + $("#ScheduledDate").val() + " " + $("#ScheduledTime").val());
+                                $("#p_Schedule").show();
+                                $("#btnScheduledOrder").hide();
+                                $("#ScheduledDate").val("");
+                                $("#ScheduledTime").val("");
+                                $("#divMsgParent").hide();
+                            }, 3000);
+
+                        }
+                        else {
+                            $("#divMsgClass").attr("class", "alert alert-site");
+                            $("#lblMsg").html(result.message);
+                        }
+                    },
+                    error: function() {
+
+                    }
+                });
+            }
+            else {
+                $("#divMsgParent").slideUp();
+                $("#divMsgParent").show();
+                $("#divMsgClass").attr("class", "alert alert-site");
+                $("#lblMsg").html("@Homemade.UI.Resources.Homemade.Please_Insert_Data");
+            }
+
+        }
+        function ConfirmCancelSchedule() {
+            $.ajax({
+                type: "POST",
+                url: "/site/home/CancelSchedule",
+                data: {
+                    _sessionID: getsessionID(),
+                },
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function(result) {
+                    if (result.status) {
+                        $("#p_Schedule").hide();
+                        $("#btncancelschedule").hide();
+                        $("#btnScheduledOrder").show();
+
+                    }
+                },
+                error: function() {
+
+                }
+            });
+        }
+        function CheckPromocode() {
+            if ($("#Txt_Promocode").val() != "") {
+                getDeliveryPrice(true)
+            }
+        }
+        function RemovePromocode() {
+            $("#Txt_Promocode").val("");
+            getDeliveryPrice(false);
+            $("#btncancelcoupon").hide();
+            $("#btncoupon").show();
+            $("#Txt_Promocode").attr("disabled", false);
+            $("#Txt_Promocode").removeClass("disabled");
+        }
+        function getDeliveryPrice(ispromo) {
+
+            debugger;
+            if (ispromo) {
+                $('#titlespn').addClass('d-none');
+                $('#promocodeLoader').removeClass('d-none')
+            }
+
+            $.ajax({
+                type: "GET",
+                url: "/site/home/checkPromocode",
+                data: {
+                    _sessionID: getsessionID(),
+                    _code: $("#Txt_Promocode").val()
+                }
+            }).done(function(result) {
+                debugger;
+                if (ispromo) {
+                    $('#titlespn').removeClass('d-none')
+                    $('#promocodeLoader').addClass('d-none')
+                }
+
+
+                if (result.status) {
+
+                    if (ispromo) {
+                        $("#btncoupon").hide();
+                        $("#btncancelcoupon").show();
+
+                        //$("#btncoupon").attr("disabled", true);
+                        //$("#btncoupon").addClass("disabled");
+                        // $("#btncoupon").html("تم التفعيل");
+
+                        $("#btncouponmessage").html("");
+
+                        $("#Txt_Promocode").attr("disabled", true);
+                        $("#Txt_Promocode").addClass("disabled");
+                    }
+
+
+                    if (result.totalWithDelivery < 0) {
+                        result.totalWithDelivery = 0;
+                        $("#totalorder").html("مجاني");
+                        $("#totalvatorder").html("0");
+                        $("#totalorderSR").html("");
+
+
+                    } else {
+                        $("#totalorder").html(result.totalWithDelivery);
+                        $("#totalvatorder").html(result.vatTotal);
+                        $("#totalorderSR").html("@Homemade.UI.Resources.Homemade.SR");
+
+
+
+                    }
+
+                    $('.totaldeliveryPrice').html(result.deliveryPrice);
+
+
+                    $("#spn_PromocodeDiscount").html(result.discount);
+                    $("#vatValue").html(result.vatValue);
+
+                    $(result.listvendor).each(function(index, value) {
+                        debugger;
+                        $('.orderPrice_' + value.vendorId + '').html(value.deliveryPrice);
+                        var ordertotal = parseFloat($('#hiddencurentordertotal_' + value.vendorId + '').val().replace('٫', '.'));
+                        $('#curentordertotal_' + value.vendorId + '').html((ordertotal + parseFloat(value.deliveryPrice)).toFixed(2));
+                    });
+                    debugger
+                    var total = parseFloat(result.totalWithDelivery);
+                    var customerbal = parseFloat("@customerBalance");
+                    if (parseFloat(customerbal) >= parseFloat(total)) {
+                        $("#radio9").prop("disabled", false);
+                    }
+                    else {
+                        $("#radio9").prop("disabled", true);
+                    }
+
+                } else {
+                    $("#btncouponmessage").html(result.message);
+                }
+            });
+
+
+        }
+        function ChangeAddress(addressID) {
+            $('.orderPrice').html('<img src="../../assets/homeMadeSite/css/ajax-loader.gif" style="width: 30%;" id="promocodeLoader">');
+            $('.totaldeliveryPrice').html('<img src="../../assets/homeMadeSite/css/ajax-loader.gif" style="width: 30%;" id="promocodeLoader">');
+
+            $.ajax({
+                type: "GET",
+                url: "/site/home/changeAddress",
+                data: {
+                    _sessionID: getsessionID(),
+                    _addressID: addressID
+                }
+            }).done(function(result) {
+                debugger;
+                getDeliveryPrice(false);
+
+                if (result) {
+
+                }
+            });
+        }
+        function Changenote(vendorid) {
+            $("#btn_addnote").attr("onclick", "addNote(" + vendorid + ")");
+            $("#Txt_Note").val($("#vendor_" + vendorid + "").val())
+        }
+        function addNote(vendorid) {
+            $.ajax({
+                type: "GET",
+                url: "/site/home/addNote",
+                data: {
+                    _sessionID: getsessionID(),
+                    _vendorid: vendorid,
+                    _note: $("#Txt_Note").val()
+                }
+            }).done(function(result) {
+                debugger;
+                if (result) {
+                    $('.btn-close').click();
+                }
+            });
+        }
+        function ShowDeliveryAddressModal(id, type) {
+            $('#title').html('@Homemade.UI.Resources.Homemade.Add_Location');
+            getLocation();
+            let fields = $('#new-address-form span');
+            fields.each(function() {
+                if ($(this).attr('data-valmsg-for') != null) {
+                    $($(this).children()[0]).text('');
+                }
+            });
+            $("#new-address-form").trigger('reset');
+            //GetRegions();
+            GetAddressTypes();
+            $("#Name").val('');
+            $("#MobileNo").val('');
+            $("#Address").val('');
+            $("#StreetNo").val('');
+            $("#BuildingNumer").val('');
+            $("#UniqueSign").val('');
+            $('#modifyAddressModal').modal('show');
+
+        }
+        function GetRegions(regionID) {
+            $.ajax({
+                type: "POST",
+                url: '/Setting/Region/GetAllRegionBySACountry',
+                data: {},
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                success: function(result) {
+                    $("#RegionID").html('');
+                    $("#RegionID").append('<option></option>');
+                    for (var i = 0; i < result.length; i++) {
+                        var item = result[i];
+                        if (regionID != undefined && regionID > 0 && regionID == item.regionID) {
+                            $("#RegionID").append('<option selected value="' + item.regionID + '">' + item.regionName + '</option>');
+                            $("#RegionID").val(regionID).trigger('change');
+                        }
+                        else
+                            $("#RegionID").append('<option value="' + item.regionID + '">' + item.regionName + '</option>');
+                    }
+                    // $($("#RegionID")).select2();
+                },
+                error: function() {
+
+                }
+            });
+        }
+        function GetCitys(e, cityID) {
+            var regionID = '';
+            if (e > 0) {
+                regionID = e;
+            }
+            else {
+                regionID = $(e).val();
+            }
+            $($("#CityID")).prop("disabled", false);
+            if (regionID != '' || regionID != undefined) {
+                $.ajax({
+                    type: "POST",
+                    url: '/Setting/City/GetAllCityByRegion',
+                    data: { 'regionID': regionID },
+                    dataType: "json",
+                    contentType: "application/x-www-form-urlencoded",
+                    success: function(result) {
+                        $("#CityID").html('');
+                        $("#CityID").append('<option></option>');
+                        for (var i = 0; i < result.length; i++) {
+                            var item = result[i];
+                            if (cityID != undefined && cityID > 0 && cityID == item.cityID) {
+                                $("#CityID").append('<option selected value="' + item.cityID + '">' + item.cityName + '</option>');
+                                $("#CityID").val(cityID).trigger('change');
+                            }
+                            else
+                                $("#CityID").append('<option value="' + item.cityID + '">' + item.cityName + '</option>');
+
+                        }
+                        //   $($("#CityID")).select2();
+                    },
+                    error: function() {
+
+                    }
+                });
+            }
+        }
+        function GetBlocks(e, blockID) {
+            var cityID = '';
+            if (e > 0) {
+                cityID = e;
+            }
+            else {
+                cityID = $(e).val();
+            }
+            if (cityID != '' || cityID != undefined) {
+                $($("#BlockID")).prop("disabled", false);
+                $.ajax({
+                    type: "POST",
+                    url: '/Vendor/Vendors/GetAllBlockByCity',
+                    data: { 'cityID': cityID },
+                    dataType: "json",
+                    contentType: "application/x-www-form-urlencoded",
+                    success: function(result) {
+                        $("#BlockID").html('');
+                        $("#BlockID").append('<option></option>');
+                        for (var i = 0; i < result.length; i++) {
+                            var item = result[i];
+                            if (blockID != undefined && blockID > 0 && blockID == item.blockID) {
+                                $("#BlockID").append('<option value="' + item.blockID + '">' + item.blockName + '</option>');
+                                $("#BlockID").val(blockID).trigger('change');
+                            }
+                            else
+                                $("#BlockID").append('<option value="' + item.blockID + '">' + item.blockName + '</option>');
+
+                        }
+                        // $($("#BlockID")).select2();
+                    },
+                    error: function() {
+
+                    }
+                });
+            }
+        }
+        function GetAddressTypes(addressTypesID) {
+            $.ajax({
+                type: "POST",
+                url: '/Setting/AddressTypes/GetAddressTypes',
+                data: {},
+                dataType: "json",
+                async: false,
+                contentType: "application/x-www-form-urlencoded",
+                success: function(result) {
+                    $('#AddressTypesID').html('');
+                    $('#AddressTypesID').append('<option></option>');
+                    for (var i = 0; i < result.length; i++) {
+                        var item = result[i];
+                        if (addressTypesID != undefined && addressTypesID > 0 && addressTypesID == item.addressTypesID) {
+                            $('#AddressTypesID').append('<option selected value="' + item.addressTypesID + '">' + item.addressTypesName + '</option>');
+                            $('#AddressTypesID').val(addressTypesID).trigger('change');
+                        }
+                        else {
+                            $('#AddressTypesID').append('<option value="' + item.addressTypesID + '">' + item.addressTypesName + '</option>');
+                        }
+
+                    }
+                },
+                error: function() {
+
+                }
+            });
+        }
+        $("#btnSaveAddress").click(function(e) {
+            e.preventDefault();
+            let frmCreate = $("#new-address-form");
+            if (frmCreate.valid()) {
+                frmCreate.submit();
+            }
+        });
+        function completedAddress(xhr) {
+            $("#divMsgClass_Er").hide();
+
+            var obj = JSON.parse(xhr.responseText);
+            var result = obj._result;
+
+            var msg = result.message;
+            if (result.resultType == 'success') {
+
+                $("#modifyAddressModal").modal('hide');
+                $("#new-address-form").trigger('reset');
+                $("#DevcompleteOrderAddressPartial").load("/Site/Home/GetCompleteOrderAddressPartial");
+            }
+            else {
+                $("#divMsgClass_Er").show();
+                $("#lblMsg_Er").html(msg);
+            }
+        };
+        $(document).ready(function() {
+            $(function() {
+                try {
+                    initMap();
+                } catch (e) {
+
+                }
+            });
+            setTimeout(function() {
+                debugger
+                var total = "@totalWithDelivery";
+                var customerbal = "@customerBalance";
+                if (parseFloat(customerbal) >= parseFloat(total)) {
+                    $("#radio9").prop("disabled", false);
+                }
+                else {
+                    $("#radio9").prop("disabled", true);
+                }
+
+
+            }, 2000);
+
+            getDeliveryPrice(false);
+        });
+    </script>
+    <script src="~/Scripts/App/Google/AddressMapScript.js"></script>
+}
