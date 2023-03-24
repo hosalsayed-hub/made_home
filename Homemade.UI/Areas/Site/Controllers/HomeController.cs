@@ -3751,9 +3751,9 @@ namespace Homemade.UI.Areas.Site.Controllers
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
             QRCodeData qrCodeData = qrGenerator.CreateQrCode(qrText, QRCodeGenerator.ECCLevel.Q);
 
-            QRCode qrCode = new QRCode(qrCodeData);
-            Bitmap qrCodeImage = qrCode.GetGraphic(20);
-            Byte[] byteData = BitmapToBytes(qrCodeImage);
+            ////QRCode qrCode = new QRCode(qrCodeData);
+            ////Bitmap qrCodeImage = qrCode.GetGraphic(20);
+            Byte[] byteData = null; //BitmapToBytes(qrCodeImage);
             return byteData;
         }
         private static Byte[] BitmapToBytes(Bitmap img)

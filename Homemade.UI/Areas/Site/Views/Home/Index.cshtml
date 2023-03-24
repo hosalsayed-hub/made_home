@@ -14,19 +14,12 @@
 <partial name="_MaintanancePartail" />
 
 <section class="section-style welcome-section">
-
     <div class="container">
-
         <div class="row">
-
             <div class="col-12">
-
                 <div class="welcome-area">
-
                     <div class="welcome-slider-container">
-
                         <div class="swiper welcome-slider">
-
                             <div class="swiper-wrapper">
                                 @foreach (var itemblSlider in sliderdata.Where(e => e.DisplayIn == (int)Homemade.BLL.DisplayInEnum.Site && e.IsEnable && e.SliderTypeId == (int)Homemade.BLL.SliderTypeEnum.Banner))
                                 {
@@ -81,17 +74,11 @@
                         <div class="filter-item filter-search-btn">
                             <button type="button" class="search-btn theme-btn  theme-btn-7" onclick="SearchProducts()">@Homemade.UI.Resources.Homemade.Search</button>
                         </div>
-
                     </div>
                 </div>
-
-
             </div>
-
         </div>
-
     </div>
-
 </section>
 
 <!-- ***** welcome-section Start ***** -->

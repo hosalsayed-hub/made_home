@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>aspnet-Homemade.UI-81C4EC3D-6D1D-43AA-B8AD-6A74880212F3</UserSecretsId>
   </PropertyGroup>
 
@@ -125,6 +125,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.9" />
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="7.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="QRCoder" Version="1.4.3" />
     <PackageReference Include="RestSharp" Version="106.12.0" />

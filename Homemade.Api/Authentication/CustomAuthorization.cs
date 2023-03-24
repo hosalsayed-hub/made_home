@@ -79,8 +79,6 @@ namespace Homemade.Api.Authentication
                 }
             }
         }
-
-
         public bool IsValidToken(string Authorization)
         {
             var tokenString = Authorization;
